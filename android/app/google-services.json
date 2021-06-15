@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "660865086897",
+    "project_id": "myxmi-94982",
+    "storage_bucket": "myxmi-94982.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:660865086897:android:65407e87af5d8194ffb990",
+        "android_client_info": {
+          "package_name": "com.lifen.myxmi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "660865086897-a9q2n684ok3g4f45lnannig7sgle37b2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lifen.myxmi",
+            "certificate_hash": "aa6afcd5be2184c6403309063c48ff4e3111769d"
+          }
+        },
+        {
+          "client_id": "660865086897-f9hocccrabv30tpsvgp2676ml2899dgl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZ2uyeWcQjjlGlg9PKdkN9AeIRdhkJudI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "660865086897-f9hocccrabv30tpsvgp2676ml2899dgl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
