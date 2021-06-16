@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'package:myxmi/provider/image.dart';
+import 'package:myxmi/providers/image.dart';
 import 'package:myxmi/screens/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +23,7 @@ class SaveButton extends HookWidget {
         Icons.save,
         color: Colors.white,
       ),
-      onPressed: _recipe.name.isNotEmpty
+      onPressed: _recipe.recipe.title.isNotEmpty
           ? () {
               showDialog(
                   context: context,
@@ -57,7 +57,7 @@ class SaveButton extends HookWidget {
                             FirebaseFirestore.instance
                                 .collection('Recipes')
                                 .add({
-                              'Name': '${_recipe.name}',
+                              'Name': '${_recipe.recipe.title}',
                               'Made':
                                   '${DateTime.now().millisecondsSinceEpoch}',
                               'Score': '0.0',

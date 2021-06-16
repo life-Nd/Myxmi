@@ -1,5 +1,5 @@
-import 'package:myxmi/provider/favorites.dart';
-import 'package:myxmi/provider/user.dart';
+import 'package:myxmi/providers/favorites.dart';
+import 'package:myxmi/providers/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';

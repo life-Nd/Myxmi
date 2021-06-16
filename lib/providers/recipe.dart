@@ -1,34 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:myxmi/models/recipes.dart';
 
 class RecipeProvider extends ChangeNotifier {
-  String name = '';
+  RecipesModel recipe = RecipesModel();
   Map<String, double> quantity = {};
   Map composition = {};
   double estimatedWeight = 0.0;
   String actualWeight = '';
-  String duration;
-  String category;
-  String subCategory;
-  String difficulty;
   List hidden = [];
+  double difficultyValue = 0.0;
+  changeTitle({@required String newName}) {
+    recipe.title = newName;
+  }
 
-  changeName({@required String newName}) {
-    name = newName;
+  changeDifficulty({double newDifficultyValue}) {
+    difficultyValue = newDifficultyValue;
     notifyListeners();
   }
 
-  changeDifficulty({String newDifficulty}) {
-    difficulty = newDifficulty;
-    notifyListeners();
+  String getDifficulty() {
+    recipe.difficulty = difficultyValue == 0.0
+        ? 'Easy'
+        : difficultyValue == 0.5
+            ? 'Medium'
+            : difficultyValue == 1.0
+                ? 'Hard'
+                : '-';
+    return recipe.difficulty;
   }
 
   changeCategory({String newCategory}) {
-    category = newCategory;
+    recipe.category = newCategory;
     notifyListeners();
   }
 
   changeSubCategory({String newSubCategory}) {
-    subCategory = newSubCategory;
+    recipe.subCategory = newSubCategory;
     notifyListeners();
   }
 
@@ -70,7 +77,7 @@ class RecipeProvider extends ChangeNotifier {
   }
 
   reset() {
-    name = '';
+    recipe.title = '';
     actualWeight = '';
     estimatedWeight = 0.0;
     quantity.clear();

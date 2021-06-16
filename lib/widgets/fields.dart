@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myxmi/provider/recipe.dart';
+import 'package:myxmi/providers/recipe.dart';
 FocusNode _componentNode = FocusNode();
 List<TextEditingController> textEditingControllers = [];
 var textFields = <TextField>[];

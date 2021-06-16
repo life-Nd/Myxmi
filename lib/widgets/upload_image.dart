@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import '../provider/image.dart';
+import '../providers/image.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 // ignore: must_be_immutable

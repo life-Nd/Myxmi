@@ -53,14 +53,15 @@ class AuthHandler {
         email: _email,
         password: _password,
       );
+      Navigator.of(context).pop();
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-            builder: (_) => App(),
+            builder: (context) => App(),
           ),
           (route) => false);
     } catch (error) {
-      print('Error: $error');
-      print('ErrorCODE: ${error?.code}');
+      print('Error-----: $error----');
+      
       if (error?.code == 'user-not-found') {
         showDialog(
           context: context,
@@ -129,7 +130,7 @@ class AuthHandler {
       } else {
         showDialog(
             context: context,
-            builder: (_) {
+            builder: (context2) {
               return AlertDialog(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
@@ -245,8 +246,8 @@ class AuthHandler {
                     child: RawMaterialButton(
                       child: Text("${'retry'.tr()}"),
                       onPressed: () {
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pop();
+                        Navigator.of(context2).pop();
+                        Navigator.of(context2).pop();
                       },
                     ),
                   )

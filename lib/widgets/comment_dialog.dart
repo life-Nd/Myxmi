@@ -1,4 +1,4 @@
-// import 'package:agati/screens/home.dart';
+// import 'package:myxmi/screens/home.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:flutter/material.dart';
 // import 'comments.dart';

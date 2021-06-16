@@ -48,7 +48,7 @@ class MoreView extends HookWidget {
           Divider(),
           ListTile(
             leading: Icon(Icons.rate_review),
-            title: Text('${'rateAgati'.tr()}'),
+            title: Text('${'rateMyxmi'.tr()}'),
             trailing: Icon(Icons.arrow_forward_ios),
             onTap: () {
               rateMyApp.showRateDialog(context);
