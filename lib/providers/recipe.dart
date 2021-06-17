@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myxmi/models/recipes.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class RecipeProvider extends ChangeNotifier {
   RecipesModel recipe = RecipesModel();
@@ -20,11 +21,11 @@ class RecipeProvider extends ChangeNotifier {
 
   String getDifficulty() {
     recipe.difficulty = difficultyValue == 0.0
-        ? 'Easy'
+        ? 'easy'.tr()
         : difficultyValue == 0.5
-            ? 'Medium'
+            ? 'medium'.tr()
             : difficultyValue == 1.0
-                ? 'Hard'
+                ? 'hard'.tr()
                 : '-';
     return recipe.difficulty;
   }

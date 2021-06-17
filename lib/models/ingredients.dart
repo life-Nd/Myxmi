@@ -1,4 +1,4 @@
-class IngredientsModel {
+class ProductsModel {
   static const NAME = 'name';
   static const QUANTITY = 'quantity';
   static const VALUETYPE = 'valueType';
@@ -9,7 +9,7 @@ class IngredientsModel {
   String valueType;
   String category;
 
-  IngredientsModel({this.name, this.quantity, this.valueType, this.category});
+  ProductsModel({this.name, this.quantity, this.valueType, this.category});
   void fromSnapshot({Map snapshot, String keyIndex}) {
     name = snapshot[NAME];
     quantity = snapshot[QUANTITY];

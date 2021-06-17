@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/screens/add.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-class IngredientsCategories extends HookWidget {
+class ProductsCategories extends HookWidget {
   Widget build(BuildContext context) {
     final _recipe = useProvider(recipeProvider);
     return SingleChildScrollView(

@@ -9,7 +9,7 @@ import 'fields.dart';
 final Stream _componentsStream =
     FirebaseFirestore.instance.collection('Vape').doc('Components').snapshots();
 
-class ComponentsList extends HookWidget {
+class ProductsList extends HookWidget {
   Widget build(BuildContext context) {
     final _recipe = useProvider(recipeProvider);
     return Expanded(
@@ -33,7 +33,7 @@ class ComponentsList extends HookWidget {
           }
           return Center(
             child: Text(
-              'ingredientsEmpty'.tr(),
+              'productsEmpty'.tr(),
             ),
           );
         },
