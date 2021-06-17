@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:myxmi/providers/recipe.dart';
+
 FocusNode _componentNode = FocusNode();
 List<TextEditingController> textEditingControllers = [];
 var textFields = <TextField>[];
+
 class Fields extends StatefulWidget {
   final Map data;
   final RecipeProvider recipe;
@@ -11,7 +13,6 @@ class Fields extends StatefulWidget {
 }
 
 class FieldsState extends State<Fields> {
-  
   List _keys = [];
   initState() {
     widget.data.keys.forEach((element) {
@@ -31,6 +32,9 @@ class FieldsState extends State<Fields> {
       itemCount: _keys.length,
       shrinkWrap: true,
       itemBuilder: (_, int index) {
+        print("KEYS: $_keys");
+        print("DATA: -----${widget.data[_keys[index]]}");
+        Map _data = widget.data[_keys[index]];
         // 1 ml oil = 0.947 gram oil;
         // 1 Drop oil = 0.05 ml
         // 0.05 ml oil = 0.0474 gram;
@@ -87,9 +91,9 @@ class FieldsState extends State<Fields> {
               onEditingComplete: () {},
               focusNode: _componentNode,
               decoration: InputDecoration(
-                hintText: '${widget.data[_keys[index]]}',
-                labelText: '${_keys[index]}',
-                suffix: Text('${widget.data[_keys[index]]}'),
+                hintText: '${_data['Name']}',
+                labelText: '${_data['MesureType']}',
+                // suffix: Text('${widget.data[_keys[index]]}'),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),

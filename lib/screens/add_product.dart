@@ -33,18 +33,22 @@ class AddProduct extends HookWidget {
             fillColor: Colors.green,
             child: Text('save'.tr()),
             onPressed: _nameCtrl.text.isNotEmpty && _mesureType != null
-                ? () {
-                    FirebaseFirestore.instance
+                ? () async {
+                    await FirebaseFirestore.instance
                         .collection('Products')
                         .doc('${_user.account.uid}')
-                        .update({
-                      '${DateTime.now().millisecondsSinceEpoch}': {
-                        'Name': '${_nameCtrl.text}',
-                        'MesureType': '$_mesureType',
-                        'Expiration': '$_expirationCtrl',
-                        'Total': '${_quantityCtrl.text}'
+                        .set(
+                      {
+                        '${DateTime.now().millisecondsSinceEpoch}': {
+                          'Name': '${_nameCtrl.text}',
+                          'MesureType': '$_mesureType',
+                          'IngredientType': '$_ingredientType',
+                          'Expiration': '$_expirationCtrl',
+                          'Total': '${_quantityCtrl.text}'
+                        },
                       },
-                    }).whenComplete(() {
+                      SetOptions(merge: true),
+                    ).whenComplete(() {
                       _nameCtrl.clear();
                       _mesureType = '';
                       Navigator.of(context).pop();
