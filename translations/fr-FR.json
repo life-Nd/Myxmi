@@ -29,8 +29,8 @@
   "passwordResetFailed" : "Réinitialisation du mot de passe a échoué",
   "sendResetLink" : "Envoyer lien pour reinitialiser le mot de passe",
   "backToSignIn" : "Retourner à la page de connexion",
-  "resetLinkSentTitle" : "Lien envoyer",
-  "resetLinkSentMessage" :
+  "resetLinkSentTitle" : "Lien envoyé",
+  "checkEmail" :
      "Vérifier votre boite de messagerie courriel",
   "emailLabel" : "Courriel",
   "emailHint" : "test@test.com",
@@ -168,7 +168,7 @@
   "accessibility":"Accessibilité",
   "public":"Public",
   "private":"Privé",
-  "addProduct":"Ajouter un produit",
+  "newProduct":"Nouveau produit",
   "drops":"Gouttes",
   "fieldsEmpty":"Certains champs sont vides",
   "chooseSource":"Choisissez une source",
@@ -223,13 +223,15 @@
    "meat":"Viande",
    "seaFood":"Poisson & fruits de mer",
    "dairyEggs":"Prod. laitiers & oeufs",
+   "oils":"Huiles",
    "productName":"Nom du produit",
    "quantityInHand":"Quantité en main",
    "visibleForYou":"Vos produits sont visibles juste par vous.",
    "youCanSaveProducts":"Vous pouvez enregistrer des produits dans votre armoire virtuel. \n Ca rendra facile vos prochaines entrées. $thisIsPrivate",
    "enterTotalQuantity":"Entrer la quantité totale du produit. Le système se chargera de soustraire à chaque fois les quantités utilisées.",
    "selectExpirationDate":"Selectionnez la date d'expiration",
-   "expirationDate":"Evitez le gaspillage et mangez vos produits frais."
+   "expirationDate":"Evitez le gaspillage et mangez vos produits frais.",
+   "optional":"Optionnel"
    
 
  

@@ -1,11 +1,12 @@
 import 'package:myxmi/app.dart';
 import 'package:myxmi/providers/view.dart';
+import 'package:myxmi/screens/sign_in.dart';
 import 'package:myxmi/widgets/search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../main.dart';
-import 'add.dart';
+import 'add_recipe.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 final viewProvider = ChangeNotifierProvider<ViewProvider>(
@@ -28,12 +29,13 @@ class Home extends HookWidget {
                       viewIndex == 1 &&
                           _user.account?.uid != null &&
                           _view.searching
-                  ? Size(100,_size.width)
-                  : Size(55,_size.width),
+                  ? Size(100, _size.width)
+                  : Size(55, _size.width),
               child: SafeArea(
                 child: SearchRecipes(
-                  showFilter:
-                      viewIndex == 2 && _user.account?.uid != null ? false : true,
+                  showFilter: viewIndex == 2 && _user.account?.uid != null
+                      ? false
+                      : true,
                 ),
               ),
             )
@@ -41,26 +43,33 @@ class Home extends HookWidget {
               automaticallyImplyLeading: false,
               title: Text('Myxmi'),
             ),
-      floatingActionButton:
-          viewIndex == 0 || viewIndex == 1 && _user.account?.uid != null
-              ? FloatingActionButton(
-                  backgroundColor: Colors.grey,
-                  child: Icon(
-                    Icons.add,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => AddRecipe(),
-                      ),
-                    );
-                  },
-                )
-              : null,
+      floatingActionButton: viewIndex <= 1 && _user.account?.uid != null
+          ? FloatingActionButton(
+              backgroundColor: Colors.grey,
+              child: Icon(
+                Icons.add,
+                color: Colors.black,
+              ),
+              onPressed: () {
+                viewIndex == 1
+                    ? Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => AddRecipe(),
+                        ),
+                      )
+                    : Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => SignInPage(),
+                        ),
+                      );
+              },
+            )
+          : null,
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Theme.of(context).cardColor,
-        selectedItemColor: Colors.green.shade700,
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        selectedItemColor: Theme.of(context).appBarTheme.titleTextStyle.color,
+        unselectedItemColor: Colors.grey,
         showUnselectedLabels: true,
         items: [
           BottomNavigationBarItem(

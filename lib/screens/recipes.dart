@@ -1,20 +1,22 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../recipe_list.dart';
-import 'home.dart';
 
 class RecipesScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final _view = useProvider(viewProvider);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Expanded(
             child: FutureBuilder(
-          future: _view.searching ? _view.search : _view.future,
+            future: FirebaseFirestore.instance
+              .collection('Recipes')
+              .orderBy('Made', descending: true)
+              .limit(20)
+              .get(),
           builder: (_, AsyncSnapshot snapshot) {
             if (snapshot.hasError) {
               return Text(
@@ -23,7 +25,8 @@ class RecipesScreen extends HookWidget {
               );
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Column(
+                print("LOADING Recipes");
+                return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(

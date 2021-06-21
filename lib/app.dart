@@ -8,6 +8,7 @@ import 'main.dart';
 import 'screens/home.dart';
 import 'providers/prefs.dart';
 
+
 final firebaseAuth = Provider<FirebaseAuth>((ref) {
   return FirebaseAuth.instance;
 });
@@ -22,6 +23,7 @@ class App extends HookWidget {
   Widget build(BuildContext context) {
     final _userProvider = useProvider(userProvider);
     final _prefProvider = useProvider(prefProvider);
+    
     return FutureBuilder(
       future: _prefProvider.readLanguage(),
       builder: (_, data) {
@@ -38,6 +40,7 @@ class App extends HookWidget {
                         (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                       if (snapshot.hasData && snapshot.data.data() != null) {
                         print('snapshot.hasData: ${snapshot.hasData}');
+                        print("_user.account.uid ${_userProvider.account.uid}");
                         var _data = snapshot.data.data();
                         _favProvider.addFavorites(newFavorite: _data);
                       }

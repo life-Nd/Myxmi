@@ -1,4 +1,5 @@
 import 'package:myxmi/screens/favorites.dart';
+import 'package:myxmi/screens/loading.dart';
 import 'package:myxmi/screens/more.dart';
 import 'package:myxmi/screens/recipes.dart';
 import 'package:myxmi/screens/sign_in.dart';
@@ -48,7 +49,7 @@ class ViewProvider extends ChangeNotifier {
                 .orderBy('Made', descending: true)
                 .limit(20)
                 .get());
-        return RecipesScreen();
+        return LoadingScreen();
     }
   }
 

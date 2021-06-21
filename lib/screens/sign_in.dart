@@ -87,6 +87,115 @@ class SignInPage extends HookWidget {
                 ),
               ),
             ),
+            Container(
+              padding: EdgeInsets.only(left: 10),
+              alignment: Alignment.centerLeft,
+              child: RawMaterialButton(
+                child: Text(
+                  'forgotPass'.tr(),
+                  style: TextStyle(color: Colors.red),
+                ),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) {
+                      return AlertDialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        insetPadding: EdgeInsets.only(
+                            top: 40, bottom: 40, left: 1, right: 1.0),
+                        title: Text('sendResetLink'.tr()),
+                        content: ListTile(
+                          title: _emailCtrl.text.isNotEmpty
+                              ? Row(
+                                  children: [
+                                    Text('${'emailLabel'.tr()}: '),
+                                    Expanded(
+                                      child: Text(
+                                        ' ${_emailCtrl.text}',
+                                        style: TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : Text(
+                                  'invalidEmailEmpty'.tr(),
+                                  style: TextStyle(
+                                      fontSize: 17, color: Colors.red),
+                                ),
+                          subtitle: Text(
+                            _emailCtrl.text.isNotEmpty
+                                ? '1.${'sendResetLink'.tr()} \n 2.${'checkEmail'.tr()}'
+                                : '${'please'.tr()} ${'enterEmail'.tr().toLowerCase()}',
+                          ),
+                        ),
+                        actions: [
+                          _emailCtrl.text.isNotEmpty
+                              ? RawMaterialButton(
+                                  child: Text('Send'.tr()),
+                                  onPressed: () {
+                                    _authHandler.resetPassword(
+                                        emailCtrl: _emailCtrl.text);
+                                    showDialog(
+                                      context: context,
+                                      builder: (_) {
+                                        return AlertDialog(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                          insetPadding: EdgeInsets.only(
+                                              top: 40, bottom: 40),
+                                          content: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(
+                                                'checkEmail'.tr(),
+                                              ),
+                                              SizedBox(
+                                                height: 100,
+                                              ),
+                                              CircularProgressIndicator(
+                                                valueColor:
+                                                    AlwaysStoppedAnimation(
+                                                        Colors.white),
+                                                backgroundColor: Colors.green,
+                                              ),
+                                            ],
+                                          ),
+                                          actions: [
+                                            RawMaterialButton(
+                                              child: Text(
+                                                'close'.tr(),
+                                              ),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                )
+                              : RawMaterialButton(
+                                  child: Text(
+                                    'close'.tr(),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[

@@ -19,49 +19,50 @@ void main() async {
     DeviceOrientation.portraitUp,
   ]);
   runApp(
-    ProviderScope(
-      child: Consumer(
-        builder: (context, watch, child) {
-          final _prefProvider = watch(prefProvider);
-          final _userProvider = watch(userProvider);
-          return StreamBuilder<User>(
-            stream: FirebaseAuth.instance.authStateChanges(),
-            builder: (context, AsyncSnapshot<User> snapUser) {
-              _userProvider.changeUser(newUser: snapUser.data);
-              return FutureBuilder(
-                future: _prefProvider.readTheme(),
-                builder: (context, snapshot) {
-                  print("THEME1");
-                  return EasyLocalization(
-                    path: 'translations',
-                    supportedLocales: [Locale('en', 'US'), Locale('fr', 'FR')],
-                    child: MaterialAppWidget(
-                      newTheme: snapshot.data,
-                    ),
-                  );
-                },
-              );
-            },
-          );
-        },
+    EasyLocalization(
+      path: 'translations',
+      supportedLocales: [Locale('en', 'US'), Locale('fr', 'FR')],
+      child: ProviderScope(
+        child: Consumer(
+          builder: (context, watch, child) {
+            final _userProvider = watch(userProvider);
+            return StreamBuilder<User>(
+              stream: FirebaseAuth.instance.authStateChanges(),
+              builder: (context, AsyncSnapshot<User> snapUser) {
+                _userProvider.changeUser(newUser: snapUser.data);
+                return MaterialAppWidget();
+              },
+            );
+          },
+        ),
       ),
     ),
   );
 }
 
-class MaterialAppWidget extends StatelessWidget {
-  final String newTheme;
-  MaterialAppWidget({this.newTheme});
+class MaterialAppWidget extends StatefulWidget {
+  // final String newTheme;
+
+  // MaterialAppWidget({this.newTheme});
+  createState() => MaterialAppWidgetState();
+}
+
+class MaterialAppWidgetState extends State<MaterialAppWidget> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      localizationsDelegates: context.localizationDelegates,
-      supportedLocales: context.supportedLocales,
-      locale: context.locale,
-      theme: newTheme == null || newTheme == 'Light' ? lightTheme : darkTheme,
-      debugShowCheckedModeBanner: false,
-      home: App(),
-    );
+    return Consumer(builder: (context, watch, child) {
+      final _pref = watch(prefProvider);
+      return MaterialApp(
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
+        theme: _pref.theme == null || _pref.theme == 'Light'
+            ? lightTheme
+            : darkTheme,
+        debugShowCheckedModeBanner: false,
+        home: App(),
+      );
+    });
   }
 }
 

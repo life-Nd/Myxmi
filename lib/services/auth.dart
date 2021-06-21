@@ -8,10 +8,12 @@ import 'platform_dialog.dart';
 import 'platform_exception_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:apple_sign_in/apple_sign_in.dart';
-import '../screens/sign_in.dart';
+
+bool _showLoading = true;
 
 class AuthHandler {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
   Future<User> newUserEmailPassword({
     String email,
     String password,
@@ -20,7 +22,9 @@ class AuthHandler {
     String _email = email.trim();
     String _password = password.trim();
 
-    loadingAlertDialog(context: context);
+    _showLoading
+        ? loadingAlertDialog(context: context)
+        : print('!!LOADING COMPLETED!!');
     final currentUser = await _firebaseAuth
         .createUserWithEmailAndPassword(
       email: _email,
@@ -32,7 +36,11 @@ class AuthHandler {
         password: _password,
         context: context,
       );
+
       await sendEmail();
+    });
+    Future.delayed(Duration(milliseconds: 777), () {
+      _showLoading = false;
     });
     User user = currentUser.user;
     return user;
@@ -46,216 +54,203 @@ class AuthHandler {
     String _email = email.trim();
     String _password = password.trim();
 
-    loadingAlertDialog(context: context);
-
+    _showLoading
+        ? loadingAlertDialog(context: context)
+        : print('!!LOADING COMPLETED!!');
     try {
-      await _firebaseAuth.signInWithEmailAndPassword(
-        email: _email,
-        password: _password,
-      );
-      Navigator.of(context).pop();
+      await trySignIn(context, _email, _password);
+    } catch (error) {
+      print('Error-----: $error----');
+      _showLoading = false;
+      if (error.code != null && error?.code == 'user-not-found') {
+        dialogNoAccoundFound(context, error, _email, _password);
+      } else {
+        _showLoading = false;
+        dialogWrongPassword(context, error, _email, email);
+      }
+    }
+  }
+
+  trySignIn(BuildContext context, String _email, String _password) async {
+    await _firebaseAuth.signInWithEmailAndPassword(
+      email: _email,
+      password: _password,
+    );
+    Future.delayed(Duration(milliseconds: 444), () {
+      _showLoading = false;
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => App(),
           ),
           (route) => false);
-    } catch (error) {
-      print('Error-----: $error----');
-      
-      if (error?.code == 'user-not-found') {
-        showDialog(
-          context: context,
-          builder: (context2) {
-            return AlertDialog(
+    });
+ 
+  }
+
+  Future<dynamic> dialogNoAccoundFound(
+      BuildContext context, error, String _email, String _password) {
+    return showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          insetPadding: EdgeInsets.only(top: 40, bottom: 40),
+          title: Center(
+            child: Text(
+              '${'error'.tr()}',
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+          content: ListTile(
+            subtitle: Text('${error.message.toString()}'),
+            title: Text(
+              '${'noAccountFound'.tr()}',
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 17,
+              ),
+            ),
+          ),
+          actions: [
+            _RetryButton(),
+            RawMaterialButton(
+              padding: EdgeInsets.all(4),
+              elevation: 20,
+              fillColor: Colors.green,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
-              insetPadding: EdgeInsets.only(top: 40, bottom: 40),
-              title: Center(
+              child: Text(
+                'signUp'.tr(),
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+              onPressed: () {
+                newUserEmailPassword(
+                  email: _email,
+                  password: _password,
+                  context: context,
+                );
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  Future<dynamic> dialogWrongPassword(
+      BuildContext context, error, String _email, String email) {
+    return showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            insetPadding: EdgeInsets.only(top: 40, bottom: 40),
+            title: Center(
+              child: Text(
+                'error'.tr(),
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+            content: ListTile(
+              title: Text('${error?.message.toString()}'),
+              subtitle: RawMaterialButton(
                 child: Text(
-                  '${'error'.tr()}',
+                  'forgotPass'.tr(),
                   style: TextStyle(color: Colors.red),
                 ),
+                onPressed: () {
+                  dialogResetLink(context, _email, email);
+                },
               ),
-              content: ListTile(
-                subtitle: Text('${error.message.toString()}'),
-                title: Text(
-                  '${'noAccountFound'.tr()}',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 17,
-                  ),
+            ),
+            actions: [_RetryButton()],
+          );
+        });
+  }
+
+  Future<dynamic> dialogResetLink(
+      BuildContext context, String _email, String email) {
+    return showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          insetPadding: EdgeInsets.only(top: 40, bottom: 40),
+          title: Text(
+            'confirm'.tr(),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                title: Text('sendResetLink'.tr()),
+                subtitle: Text(
+                  'checkEmail'.tr(),
                 ),
               ),
-              actions: [
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20),
-                    ),
-                  ),
-                  child: RawMaterialButton(
-                    child: Text('retry'.tr()),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ),
-                RawMaterialButton(
-                  padding: EdgeInsets.all(4),
-                  elevation: 20,
-                  fillColor: Colors.green,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    'signUp'.tr(),
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                  onPressed: () {
-                    newUserEmailPassword(
-                      email: _email,
-                      password: _password,
-                      context: context2,
+              Text(
+                '$_email',
+                style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+              )
+            ],
+          ),
+          actions: [
+            RawMaterialButton(
+              child: Text('reset'.tr()),
+              onPressed: () {
+                resetPassword(emailCtrl: email);
+                showDialog(
+                  context: context,
+                  builder: (_) {
+                    return AlertDialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      insetPadding: EdgeInsets.only(top: 40, bottom: 40),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'checkEmail'.tr(),
+                          ),
+                          SizedBox(
+                            height: 100,
+                          ),
+                          CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation(Colors.white),
+                            backgroundColor: Colors.green,
+                          ),
+                        ],
+                      ),
+                      actions: [
+                        RawMaterialButton(
+                          child: Text(
+                            'close'.tr(),
+                          ),
+                          onPressed: () {
+                            _showLoading = false;
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
                     );
                   },
-                )
-              ],
-            );
-          },
+                );
+              },
+            ),
+          ],
         );
-      } else {
-        showDialog(
-            context: context,
-            builder: (context2) {
-              return AlertDialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                insetPadding: EdgeInsets.only(top: 40, bottom: 40),
-                title: Center(
-                  child: Text(
-                    'error'.tr(),
-                    style: TextStyle(color: Colors.red),
-                  ),
-                ),
-                content: ListTile(
-                  title: Text('${error.toString()}'),
-                  subtitle: RawMaterialButton(
-                    child: Text(
-                      'forgotPass'.tr(),
-                      style: TextStyle(color: Colors.red),
-                    ),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (_) {
-                          return AlertDialog(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            insetPadding: EdgeInsets.only(top: 40, bottom: 40),
-                            title: Text(
-                              'confirm'.tr(),
-                            ),
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                ListTile(
-                                  title: Text('sendResetLink'.tr()),
-                                  subtitle: Text(
-                                    'resetLinkSentMessage'.tr(),
-                                  ),
-                                ),
-                                Text(
-                                  '$_email',
-                                  style: TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold),
-                                )
-                              ],
-                            ),
-                            actions: [
-                              RawMaterialButton(
-                                child: Text('reset'.tr()),
-                                onPressed: () {
-                                  resetPassword(emailCtrl: email);
-                                  showDialog(
-                                    context: context,
-                                    builder: (_) {
-                                      return AlertDialog(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                        insetPadding: EdgeInsets.only(
-                                            top: 40, bottom: 40),
-                                        content: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text(
-                                              'resetLinkSentMessage'.tr(),
-                                            ),
-                                            SizedBox(
-                                              height: 100,
-                                            ),
-                                            CircularProgressIndicator(
-                                              valueColor:
-                                                  AlwaysStoppedAnimation(
-                                                      Colors.white),
-                                              backgroundColor: Colors.green,
-                                            ),
-                                          ],
-                                        ),
-                                        actions: [
-                                          RawMaterialButton(
-                                            child: Text(
-                                              'close'.tr(),
-                                            ),
-                                            onPressed: () {
-                                              Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                  builder: (_) => SignInPage(),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ),
-                actions: [
-                  Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20),
-                      ),
-                    ),
-                    child: RawMaterialButton(
-                      child: Text("${'retry'.tr()}"),
-                      onPressed: () {
-                        Navigator.of(context2).pop();
-                        Navigator.of(context2).pop();
-                      },
-                    ),
-                  )
-                ],
-              );
-            });
-      }
-    }
+      },
+    );
   }
 
   Future sendEmail() {
@@ -271,7 +266,9 @@ class AuthHandler {
     User user;
     final GoogleSignIn googleSignIn = GoogleSignIn();
     final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
-    loadingAlertDialog(context: context);
+    _showLoading
+        ? loadingAlertDialog(context: context)
+        : print('!!LOADING COMPLETED!!');
 
     if (googleSignInAccount != null) {
       final GoogleSignInAuthentication googleSignInAuthentication =
@@ -286,6 +283,7 @@ class AuthHandler {
         user = userCredential.user;
 
         print("USER: ${user.email}");
+        _showLoading = false;
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
               builder: (_) => App(),
@@ -323,6 +321,9 @@ class AuthHandler {
     List<Scope> scopes = const [],
     BuildContext context,
   }) async {
+    _showLoading
+        ? loadingAlertDialog(context: context)
+        : print('!!LOADING COMPLETED!!');
     User user;
     final result = await AppleSignIn.performRequests(
         [AppleIdRequest(requestedScopes: scopes)]);
@@ -354,6 +355,7 @@ class AuthHandler {
           print("New user: ${userCredential.additionalUserInfo.isNewUser}");
 
           print("USER: ${user.email}");
+          _showLoading = false;
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
                 builder: (_) => App(),
@@ -378,7 +380,7 @@ class AuthHandler {
         } catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(
             customSnackBar(
-              content: 'Error occurred using Google Sign-In. Try again.',
+              content: 'Error occurred using Apple Sign-In. Try again.',
             ),
           );
         }
@@ -458,6 +460,30 @@ class AuthHandler {
       content: Text(
         content,
         style: TextStyle(color: Colors.redAccent, letterSpacing: 0.5),
+      ),
+    );
+  }
+}
+
+class _RetryButton extends StatelessWidget {
+  const _RetryButton({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(20),
+        ),
+      ),
+      child: RawMaterialButton(
+        child: Text("${'retry'.tr()}"),
+        onPressed: () {
+          _showLoading = false;
+          Navigator.of(context).pop();
+        },
       ),
     );
   }

@@ -16,14 +16,14 @@ bool _explainAccess = false;
 bool _explainQuantity = false;
 bool _explainExpiration = false;
 
-class AddProduct extends HookWidget {
+class NewProduct extends HookWidget {
   Widget build(BuildContext context) {
     final _change = useState<bool>(false);
     final _user = useProvider(userProvider);
     final Size _size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text('addProduct'.tr()),
+        title: Text('newProduct'.tr()),
         actions: [
           RawMaterialButton(
             visualDensity: VisualDensity.compact,
@@ -135,13 +135,13 @@ class AddProduct extends HookWidget {
                 ),
               ),
               Container(
-                height: _size.height < 700 ? 80 : 100,
+                height: _size.height < 700 ? 240 : 300,
                 padding: EdgeInsets.only(left: 20, right: 20),
                 child: GridView(
                   scrollDirection: Axis.vertical,
                   padding: EdgeInsets.symmetric(vertical: 0),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: 3,
+                    childAspectRatio: 1,
                     crossAxisCount: 3,
                     crossAxisSpacing: 1,
                     mainAxisSpacing: 4,
@@ -158,8 +158,20 @@ class AddProduct extends HookWidget {
                         _ingredientType = 'Fruit';
                         _change.value = !_change.value;
                       },
-                      child: Text(
-                        'fruit'.tr(),
+                      // 790*608
+
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 4),
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: Image.asset('assets/fruits.png'),
+                            ),
+                            Text(
+                              'fruit'.tr(),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     RawMaterialButton(
@@ -173,12 +185,17 @@ class AddProduct extends HookWidget {
                         _ingredientType = 'Vegetable';
                         _change.value = !_change.value;
                       },
-                      child: Center(
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Text(
-                            'vegetable'.tr(),
-                          ),
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 4, right: 4),
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: Image.asset('assets/vegetables.png'),
+                            ),
+                            Text(
+                              'vegetable'.tr(),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -193,9 +210,17 @@ class AddProduct extends HookWidget {
                         _ingredientType = 'Meat';
                         _change.value = !_change.value;
                       },
-                      child: Center(
-                        child: Text(
-                          'meat'.tr(),
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 4, right: 4),
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: Image.asset('assets/meat.png'),
+                            ),
+                            Text(
+                              'meat'.tr(),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -210,9 +235,17 @@ class AddProduct extends HookWidget {
                         _ingredientType = 'SeaFood';
                         _change.value = !_change.value;
                       },
-                      child: Center(
-                        child: Text(
-                          'seaFood'.tr(),
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 4, right: 4),
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: Image.asset('assets/seafood.png'),
+                            ),
+                            Text(
+                              'seaFood'.tr(),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -221,18 +254,48 @@ class AddProduct extends HookWidget {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       fillColor: _ingredientType == 'Dairy&Eggs'
-                          ? Colors.blue.shade100
+                          ? Colors.grey.shade300
                           : Theme.of(context).scaffoldBackgroundColor,
                       onPressed: () {
                         _ingredientType = 'Dairy&Eggs';
                         _change.value = !_change.value;
                       },
-                      child: Center(
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Text(
-                            'dairyEggs'.tr(),
-                          ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 4),
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: Image.asset('assets/dairy.png'),
+                            ),
+                            Text(
+                              'dairyEggs'.tr(),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    RawMaterialButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      fillColor: _ingredientType == 'Oils'
+                          ? Colors.grey.shade300
+                          : Theme.of(context).scaffoldBackgroundColor,
+                      onPressed: () {
+                        _ingredientType = 'Oils';
+                        _change.value = !_change.value;
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 4),
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: Image.asset('assets/eliquid.png'),
+                            ),
+                            Text(
+                              'oils'.tr(),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -241,7 +304,7 @@ class AddProduct extends HookWidget {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       fillColor: _ingredientType == 'Other'
-                          ? Colors.brown.shade300
+                          ? Colors.brown.shade200
                           : Theme.of(context).scaffoldBackgroundColor,
                       onPressed: () {
                         _ingredientType = 'Other';
@@ -355,7 +418,7 @@ class AddProduct extends HookWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 title: Text(
-                  'quantityInHand'.tr(),
+                  '${'quantityInHand'.tr()} ${'optional'.tr()}',
                   style: TextStyle(
                     fontSize: 17,
                   ),
@@ -407,7 +470,7 @@ class AddProduct extends HookWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 title: Text(
-                  'selectExpirationDate'.tr(),
+                  '${'selectExpirationDate'.tr()} ${'optional'.tr()}',
                   style: TextStyle(
                     fontSize: 17,
                   ),

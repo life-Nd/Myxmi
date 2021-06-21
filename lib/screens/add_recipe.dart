@@ -3,10 +3,10 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/widgets/drinks_subcategories.dart';
 import 'package:myxmi/widgets/food_subcategories.dart';
+import '../main.dart';
 import '../providers/recipe.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../widgets/products_list.dart';
-import '../widgets/save_recipe.dart';
 import 'add_product.dart';
 import 'recipe_instructions.dart';
 import 'recipe_image.dart';
@@ -19,11 +19,12 @@ List steps = [];
 
 class AddRecipe extends HookWidget {
   Widget build(BuildContext context) {
+    print("ADDING RECIPE");
     final _recipe = useProvider(recipeProvider);
-
+    final _user = useProvider(userProvider);
     final Size _size = MediaQuery.of(context).size;
     return Scaffold(
-      floatingActionButton: SaveButton(),
+      // floatingActionButton: SaveButton(),
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
@@ -85,7 +86,6 @@ class AddRecipe extends HookWidget {
                 SizedBox(
                   height: 4,
                 ),
-                  
                 Container(
                   height: _size.height,
                   child: Column(
@@ -179,12 +179,15 @@ class AddRecipe extends HookWidget {
                           icon: Icon(Icons.add),
                           onPressed: () => Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (_) => AddProduct(),
+                              builder: (_) => NewProduct(),
                             ),
                           ),
                         ),
                       ),
-                      ProductsList(),
+                      ProductsList(
+                        uid: _user.account.uid,
+                        // recipe: _recipe,
+                      ),
                       Text('1/3')
                     ],
                   ),
