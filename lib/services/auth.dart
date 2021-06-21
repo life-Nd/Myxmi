@@ -2,14 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:myxmi/widgets/loading_alert.dart';
 import '../app.dart';
 import 'platform_dialog.dart';
 import 'platform_exception_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:apple_sign_in/apple_sign_in.dart';
-
-bool _showLoading = true;
+import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 
 class AuthHandler {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -22,9 +20,6 @@ class AuthHandler {
     String _email = email.trim();
     String _password = password.trim();
 
-    _showLoading
-        ? loadingAlertDialog(context: context)
-        : print('!!LOADING COMPLETED!!');
     final currentUser = await _firebaseAuth
         .createUserWithEmailAndPassword(
       email: _email,
@@ -39,9 +34,9 @@ class AuthHandler {
 
       await sendEmail();
     });
-    Future.delayed(Duration(milliseconds: 777), () {
-      _showLoading = false;
-    });
+    // Future.delayed(Duration(milliseconds: 777), () {
+    //   _showLoading = false;
+    // });
     User user = currentUser.user;
     return user;
   }
@@ -53,38 +48,30 @@ class AuthHandler {
   }) async {
     String _email = email.trim();
     String _password = password.trim();
-
-    _showLoading
-        ? loadingAlertDialog(context: context)
-        : print('!!LOADING COMPLETED!!');
+    final ProgressDialog pr = ProgressDialog(context: context);
+    pr.show(max: 100, msg: 'loading'.tr());
     try {
-      await trySignIn(context, _email, _password);
-    } catch (error) {
-      print('Error-----: $error----');
-      _showLoading = false;
-      if (error.code != null && error?.code == 'user-not-found') {
-        dialogNoAccoundFound(context, error, _email, _password);
-      } else {
-        _showLoading = false;
-        dialogWrongPassword(context, error, _email, email);
-      }
-    }
-  }
+      await _firebaseAuth.signInWithEmailAndPassword(
+        email: _email,
+        password: _password,
+      );
+      pr.close();
 
-  trySignIn(BuildContext context, String _email, String _password) async {
-    await _firebaseAuth.signInWithEmailAndPassword(
-      email: _email,
-      password: _password,
-    );
-    Future.delayed(Duration(milliseconds: 444), () {
-      _showLoading = false;
-      Navigator.of(context).pushAndRemoveUntil(
+      return Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => App(),
           ),
           (route) => false);
-    });
- 
+    } catch (error) {
+      pr.close();
+      print('Error-----: $error----');
+      if (error.code != null && error?.code == 'user-not-found') {
+        dialogNoAccoundFound(context, error, _email, _password);
+      } else {
+        pr.close();
+        dialogWrongPassword(context, error, _email, email);
+      }
+    }
   }
 
   Future<dynamic> dialogNoAccoundFound(
@@ -184,69 +171,86 @@ class AuthHandler {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          insetPadding: EdgeInsets.only(top: 40, bottom: 40),
-          title: Text(
-            'confirm'.tr(),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                title: Text('sendResetLink'.tr()),
-                subtitle: Text(
-                  'checkEmail'.tr(),
-                ),
-              ),
-              Text(
-                '$_email',
-                style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-              )
-            ],
+          insetPadding:
+              EdgeInsets.only(top: 40, bottom: 40, left: 1, right: 1.0),
+          title: Text('sendResetLink'.tr()),
+          content: ListTile(
+            title: _email.isNotEmpty
+                ? Row(
+                    children: [
+                      Text('${'emailLabel'.tr()}: '),
+                      Expanded(
+                        child: Text(
+                          ' $_email',
+                          style: TextStyle(
+                              fontSize: 17, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  )
+                : Text(
+                    'invalidEmailEmpty'.tr(),
+                    style: TextStyle(fontSize: 17, color: Colors.red),
+                  ),
+            subtitle: Text(
+              _email.isNotEmpty
+                  ? '1.${'sendResetLink'.tr()} \n 2.${'checkEmail'.tr()}'
+                  : '${'please'.tr()} ${'enterEmail'.tr().toLowerCase()}',
+            ),
           ),
           actions: [
-            RawMaterialButton(
-              child: Text('reset'.tr()),
-              onPressed: () {
-                resetPassword(emailCtrl: email);
-                showDialog(
-                  context: context,
-                  builder: (_) {
-                    return AlertDialog(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      insetPadding: EdgeInsets.only(top: 40, bottom: 40),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'checkEmail'.tr(),
-                          ),
-                          SizedBox(
-                            height: 100,
-                          ),
-                          CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation(Colors.white),
-                            backgroundColor: Colors.green,
-                          ),
-                        ],
-                      ),
-                      actions: [
-                        RawMaterialButton(
-                          child: Text(
-                            'close'.tr(),
-                          ),
-                          onPressed: () {
-                            _showLoading = false;
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-            ),
+            _email.isNotEmpty
+                ? RawMaterialButton(
+                    child: Text('Send'.tr()),
+                    onPressed: () {
+                      resetPassword(emailCtrl: _email);
+                      showDialog(
+                        context: context,
+                        builder: (_) {
+                          return AlertDialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            insetPadding: EdgeInsets.only(top: 40, bottom: 40),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  'checkEmail'.tr(),
+                                ),
+                                SizedBox(
+                                  height: 100,
+                                ),
+                                CircularProgressIndicator(
+                                  valueColor:
+                                      AlwaysStoppedAnimation(Colors.white),
+                                  backgroundColor: Colors.green,
+                                ),
+                              ],
+                            ),
+                            actions: [
+                              RawMaterialButton(
+                                child: Text(
+                                  'close'.tr(),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  )
+                : RawMaterialButton(
+                    child: Text(
+                      'close'.tr(),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
           ],
         );
       },
@@ -266,9 +270,9 @@ class AuthHandler {
     User user;
     final GoogleSignIn googleSignIn = GoogleSignIn();
     final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
-    _showLoading
-        ? loadingAlertDialog(context: context)
-        : print('!!LOADING COMPLETED!!');
+    // _showLoading
+    // ? loadingAlertDialog(context: context)
+    // : print('!!LOADING COMPLETED!!');
 
     if (googleSignInAccount != null) {
       final GoogleSignInAuthentication googleSignInAuthentication =
@@ -283,7 +287,7 @@ class AuthHandler {
         user = userCredential.user;
 
         print("USER: ${user.email}");
-        _showLoading = false;
+        // _showLoading = false;
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
               builder: (_) => App(),
@@ -321,9 +325,9 @@ class AuthHandler {
     List<Scope> scopes = const [],
     BuildContext context,
   }) async {
-    _showLoading
-        ? loadingAlertDialog(context: context)
-        : print('!!LOADING COMPLETED!!');
+    // _showLoading
+    //     ? loadingAlertDialog(context: context)
+    //     : print('!!LOADING COMPLETED!!');
     User user;
     final result = await AppleSignIn.performRequests(
         [AppleIdRequest(requestedScopes: scopes)]);
@@ -355,7 +359,7 @@ class AuthHandler {
           print("New user: ${userCredential.additionalUserInfo.isNewUser}");
 
           print("USER: ${user.email}");
-          _showLoading = false;
+          // _showLoading = false;
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
                 builder: (_) => App(),
@@ -481,7 +485,6 @@ class _RetryButton extends StatelessWidget {
       child: RawMaterialButton(
         child: Text("${'retry'.tr()}"),
         onPressed: () {
-          _showLoading = false;
           Navigator.of(context).pop();
         },
       ),

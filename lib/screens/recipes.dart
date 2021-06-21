@@ -1,10 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:easy_localization/easy_localization.dart';
-import '../recipe_list.dart';
+import '../widgets/recipe_list.dart';
 
-class RecipesScreen extends HookWidget {
+class RecipesScreen extends StatefulWidget {
+  createState() => RecipesScreenState();
+}
+
+class RecipesScreenState extends State<RecipesScreen> {
+  Future _future;
+  @override
+  void initState() {
+    _future = FirebaseFirestore.instance
+        .collection('Recipes')
+        .orderBy('Made', descending: true)
+        .limit(20)
+        .get();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -12,11 +26,7 @@ class RecipesScreen extends HookWidget {
       children: [
         Expanded(
             child: FutureBuilder(
-            future: FirebaseFirestore.instance
-              .collection('Recipes')
-              .orderBy('Made', descending: true)
-              .limit(20)
-              .get(),
+          future: _future,
           builder: (_, AsyncSnapshot snapshot) {
             if (snapshot.hasError) {
               return Text(
@@ -25,8 +35,8 @@ class RecipesScreen extends HookWidget {
               );
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
-                print("LOADING Recipes");
-                return Column(
+              print("LOADING Recipes");
+              return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(

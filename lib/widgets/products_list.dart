@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:myxmi/screens/add_recipe.dart';
+
+import 'fields.dart';
 
 class ProductsList extends StatefulWidget {
   final String uid;
@@ -10,18 +13,19 @@ class ProductsList extends StatefulWidget {
 }
 
 class ProductsListState extends State<ProductsList> {
-  static Stream _componentsStream;
+  Future _componentsFuture;
   initState() {
-    _componentsStream = FirebaseFirestore.instance
+    this._componentsFuture = FirebaseFirestore.instance
         .collection('Products')
         .doc('${widget.uid}')
-        .snapshots();
+        .get();
     super.initState();
   }
 
   Widget build(BuildContext context) {
-    return StreamBuilder<DocumentSnapshot>(
-      stream: _componentsStream,
+    final Size _size = MediaQuery.of(context).size;
+    return FutureBuilder<DocumentSnapshot>(
+      future: _componentsFuture,
       builder: (_, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
           return Text('${'error'}');
@@ -35,16 +39,58 @@ class ProductsListState extends State<ProductsList> {
             ],
           );
         }
-        if (snapshot.data.data() != null) {
+        if (snapshot.data != null) {
           Map _data = snapshot.data.data();
-          print("DATA:***** $_data");
-          return Expanded(
-            child: Consumer(builder: (context, watch, child) {
-              return TextField(
-                decoration: InputDecoration(hintText: 'Test'),
-              );
-            }),
-          );
+          print("DATA:--- $_data----");
+          return Consumer(builder: (context, watch, child) {
+            final _recipe = watch(recipeProvider);
+            final _keys = _data.keys.toList();
+            return Container(
+              height: _size.height / 1.2,
+              child: ListView.builder(
+                  itemCount: _keys.length,
+                  itemBuilder: (context, index) {
+                    final _key = _keys[index];
+                    print("KEY: $_key");
+                    return Dismissible(
+                      key: UniqueKey(),
+                      onDismissed: (direction) {
+                        // _data.remove(_data[_data.keys[index]]);
+                        // widget.recipe.hide(component: _keys[index]);
+                        // print("REMOVED: ${_keys[index]}");
+                        // print("DISMISSED $direction");
+                      },
+                      background: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Card(
+                          color: Colors.red,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                'Delete',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 17),
+                              ),
+                              SizedBox(
+                                width: 40,
+                              ),
+                              Icon(Icons.delete),
+                            ],
+                          ),
+                        ),
+                      ),
+                      child: Fields(
+                        data: _data[_key],
+                        recipe: _recipe,
+                      ),
+                    );
+                  }),
+            );
+          });
         }
         return Center(
           child: Text(
@@ -52,6 +98,18 @@ class ProductsListState extends State<ProductsList> {
           ),
         );
       },
+    );
+  }
+}
+
+class _Textfield extends StatefulWidget {
+  createState() => _TextfieldState();
+}
+
+class _TextfieldState extends State<_Textfield> {
+  Widget build(BuildContext context) {
+    return TextField(
+      decoration: InputDecoration(hintText: 'Test'),
     );
   }
 }

@@ -8,7 +8,7 @@ import '../main.dart';
 
 TextEditingController _nameCtrl = TextEditingController();
 TextEditingController _quantityCtrl = TextEditingController();
-DateTime _expirationCtrl;
+DateTime _expiration;
 int _mesureValue = 0;
 String _ingredientType = 'Other';
 String _mesureType = 'g';
@@ -43,7 +43,7 @@ class NewProduct extends HookWidget {
                           'Name': '${_nameCtrl.text}',
                           'MesureType': '$_mesureType',
                           'IngredientType': '$_ingredientType',
-                          'Expiration': '$_expirationCtrl',
+                          'Expiration': '$_expiration',
                           'Total': '${_quantityCtrl.text}'
                         },
                       },
@@ -158,8 +158,6 @@ class NewProduct extends HookWidget {
                         _ingredientType = 'Fruit';
                         _change.value = !_change.value;
                       },
-                      // 790*608
-
                       child: Padding(
                         padding: const EdgeInsets.only(right: 4),
                         child: Column(
@@ -469,11 +467,15 @@ class NewProduct extends HookWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
-                title: Text(
-                  '${'selectExpirationDate'.tr()} ${'optional'.tr()}',
-                  style: TextStyle(
-                    fontSize: 17,
-                  ),
+                title: Row(
+                  children: [
+                    Text(
+                      '${'selectExpirationDate'.tr()} ',
+                      style: TextStyle(
+                        fontSize: 17,
+                      ),
+                    ),
+                  ],
                 ),
                 trailing: _explainExpiration
                     ? IconButton(
@@ -503,7 +505,7 @@ class NewProduct extends HookWidget {
                 onPressed: () async {
                   var _date = await showDatePicker(
                       context: context,
-                      currentDate: _expirationCtrl,
+                      currentDate: _expiration,
                       initialDate: DateTime.now(),
                       firstDate: DateTime.now().subtract(Duration(days: 5)),
                       lastDate: DateTime.now().add(
@@ -512,16 +514,21 @@ class NewProduct extends HookWidget {
                       builder: (_, child) {
                         return child;
                       });
-                  if (_date != null && _date != _expirationCtrl)
-                    _expirationCtrl = _date;
+                  if (_date != null && _date != _expiration)
+                    _expiration = _date;
                   _change.value = !_change.value;
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _expirationCtrl != null
-                        ? Text('$_expirationCtrl')
-                        : Text('-'),
+                    _expiration != null
+                        ? Text(
+                            '${DateFormat.yMMMMEEEEd().format(_expiration)}',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        : Text(''),
                     Icon(
                       Icons.calendar_today_outlined,
                     ),

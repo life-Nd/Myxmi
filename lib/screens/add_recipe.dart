@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/widgets/drinks_subcategories.dart';
 import 'package:myxmi/widgets/food_subcategories.dart';
+import 'package:myxmi/widgets/save_recipe.dart';
 import '../main.dart';
 import '../providers/recipe.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -22,9 +23,9 @@ class AddRecipe extends HookWidget {
     print("ADDING RECIPE");
     final _recipe = useProvider(recipeProvider);
     final _user = useProvider(userProvider);
-    final Size _size = MediaQuery.of(context).size;
+
     return Scaffold(
-      // floatingActionButton: SaveButton(),
+      floatingActionButton: SaveButton(),
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
@@ -73,10 +74,8 @@ class AddRecipe extends HookWidget {
                               borderRadius: BorderRadius.circular(20)),
                           hintText: 'Recipe name',
                         ),
-                        onChanged: (value) {
-                          _recipe.changeTitle(newName: _titleCtrl.text);
-                        },
                         onSubmitted: (submitted) {
+                          _recipe.changeTitle(newName: _titleCtrl.text);
                           FocusScope.of(context).requestFocus(FocusNode());
                         },
                       ),
@@ -87,7 +86,6 @@ class AddRecipe extends HookWidget {
                   height: 4,
                 ),
                 Container(
-                  height: _size.height,
                   child: Column(
                     children: [
                       Row(
@@ -186,7 +184,6 @@ class AddRecipe extends HookWidget {
                       ),
                       ProductsList(
                         uid: _user.account.uid,
-                        // recipe: _recipe,
                       ),
                       Text('1/3')
                     ],

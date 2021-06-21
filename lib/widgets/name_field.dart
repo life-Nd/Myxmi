@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../app.dart';
 import '../main.dart';
-import 'loading_alert.dart';
-
+import 'package:sn_progress_dialog/sn_progress_dialog.dart';
+import 'package:easy_localization/easy_localization.dart';
 class NameField extends StatefulWidget {
   final String name;
 
@@ -20,6 +20,7 @@ class NameFieldState extends State<NameField> {
   }
 
   Widget build(BuildContext context) {
+    final ProgressDialog pr = ProgressDialog(context: context);
     return TextField(
       controller: _nameCtrl,
       decoration: InputDecoration(
@@ -35,20 +36,20 @@ class NameFieldState extends State<NameField> {
               Icons.send,
               color: Colors.green,
             ),
-            onPressed: () {
-              loadingAlertDialog(
-                context: context,
-              );
+            onPressed: () async {
+              await pr.show(max: 100, msg: 'loading'.tr());
               _user.account.updateDisplayName('${_nameCtrl.text}');
 
               _nameCtrl.clear();
               AuthHandler().reload();
               Future.delayed(Duration(seconds: 2), () {
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                      builder: (_) => App(),
-                    ),
-                    (route) => false);
+                Navigator.of(context)
+                    .pushAndRemoveUntil(
+                        MaterialPageRoute(
+                          builder: (_) => App(),
+                        ),
+                        (route) => false)
+                    .then((value) => pr.close());
               });
             },
           );

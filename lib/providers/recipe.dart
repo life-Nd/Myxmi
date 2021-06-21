@@ -12,6 +12,7 @@ class RecipeProvider extends ChangeNotifier {
   double difficultyValue = 0.0;
   changeTitle({@required String newName}) {
     recipe.title = newName;
+    notifyListeners();
   }
 
   changeDifficulty({double newDifficultyValue}) {

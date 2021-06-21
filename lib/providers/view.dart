@@ -2,7 +2,7 @@ import 'package:myxmi/screens/favorites.dart';
 import 'package:myxmi/screens/loading.dart';
 import 'package:myxmi/screens/more.dart';
 import 'package:myxmi/screens/recipes.dart';
-import 'package:myxmi/screens/sign_in.dart';
+import 'package:myxmi/widgets/sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -37,11 +37,11 @@ class ViewProvider extends ChangeNotifier {
                 .orderBy('Made', descending: true)
                 .limit(20)
                 .get());
-        return uid != null ? RecipesScreen() : SignInPage();
+        return uid != null ? RecipesScreen() : SignIn();
       case 2:
-        return uid != null ? Favorites() : SignInPage();
+        return uid != null ? Favorites() : SignIn();
       case 3:
-        return uid != null ? MoreView() : SignInPage();
+        return uid != null ? MoreView() : SignIn();
       default:
         changeFuture(
             newFuture: FirebaseFirestore.instance

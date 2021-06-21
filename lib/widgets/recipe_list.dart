@@ -2,23 +2,32 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'widgets/recipe_tile.dart';
+import 'recipe_tile.dart';
 
-class RecipeList extends HookWidget {
+class RecipeList extends StatefulWidget {
   final QuerySnapshot snapshot;
-  RecipeList({@required this.snapshot});
+  const RecipeList({@required this.snapshot});
+  createState() => RecipeListState();
+}
+
+class RecipeListState extends State<RecipeList> {
+  Map _data;
+  List _keys = [];
+  initState() {
+    _data = widget.snapshot.docChanges.asMap();
+    _keys = _data.keys.toList();
+    super.initState();
+  }
+
   Widget build(BuildContext context) {
-    Map _data = snapshot.docChanges.asMap();
-    List _keys = _data.keys.toList();
-    final Size _size = MediaQuery.of(context).size;
     return ListView.builder(
       itemCount: _keys.length,
       itemBuilder: (_, int index) {
         int _newIndex = index + 1;
-        Map _indexData = snapshot.docs[index].data();
+        Map _indexData = widget.snapshot.docs[index].data();
         final Map _comments =
             _indexData['Comments'] != null ? _indexData['Comments'] : [];
-
+        //TODO keeps fetching new data
         print("INDEXDATA: $_indexData");
         print('COMMENTS: $_comments');
         final List _orderedComments = _comments.keys.toList();
@@ -31,7 +40,7 @@ class RecipeList extends HookWidget {
             gradient: LinearGradient(
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
-              colors: [ 
+              colors: [
                 Theme.of(context).cardColor,
                 _indexData['Composition']['Use'] == 'Work'
                     ? Colors.yellow.shade400
@@ -52,7 +61,7 @@ class RecipeList extends HookWidget {
                 newIndex: _newIndex,
                 keys: _keys,
                 index: index,
-                keyIndex: snapshot.docs[index].id,
+                keyIndex: widget.snapshot.docs[index].id,
                 time: '${_indexData['Made']}',
               ),
               Center(
@@ -63,7 +72,6 @@ class RecipeList extends HookWidget {
               ),
               Container(
                 height: 50,
-                width: _size.width,
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: _indexData['Composition']['Use'] == 'Work'

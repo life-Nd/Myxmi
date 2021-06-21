@@ -1,6 +1,5 @@
 import 'package:myxmi/app.dart';
 import 'package:myxmi/providers/view.dart';
-import 'package:myxmi/screens/sign_in.dart';
 import 'package:myxmi/widgets/search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -20,6 +19,7 @@ class Home extends HookWidget {
     final _view = useProvider(viewProvider);
     final _favorites = useProvider(favProvider);
     final _user = useProvider(userProvider);
+    final _change = useState<bool>(false);
     return Scaffold(
       appBar: viewIndex == 0 ||
               viewIndex == 1 && _user.account?.uid != null ||
@@ -43,28 +43,35 @@ class Home extends HookWidget {
               automaticallyImplyLeading: false,
               title: Text('Myxmi'),
             ),
-      floatingActionButton: viewIndex <= 1 && _user.account?.uid != null
-          ? FloatingActionButton(
-              backgroundColor: Colors.grey,
-              child: Icon(
-                Icons.add,
-                color: Colors.black,
-              ),
-              onPressed: () {
-                viewIndex == 1
-                    ? Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => AddRecipe(),
-                        ),
-                      )
-                    : Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => SignInPage(),
-                        ),
-                      );
-              },
-            )
-          : null,
+      floatingActionButton:
+          viewIndex == 0 || viewIndex == 1 && _user.account?.uid != null
+              ? _user.account?.uid != null
+                  ? FloatingActionButton(
+                      backgroundColor: Colors.green.shade400,
+                      child: Icon(
+                        Icons.add,
+                        color: Colors.black,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => AddRecipe(),
+                          ),
+                        );
+                      },
+                    )
+                  : FloatingActionButton(
+                      backgroundColor: Colors.red,
+                      child: Icon(
+                        Icons.add,
+                        color: Colors.black,
+                      ),
+                      onPressed: () {
+                        viewIndex = 3;
+                        _change.value = !_change.value;
+                      },
+                    )
+              : null,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
