@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'recipe_tile.dart';
 
@@ -13,14 +12,12 @@ class RecipeList extends StatefulWidget {
 class RecipeListState extends State<RecipeList> {
   Map _data;
   List _keys = [];
+  var _builder;
   initState() {
     _data = widget.snapshot.docChanges.asMap();
     _keys = _data.keys.toList();
-    super.initState();
-  }
-
-  Widget build(BuildContext context) {
-    return ListView.builder(
+    _builder = ListView.builder(
+      padding: EdgeInsets.all(1),
       itemCount: _keys.length,
       itemBuilder: (_, int index) {
         int _newIndex = index + 1;
@@ -28,12 +25,12 @@ class RecipeListState extends State<RecipeList> {
         final Map _comments =
             _indexData['Comments'] != null ? _indexData['Comments'] : [];
         //TODO keeps fetching new data
+        print('INDEX: $index');
         print("INDEXDATA: $_indexData");
-        print('COMMENTS: $_comments');
         final List _orderedComments = _comments.keys.toList();
         _orderedComments.sort();
         return Container(
-          height: 150,
+
           margin: EdgeInsets.all(5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
@@ -53,9 +50,20 @@ class RecipeListState extends State<RecipeList> {
             ),
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
+              Container(
+                height: 150,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: _indexData['Images'].toList().isNotEmpty
+                      ? Text(
+                          '${_indexData['Images'].toList().isNotEmpty}'
+                        )
+                      : _image(_indexData['Name']),
+                ),
+              ),
               RecipeTile(
                 indexData: _indexData,
                 newIndex: _newIndex,
@@ -86,50 +94,84 @@ class RecipeListState extends State<RecipeList> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _comments.isNotEmpty
-                        ? Text(
-                            'anonymous'.tr(),
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          )
-                        : Container(),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: _comments.isNotEmpty
-                          ? Center(
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 4),
-                                child: Text(
-                                  '${_comments[_orderedComments.last]}',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w400,
+                    Stack(
+                      alignment: Alignment.topLeft,
+                      children: [
+                        _comments.isNotEmpty
+                            ? Text(
+                                'anonymous'.tr(),
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              )
+                            : Container(),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: _comments.isNotEmpty
+                              ? Center(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 4),
+                                    child: Text(
+                                      '${_comments[_orderedComments.last]}',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : Center(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 4),
+                                    child: Text(
+                                      'noComments'.tr(),
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            )
-                          : Center(
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 4),
-                                child: Text(
-                                  'noComments'.tr(),
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ),
-                            ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ),
+              )
             ],
           ),
         );
       },
     );
+    super.initState();
+  }
+
+  Widget _image(String type) {
+    switch (type) {
+      case 'Fruit':
+        return Image.asset(
+          'assets/fruits.png',
+        );
+      case 'Vegetable':
+        return Image.asset('assets/vegetables.png');
+      case 'Meat':
+        return Image.asset('assets/meat.png');
+      case 'Seafood':
+        return Image.asset('assets/seafood.png');
+      case 'Dairy':
+        return Image.asset('assets/dairy.png');
+      case 'Eliquid':
+        return Image.asset('assets/eliquid.png');
+      default:
+        return Image.asset(
+          'assets/fruits.png',
+          fit: BoxFit.fitWidth,
+        );
+    }
+  }
+
+  Widget build(BuildContext context) {
+    return _builder;
   }
 }

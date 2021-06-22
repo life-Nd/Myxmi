@@ -34,6 +34,7 @@ class ProductsListState extends State<ProductsList> {
           print("WAITING PRODUCTSLISt");
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text('${'loading'.tr()}...'),
             ],
@@ -41,7 +42,7 @@ class ProductsListState extends State<ProductsList> {
         }
         if (snapshot.data != null) {
           Map _data = snapshot.data.data();
-          print("DATA:--- $_data----");
+          print("---DATA:---- $_data----");
           return Consumer(builder: (context, watch, child) {
             final _recipe = watch(recipeProvider);
             final _keys = _data.keys.toList();
@@ -55,10 +56,11 @@ class ProductsListState extends State<ProductsList> {
                     return Dismissible(
                       key: UniqueKey(),
                       onDismissed: (direction) {
-                        // _data.remove(_data[_data.keys[index]]);
-                        // widget.recipe.hide(component: _keys[index]);
-                        // print("REMOVED: ${_keys[index]}");
-                        // print("DISMISSED $direction");
+                        print('_key: $_key');
+                        _data.remove(_data[index]);
+                        _recipe.hide(component: _keys[index]);
+                        print("REMOVED: ${_keys[index]}");
+                        print("DISMISSED $direction");
                       },
                       background: Padding(
                         padding: const EdgeInsets.all(8.0),

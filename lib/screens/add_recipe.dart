@@ -72,7 +72,7 @@ class AddRecipe extends HookWidget {
                           isDense: true,
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20)),
-                          hintText: 'Recipe name',
+                          hintText: 'recipeName'.tr(),
                         ),
                         onSubmitted: (submitted) {
                           _recipe.changeTitle(newName: _titleCtrl.text);

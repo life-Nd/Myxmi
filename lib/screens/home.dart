@@ -29,9 +29,10 @@ class Home extends HookWidget {
                       viewIndex == 1 &&
                           _user.account?.uid != null &&
                           _view.searching
-                  ? Size(100, _size.width)
-                  : Size(55, _size.width),
+                  ? Size(_size.width, 100)
+                  : Size(_size.width, 55),
               child: SafeArea(
+                top: true,
                 child: SearchRecipes(
                   showFilter: viewIndex == 2 && _user.account?.uid != null
                       ? false
@@ -108,14 +109,9 @@ class Home extends HookWidget {
           _favorites.showFilter(false);
         },
       ),
-      body: Container(
-        height: _size.height,
-        width: _size.width,
-        padding: EdgeInsets.all(4),
-        child: _view.changeView(
+      body:  _view.changeView(
           uid: _user.account?.uid,
           newView: viewIndex,
-        ),
       ),
     );
   }

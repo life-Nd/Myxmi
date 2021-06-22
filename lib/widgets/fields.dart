@@ -27,21 +27,21 @@ class FieldsState extends State<Fields> {
         controller: textCtrl,
         keyboardType: TextInputType.number,
         onSubmitted: (submitted) {
-          print("DATA ${widget.data.toString()}");
-          // widget.recipe.changeEstimatedWeight();
           FocusScope.of(context).requestFocus(FocusNode());
         },
         onChanged: (value) {
-          print("DATA ${widget.data.keys.toString()}");
-          // widget.recipe.changeComposition(
-          //     key: widget.data.keys.toString(),
-          //     value: '$value',
-          //     type: widget.data['MesureType']);
-          // widget.recipe.changeQuantity(
-          //   key: widget.data.keys.toString(),
-          //   value: '$value',
-          //   type: widget.data['MesureType'],
-          // );
+          
+          print('KEY: $value');
+          print('VALUE: ${widget.data['MesureType']}');
+          widget.recipe.changeComposition(
+              key: widget.data['Name'],
+              value: '$value',
+              type: widget.data['MesureType']);
+          widget.recipe.changeQuantity(
+            key: widget.data.keys.toString(),
+            value: '$value',
+            type: widget.data['MesureType'],
+          );
         },
         onEditingComplete: () {
           FocusScope.of(context).requestFocus(FocusNode());

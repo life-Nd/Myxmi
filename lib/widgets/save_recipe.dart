@@ -71,6 +71,13 @@ class SaveButton extends HookWidget {
                               'UserEmail': '${_user.account?.email}',
                               'UserAvatar': '${_user.account?.photoURL}',
                               'Images': _image.imageLinks,
+                              'Category': '${_recipe.recipe.category}',
+                              'SubCategory': '${_recipe.recipe.subCategory}',
+                              'Stars': '${_recipe.recipe.stars}',
+                              'Access': '${_recipe.recipe.access}',
+                              'Vegan': '${_recipe.recipe.vegan}',
+                              
+                              'Difficulty': '${_recipe.recipe.difficulty}',
                               'Reference': '$_random'
                             }).then(
                               (value) =>

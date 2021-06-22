@@ -19,7 +19,6 @@ class SearchRecipes extends HookWidget {
     final _change = useState<bool>(false);
     final _fav = useProvider(favProvider);
     return ListTile(
-      visualDensity: VisualDensity.adaptivePlatformDensity,
       dense: true,
       title: TextField(
         onTap: () {

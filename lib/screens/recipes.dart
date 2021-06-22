@@ -9,6 +9,7 @@ class RecipesScreen extends StatefulWidget {
 
 class RecipesScreenState extends State<RecipesScreen> {
   Future _future;
+  Widget futureBuilder;
   @override
   void initState() {
     _future = FirebaseFirestore.instance
@@ -21,52 +22,47 @@ class RecipesScreenState extends State<RecipesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Expanded(
-            child: FutureBuilder(
-          future: _future,
-          builder: (_, AsyncSnapshot snapshot) {
-            if (snapshot.hasError) {
-              return Text(
-                'somethingWentWrong'.tr(),
-                style: TextStyle(color: Colors.white),
-              );
-            }
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              print("LOADING Recipes");
-              return Column(
+    return FutureBuilder(
+      future: _future,
+      builder: (_, AsyncSnapshot snapshot) {
+        if (snapshot.hasError) {
+          return Text(
+            'somethingWentWrong'.tr(),
+            style: TextStyle(color: Colors.white),
+          );
+        }
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          print("LOADING Recipes");
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                "${'loading'.tr()}...",
+              ),
+            ],
+          );
+        }
+        return snapshot.data != null
+            ? RecipeList(snapshot: snapshot.data)
+            : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        bottom: 20.0, left: 40, right: 40.0),
+                    child: LinearProgressIndicator(
+                      color: Colors.white,
+                      backgroundColor: Colors.black,
+                    ),
+                  ),
                   Text(
-                    "${'loading'.tr()}...",
+                    'noRecipes'.tr(),
+                    style: TextStyle(color: Colors.white),
                   ),
                 ],
               );
-            }
-            return snapshot.data != null
-                ? RecipeList(snapshot: snapshot.data)
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            bottom: 20.0, left: 40, right: 40.0),
-                        child: LinearProgressIndicator(
-                          color: Colors.white,
-                          backgroundColor: Colors.black,
-                        ),
-                      ),
-                      Text(
-                        'noRecipes'.tr(),
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ],
-                  );
-          },
-        )),
-      ],
+      },
     );
   }
 }

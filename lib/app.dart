@@ -23,7 +23,6 @@ class App extends HookWidget {
   Widget build(BuildContext context) {
     final _userProvider = useProvider(userProvider);
     final _prefProvider = useProvider(prefProvider);
-    
     return FutureBuilder(
       future: _prefProvider.readLanguage(),
       builder: (_, data) {
