@@ -63,7 +63,7 @@ class SaveButton extends HookWidget {
                               'Score': '0.0',
                               'Composition': _recipe.composition,
                               'Comments': {},
-                              'Estimated Quantity':
+                              'Estimated Quantitu8y':
                                   '${_recipe.estimatedWeight.toStringAsFixed(3)}',
                               'Actual Quantity': '${_actualWeightCtrl.text}',
                               'UserName': '${_user.account?.displayName}',
