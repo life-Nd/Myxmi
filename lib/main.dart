@@ -11,6 +11,7 @@ import 'providers/user.dart';
 final userProvider = Provider<UserProvider>((ref) => UserProvider());
 
 void main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
   await TimeMachine.initialize({'rootBundle': rootBundle});
   await Firebase.initializeApp();

@@ -125,6 +125,7 @@
    "noComments":"No comments",
    "favorites":"Favorites",
    "recipe":"Recipe",
+   "recipeName":"Recipe name",
    "use":"Use",
    "actQuantity":"Act. Quantity",
    "estQuantity":"Est. Quantity",
@@ -147,15 +148,16 @@
    "subCategory":"Subcategory",
    "drink":"Drink",
    "food":"Food",
-   "eliquid":"E-Liquid",
+   "vape":"Vape",
    "other":"Other",
    "appetizer":"Appetizer",
    "salad":"Salad",
-   
    "dinner":"Dinner",
    "breakfast":"Breakfast",
    "soup":"Soup",
    "dessert":"Dessert",
+   "base":"Base",
+   "flavour":"Flavour",
    "products":"Products",
    "images":"Images",
    "step":"Step",
@@ -179,5 +181,7 @@
    "enterTotalQuantity":"Enter the total quantity of the product in hand. The system will keep subtracting the portion used each time.",
    "selectExpirationDate":"Select the expiration date",
    "expirationDate":"Avoid waste and eat your food fresh.",
-   "optional":"Optional"
+   "optional":"Optional",
+   "duration":"Duration",
+   "time":"Time"
 }

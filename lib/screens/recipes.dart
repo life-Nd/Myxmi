@@ -33,14 +33,11 @@ class RecipesScreenState extends State<RecipesScreen> {
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
           print("LOADING Recipes");
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                "${'loading'.tr()}...",
-              ),
-            ],
+          return Container(
+            alignment: Alignment.center,
+            child: Text(
+              "${'loading'.tr()}...",
+            ),
           );
         }
         return snapshot.data != null

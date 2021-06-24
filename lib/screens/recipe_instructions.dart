@@ -6,6 +6,17 @@ class RecipeInstructions extends HookWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.radio_button_unchecked_rounded,
+              size: 15,
+            ),
+            Icon(Icons.radio_button_checked_rounded, size: 13),
+            Icon(Icons.radio_button_unchecked_rounded, size: 13),
+          ],
+        ),
         Text('instructions'.tr()),
         Expanded(
           child: ListView.builder(
@@ -13,6 +24,7 @@ class RecipeInstructions extends HookWidget {
             itemBuilder: (_, int index) {
               int _index = index + 1;
               return Card(
+                color: Theme.of(context).scaffoldBackgroundColor,
                 child: ListTile(
                   title: Text('${'step'.tr()} $_index'),
                   subtitle: Text('$index'),
@@ -21,7 +33,30 @@ class RecipeInstructions extends HookWidget {
             },
           ),
         ),
-        Text('2/3'),
+        Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10, right: 30, bottom: 20),
+                child: TextField(
+                  decoration: InputDecoration(
+                    fillColor: Colors.grey,
+                    isDense: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    hintText: 'Step',
+                    labelText: '',
+                  ),
+                ),
+              ),
+            ),
+            IconButton(
+              icon: Icon(Icons.send, color: Colors.green),
+              onPressed: () {},
+            ),
+          ],
+        ),
       ],
     );
   }

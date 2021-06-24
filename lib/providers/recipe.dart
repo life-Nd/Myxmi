@@ -15,6 +15,11 @@ class RecipeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  changeDuration({@required String newDuration}) {
+    recipe.duration = newDuration;
+    notifyListeners();
+  }
+
   changeDifficulty({double newDifficultyValue}) {
     difficultyValue = newDifficultyValue;
     notifyListeners();
@@ -44,6 +49,7 @@ class RecipeProvider extends ChangeNotifier {
   changeComposition(
       {@required String key, @required String type, @required String value}) {
     composition[key] = '$value $type';
+    recipe.productsCount = '${composition.keys}';
   }
 
   changeQuantity(
@@ -60,6 +66,10 @@ class RecipeProvider extends ChangeNotifier {
       quantity[key] =
           value != null && value.isNotEmpty ? double.parse(value) / 1.05 : 0.0;
     }
+  }
+
+  saveToDb() {
+    recipe.toMap();
   }
 
   changeEstimatedWeight() {

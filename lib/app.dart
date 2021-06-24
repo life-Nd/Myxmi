@@ -8,7 +8,6 @@ import 'main.dart';
 import 'screens/home.dart';
 import 'providers/prefs.dart';
 
-
 final firebaseAuth = Provider<FirebaseAuth>((ref) {
   return FirebaseAuth.instance;
 });
@@ -38,8 +37,6 @@ class App extends HookWidget {
                     builder:
                         (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                       if (snapshot.hasData && snapshot.data.data() != null) {
-                        print('snapshot.hasData: ${snapshot.hasData}');
-                        print("_user.account.uid ${_userProvider.account.uid}");
                         var _data = snapshot.data.data();
                         _favProvider.addFavorites(newFavorite: _data);
                       }

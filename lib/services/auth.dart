@@ -270,10 +270,6 @@ class AuthHandler {
     User user;
     final GoogleSignIn googleSignIn = GoogleSignIn();
     final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
-    // _showLoading
-    // ? loadingAlertDialog(context: context)
-    // : print('!!LOADING COMPLETED!!');
-
     if (googleSignInAccount != null) {
       final GoogleSignInAuthentication googleSignInAuthentication =
           await googleSignInAccount.authentication;
@@ -287,7 +283,6 @@ class AuthHandler {
         user = userCredential.user;
 
         print("USER: ${user.email}");
-        // _showLoading = false;
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
               builder: (_) => App(),
@@ -325,9 +320,6 @@ class AuthHandler {
     List<Scope> scopes = const [],
     BuildContext context,
   }) async {
-    // _showLoading
-    //     ? loadingAlertDialog(context: context)
-    //     : print('!!LOADING COMPLETED!!');
     User user;
     final result = await AppleSignIn.performRequests(
         [AppleIdRequest(requestedScopes: scopes)]);

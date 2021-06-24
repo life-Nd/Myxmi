@@ -32,12 +32,9 @@ class ProductsListState extends State<ProductsList> {
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
           print("WAITING PRODUCTSLISt");
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text('${'loading'.tr()}...'),
-            ],
+          return Container(
+            alignment: Alignment.center,
+            child: Text('${'loading'.tr()}...'),
           );
         }
         if (snapshot.data != null) {

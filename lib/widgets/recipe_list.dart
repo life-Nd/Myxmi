@@ -24,13 +24,10 @@ class RecipeListState extends State<RecipeList> {
         Map _indexData = widget.snapshot.docs[index].data();
         final Map _comments =
             _indexData['Comments'] != null ? _indexData['Comments'] : [];
-        //TODO keeps fetching new data
-        print('INDEX: $index');
-        print("INDEXDATA: $_indexData");
+        print("$index: $_indexData");
         final List _orderedComments = _comments.keys.toList();
         _orderedComments.sort();
         return Container(
-
           margin: EdgeInsets.all(5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),

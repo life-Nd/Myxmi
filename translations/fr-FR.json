@@ -179,7 +179,8 @@
   "noComments":"Pas de commentaire",
   "favorites":"Favoris",
   "recipe":"Recette",
-  "use":"Use",
+  "recipeName":"Nom de la recette",
+  "use":"Usage",
   "actQuantity":"Act. Quantity",
   "estQuantity":"Est. Quantity",
   "connected":"Connecté",
@@ -200,13 +201,15 @@
   "subCategory":"Sous-Categorie",
    "drink":"Breuvage",
    "food":"Nourriture",
-   "eliquid":"E-liquide",
+   "vape":"Vape",
    "appetizer":"Apperitif",
    "salad":"Salade",
    "dinner":"Dîner",
    "breakfast":"Déjeuner",
    "soup":"Soupe",
    "dessert":"Dessert",
+   "base":"Base",
+   "flavour":"Saveur",
    "products":"Produits",
    "images":"Images",
    "step":"Étape",
@@ -231,8 +234,7 @@
    "enterTotalQuantity":"Entrer la quantité totale du produit. Le système se chargera de soustraire à chaque fois les quantités utilisées.",
    "selectExpirationDate":"Selectionnez la date d'expiration",
    "expirationDate":"Evitez le gaspillage et mangez vos produits frais.",
-   "optional":"Optionnel"
-   
-
- 
+   "optional":"Optionnel",
+   "duration":"Durée",
+   "time":"Temps"
 }
