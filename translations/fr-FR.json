@@ -138,7 +138,7 @@
   "labelAlert":"Titre de l'alerte",
   "hintAlertDetails":"ex: Nous avons un probleme technique avec notre caisse enregistreuse",
   "labelTextDetails":"Details de l'alerte",
-  "add":"Ajouter une recette",
+  "addRecipe":"Ajouter une recette",
   "createEntryForm":"Créer un formulaire",
   "question":"Question",
   "firstName":"ex: Prénom",
@@ -236,5 +236,6 @@
    "expirationDate":"Evitez le gaspillage et mangez vos produits frais.",
    "optional":"Optionnel",
    "duration":"Durée",
-   "time":"Temps"
+   "time":"Temps",
+   "add":"Ajouter"
 }

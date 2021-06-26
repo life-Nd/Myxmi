@@ -6,18 +6,6 @@ class RecipeInstructions extends HookWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.radio_button_unchecked_rounded,
-              size: 15,
-            ),
-            Icon(Icons.radio_button_checked_rounded, size: 13),
-            Icon(Icons.radio_button_unchecked_rounded, size: 13),
-          ],
-        ),
-        Text('instructions'.tr()),
         Expanded(
           child: ListView.builder(
             itemCount: 10,
@@ -37,7 +25,7 @@ class RecipeInstructions extends HookWidget {
           children: [
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(left: 10, right: 30, bottom: 20),
+                padding: const EdgeInsets.only(left: 10, right: 30, bottom: 5),
                 child: TextField(
                   decoration: InputDecoration(
                     fillColor: Colors.grey,

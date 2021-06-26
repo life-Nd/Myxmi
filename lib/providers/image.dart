@@ -42,7 +42,6 @@ class ImageProvider extends ChangeNotifier {
                       height: 7,
                     ),
                     FloatingActionButton(
-                      backgroundColor: Colors.red,
                       child: Icon(
                         Icons.image,
                       ),

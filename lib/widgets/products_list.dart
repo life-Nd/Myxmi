@@ -39,7 +39,6 @@ class ProductsListState extends State<ProductsList> {
         }
         if (snapshot.data != null) {
           Map _data = snapshot.data.data();
-          print("---DATA:---- $_data----");
           return Consumer(builder: (context, watch, child) {
             final _recipe = watch(recipeProvider);
             final _keys = _data.keys.toList();
@@ -49,11 +48,12 @@ class ProductsListState extends State<ProductsList> {
                   itemCount: _keys.length,
                   itemBuilder: (context, index) {
                     final _key = _keys[index];
-                    print("KEY: $_key");
                     return Dismissible(
                       key: UniqueKey(),
                       onDismissed: (direction) {
                         print('_key: $_key');
+                        print(
+                            'Recipe: ${_recipe.composition['${_data[_keys[index]]['Name']}']}');
                         _data.remove(_data[index]);
                         _recipe.hide(component: _keys[index]);
                         print("REMOVED: ${_keys[index]}");
@@ -70,9 +70,11 @@ class ProductsListState extends State<ProductsList> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                                'Delete',
+                                'delete'.tr(),
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 17),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 17,
+                                ),
                               ),
                               SizedBox(
                                 width: 40,
@@ -85,6 +87,7 @@ class ProductsListState extends State<ProductsList> {
                       child: Fields(
                         data: _data[_key],
                         recipe: _recipe,
+                        
                       ),
                     );
                   }),

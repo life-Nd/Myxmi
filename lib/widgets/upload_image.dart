@@ -18,7 +18,6 @@ class UploadImage extends HookWidget {
     return Scaffold(
       key: _scaffoldKey,
       body: Container(
-        color: Colors.black,
         height: size.height,
         width: size.width,
         child: Column(
@@ -34,6 +33,7 @@ class UploadImage extends HookWidget {
             ),
             _image.added == "No"
                 ? RawMaterialButton(
+                    fillColor: Theme.of(context).cardColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(
                         Radius.circular(15),
@@ -41,7 +41,6 @@ class UploadImage extends HookWidget {
                     ),
                     elevation: 7.0,
                     child: Text('add'.tr()),
-                    fillColor: Colors.blue,
                     onPressed: () {
                       _image.addImageToDb(
                           addedImage: "Yes",

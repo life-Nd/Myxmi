@@ -12,15 +12,17 @@ class Fields extends StatefulWidget {
 
 class FieldsState extends State<Fields> {
   initState() {
-    widget.data.keys.forEach((element) {
-      textCtrl =
-          TextEditingController(text: widget.recipe.composition[element]);
-    });
-
     super.initState();
   }
 
   Widget build(BuildContext context) {
+    print('---WIDGET.data: ${widget.data}');
+    print('---WIDGET.data.values: ${widget.data.values}');
+    print('---WIDGET.recipe.composition ${widget.recipe.composition}');
+    List _ingredientName =
+        widget.recipe.composition[widget.data['Name']].toString().split(' ');
+    print('Ingredient: $_ingredientName');
+    textCtrl = TextEditingController(text: _ingredientName[0]);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextField(
@@ -30,9 +32,6 @@ class FieldsState extends State<Fields> {
           FocusScope.of(context).requestFocus(FocusNode());
         },
         onChanged: (value) {
-          
-          print('KEY: $value');
-          print('VALUE: ${widget.data['MesureType']}');
           widget.recipe.changeComposition(
               key: widget.data['Name'],
               value: '$value',
@@ -48,7 +47,7 @@ class FieldsState extends State<Fields> {
         },
         decoration: InputDecoration(
           labelText: '${widget.data['Name']}',
-          hintText: '${widget.data['MesureType']}',
+          suffixText: '${widget.data['MesureType']}',
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
           ),

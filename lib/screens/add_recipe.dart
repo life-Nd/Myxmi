@@ -19,13 +19,14 @@ TextEditingController _durationCtrl = TextEditingController();
 final recipeProvider =
     ChangeNotifierProvider<RecipeProvider>((ref) => RecipeProvider());
 List steps = [];
+int _pageIndex = 0;
 
 class AddRecipe extends HookWidget {
   Widget build(BuildContext context) {
-    print("ADDING RECIPE");
+
     final _recipe = useProvider(recipeProvider);
     final _user = useProvider(userProvider);
-    final Size _size = MediaQuery.of(context).size;
+    final _change = useState<bool>(false);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -45,43 +46,62 @@ class AddRecipe extends HookWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Column(
-                children: [
-                  Text('details'.tr().toUpperCase(),
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  Container(
-                    height: 4,
-                    color: Colors.black,
-                    width: 100,
+              Container(
+                padding: EdgeInsets.only(left: 10, right: 10),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      width: 4,
+                      color: _pageIndex == 0
+                          ? Theme.of(context).appBarTheme.titleTextStyle.color
+                          : Theme.of(context).scaffoldBackgroundColor,
+                    ),
                   ),
-                ],
+                ),
+                child: Text('details'.tr().toUpperCase(),
+                    style: TextStyle(fontWeight: FontWeight.bold)),
               ),
-              Column(
-                children: [
-                  Text('instructions'.tr().toUpperCase(),
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  Container(
-                    height: 4,
-                    color: Colors.black,
-                    width: 150,
-                  ),
-                ],
+              Container(
+                padding: EdgeInsets.only(left: 10, right: 10),
+                decoration: BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(
+                    width: 4,
+                    color: _pageIndex == 1
+                        ? Theme.of(context).appBarTheme.titleTextStyle.color
+                        : Theme.of(context).scaffoldBackgroundColor,
+                  )),
+                ),
+                child: Text('instructions'.tr().toUpperCase(),
+                    style: TextStyle(fontWeight: FontWeight.bold)),
               ),
-              Column(
-                children: [
-                  Text('images'.tr().toUpperCase(),
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  Container(
-                    height: 4,
-                    color: Colors.black,
-                    width: 100,
+              Container(
+                padding: EdgeInsets.only(left: 10, right: 10),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      width: 4,
+                      color: _pageIndex == 2
+                          ? Theme.of(context).appBarTheme.titleTextStyle.color
+                          : Theme.of(context).scaffoldBackgroundColor,
+                    ),
                   ),
-                ],
+                ),
+                child: Text('image'.tr().toUpperCase(),
+                    style: TextStyle(fontWeight: FontWeight.bold)),
               ),
             ],
           ),
           Expanded(
             child: PageView(
+              controller: PageController(
+                initialPage: _pageIndex,
+                keepPage: true,
+              ),
+              onPageChanged: (index) {
+                _pageIndex = index;
+                _change.value = !_change.value;
+              },
               children: [
                 SingleChildScrollView(
                   scrollDirection: Axis.vertical,
