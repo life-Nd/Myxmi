@@ -19,10 +19,14 @@ class FieldsState extends State<Fields> {
     print('---WIDGET.data: ${widget.data}');
     print('---WIDGET.data.values: ${widget.data.values}');
     print('---WIDGET.recipe.composition ${widget.recipe.composition}');
+    print(
+        '***widget.recipe.NAME : ${widget.recipe.composition[widget.data['Name']]}');
     List _ingredientName =
         widget.recipe.composition[widget.data['Name']].toString().split(' ');
-    print('Ingredient: $_ingredientName');
-    textCtrl = TextEditingController(text: _ingredientName[0]);
+    print('!!!_ingredientName[0]: ${_ingredientName[0]}');
+    textCtrl = _ingredientName[0] != 'null'
+        ? TextEditingController(text: _ingredientName[0])
+        : TextEditingController();
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextField(

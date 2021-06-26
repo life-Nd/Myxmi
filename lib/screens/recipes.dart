@@ -32,7 +32,6 @@ class RecipesScreenState extends State<RecipesScreen> {
           );
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
-          print("LOADING Recipes");
           return Container(
             alignment: Alignment.center,
             child: Text(

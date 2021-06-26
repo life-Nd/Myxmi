@@ -31,7 +31,6 @@ class ProductsListState extends State<ProductsList> {
           return Text('${'error'}');
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
-          print("WAITING PRODUCTSLISt");
           return Container(
             alignment: Alignment.center,
             child: Text('${'loading'.tr()}...'),
@@ -51,13 +50,8 @@ class ProductsListState extends State<ProductsList> {
                     return Dismissible(
                       key: UniqueKey(),
                       onDismissed: (direction) {
-                        print('_key: $_key');
-                        print(
-                            'Recipe: ${_recipe.composition['${_data[_keys[index]]['Name']}']}');
                         _data.remove(_data[index]);
                         _recipe.hide(component: _keys[index]);
-                        print("REMOVED: ${_keys[index]}");
-                        print("DISMISSED $direction");
                       },
                       background: Padding(
                         padding: const EdgeInsets.all(8.0),
