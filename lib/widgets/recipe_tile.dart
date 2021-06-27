@@ -40,32 +40,23 @@ class RecipeTile extends HookWidget {
         ));
       },
       onTap: () {
-        viewComposition(
-          context: context,
-          user: _user,
-          fav: _fav,
-          indexData: indexData,
-          keyIndex: keyIndex,
-          size: _size,
-        );
+        // viewComposition(
+        //   context: context,
+        //   user: _user,
+        //   fav: _fav,
+        //   indexData: indexData,
+        //   keyIndex: keyIndex,
+        //   size: _size,
+        // );
       },
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
-      // leading: CircleAvatar(
-      //   backgroundColor: Colors.black,
-      //   child: Center(
-      //     child: Text(
-      //       '$newIndex',
-      //       style: TextStyle(color: Colors.white),
-      //     ),
-      // ),
-      // ),
       title: Row(
         children: [
-          Text('${indexData['Name']}'),
+          Text('${indexData['title']}'),
           Text(
-            '  #${indexData['Reference']}',
+            '  #${indexData['reference']}',
             style: TextStyle(
               fontWeight: FontWeight.bold,
             ),
@@ -76,44 +67,44 @@ class RecipeTile extends HookWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            height: 30,
-            width: _size.width,
-            child: ListView.builder(
-                itemCount: indexData['Composition'].keys.length,
-                scrollDirection: Axis.horizontal,
-                padding: EdgeInsets.all(1),
-                itemBuilder: (_, int index) {
-                  List _key = indexData['Composition'].keys.toList();
-                  return Text(
-                      '${_key[index]}: ${indexData['Composition'][_key[index]]}, ');
-                }),
-          ),
+          // Container(
+          //   height: 30,
+          //   width: _size.width,
+          //   child: ListView.builder(
+          //       itemCount: indexData['Composition'].keys.length,
+          //       scrollDirection: Axis.horizontal,
+          //       padding: EdgeInsets.all(1),
+          //       itemBuilder: (_, int index) {
+          //         List _key = indexData['Composition'].keys.toList();
+          //         return Text(
+          //             '${_key[index]}: ${indexData['Composition'][_key[index]]}, ');
+          //       }),
+          // ),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text('${'created'.tr()}: '),
-                Text(
-                  ': ${formatTime('$time')}',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.black),
-                ),
+                // Text(
+                //   ': ${formatTime('$time')}',
+                //   style: TextStyle(
+                //       fontWeight: FontWeight.bold, color: Colors.black),
+                // ),
               ],
             ),
           )
         ],
       ),
-      trailing: CircleAvatar(
-        backgroundColor: double.parse('${indexData['Score']}') < 5.0
-            ? Colors.red
-            : Colors.green,
-        child: Text(
-          '${indexData['Score']}',
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
+      // trailing: CircleAvatar(
+      //   backgroundColor: double.parse('${indexData['Score']}') < 5.0
+      //       ? Colors.red
+      //       : Colors.green,
+      //   child: Text(
+      //     '${indexData['Score']}',
+      //     style: TextStyle(color: Colors.white),
+      //   ),
+      // ),
     );
   }
 }

@@ -189,19 +189,6 @@ class _Filter extends StatefulWidget {
 }
 
 class _FilterState extends State<_Filter> {
-  // Widget image = CircularProgressIndicator();
-  // initState() {
-  //   image = Container(
-  //     height: 150,
-  //     width: 150,
-  //     child: ClipRRect(
-  //       child: Image.asset('assets/${widget.legend}.jpg'),
-  //       borderRadius: BorderRadius.circular(20),
-  //     ),
-  //   );
-  //   super.initState();
-  // }
-
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
     return GestureDetector(
@@ -229,7 +216,10 @@ class _FilterState extends State<_Filter> {
               width: _size.width / 2,
               child: ClipRRect(
                 child: Image.asset(
+                  
                   'assets/${widget.legend}.jpg',
+                  cacheHeight: 400,
+                  cacheWidth: 400,
                   fit: BoxFit.cover,
                 ),
                 borderRadius: BorderRadius.circular(20),

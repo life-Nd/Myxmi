@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import '../widgets/recipe_list.dart';
+import 'package:myxmi/widgets/recipe_list.dart';
 
 class RecipesScreen extends StatefulWidget {
   final String legend;
@@ -14,27 +14,39 @@ class RecipesScreenState extends State<RecipesScreen> {
   Widget futureBuilder;
   @override
   void initState() {
-    _future = FirebaseFirestore.instance
-        .collection('Recipes')
-        .where('sub_category', isEqualTo: '${widget.legend}')
-        .get();
+    getFuture();
     super.initState();
   }
 
-  // Future getFuture() async {
-  //   switch (widget.legend ) {
-  //     case ('Breakfast'):
-  //       return FirebaseFirestore.instance
-  //           .collection('Recipes')
-  //           .where('sub_category', isEqualTo: 'Breakfast')
-  //           .get();
-  //   }
-  // }
+  Future getFuture() {
+    print('widget.legend: ${widget.legend}');
+    String _legend =
+        widget.legend[0].toUpperCase() + widget.legend.substring(1);
+    switch (_legend) {
+      case ('All'):
+        _future = FirebaseFirestore.instance
+            .collection('Recipes')
+            .where('category', isEqualTo: '$_legend')
+            .get();
+        return _future;
+      default:
+        _future = FirebaseFirestore.instance
+            .collection('Recipes')
+            .where('sub_category', isEqualTo: '$_legend')
+            .get();
+        return _future;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+     String _legend =
+        widget.legend[0].toUpperCase() + widget.legend.substring(1);
     return FutureBuilder(
-      future: _future,
+      future: FirebaseFirestore.instance
+          .collection('Recipes')
+          .where('sub_category', isEqualTo: '$_legend')
+          .get(),
       builder: (_, AsyncSnapshot snapshot) {
         if (snapshot.hasError) {
           return Text(
@@ -65,7 +77,7 @@ class RecipesScreenState extends State<RecipesScreen> {
                   ),
                   Text(
                     'noRecipes'.tr(),
-                    style: TextStyle(color: Colors.white),
+                    // style: TextStyle(color: Colors.white),
                   ),
                 ],
               );
