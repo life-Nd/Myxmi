@@ -7,10 +7,10 @@ class AddedImages extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final _image = useProvider(imageProvider);
-    return _image.imageIds != null && _image.imageIds.length != 0
+    return _image.imageId != null 
         ? Card(
             child: Image.network(
-              _image.imageLinks[0],
+              _image.imageLink,
               fit: BoxFit.fitHeight,
               alignment: Alignment.topCenter,
             ),

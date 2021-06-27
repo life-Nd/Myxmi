@@ -17,7 +17,7 @@ class FoodSubCategories extends HookWidget {
             onPressed: () {
               _recipe.changeSubCategory(newSubCategory: 'Breakfast');
             },
-            fillColor: _recipe.recipe.subCategory == 'Breakfast'
+            fillColor: _recipe.details.subCategory == 'Breakfast'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
@@ -31,7 +31,7 @@ class FoodSubCategories extends HookWidget {
             onPressed: () {
               _recipe.changeSubCategory(newSubCategory: 'Appetizer');
             },
-            fillColor: _recipe.recipe.subCategory == 'Appetizer'
+            fillColor: _recipe.details.subCategory == 'Appetizer'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
@@ -45,7 +45,7 @@ class FoodSubCategories extends HookWidget {
             onPressed: () {
               _recipe.changeSubCategory(newSubCategory: 'Salad');
             },
-            fillColor: _recipe.recipe.subCategory == 'Salad'
+            fillColor: _recipe.details.subCategory == 'Salad'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
@@ -59,7 +59,7 @@ class FoodSubCategories extends HookWidget {
             onPressed: () {
               _recipe.changeSubCategory(newSubCategory: 'Soup');
             },
-            fillColor: _recipe.recipe.subCategory == 'Soup'
+            fillColor: _recipe.details.subCategory == 'Soup'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
@@ -73,7 +73,7 @@ class FoodSubCategories extends HookWidget {
             onPressed: () {
               _recipe.changeSubCategory(newSubCategory: 'Dinner');
             },
-            fillColor: _recipe.recipe.subCategory == 'Dinner'
+            fillColor: _recipe.details.subCategory == 'Dinner'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
@@ -84,7 +84,7 @@ class FoodSubCategories extends HookWidget {
           ),
           RawMaterialButton(
             child: Text('dessert'.tr()),
-            fillColor: _recipe.recipe.subCategory == 'Dessert'
+            fillColor: _recipe.details.subCategory == 'Dessert'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             onPressed: () {
@@ -101,7 +101,7 @@ class FoodSubCategories extends HookWidget {
             onPressed: () {
               _recipe.changeSubCategory(newSubCategory: 'Other');
             },
-            fillColor: _recipe.recipe.subCategory == 'Other'
+            fillColor: _recipe.details.subCategory == 'Other'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:

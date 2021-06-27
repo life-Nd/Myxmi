@@ -1,11 +1,12 @@
 import 'dart:io';
 import 'dart:math';
-import 'package:myxmi/widgets/upload_image.dart';
+import 'package:myxmi/screens/add_recipe.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:easy_localization/easy_localization.dart';
+import 'package:sn_progress_dialog/progress_dialog.dart';
 
 final imageProvider =
     ChangeNotifierProvider<ImageProvider>((ref) => ImageProvider());
@@ -13,8 +14,8 @@ final imageProvider =
 class ImageProvider extends ChangeNotifier {
   File imageSample;
   String urlString;
-  List<String> imageLinks = [];
-  List<String> imageIds = [];
+  String imageLink = '';
+  String imageId = '';
   String added;
   final picker = ImagePicker();
 
@@ -46,11 +47,11 @@ class ImageProvider extends ChangeNotifier {
                         Icons.image,
                       ),
                       onPressed: () {
-                        getImage(ImageSource.camera).then(
+                        pickImage(ImageSource.gallery).then(
                           (a) {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (_) => UploadImage(),
+                                builder: (_) => AddRecipe(),
                               ),
                             );
                           },
@@ -73,11 +74,11 @@ class ImageProvider extends ChangeNotifier {
                         ),
                       ),
                       onPressed: () {
-                        getImage(ImageSource.camera).then(
+                        pickImage(ImageSource.camera).then(
                           (a) {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (_) => UploadImage(),
+                                builder: (_) => AddRecipe(),
                               ),
                             );
                           },
@@ -94,62 +95,54 @@ class ImageProvider extends ChangeNotifier {
     );
   }
 
-  Future getImage(ImageSource source) async {
+  Future pickImage(ImageSource source) async {
     final pickedFile = await picker.getImage(source: source, imageQuality: 50);
-    added = "No";
-    imageSample = File(pickedFile.path);
+    changeImageSample(pickedFile.path);
     print("GetImage: $added");
     notifyListeners();
   }
 
-  addImageToDb(
+  changeImageSample(String path) {
+    imageSample = File(path);
+    notifyListeners();
+  }
+
+  Future addImageToDb(
       {String addedImage,
       BuildContext context,
       GlobalKey<ScaffoldState> scaffoldKey}) async {
+    final ProgressDialog pr = ProgressDialog(context: context);
     firebase_storage.UploadTask task;
     String timeStamp = DateTime.now().millisecondsSinceEpoch.toString();
     var rng = new Random();
-    var _random = rng.nextInt(9000) + 1000;
-    imageIds.add('$timeStamp-$_random}');
+    var _random = rng.nextInt(90000) + 10000;
+    pr.show(max: 100, msg: '${'loading'.tr()} ${'image'.tr()}...');
+    imageId = '$timeStamp-$_random}';
 
     final firebaseStorageRef = firebase_storage.FirebaseStorage.instance
         .ref()
         .child("$timeStamp-$_random.jpg");
     task = firebaseStorageRef.putFile(imageSample);
-    ScaffoldMessenger.of(context).showSnackBar(
-      new SnackBar(
-        content: Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: ListTile(
-            title: new LinearProgressIndicator(
-              backgroundColor: Colors.black,
-              valueColor: AlwaysStoppedAnimation(Colors.red),
-            ),
-          ),
-        ),
-        backgroundColor: Colors.white,
-      ),
-    );
-    task.whenComplete(() {
+    await task.whenComplete(() {
       added = addedImage;
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       print("AddImageToDb: $added");
       notifyListeners();
     }).then((value) async {
       var downUrl = await value.ref.getDownloadURL();
-      print("DOWNURL: $downUrl");
-      imageLinks.add("$downUrl");
+      print('DOWNURL: $downUrl');
+      imageLink = '$downUrl';
       urlString = downUrl.toString();
+      pr.close();
     });
-
     print("Url for Download: $urlString");
   }
 
   void delete() {
-    imageLinks = [];
-    urlString = "";
-    imageIds = [];
-    imageLinks = [];
+    imageLink = '';
+    urlString = '';
+    imageId = '';
+    imageLink = '';
 
     notifyListeners();
   }

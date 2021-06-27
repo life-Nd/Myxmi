@@ -6,10 +6,10 @@ import 'recipe_tile.dart';
 class RecipeList extends StatefulWidget {
   final QuerySnapshot snapshot;
   const RecipeList({@required this.snapshot});
-  createState() => RecipeListState();
+  createState() => _RecipeListState();
 }
 
-class RecipeListState extends State<RecipeList> {
+class _RecipeListState extends State<RecipeList> {
   Map _data;
   List _keys = [];
   var _builder;

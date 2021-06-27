@@ -4,6 +4,8 @@ import 'package:easy_localization/easy_localization.dart';
 import '../widgets/recipe_list.dart';
 
 class RecipesScreen extends StatefulWidget {
+  final String legend;
+  RecipesScreen(this.legend);
   createState() => RecipesScreenState();
 }
 
@@ -14,11 +16,20 @@ class RecipesScreenState extends State<RecipesScreen> {
   void initState() {
     _future = FirebaseFirestore.instance
         .collection('Recipes')
-        .orderBy('Made', descending: true)
-        .limit(20)
+        .where('sub_category', isEqualTo: '${widget.legend}')
         .get();
     super.initState();
   }
+
+  // Future getFuture() async {
+  //   switch (widget.legend ) {
+  //     case ('Breakfast'):
+  //       return FirebaseFirestore.instance
+  //           .collection('Recipes')
+  //           .where('sub_category', isEqualTo: 'Breakfast')
+  //           .get();
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

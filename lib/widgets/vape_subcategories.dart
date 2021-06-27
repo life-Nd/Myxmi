@@ -13,11 +13,11 @@ class VapeSubCategories extends HookWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           RawMaterialButton(
-            child: Text('base'.tr()),
+            child: Text('Nicotine'.tr()),
             onPressed: () {
-              _recipe.changeSubCategory(newSubCategory: 'Base');
+              _recipe.changeSubCategory(newSubCategory: 'Nicotine');
             },
-            fillColor: _recipe.recipe.subCategory == 'Base'
+            fillColor: _recipe.details.subCategory == 'Nicotine'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
@@ -27,11 +27,25 @@ class VapeSubCategories extends HookWidget {
             width: 4,
           ),
           RawMaterialButton(
-            child: Text('flavour'.tr()),
+            child: Text('THC'.tr()),
             onPressed: () {
-              _recipe.changeSubCategory(newSubCategory: 'Flavour');
+              _recipe.changeSubCategory(newSubCategory: 'THC');
             },
-            fillColor: _recipe.recipe.subCategory == 'Flavour'
+            fillColor: _recipe.details.subCategory == 'THC'
+                ? Colors.green
+                : Theme.of(context).cardColor,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          ),
+          SizedBox(
+            width: 4,
+          ),
+               RawMaterialButton(
+            child: Text('CBD'.tr()),
+            onPressed: () {
+              _recipe.changeSubCategory(newSubCategory: 'CBD');
+            },
+            fillColor: _recipe.details.subCategory == 'CBD'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
@@ -45,7 +59,7 @@ class VapeSubCategories extends HookWidget {
             onPressed: () {
               _recipe.changeSubCategory(newSubCategory: 'Other');
             },
-            fillColor: _recipe.recipe.subCategory == 'Other'
+            fillColor: _recipe.details.subCategory == 'Other'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:

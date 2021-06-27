@@ -18,7 +18,7 @@ class NameFieldState extends State<NameField> {
     _nameCtrl.text = widget.name;
     super.initState();
   }
-
+// TODO changing username
   Widget build(BuildContext context) {
     final ProgressDialog pr = ProgressDialog(context: context);
     return TextField(

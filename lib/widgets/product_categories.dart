@@ -15,7 +15,7 @@ class ProductsCategories extends HookWidget {
           RawMaterialButton(
             child: Text('cocktail'.tr()),
             onPressed: () {},
-            fillColor: _recipe.recipe.subCategory == 'Cocktail'
+            fillColor: _recipe.details.subCategory == 'Cocktail'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
@@ -27,7 +27,7 @@ class ProductsCategories extends HookWidget {
           RawMaterialButton(
             child: Text('smoothie'.tr()),
             onPressed: () {},
-            fillColor: _recipe.recipe.subCategory == 'Smoothie'
+            fillColor: _recipe.details.subCategory == 'Smoothie'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
@@ -39,7 +39,7 @@ class ProductsCategories extends HookWidget {
           RawMaterialButton(
             child: Text('shake'.tr()),
             onPressed: () {},
-            fillColor: _recipe.recipe.subCategory == 'Shake'
+            fillColor: _recipe.details.subCategory == 'Shake'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
@@ -51,7 +51,7 @@ class ProductsCategories extends HookWidget {
           RawMaterialButton(
             child: Text('other'.tr()),
             onPressed: () {},
-            fillColor: _recipe.recipe.subCategory == 'Other'
+            fillColor: _recipe.details.subCategory == 'Other'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:

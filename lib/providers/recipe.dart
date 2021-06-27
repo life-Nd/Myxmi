@@ -1,22 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:myxmi/models/instructions.dart';
 import 'package:myxmi/models/recipes.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class RecipeProvider extends ChangeNotifier {
-  RecipesModel recipe = RecipesModel();
+  RecipesModel details = RecipesModel();
+  InstructionsModel instructions = InstructionsModel(products: {}, steps: []);
   Map<String, double> quantity = {};
   Map composition = {};
   double estimatedWeight = 0.0;
   String actualWeight = '';
   List hidden = [];
   double difficultyValue = 0.0;
+  int pageIndex = 0;
+
+  changeView(int index) {
+    pageIndex = index;
+    notifyListeners();
+  }
+
   changeTitle({@required String newName}) {
-    recipe.title = newName;
+    details.title = newName;
     notifyListeners();
   }
 
   changeDuration({@required String newDuration}) {
-    recipe.duration = newDuration;
+    details.duration = newDuration;
     notifyListeners();
   }
 
@@ -26,30 +35,30 @@ class RecipeProvider extends ChangeNotifier {
   }
 
   String getDifficulty() {
-    recipe.difficulty = difficultyValue == 0.0
+    details.difficulty = difficultyValue == 0.0
         ? 'easy'.tr()
         : difficultyValue == 0.5
             ? 'medium'.tr()
             : difficultyValue == 1.0
                 ? 'hard'.tr()
                 : '-';
-    return recipe.difficulty;
+    return details.difficulty;
   }
 
   changeCategory({String newCategory}) {
-    recipe.category = newCategory;
+    details.category = newCategory;
     notifyListeners();
   }
 
   changeSubCategory({String newSubCategory}) {
-    recipe.subCategory = newSubCategory;
+    details.subCategory = newSubCategory;
     notifyListeners();
   }
 
   changeComposition(
       {@required String key, @required String type, @required String value}) {
     composition[key] = '$value $type';
-    recipe.productsCount = '${composition.keys}';
+    details.productsCount = '${composition.keys.toList().length}';
   }
 
   changeQuantity(
@@ -66,10 +75,32 @@ class RecipeProvider extends ChangeNotifier {
       quantity[key] =
           value != null && value.isNotEmpty ? double.parse(value) / 1.05 : 0.0;
     }
+    if (type == 'Teaspoons') {
+      quantity[key] =
+          value != null && value.isNotEmpty ? double.parse(value) * 5 : 0.0;
+    }
+    if (type == 'Tablespoons') {
+      quantity[key] =
+          value != null && value.isNotEmpty ? double.parse(value) * 14.20 : 0.0;
+    }
+    if (type == 'Cups') {
+      quantity[key] =
+          value != null && value.isNotEmpty ? double.parse(value) * 340 : 0.0;
+    }
+  }
+
+  void addStep({@required String step}) {
+    instructions.steps.add(step);
+    notifyListeners();
+  }
+
+  void addProduct({@required Map product}) {
+    instructions.products = product;
+    notifyListeners();
   }
 
   saveToDb() {
-    recipe.toMap();
+    details.toMap();
   }
 
   changeEstimatedWeight() {
@@ -89,11 +120,15 @@ class RecipeProvider extends ChangeNotifier {
   }
 
   reset() {
-    recipe.title = '';
-    actualWeight = '';
-    estimatedWeight = 0.0;
+    details = RecipesModel();
+    instructions = InstructionsModel();
     quantity.clear();
     composition.clear();
-    notifyListeners();
+    estimatedWeight = 0.0;
+    actualWeight = '';
+    difficultyValue = 0.0;
+    pageIndex = 0;
+    hidden.clear();
+    
   }
 }

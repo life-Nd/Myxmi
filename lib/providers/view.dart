@@ -1,4 +1,5 @@
 import 'package:myxmi/screens/favorites.dart';
+import 'package:myxmi/screens/filtering.dart';
 import 'package:myxmi/screens/loading.dart';
 import 'package:myxmi/screens/more.dart';
 import 'package:myxmi/screens/recipes.dart';
@@ -18,14 +19,14 @@ class ViewProvider extends ChangeNotifier {
     view = newView;
     switch (view) {
       case 0:
-        changeFuture(
-            newFuture: FirebaseFirestore.instance
-                .collection('Recipes')
-                .orderBy('Made', descending: true)
-                .limit(20)
-                .get());
+        // changeFuture(
+        //     newFuture: FirebaseFirestore.instance
+        //         .collection('Recipes')
+        //         .orderBy('Made', descending: true)
+        //         .limit(20)
+        //         .get());
 
-        return RecipesScreen();
+        return FilteringScreen();
       case 1:
         changeFuture(
             newFuture: FirebaseFirestore.instance
@@ -37,7 +38,7 @@ class ViewProvider extends ChangeNotifier {
                 .orderBy('Made', descending: true)
                 .limit(20)
                 .get());
-        return uid != null ? RecipesScreen() : SignIn();
+        return uid != null ? RecipesScreen('Breakfast') : SignIn();
       case 2:
         return uid != null ? Favorites() : SignIn();
       case 3:

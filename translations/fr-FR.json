@@ -237,5 +237,12 @@
    "optional":"Optionnel",
    "duration":"Durée",
    "time":"Temps",
-   "add":"Ajouter"
+   "add":"Ajouter",
+   "diet":"Diete",
+   "allFood":"Tout",
+   "allDrinks":"Tout",
+   "allVapes":"Tout",
+   "nicotine":"Nicotine",
+   "thc":"THC",
+   "cbd":"CBD"
 }

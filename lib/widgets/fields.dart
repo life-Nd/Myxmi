@@ -11,19 +11,10 @@ class Fields extends StatefulWidget {
 }
 
 class FieldsState extends State<Fields> {
-  initState() {
-    super.initState();
-  }
 
   Widget build(BuildContext context) {
-    print('---WIDGET.data: ${widget.data}');
-    print('---WIDGET.data.values: ${widget.data.values}');
-    print('---WIDGET.recipe.composition ${widget.recipe.composition}');
-    print(
-        '***widget.recipe.NAME : ${widget.recipe.composition[widget.data['Name']]}');
     List _ingredientName =
         widget.recipe.composition[widget.data['Name']].toString().split(' ');
-    print('!!!_ingredientName[0]: ${_ingredientName[0]}');
     textCtrl = _ingredientName[0] != 'null'
         ? TextEditingController(text: _ingredientName[0])
         : TextEditingController();
@@ -47,6 +38,7 @@ class FieldsState extends State<Fields> {
           );
         },
         onEditingComplete: () {
+          widget.recipe.changeEstimatedWeight();
           FocusScope.of(context).requestFocus(FocusNode());
         },
         decoration: InputDecoration(

@@ -19,14 +19,13 @@ TextEditingController _durationCtrl = TextEditingController();
 final recipeProvider =
     ChangeNotifierProvider<RecipeProvider>((ref) => RecipeProvider());
 List steps = [];
-int _pageIndex = 0;
 
+// ignore: must_be_immutable
 class AddRecipe extends HookWidget {
+  
   Widget build(BuildContext context) {
-
     final _recipe = useProvider(recipeProvider);
     final _user = useProvider(userProvider);
-    final _change = useState<bool>(false);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -52,7 +51,7 @@ class AddRecipe extends HookWidget {
                   border: Border(
                     bottom: BorderSide(
                       width: 4,
-                      color: _pageIndex == 0
+                      color: _recipe.pageIndex == 0
                           ? Theme.of(context).appBarTheme.titleTextStyle.color
                           : Theme.of(context).scaffoldBackgroundColor,
                     ),
@@ -67,7 +66,7 @@ class AddRecipe extends HookWidget {
                   border: Border(
                       bottom: BorderSide(
                     width: 4,
-                    color: _pageIndex == 1
+                    color: _recipe.pageIndex == 1
                         ? Theme.of(context).appBarTheme.titleTextStyle.color
                         : Theme.of(context).scaffoldBackgroundColor,
                   )),
@@ -81,7 +80,7 @@ class AddRecipe extends HookWidget {
                   border: Border(
                     bottom: BorderSide(
                       width: 4,
-                      color: _pageIndex == 2
+                      color: _recipe.pageIndex == 2
                           ? Theme.of(context).appBarTheme.titleTextStyle.color
                           : Theme.of(context).scaffoldBackgroundColor,
                     ),
@@ -95,12 +94,12 @@ class AddRecipe extends HookWidget {
           Expanded(
             child: PageView(
               controller: PageController(
-                initialPage: _pageIndex,
+                initialPage: _recipe.pageIndex,
                 keepPage: true,
               ),
               onPageChanged: (index) {
-                _pageIndex = index;
-                _change.value = !_change.value;
+                _recipe.changeView(index);
+
               },
               children: [
                 SingleChildScrollView(
@@ -124,7 +123,7 @@ class AddRecipe extends HookWidget {
                                         right: 10,
                                         left: 10),
                                     child: Text(
-                                      '${_recipe.estimatedWeight.toStringAsFixed(3)} g',
+                                      '± ${_recipe.estimatedWeight.toStringAsFixed(3)} g',
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold),
@@ -188,7 +187,7 @@ class AddRecipe extends HookWidget {
                                 max: 1.0,
                                 min: 0.0,
                                 divisions: 2,
-                                label: _recipe.recipe.difficulty,
+                                label: _recipe.details.difficulty,
                                 inactiveColor: Colors.grey,
                               ),
                             ],
@@ -204,6 +203,7 @@ class AddRecipe extends HookWidget {
                                     const EdgeInsets.only(left: 80, right: 80),
                                 child: TextField(
                                   controller: _durationCtrl,
+                                  keyboardType: TextInputType.number,
                                   onSubmitted: (submitted) {
                                     _recipe.changeDuration(
                                         newDuration: _durationCtrl.text);
@@ -232,7 +232,7 @@ class AddRecipe extends HookWidget {
                                 RawMaterialButton(
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20)),
-                                  fillColor: _recipe.recipe.category == 'Drink'
+                                  fillColor: _recipe.details.category == 'Drink'
                                       ? Colors.green
                                       : Theme.of(context).cardColor,
                                   onPressed: () {
@@ -244,7 +244,7 @@ class AddRecipe extends HookWidget {
                                 RawMaterialButton(
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20)),
-                                  fillColor: _recipe.recipe.category == 'Food'
+                                  fillColor: _recipe.details.category == 'Food'
                                       ? Colors.green
                                       : Theme.of(context).cardColor,
                                   onPressed: () {
@@ -255,7 +255,7 @@ class AddRecipe extends HookWidget {
                                 RawMaterialButton(
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20)),
-                                  fillColor: _recipe.recipe.category == 'Vape'
+                                  fillColor: _recipe.details.category == 'Vape'
                                       ? Colors.green
                                       : Theme.of(context).cardColor,
                                   onPressed: () {
@@ -266,7 +266,7 @@ class AddRecipe extends HookWidget {
                                 RawMaterialButton(
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20)),
-                                  fillColor: _recipe.recipe.category == 'Other'
+                                  fillColor: _recipe.details.category == 'Other'
                                       ? Colors.green
                                       : Theme.of(context).cardColor,
                                   onPressed: () {
@@ -277,7 +277,7 @@ class AddRecipe extends HookWidget {
                                 )
                               ]),
                         ),
-                        subCategory(category: _recipe.recipe.category),
+                        subCategory(category: _recipe.details.category),
                         ListTile(
                           title: Text(
                             'products'.tr(),

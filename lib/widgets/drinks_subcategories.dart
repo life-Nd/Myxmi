@@ -17,7 +17,7 @@ class DrinksSubCategories extends HookWidget {
             onPressed: () {
               _recipe.changeSubCategory(newSubCategory: 'Cocktail');
             },
-            fillColor: _recipe.recipe.subCategory == 'Cocktail'
+            fillColor: _recipe.details.subCategory == 'Cocktail'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
@@ -31,7 +31,7 @@ class DrinksSubCategories extends HookWidget {
             onPressed: () {
               _recipe.changeSubCategory(newSubCategory: 'Smoothie');
             },
-            fillColor: _recipe.recipe.subCategory == 'Smoothie'
+            fillColor: _recipe.details.subCategory == 'Smoothie'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
@@ -45,7 +45,7 @@ class DrinksSubCategories extends HookWidget {
             onPressed: () {
               _recipe.changeSubCategory(newSubCategory: 'Shake');
             },
-            fillColor: _recipe.recipe.subCategory == 'Shake'
+            fillColor: _recipe.details.subCategory == 'Shake'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
@@ -59,7 +59,7 @@ class DrinksSubCategories extends HookWidget {
             onPressed: () {
               _recipe.changeSubCategory(newSubCategory: 'Other');
             },
-            fillColor: _recipe.recipe.subCategory == 'Other'
+            fillColor: _recipe.details.subCategory == 'Other'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:

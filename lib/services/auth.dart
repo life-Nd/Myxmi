@@ -56,12 +56,13 @@ class AuthHandler {
         password: _password,
       );
       pr.close();
-
-      return Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (context) => App(),
-          ),
-          (route) => false);
+      Future.delayed(Duration(milliseconds: 444), () {
+        return Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => App(),
+            ),
+            (route) => false);
+      });
     } catch (error) {
       pr.close();
       print('Error-----: $error----');

@@ -2,8 +2,8 @@ class InstructionsModel {
   static const INGREDIENTS = 'products';
   static const STEPS = 'steps';
 
-  List steps = [];
-  List products = [];
+  List<String> steps = [];
+  Map products = {};
 
   InstructionsModel({this.products, this.steps});
 
@@ -12,8 +12,8 @@ class InstructionsModel {
     steps = snapshot[STEPS];
   }
 
-  Map<dynamic, dynamic> toMap() {
-    return <dynamic, dynamic>{
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
       INGREDIENTS: products,
       STEPS: steps,
     };
