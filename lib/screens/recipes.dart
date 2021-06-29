@@ -20,8 +20,8 @@ class RecipesScreenState extends State<RecipesScreen> {
 
   Future getFuture() {
     print('widget.legend: ${widget.legend}');
-    String _legend =
-        widget.legend[0].toUpperCase() + widget.legend.substring(1);
+    String _legend = widget.legend;
+    print('LEGEND: $_legend'); 
     switch (_legend) {
       case ('All'):
         _future = FirebaseFirestore.instance
@@ -40,13 +40,8 @@ class RecipesScreenState extends State<RecipesScreen> {
 
   @override
   Widget build(BuildContext context) {
-     String _legend =
-        widget.legend[0].toUpperCase() + widget.legend.substring(1);
     return FutureBuilder(
-      future: FirebaseFirestore.instance
-          .collection('Recipes')
-          .where('sub_category', isEqualTo: '$_legend')
-          .get(),
+      future: _future,
       builder: (_, AsyncSnapshot snapshot) {
         if (snapshot.hasError) {
           return Text(

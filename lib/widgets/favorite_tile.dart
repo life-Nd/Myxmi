@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/screens/comments.dart';
-import '../app.dart';
-import '../main.dart';
 import 'format_time.dart';
-import 'view_composition.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class FavoriteTile extends HookWidget {
@@ -30,8 +26,8 @@ class FavoriteTile extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
-    final _user = useProvider(userProvider);
-    final _fav = useProvider(favProvider);
+    // final _user = useProvider(userProvider);
+    // final _fav = useProvider(favProvider);
     return ListTile(
       dense: true,
       onLongPress: () {
@@ -41,13 +37,13 @@ class FavoriteTile extends HookWidget {
         ));
       },
       onTap: () {
-        viewComposition(
-            context: context,
-            user: _user,
-            fav: _fav,
-            indexData: indexData,
-            keyIndex: keyIndex,
-            size: _size);
+        // viewComposition(
+        //     context: context,
+        //     user: _user,
+        //     fav: _fav,
+        //     indexData: indexData,
+        //     keyIndex: keyIndex,
+        //     size: _size);
       },
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),

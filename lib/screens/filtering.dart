@@ -42,26 +42,26 @@ class _FoodFilter extends HookWidget {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              _Filter(
+              Filter(
                 'breakfast',
               ),
-              _Filter(
+              Filter(
                 'appetizer',
               ),
-              _Filter(
+              Filter(
                 'salad',
               ),
-              _Filter(
+              Filter(
                 'soup',
               ),
-              _Filter(
+              Filter(
                 'dinner',
               ),
-              _Filter(
+              Filter(
                 'dessert',
               ),
-              _Filter(
-                'allFood',
+              Filter(
+                'allFoods',
               ),
             ],
           ),
@@ -79,7 +79,7 @@ class _DrinksFilter extends HookWidget {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            '${'drink'.tr()}s',
+            '${'drinks'.tr()}',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
           ),
         ),
@@ -87,16 +87,16 @@ class _DrinksFilter extends HookWidget {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              _Filter(
+              Filter(
                 'cocktail',
               ),
-              _Filter(
+              Filter(
                 'smoothie',
               ),
-              _Filter(
+              Filter(
                 'shake',
               ),
-              _Filter(
+              Filter(
                 'allDrinks',
               ),
             ],
@@ -126,16 +126,16 @@ class _VapesFilter extends HookWidget {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              _Filter(
+              Filter(
                 'nicotine',
               ),
-              _Filter(
+              Filter(
                 'thc',
               ),
-              _Filter(
+              Filter(
                 'cbd',
               ),
-              _Filter(
+              Filter(
                 'allVapes',
               ),
             ],
@@ -162,16 +162,16 @@ class _DietFilter extends HookWidget {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              _Filter(
+              Filter(
                 'nicotine',
               ),
-              _Filter(
+              Filter(
                 'thc',
               ),
-              _Filter(
+              Filter(
                 'cbd',
               ),
-              _Filter(
+              Filter(
                 'allVapes',
               ),
             ],
@@ -182,15 +182,17 @@ class _DietFilter extends HookWidget {
   }
 }
 
-class _Filter extends StatefulWidget {
+class Filter extends StatefulWidget {
   final String legend;
-  _Filter(this.legend);
+  Filter(this.legend);
   createState() => _FilterState();
 }
 
-class _FilterState extends State<_Filter> {
+class _FilterState extends State<Filter> {
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
+    String _legend = widget.legend;
+    // widget.legend[0].toUpperCase() + widget.legend.substring(1);
     return GestureDetector(
       onTap: () {
         // TODO change the future and switch based on category
@@ -216,17 +218,16 @@ class _FilterState extends State<_Filter> {
               width: _size.width / 2,
               child: ClipRRect(
                 child: Image.asset(
-                  
                   'assets/${widget.legend}.jpg',
-                  cacheHeight: 400,
-                  cacheWidth: 400,
-                  fit: BoxFit.cover,
+                  cacheHeight: 1000,
+                  cacheWidth: 1000,
+                  fit: BoxFit.fitHeight,
                 ),
                 borderRadius: BorderRadius.circular(20),
               ),
             ),
             Text(
-              '${widget.legend}'.tr().toUpperCase(),
+              '$_legend'.tr().toUpperCase(),
               style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
             ),
           ],

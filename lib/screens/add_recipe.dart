@@ -232,46 +232,46 @@ class AddRecipe extends HookWidget {
                                 RawMaterialButton(
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20)),
-                                  fillColor: _recipe.details.category == 'Drink'
+                                  fillColor: _recipe.details.category == 'drink'
                                       ? Colors.green
                                       : Theme.of(context).cardColor,
                                   onPressed: () {
                                     _recipe.changeCategory(
-                                        newCategory: 'Drink');
+                                        newCategory: 'drink');
                                   },
                                   child: Text('${'drink'.tr()}'),
                                 ),
                                 RawMaterialButton(
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20)),
-                                  fillColor: _recipe.details.category == 'Food'
+                                  fillColor: _recipe.details.category == 'food'
                                       ? Colors.green
                                       : Theme.of(context).cardColor,
                                   onPressed: () {
-                                    _recipe.changeCategory(newCategory: 'Food');
+                                    _recipe.changeCategory(newCategory: 'food');
                                   },
-                                  child: Text('${'food'.tr()}'),
+                                  child: Text('food'.tr()),
                                 ),
                                 RawMaterialButton(
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20)),
-                                  fillColor: _recipe.details.category == 'Vape'
+                                  fillColor: _recipe.details.category == 'vape'
                                       ? Colors.green
                                       : Theme.of(context).cardColor,
                                   onPressed: () {
-                                    _recipe.changeCategory(newCategory: 'Vape');
+                                    _recipe.changeCategory(newCategory: 'vape');
                                   },
                                   child: Text('${'vape'.tr()}'),
                                 ),
                                 RawMaterialButton(
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20)),
-                                  fillColor: _recipe.details.category == 'Other'
+                                  fillColor: _recipe.details.category == 'other'
                                       ? Colors.green
                                       : Theme.of(context).cardColor,
                                   onPressed: () {
                                     _recipe.changeCategory(
-                                        newCategory: 'Other');
+                                        newCategory: 'other');
                                   },
                                   child: Text('${'other'.tr()}'),
                                 )
@@ -324,7 +324,7 @@ class AddRecipe extends HookWidget {
           ],
         );
         return _subCategory;
-      case ('Drink'):
+      case ('Drinks'):
         _subCategory = Column(
           mainAxisSize: MainAxisSize.min,
           children: [

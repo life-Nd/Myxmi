@@ -13,11 +13,11 @@ class DrinksSubCategories extends HookWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           RawMaterialButton(
-            child: Text('cocktail'.tr()),
+            child: Text('cocktails'.tr()),
             onPressed: () {
-              _recipe.changeSubCategory(newSubCategory: 'Cocktail');
+              _recipe.changeSubCategory(newSubCategory: 'Cocktails');
             },
-            fillColor: _recipe.details.subCategory == 'Cocktail'
+            fillColor: _recipe.details.subCategory == 'Cocktails'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
@@ -27,11 +27,11 @@ class DrinksSubCategories extends HookWidget {
             width: 7,
           ),
           RawMaterialButton(
-            child: Text('smoothie'.tr()),
+            child: Text('smoothies'.tr()),
             onPressed: () {
-              _recipe.changeSubCategory(newSubCategory: 'Smoothie');
+              _recipe.changeSubCategory(newSubCategory: 'Smoothies');
             },
-            fillColor: _recipe.details.subCategory == 'Smoothie'
+            fillColor: _recipe.details.subCategory == 'Smoothies'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
@@ -41,11 +41,11 @@ class DrinksSubCategories extends HookWidget {
             width: 7,
           ),
           RawMaterialButton(
-            child: Text('shake'.tr()),
+            child: Text('shakes'.tr()),
             onPressed: () {
-              _recipe.changeSubCategory(newSubCategory: 'Shake');
+              _recipe.changeSubCategory(newSubCategory: 'Shakes');
             },
-            fillColor: _recipe.details.subCategory == 'Shake'
+            fillColor: _recipe.details.subCategory == 'Shakes'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:

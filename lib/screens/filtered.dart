@@ -9,11 +9,14 @@ class Filtered extends StatefulWidget {
 }
 
 class _FilteredState extends State<Filtered> {
+  
   Widget build(BuildContext context) {
+    String _legend =
+        '${widget.legend[0].toUpperCase() + widget.legend.substring(1)}s';
     final Size _size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text('${widget.legend}'.tr()),
+        title: Text('$_legend'.tr()),
       ),
       body: Container(
         height: _size.height,

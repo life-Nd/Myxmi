@@ -54,85 +54,14 @@ class SaveButton extends HookWidget {
                     .set(_recipe.instructions.toMap());
               }).whenComplete(() {
                 pr.close();
-
+                _recipe.reset();
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
                       builder: (context) => Home(),
                     ),
                     (route) => false);
               });
-              _recipe.reset();
             }
-
-          // ? () {
-          //     showDialog(
-          //         context: context,
-          //         builder: (_) {
-          //           return AlertDialog(
-          //             title: Text('${'actualQuantity'.tr()}'),
-          //             content:
-          //                 Column(mainAxisSize: MainAxisSize.min, children: [
-          //               Padding(
-          //                 padding: const EdgeInsets.only(
-          //                     top: 2, bottom: 4, right: 80, left: 80),
-          //                 child: TextField(
-          //                   keyboardType: TextInputType.number,
-          //                   controller: _actualWeightCtrl,
-          //                   decoration: InputDecoration(
-          //                     isDense: true,
-          //                     border: OutlineInputBorder(
-          //                         borderRadius: BorderRadius.circular(20)),
-          //                     hintText: 'g',
-          //                   ),
-          //                 ),
-          //               ),
-          //             ]),
-          //             actions: [
-          //               RawMaterialButton(
-          //                 fillColor: Colors.green,
-          //                 child: Text('${'save'.tr()}'),
-          //                 onPressed: () {
-
-          //       FirebaseFirestore.instance
-          //           .collection('Recipes')
-          //           .add({
-          //         'Name': '${_recipe.recipe.title}',
-          //         'Made':
-          //             '${DateTime.now().millisecondsSinceEpoch}',
-          //         'Score': '0.0',
-          //         'Composition': _recipe.composition,
-          //         'Comments': {},
-          //         'Estimated Quantitu8y':
-          //             '${_recipe.estimatedWeight.toStringAsFixed(3)}',
-          //         'Actual Quantity': '${_actualWeightCtrl.text}',
-          //         'UserName': '${_user.account?.displayName}',
-          //         'Uid': '${_user.account?.uid}',
-          //         'UserEmail': '${_user.account?.email}',
-          //         'UserAvatar': '${_user.account?.photoURL}',
-          //         'Images': _image.imageLinks,
-          //         'Category': '${_recipe.recipe.category}',
-          //         'SubCategory': '${_recipe.recipe.subCategory}',
-          //         'Stars': '${_recipe.recipe.stars}',
-          //         'Access': '${_recipe.recipe.access}',
-          //         'Vegan': '${_recipe.recipe.vegan}',
-          //         'Difficulty': '${_recipe.recipe.difficulty}',
-          //         'Reference': '$_random'
-          //       }).then(
-          //         (value) =>
-          //             Navigator.of(context).pushAndRemoveUntil(
-          //                 MaterialPageRoute(
-          //                   builder: (_) => Home(),
-          //                 ),
-          //                 (route) => false),
-          //       );
-          //       _recipe.reset();
-          //       _recipe.unhide();
-          //       },
-          //     )
-          //   ],
-          // );
-          // });
-          // }
           : () {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(

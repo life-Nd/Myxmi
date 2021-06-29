@@ -199,7 +199,7 @@
   "hard":"Difficile",
   "category":"Categorie",
   "subCategory":"Sous-Categorie",
-   "drink":"Breuvage",
+   "drinks":"Boissons",
    "food":"Nourriture",
    "vape":"Vape",
    "appetizer":"Apperitif",
@@ -239,10 +239,11 @@
    "time":"Temps",
    "add":"Ajouter",
    "diet":"Diete",
-   "allFood":"Tout",
+   "allFoods":"Tout",
    "allDrinks":"Tout",
    "allVapes":"Tout",
    "nicotine":"Nicotine",
    "thc":"THC",
-   "cbd":"CBD"
+   "cbd":"CBD",
+   "ingredients":"Ingrédients"
 }

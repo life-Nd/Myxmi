@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:myxmi/screens/add_recipe.dart';
+import 'package:myxmi/screens/selected_recipe.dart';
 import 'recipe_tile.dart';
 
 class RecipeList extends StatefulWidget {
@@ -12,158 +14,103 @@ class RecipeList extends StatefulWidget {
 class _RecipeListState extends State<RecipeList> {
   Map _data;
   List _keys = [];
-  var _builder;
   initState() {
     _data = widget.snapshot.docChanges.asMap();
-    print('----DATA: $_data ');
     _keys = _data.keys?.toList();
-    _builder = ListView.builder(
-      padding: EdgeInsets.all(1),
-      itemCount: _keys.length,
-      itemBuilder: (_, int index) {
-        int _newIndex = index + 1;
-        Map _indexData = widget.snapshot.docs[index].data();
-        // final Map _comments =
-        //     _indexData['Comments'] != null ? _indexData['Comments'] : [];
-        print("$index: $_indexData");
-        // final List _orderedComments = _comments.keys.toList();
-        // _orderedComments.sort();
-        return Container(
-          margin: EdgeInsets.all(5),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            gradient: LinearGradient(
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-              colors: [
-                Theme.of(context).cardColor,
-                // _indexData['Composition']['Use'] == 'Work'
-                //     ? Colors.yellow.shade400
-                //     : _indexData['Composition']['Use'] == 'Relax'
-                //         ? Colors.purple.shade900
-                //         : _indexData['Composition']['Use'] == 'Sleep'
-                //             ? Colors.blue.shade400
-                Colors.grey.shade100,
-              ],
-            ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                height: 150,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: _indexData['image_url'] != null
-                      ? Image.network(
-                          '${_indexData['image_url']}',
-                          fit: BoxFit.fitWidth,
-                        )
-                      : _image('${_indexData['sub_category']}'),
-                ),
-              ),
-              RecipeTile(
-                indexData: _indexData,
-                newIndex: _newIndex,
-                keys: _keys,
-                index: index,
-                keyIndex: widget.snapshot.docs[index].id,
-                time: '${_indexData['Made']}',
-              ),
-
-              // Container(
-              //   height: 50,
-              //   padding: EdgeInsets.all(8),
-              //   decoration: BoxDecoration(
-              //     color: Colors.grey.shade100,
-              //     borderRadius: BorderRadius.circular(20),
-              //   ),
-              //   child: Column(
-              //     crossAxisAlignment: CrossAxisAlignment.start,
-              //     children: [
-              //       Stack(
-              //         alignment: Alignment.topLeft,
-              //         children: [
-              //           // _comments.isNotEmpty
-              //           // ? Text(
-              //           //     'anonymous'.tr(),
-              //           //     style: TextStyle(
-              //           //       color: Colors.black,
-              //           //       fontWeight: FontWeight.w700,
-              //           //     ),
-              //           //   )
-              //           // : Container(),
-              //           // SingleChildScrollView(
-              //           //   scrollDirection: Axis.horizontal,
-              //           //   child: _comments.isNotEmpty
-              //           //       ? Center(
-              //           //           child: Padding(
-              //           //             padding: EdgeInsets.only(left: 4),
-              //           //             child: Text(
-              //           //               '${_comments[_orderedComments.last]}',
-              //           //               style: TextStyle(
-              //           //                 color: Colors.black,
-              //           //                 fontWeight: FontWeight.w400,
-              //           //               ),
-              //           //             ),
-              //           //           ),
-              //           //         )
-              //           //       : Center(
-              //           //           child: Padding(
-              //           //             padding: EdgeInsets.only(left: 4),
-              //           //             child: Text(
-              //           //               'noComments'.tr(),
-              //           //               style: TextStyle(
-              //           //                 color: Colors.black,
-              //           //                 fontWeight: FontWeight.w400,
-              //           //               ),
-              //           //             ),
-              //           //           ),
-              //           //         ),
-              //           // ),
-              //         ],
-              //       ),
-              // ],
-              // ),
-              // )
-            ],
-          ),
-        );
-      },
-    );
     super.initState();
   }
 
-  Widget _image(String type) {
-    switch (type) {
-      case 'Fruit':
-        return Image.asset(
-          'assets/fruits.png',
-        );
-      case 'Vegetable':
-        return Image.asset('assets/vegetables.png');
-      case 'Meat':
-        return Image.asset('assets/meat.png');
-      case 'Seafood':
-        return Image.asset('assets/seafood.png');
-      case 'Dairy':
-        return Image.asset('assets/dairy.png');
-      case 'Eliquid':
-        return Image.asset('assets/eliquid.png');
-      default:
-        return Image.network(
-          'assets/$type.png',
-          fit: BoxFit.fitWidth,
-        );
-    }
-  }
+  // Widget _image(String type) {
+  //   switch (type) {
+  //     case 'Fruit':
+  //       return Image.asset(
+  //         'assets/fruits.png',
+  //       );
+  //     case 'Vegetable':
+  //       return Image.asset('assets/vegetables.png');
+  //     case 'Meat':
+  //       return Image.asset('assets/meat.png');
+  //     case 'Seafood':
+  //       return Image.asset('assets/seafood.png');
+  //     case 'Dairy':
+  //       return Image.asset('assets/dairy.png');
+  //     case 'Eliquid':
+  //       return Image.asset('assets/eliquid.png');
+  //     default:
+  //       return Image.network(
+  //         'assets/$type.png',
+  //         fit: BoxFit.fitWidth,
+  //       );
+  //   }
+  // }
 
   Widget build(BuildContext context) {
-    return Container(
-      height: 400,
-      width: 400,
-      child: _builder,
-    );
+    final Size _size = MediaQuery.of(context).size;
+    return Consumer(builder: (context, watch, child) {
+      final _recipe = watch(recipeProvider);
+      return Container(
+        height: _size.height / 1,
+        width: _size.width / 1,
+        child: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            childAspectRatio: 0.6,
+            crossAxisCount: 2,
+          ),
+          padding: EdgeInsets.all(1),
+          itemCount: _keys.length,
+          itemBuilder: (_, int index) {
+            Map _indexData = widget.snapshot.docs[index].data();
+            _recipe.details.fromSnapshot(
+                snapshot: _indexData, keyIndex: widget.snapshot.docs[index].id);
+            print("$index: $_indexData");
+            return GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => SelectedRecipe(),
+                  ),
+                );
+              },
+              child: Container(
+                margin: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  gradient: LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [
+                      Theme.of(context).cardColor,
+                      Colors.grey.shade100,
+                    ],
+                  ),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      height: _size.height / 3,
+                      width: _size.width / 2,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                        ),
+                        child: Image.network(
+                          '${_indexData['image_url']}',
+                          fit: BoxFit.fitWidth,
+                        ),
+                      ),
+                    ),
+                    RecipeTile(
+                      indexData: _indexData,
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      );
+    });
   }
 }
