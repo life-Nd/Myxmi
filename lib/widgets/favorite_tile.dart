@@ -11,7 +11,7 @@ class FavoriteTile extends HookWidget {
       @required this.indexData,
       @required this.index,
       @required this.newIndex,
-      @required this.keys,
+      // @required this.keys,
       @required this.keyIndex,
       @required this.time})
       : super(key: key);
@@ -19,7 +19,7 @@ class FavoriteTile extends HookWidget {
   final Map indexData;
   final int index;
   final int newIndex;
-  final List keys;
+  // final List keys;
   final String keyIndex;
   final String time;
 
@@ -76,14 +76,14 @@ class FavoriteTile extends HookWidget {
             height: 20,
             width: _size.width,
             child: ListView.builder(
-              itemCount: indexData['Composition'].keys.length,
+              itemCount: 4,
               scrollDirection: Axis.horizontal,
               padding: EdgeInsets.all(1),
               itemBuilder: (_, int index) {
-                List _key = indexData['Composition'].keys.toList();
+                // List _key = indexData['Composition'].keys.toList();
                 return Center(
-                  child: Text(
-                      '${_key[index]}: ${indexData['Composition'][_key[index]]}, '),
+                  child: Text('test'),
+                  // '${_key[index]}: ${indexData['Composition'][_key[index]]}, '),
                 );
               },
             ),

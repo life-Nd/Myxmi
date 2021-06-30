@@ -15,6 +15,7 @@ class SelectedRecipe extends HookWidget {
     final _user = useProvider(userProvider);
     final _fav = useProvider(favProvider);
     final Size _size = MediaQuery.of(context).size;
+final _change = useState<bool>(false);
     return Scaffold(
       appBar: AppBar(
         title: Text('${_recipe.details.title}'),
@@ -28,6 +29,8 @@ class SelectedRecipe extends HookWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
+              Theme.of(context).cardColor,
+              Theme.of(context).cardColor,
               Theme.of(context).cardColor,
               _details.difficulty == 'easy'
                   ? Colors.yellow.shade700
@@ -51,7 +54,10 @@ class SelectedRecipe extends HookWidget {
                     height: _size.height / 2.7,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: _recipe.image,
+                      child: Hero(
+                        tag: '${_details.imageUrl}',
+                        child: _recipe.image,
+                      ),
                     ),
                   ),
                   Padding(
@@ -81,7 +87,7 @@ class SelectedRecipe extends HookWidget {
                                 ? IconButton(
                                     icon: Icon(
                                       Icons.star_border,
-                                      color: Colors.yellow,
+                                      color: Colors.black,
                                       size: 40,
                                     ),
                                     onPressed: () {
@@ -99,6 +105,7 @@ class SelectedRecipe extends HookWidget {
                                           .doc('${_user.account.uid}')
                                           .set(_data, SetOptions(merge: true));
                                       _fav.addFavorites(newFavorite: _data);
+                                      _change.value = !_change.value;
                                     },
                                   )
                                 : IconButton(
@@ -117,6 +124,7 @@ class SelectedRecipe extends HookWidget {
                                       });
                                       _fav.removeFavorites(
                                           newFavorite: _details.recipeId);
+                                      _change.value = !_change.value;
                                     },
                                   ),
                       ],
@@ -132,10 +140,9 @@ class SelectedRecipe extends HookWidget {
                     .get(),
                 builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                   final InstructionsModel _instructions = InstructionsModel();
-                  if (snapshot.hasData && snapshot.data.data() != null)
+                  if (snapshot.hasData && snapshot?.data?.data() != null)
                     _instructions.fromSnapshot(snapshot: snapshot.data.data());
-                  print("RECIPEID: ${_details.recipeId}");
-                  print('DATA: ${snapshot.data.data()}');
+
                   print('INSTRUCTION: ${_instructions.ingredients}');
                   print('INSTRUCTION: ${_instructions.steps}');
                   return Container(
@@ -152,7 +159,8 @@ class SelectedRecipe extends HookWidget {
                             ),
                             _instructions.ingredients != null
                                 ? _IngredientsListView(
-                                    ingredients: _instructions.ingredients)
+                                    ingredients: _instructions.ingredients,
+                                  )
                                 : _NoInstructions('noIngredients'),
                           ],
                         ),
@@ -190,9 +198,6 @@ class _IngredientsListView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
-    // final _recipe = useProvider(recipeProvider);
-    // final _ingredients = _recipe.instructions.ingredients;
-    // print('_instructions.ingredients.length:${_ingredients.keys}');
     List _keys = ingredients.keys.toList();
     return Container(
       height: _size.height / 2.1,

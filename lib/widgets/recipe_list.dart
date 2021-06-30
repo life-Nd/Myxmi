@@ -48,6 +48,7 @@ class _RecipeListState extends State<RecipeList> {
     final Size _size = MediaQuery.of(context).size;
     return Consumer(builder: (context, watch, child) {
       final _recipe = watch(recipeProvider);
+      final _details = _recipe.details;
       return Container(
         height: _size.height / 1,
         width: _size.width / 1,
@@ -61,6 +62,7 @@ class _RecipeListState extends State<RecipeList> {
           itemBuilder: (_, int index) {
             Map _indexData = widget.snapshot.docs[index].data();
             String _keyIndex = widget.snapshot.docs[index].id;
+
             return GestureDetector(
               onTap: () {
                 _recipe.details.fromSnapshot(
@@ -101,9 +103,12 @@ class _RecipeListState extends State<RecipeList> {
                             topLeft: Radius.circular(20),
                             topRight: Radius.circular(20),
                           ),
-                          child: Image.network(
-                            '${_indexData['image_url']}',
-                            fit: BoxFit.fitWidth,
+                          child: Hero(
+                            tag: '${_details.imageUrl}',
+                            child: Image.network(
+                              '${_indexData['image_url']}',
+                              fit: BoxFit.fitWidth,
+                            ),
                           ),
                         ),
                       ),
