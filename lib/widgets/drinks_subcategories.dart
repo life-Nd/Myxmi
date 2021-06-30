@@ -13,11 +13,11 @@ class DrinksSubCategories extends HookWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           RawMaterialButton(
-            child: Text('cocktails'.tr()),
+            child: Text('cocktail'.tr()),
             onPressed: () {
-              _recipe.changeSubCategory(newSubCategory: 'Cocktails');
+              _recipe.changeSubCategory(newSubCategory: 'cocktail');
             },
-            fillColor: _recipe.details.subCategory == 'Cocktails'
+            fillColor: _recipe.details.subCategory == 'cocktail'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
@@ -27,11 +27,11 @@ class DrinksSubCategories extends HookWidget {
             width: 7,
           ),
           RawMaterialButton(
-            child: Text('smoothies'.tr()),
+            child: Text('smoothie'.tr()),
             onPressed: () {
-              _recipe.changeSubCategory(newSubCategory: 'Smoothies');
+              _recipe.changeSubCategory(newSubCategory: 'smoothie');
             },
-            fillColor: _recipe.details.subCategory == 'Smoothies'
+            fillColor: _recipe.details.subCategory == 'smoothie'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
@@ -41,11 +41,11 @@ class DrinksSubCategories extends HookWidget {
             width: 7,
           ),
           RawMaterialButton(
-            child: Text('shakes'.tr()),
+            child: Text('shake'.tr()),
             onPressed: () {
-              _recipe.changeSubCategory(newSubCategory: 'Shakes');
+              _recipe.changeSubCategory(newSubCategory: 'shake');
             },
-            fillColor: _recipe.details.subCategory == 'Shakes'
+            fillColor: _recipe.details.subCategory == 'shake'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
@@ -57,9 +57,9 @@ class DrinksSubCategories extends HookWidget {
           RawMaterialButton(
             child: Text('other'.tr()),
             onPressed: () {
-              _recipe.changeSubCategory(newSubCategory: 'Other');
+              _recipe.changeSubCategory(newSubCategory: 'other');
             },
-            fillColor: _recipe.details.subCategory == 'Other'
+            fillColor: _recipe.details.subCategory == 'other'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:

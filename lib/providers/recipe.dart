@@ -5,7 +5,8 @@ import 'package:easy_localization/easy_localization.dart';
 
 class RecipeProvider extends ChangeNotifier {
   RecipesModel details = RecipesModel();
-  InstructionsModel instructions = InstructionsModel(products: {}, steps: []);
+  InstructionsModel instructions =
+      InstructionsModel(ingredients: {}, steps: []);
   Map<String, double> quantity = {};
   Map composition = {};
   double estimatedWeight = 0.0;
@@ -13,6 +14,13 @@ class RecipeProvider extends ChangeNotifier {
   List hidden = [];
   double difficultyValue = 0.0;
   int pageIndex = 0;
+  Image image;
+
+  imageViewer({@required Image newImage}) {
+    image = newImage;
+
+    return image;
+  }
 
   changeView(int index) {
     pageIndex = index;
@@ -94,8 +102,8 @@ class RecipeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addProduct({@required Map product}) {
-    instructions.products = product;
+  void addProduct({@required Map ingredient}) {
+    instructions.ingredients = ingredient;
     notifyListeners();
   }
 
@@ -129,6 +137,5 @@ class RecipeProvider extends ChangeNotifier {
     difficultyValue = 0.0;
     pageIndex = 0;
     hidden.clear();
-    
   }
 }

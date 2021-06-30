@@ -60,11 +60,17 @@ class _RecipeListState extends State<RecipeList> {
           itemCount: _keys.length,
           itemBuilder: (_, int index) {
             Map _indexData = widget.snapshot.docs[index].data();
-            _recipe.details.fromSnapshot(
-                snapshot: _indexData, keyIndex: widget.snapshot.docs[index].id);
-            print("$index: $_indexData");
+            String _keyIndex = widget.snapshot.docs[index].id;
             return GestureDetector(
               onTap: () {
+                _recipe.details.fromSnapshot(
+                  keyIndex: _keyIndex,
+                  snapshot: _indexData,
+                );
+                _recipe.image = Image.network(
+                  '${_indexData['image_url']}',
+                  fit: BoxFit.fitWidth,
+                );
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (_) => SelectedRecipe(),
@@ -87,23 +93,22 @@ class _RecipeListState extends State<RecipeList> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Container(
-                      height: _size.height / 3,
-                      width: _size.width / 2,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                        ),
-                        child: Image.network(
-                          '${_indexData['image_url']}',
-                          fit: BoxFit.fitWidth,
+                    Expanded(
+                      child: Container(
+                        width: _size.width / 2,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
+                          ),
+                          child: Image.network(
+                            '${_indexData['image_url']}',
+                            fit: BoxFit.fitWidth,
+                          ),
                         ),
                       ),
                     ),
-                    RecipeTile(
-                      indexData: _indexData,
-                    ),
+                    RecipeTile(indexData: _indexData, keyIndex: _keyIndex),
                   ],
                 ),
               ),

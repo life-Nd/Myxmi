@@ -34,7 +34,7 @@ class SaveButton extends HookWidget {
               _recipe.details.usedCount = '1';
               _recipe.details.stepsCount =
                   '${_recipe.instructions.steps.length}';
-              _recipe.instructions.products = _recipe.composition;
+              _recipe.instructions.ingredients = _recipe.composition;
               _recipe.details.made = '${DateTime.now().millisecondsSinceEpoch}';
               _image.addImageToDb(context: context).whenComplete(() async {
                 pr.show(max: 100, msg: '${'loading'.tr()} ${'recipe'.tr()}...');
@@ -47,7 +47,7 @@ class SaveButton extends HookWidget {
                 print('----KeyID: $_key');
               }).whenComplete(() async {
                 print(
-                    'Instructions: ${_recipe.instructions.products} \n ${_recipe.instructions.steps} ');
+                    'Instructions: ${_recipe.instructions.ingredients} \n ${_recipe.instructions.steps} ');
                 await FirebaseFirestore.instance
                     .collection('Instructions')
                     .doc('$_key')

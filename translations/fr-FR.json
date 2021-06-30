@@ -217,7 +217,7 @@
    "smoothie":"Smoothie",
    "hotBeverage":"Breuvage chaud",
    "shake":"Shake",
-   "cocktail":"Cocktail",
+   "cocktail":"0000Cocktail1",
    "enterProductName":"Entrer le nom de l'product ",
    "productType":"Type de produit",
    "mesuredIn":"Mesuré en",
@@ -245,5 +245,17 @@
    "nicotine":"Nicotine",
    "thc":"THC",
    "cbd":"CBD",
-   "ingredients":"Ingrédients"
+   "ingredients":"Ingrédients",
+   "home":"Accueil",
+   "vegan":"Végane",
+   "vegetarian":"Végétarien",
+   "keto":"Keto",
+   "allDiets":"Tout",
+   "steps":"Étapes",
+   "details":"Détails",
+   "image":"Image",
+   "drink":"Boissons",
+   "noIngredients":"Pas d'ingrédient",
+   "noSteps":"Pas d'étapes"
+
 }

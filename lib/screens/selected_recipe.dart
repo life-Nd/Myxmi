@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/app.dart';
+import 'package:myxmi/models/instructions.dart';
 import 'package:myxmi/screens/add_recipe.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../main.dart';
@@ -41,99 +42,88 @@ class SelectedRecipe extends HookWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Stack(
-              alignment: Alignment.topLeft,
-              children: [
-                Container(
-                  width: _size.width / 1,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.network(
-                      '${_details.imageUrl}',
-                      width: _size.width / 1,
-                      height: _size.height / 3,
-                      cacheHeight: 10000,
-                      cacheWidth: 10000,
-                      fit: BoxFit.cover,
+            Expanded(
+              child: Stack(
+                alignment: Alignment.topLeft,
+                children: [
+                  Container(
+                    width: _size.width / 1,
+                    height: _size.height / 2.7,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: _recipe.image,
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('${_details.title} #${_details.reference}'),
-                      GestureDetector(
-                          child: CircleAvatar(
-                            backgroundColor: Colors.green,
-                            child: Text(
-                              '${_details.stars}',
-                              style: TextStyle(color: Colors.white),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        GestureDetector(
+                            child: CircleAvatar(
+                              backgroundColor: Colors.green,
+                              child: Text(
+                                '${_details.stars}',
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ),
-                          ),
-                          onTap: () {
-                            // changeScore(context: context, keyIndex: keyIndex);
-                          }),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          _user.account?.uid == null
-                              ? IconButton(
-                                  icon: Icon(
-                                    Icons.star_border,
-                                  ),
-                                  onPressed: () {},
-                                )
-                              : !_fav.favorites.keys.contains(_details.recipeId)
-                                  ? IconButton(
-                                      icon: Icon(
-                                        Icons.star_border,
-                                        color: Colors.yellow,
-                                        size: 40,
-                                      ),
-                                      onPressed: () {
-                                        print('DETAILS ${_details.recipeId}');
-                                        Map<String, dynamic> _data = {};
-                                        print('DETAILS: ${_details.recipeId}');
-                                        _data[_details.recipeId] = {
-                                          'UserName':
-                                              '${_user.account.displayName}',
-                                          'Liked':
-                                              '${DateTime.now().millisecondsSinceEpoch}',
-                                        };
-                                        FirebaseFirestore.instance
-                                            .collection('Favorites')
-                                            .doc('${_user.account.uid}')
-                                            .set(
-                                                _data, SetOptions(merge: true));
-                                        _fav.addFavorites(newFavorite: _data);
-                                      },
-                                    )
-                                  : IconButton(
-                                      icon: Icon(
-                                        Icons.star_outlined,
-                                        size: 40,
-                                        color: Colors.yellowAccent,
-                                      ),
-                                      onPressed: () {
-                                        FirebaseFirestore.instance
-                                            .collection('Favorites')
-                                            .doc('${_user.account.uid}')
-                                            .update({
-                                          '${_details.recipeId}':
-                                              FieldValue.delete()
-                                        });
-                                        _fav.removeFavorites(
-                                            newFavorite: _details.recipeId);
-                                      },
+                            onTap: () {
+                              // changeScore(context: context, keyIndex: keyIndex);
+                            }),
+                        _user.account?.uid == null
+                            ? IconButton(
+                                icon: Icon(
+                                  Icons.star_border,
+                                ),
+                                onPressed: () {},
+                              )
+                            : !_fav.favorites.keys.contains(_details.recipeId)
+                                ? IconButton(
+                                    icon: Icon(
+                                      Icons.star_border,
+                                      color: Colors.yellow,
+                                      size: 40,
                                     ),
-                        ],
-                      ),
-                    ],
+                                    onPressed: () {
+                                      print('DETAILS ${_details.recipeId}');
+                                      Map<String, dynamic> _data = {};
+                                      print('DETAILS: ${_details.recipeId}');
+                                      _data[_details.recipeId] = {
+                                        'UserName':
+                                            '${_user.account.displayName}',
+                                        'Liked':
+                                            '${DateTime.now().millisecondsSinceEpoch}',
+                                      };
+                                      FirebaseFirestore.instance
+                                          .collection('Favorites')
+                                          .doc('${_user.account.uid}')
+                                          .set(_data, SetOptions(merge: true));
+                                      _fav.addFavorites(newFavorite: _data);
+                                    },
+                                  )
+                                : IconButton(
+                                    icon: Icon(
+                                      Icons.star_outlined,
+                                      size: 40,
+                                      color: Colors.yellowAccent,
+                                    ),
+                                    onPressed: () {
+                                      FirebaseFirestore.instance
+                                          .collection('Favorites')
+                                          .doc('${_user.account.uid}')
+                                          .update({
+                                        '${_details.recipeId}':
+                                            FieldValue.delete()
+                                      });
+                                      _fav.removeFavorites(
+                                          newFavorite: _details.recipeId);
+                                    },
+                                  ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             FutureBuilder<DocumentSnapshot>(
                 future: FirebaseFirestore.instance
@@ -141,113 +131,141 @@ class SelectedRecipe extends HookWidget {
                     .doc('${_details.recipeId}')
                     .get(),
                 builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                  if (snapshot.hasError) {
-                    return Text('${'error'}');
-                  }
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Container(
-                      alignment: Alignment.center,
-                      child: Text('${'loading'.tr()}...'),
-                    );
-                  }
-                  if (snapshot.hasData) {
-                    print('SNAPSHOT: ${snapshot.data.data()}');
-                    Map _data = snapshot.data.data();
-                    List _steps = _data['steps'];
-                    Map _products = _data['products'];
-                    List _productsKeys = _products.keys.toList();
-                    return Container(
-                      height: _size.height / 1.9,
-                      child: PageView(
-                        children: [
-                          Column(
-                            children: [
-                              Text(
-                                'ingredients'.tr().toUpperCase(),
-                                style: TextStyle(
-                                  fontSize: 17,
-                                ),
+                  final InstructionsModel _instructions = InstructionsModel();
+                  if (snapshot.hasData && snapshot.data.data() != null)
+                    _instructions.fromSnapshot(snapshot: snapshot.data.data());
+                  print("RECIPEID: ${_details.recipeId}");
+                  print('DATA: ${snapshot.data.data()}');
+                  print('INSTRUCTION: ${_instructions.ingredients}');
+                  print('INSTRUCTION: ${_instructions.steps}');
+                  return Container(
+                    height: _size.height / 1.9,
+                    child: PageView(
+                      children: [
+                        Column(
+                          children: [
+                            Text(
+                              'ingredients'.tr().toUpperCase(),
+                              style: TextStyle(
+                                fontSize: 17,
                               ),
-                              Container(
-                                height: _size.height / 2.1,
-                                width: _size.width / 1,
-                                child: Stack(
-                                  alignment: Alignment.bottomRight,
-                                  children: [
-                                    ListView.builder(
-                                      itemCount: _productsKeys.length,
-                                      itemBuilder: (_, int index) {
-                                        return ListTile(
-                                          leading: IconButton(
-                                            icon: Icon(
-                                                Icons.radio_button_unchecked),
-                                            onPressed: () {},
-                                          ),
-                                          title: Row(
-                                            children: [
-                                              Text(
-                                                '${_productsKeys[index]}: ',
-                                              ),
-                                              Text(
-                                                '${_products[_productsKeys[index]]}',
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
+                            ),
+                            _instructions.ingredients != null
+                                ? _IngredientsListView(
+                                    ingredients: _instructions.ingredients)
+                                : _NoInstructions('noIngredients'),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              'instructions'.tr().toUpperCase(),
+                              style: TextStyle(
+                                fontSize: 17,
                               ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Text(
-                                'instructions'.tr().toUpperCase(),
-                                style: TextStyle(
-                                  fontSize: 17,
-                                ),
-                              ),
-                              Container(
-                                height: _size.height / 2.1,
-                                width: _size.width / 1,
-                                child: Stack(
-                                  alignment: Alignment.bottomRight,
-                                  children: [
-                                    ListView.builder(
-                                      itemCount: _steps.length,
-                                      itemBuilder: (_, int index) {
-                                        return ListTile(
-                                          leading: IconButton(
-                                            icon: Icon(
-                                                Icons.radio_button_unchecked),
-                                            onPressed: () {},
-                                          ),
-                                          title: Text(
-                                            '${_steps[index]}',
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                  return Center(
-                    child: Text(
-                      'instructionsEmpty'.tr(),
+                            ),
+                            _instructions.steps != null
+                                ? _StepsListView(
+                                    steps: _instructions.steps,
+                                  )
+                                : _NoInstructions('noSteps')
+                          ],
+                        ),
+                      ],
                     ),
                   );
                 }),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _IngredientsListView extends HookWidget {
+  final Map ingredients;
+
+  _IngredientsListView({this.ingredients});
+
+  @override
+  Widget build(BuildContext context) {
+    final Size _size = MediaQuery.of(context).size;
+    // final _recipe = useProvider(recipeProvider);
+    // final _ingredients = _recipe.instructions.ingredients;
+    // print('_instructions.ingredients.length:${_ingredients.keys}');
+    List _keys = ingredients.keys.toList();
+    return Container(
+      height: _size.height / 2.1,
+      width: _size.width / 1,
+      child: Stack(
+        alignment: Alignment.bottomRight,
+        children: [
+          ListView.builder(
+            itemCount: _keys.length,
+            itemBuilder: (_, int index) {
+              return ListTile(
+                leading: IconButton(
+                  icon: Icon(Icons.radio_button_unchecked),
+                  onPressed: () {},
+                ),
+                title: Row(
+                  children: [
+                    Text(
+                      '${_keys[index]}: ',
+                    ),
+                    Text(
+                      '${ingredients[_keys[index]]}',
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StepsListView extends HookWidget {
+  final List steps;
+
+  _StepsListView({this.steps});
+  @override
+  Widget build(BuildContext context) {
+    final Size _size = MediaQuery.of(context).size;
+    return Container(
+      height: _size.height / 2.1,
+      width: _size.width / 1,
+      child: Stack(
+        alignment: Alignment.bottomRight,
+        children: [
+          ListView.builder(
+            itemCount: steps.length,
+            itemBuilder: (_, int index) {
+              return ListTile(
+                leading: IconButton(
+                  icon: Icon(Icons.radio_button_unchecked),
+                  onPressed: () {},
+                ),
+                title: Text(
+                  '${steps[index]}',
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _NoInstructions extends HookWidget {
+  final String text;
+  _NoInstructions(this.text);
+  Widget build(BuildContext context) {
+    return Text(
+      text.tr(),
     );
   }
 }

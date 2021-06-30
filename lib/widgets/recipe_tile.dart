@@ -8,13 +8,16 @@ class RecipeTile extends HookWidget {
   RecipeTile({
     Key key,
     @required this.indexData,
+    @required this.keyIndex,
   }) : super(key: key);
 
   final Map indexData;
+  final String keyIndex;
 
   @override
   Widget build(BuildContext context) {
     final _recipe = useProvider(recipeProvider);
+    _recipe.details.fromSnapshot(snapshot: indexData, keyIndex: keyIndex);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,

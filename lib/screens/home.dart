@@ -81,8 +81,8 @@ class Home extends HookWidget {
         showUnselectedLabels: true,
         items: [
           BottomNavigationBarItem(
-            label: '${'public'.tr()}',
-            icon: Icon(Icons.public),
+            label: '${'home'.tr()}',
+            icon: Icon(Icons.home),
           ),
           BottomNavigationBarItem(
             label: 'myLibrary'.tr(),

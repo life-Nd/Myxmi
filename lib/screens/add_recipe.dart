@@ -315,7 +315,7 @@ class AddRecipe extends HookWidget {
   Widget subCategory({String category}) {
     Widget _subCategory;
     switch (category) {
-      case ('Food'):
+      case ('food'):
         _subCategory = Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -324,7 +324,7 @@ class AddRecipe extends HookWidget {
           ],
         );
         return _subCategory;
-      case ('Drinks'):
+      case ('drink'):
         _subCategory = Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -333,7 +333,7 @@ class AddRecipe extends HookWidget {
           ],
         );
         return _subCategory;
-      case ('Vape'):
+      case ('vape'):
         _subCategory = Column(
           mainAxisSize: MainAxisSize.min,
           children: [

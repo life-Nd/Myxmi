@@ -13,17 +13,17 @@ class FilteringScreen extends HookWidget {
       child: ListView(
         scrollDirection: Axis.vertical,
         children: [
-          _FoodFilter(),
           _DrinksFilter(),
+          _FoodsFilter(),
+          _DietsFilter(),
           _VapesFilter(),
-          _DietFilter(),
         ],
       ),
     );
   }
 }
 
-class _FoodFilter extends HookWidget {
+class _FoodsFilter extends HookWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,7 +146,7 @@ class _VapesFilter extends HookWidget {
   }
 }
 
-class _DietFilter extends HookWidget {
+class _DietsFilter extends HookWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -163,16 +163,16 @@ class _DietFilter extends HookWidget {
           child: Row(
             children: [
               Filter(
-                'nicotine',
+                'vegan',
               ),
               Filter(
-                'thc',
+                'vegetarian',
               ),
               Filter(
-                'cbd',
+                'keto',
               ),
               Filter(
-                'allVapes',
+                'allDiets',
               ),
             ],
           ),
@@ -191,7 +191,6 @@ class Filter extends StatefulWidget {
 class _FilterState extends State<Filter> {
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
-    String _legend = widget.legend;
     // widget.legend[0].toUpperCase() + widget.legend.substring(1);
     return GestureDetector(
       onTap: () {
@@ -227,7 +226,7 @@ class _FilterState extends State<Filter> {
               ),
             ),
             Text(
-              '$_legend'.tr().toUpperCase(),
+              '${widget.legend}'.tr(),
               style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
             ),
           ],
