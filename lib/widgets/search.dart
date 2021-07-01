@@ -79,43 +79,6 @@ class SearchRecipes extends HookWidget {
           _change.value = !_change.value;
         },
       ),
-      subtitle: showFilter && _searchNode.hasFocus
-          ? Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                RawMaterialButton(
-                  visualDensity: VisualDensity.compact,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  fillColor: _searchFilter == 'Reference'
-                      ? Colors.green
-                      : Theme.of(context).cardColor,
-                  child: Text('Ref.'),
-                  onPressed: () {
-                    _searchFilter = 'Reference';
-                    Future.delayed(Duration(seconds: 2), () {
-                      _searchCtrl.clear();
-                    });
-                    _change.value = !_change.value;
-                  },
-                ),
-                RawMaterialButton(
-                  visualDensity: VisualDensity.compact,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  fillColor: _searchFilter == 'Name'
-                      ? Colors.green
-                      : Theme.of(context).cardColor,
-                  child: Text('recipe'.tr()),
-                  onPressed: () {
-                    _searchFilter = 'Name';
-                    _searchCtrl.clear();
-                    _change.value = !_change.value;
-                  },
-                ),
-              ],
-            )
-          : Container(),
     );
   }
 }

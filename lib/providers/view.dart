@@ -1,6 +1,5 @@
 import 'package:myxmi/screens/favorites.dart';
 import 'package:myxmi/screens/filtering.dart';
-import 'package:myxmi/screens/loading.dart';
 import 'package:myxmi/screens/more.dart';
 import 'package:myxmi/screens/recipes.dart';
 import 'package:myxmi/widgets/sign_in.dart';
@@ -15,7 +14,7 @@ class ViewProvider extends ChangeNotifier {
   Future future;
   Future search;
 
-  changeView({@required int newView, @required String uid}) {
+  changeView({@required int newView, String uid}) {
     view = newView;
     switch (view) {
       case 0:
@@ -28,32 +27,35 @@ class ViewProvider extends ChangeNotifier {
 
         return FilteringScreen();
       case 1:
-        changeFuture(
-            newFuture: FirebaseFirestore.instance
-                .collection('Recipes')
-                .where(
-                  'Uid',
-                  isEqualTo: '$uid',
-                )
-                .orderBy('Made', descending: true)
-                .limit(20)
-                .get());
+        // changeFuture(
+        //     newFuture: FirebaseFirestore.instance
+        //         .collection('Recipes')
+        //         .where(
+        //           'Uid',
+        //           isEqualTo: '$uid',
+        //         )
+        //         .orderBy('Made', descending: true)
+        //         .limit(20)
+        //         .get());
         return uid != null ? RecipesScreen('Breakfast') : SignIn();
       case 2:
         return uid != null ? Favorites() : SignIn();
       case 3:
         return uid != null ? MoreView() : SignIn();
+      case 4:
+        return uid != null ? MoreView() : SignIn();
       default:
-        changeFuture(
-            newFuture: FirebaseFirestore.instance
-                .collection('Recipes')
-                .orderBy('Made', descending: true)
-                .limit(20)
-                .get());
-        return LoadingScreen();
+        // changeFuture(
+        //     newFuture: FirebaseFirestore.instance
+        //         .collection('Recipes')
+        //         .orderBy('Made', descending: true)
+        //         .limit(20)
+        //         .get());
+        return FilteringScreen();
     }
   }
 
+// TODO fix this search
   searchRecipe(
       {@required String filter,
       @required String text,

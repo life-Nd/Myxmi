@@ -14,11 +14,10 @@ class RecipeProvider extends ChangeNotifier {
   List hidden = [];
   double difficultyValue = 0.0;
   int pageIndex = 0;
-  Image image;
+  FadeInImage image;
 
-  imageViewer({@required Image newImage}) {
+  FadeInImage imageViewer({@required FadeInImage newImage}) {
     image = newImage;
-
     return image;
   }
 

@@ -68,6 +68,7 @@ class FavoriteTile extends HookWidget {
           )
         ],
       ),
+      
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,

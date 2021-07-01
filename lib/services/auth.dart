@@ -34,9 +34,6 @@ class AuthHandler {
 
       await sendEmail();
     });
-    // Future.delayed(Duration(milliseconds: 777), () {
-    //   _showLoading = false;
-    // });
     User user = currentUser.user;
     return user;
   }
@@ -59,7 +56,7 @@ class AuthHandler {
       Future.delayed(Duration(milliseconds: 444), () {
         return Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-              builder: (context) => App(),
+              builder: (_) => App(),
             ),
             (route) => false);
       });
@@ -416,9 +413,11 @@ class AuthHandler {
   }
 
   Future<void> _signOut(BuildContext context) async {
+    final ProgressDialog pr = ProgressDialog(context: context);
+    pr.show(max: 100, msg: 'loading'.tr());
     try {
-      final AuthHandler _authHandler = AuthHandler();
-      await _authHandler.signOut(context);
+      await signOut(context);
+      pr.close();
     } on PlatformException catch (e) {
       await PlatformExceptionAlertDialog(
         title: "${'logoutFailed'.tr()}",

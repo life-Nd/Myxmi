@@ -11,7 +11,7 @@ import 'package:easy_localization/easy_localization.dart';
 final viewProvider = ChangeNotifierProvider<ViewProvider>(
   (ref) => ViewProvider(),
 );
-int viewIndex = 0;
+// int viewIndex = 0;
 
 class Home extends HookWidget {
   Widget build(BuildContext context) {
@@ -20,6 +20,7 @@ class Home extends HookWidget {
     final _favorites = useProvider(favProvider);
     final _user = useProvider(userProvider);
     final _change = useState<bool>(false);
+    int viewIndex = _view.view;
     return Scaffold(
       appBar: viewIndex == 0 ||
               viewIndex == 1 && _user.account?.uid != null ||
@@ -82,16 +83,21 @@ class Home extends HookWidget {
         items: [
           BottomNavigationBarItem(
             label: '${'home'.tr()}',
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.home_outlined),
           ),
           BottomNavigationBarItem(
-            label: 'myLibrary'.tr(),
-            icon: Icon(Icons.my_library_books_outlined),
+            label: 'recipes'.tr(),
+            icon: Icon(Icons.menu_book_outlined),
           ),
           BottomNavigationBarItem(
             label: 'favorites'.tr(),
-            icon: Icon(Icons.star),
+            icon: Icon(Icons.favorite_border),
           ),
+          BottomNavigationBarItem(
+              label: 'products'.tr(),
+              icon: Icon(
+                Icons.fastfood_outlined,
+              )),
           _user.account?.uid != null
               ? BottomNavigationBarItem(
                   label: 'settings'.tr(),
@@ -99,19 +105,19 @@ class Home extends HookWidget {
                 )
               : BottomNavigationBarItem(
                   label: 'signIn'.tr(),
-                  icon: Icon(Icons.person),
+                  icon: Icon(Icons.person_outlined),
                 ),
         ],
         currentIndex: viewIndex,
         onTap: (index) {
-          viewIndex = index;
+         _view.changeView(newView: index);
           _view.doSearch(false);
           _favorites.showFilter(false);
         },
       ),
-      body:  _view.changeView(
-          uid: _user.account?.uid,
-          newView: viewIndex,
+      body: _view.changeView(
+        uid: _user.account?.uid,
+        newView: viewIndex,
       ),
     );
   }

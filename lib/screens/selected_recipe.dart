@@ -6,16 +6,16 @@ import 'package:myxmi/app.dart';
 import 'package:myxmi/models/instructions.dart';
 import 'package:myxmi/screens/add_recipe.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:myxmi/widgets/comments.dart';
 import '../main.dart';
 
 class SelectedRecipe extends HookWidget {
   Widget build(BuildContext context) {
     final _recipe = useProvider(recipeProvider);
-    final _details = _recipe.details;
     final _user = useProvider(userProvider);
     final _fav = useProvider(favProvider);
     final Size _size = MediaQuery.of(context).size;
-final _change = useState<bool>(false);
+    final _change = useState<bool>(false);
     return Scaffold(
       appBar: AppBar(
         title: Text('${_recipe.details.title}'),
@@ -32,11 +32,11 @@ final _change = useState<bool>(false);
               Theme.of(context).cardColor,
               Theme.of(context).cardColor,
               Theme.of(context).cardColor,
-              _details.difficulty == 'easy'
+              _recipe.details.difficulty == 'easy'
                   ? Colors.yellow.shade700
-                  : _details.difficulty == 'medium'
+                  : _recipe.details.difficulty == 'medium'
                       ? Colors.orange.shade900
-                      : _details.difficulty == 'hard'
+                      : _recipe.details.difficulty == 'hard'
                           ? Colors.red.shade700
                           : Colors.grey.shade700,
             ],
@@ -55,7 +55,7 @@ final _change = useState<bool>(false);
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: Hero(
-                        tag: '${_details.imageUrl}',
+                        tag: 'RecipesHero',
                         child: _recipe.image,
                       ),
                     ),
@@ -63,38 +63,30 @@ final _change = useState<bool>(false);
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        GestureDetector(
-                            child: CircleAvatar(
-                              backgroundColor: Colors.green,
-                              child: Text(
-                                '${_details.stars}',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                            onTap: () {
-                              // changeScore(context: context, keyIndex: keyIndex);
-                            }),
                         _user.account?.uid == null
                             ? IconButton(
                                 icon: Icon(
-                                  Icons.star_border,
+                                  Icons.favorite_border,
                                 ),
                                 onPressed: () {},
                               )
-                            : !_fav.favorites.keys.contains(_details.recipeId)
+                            : !_fav.favorites.keys
+                                    .contains(_recipe.details.recipeId)
                                 ? IconButton(
                                     icon: Icon(
-                                      Icons.star_border,
-                                      color: Colors.black,
+                                      Icons.favorite_border,
+                                      color: Colors.red,
                                       size: 40,
                                     ),
                                     onPressed: () {
-                                      print('DETAILS ${_details.recipeId}');
+                                      print(
+                                          'DETAILS ${_recipe.details.recipeId}');
                                       Map<String, dynamic> _data = {};
-                                      print('DETAILS: ${_details.recipeId}');
-                                      _data[_details.recipeId] = {
+                                      print(
+                                          'DETAILS: ${_recipe.details.recipeId}');
+                                      _data[_recipe.details.recipeId] = {
                                         'UserName':
                                             '${_user.account.displayName}',
                                         'Liked':
@@ -110,23 +102,37 @@ final _change = useState<bool>(false);
                                   )
                                 : IconButton(
                                     icon: Icon(
-                                      Icons.star_outlined,
+                                      Icons.favorite_outlined,
                                       size: 40,
-                                      color: Colors.yellowAccent,
+                                      color: Colors.red,
                                     ),
                                     onPressed: () {
                                       FirebaseFirestore.instance
                                           .collection('Favorites')
                                           .doc('${_user.account.uid}')
                                           .update({
-                                        '${_details.recipeId}':
+                                        '${_recipe.details.recipeId}':
                                             FieldValue.delete()
                                       });
                                       _fav.removeFavorites(
-                                          newFavorite: _details.recipeId);
+                                          newFavorite:
+                                              _recipe.details.recipeId);
                                       _change.value = !_change.value;
                                     },
                                   ),
+                        GestureDetector(
+                            child: CircleAvatar(
+                              backgroundColor: Colors.green,
+                              child: Text(
+                                _recipe.details.stars != null
+                                    ? '${_recipe.details.stars}'
+                                    : '0.0',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            onTap: () {
+                              // changeScore(context: context, keyIndex: keyIndex);
+                            }),
                       ],
                     ),
                   ),
@@ -136,7 +142,7 @@ final _change = useState<bool>(false);
             FutureBuilder<DocumentSnapshot>(
                 future: FirebaseFirestore.instance
                     .collection('Instructions')
-                    .doc('${_details.recipeId}')
+                    .doc('${_recipe.details.recipeId}')
                     .get(),
                 builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                   final InstructionsModel _instructions = InstructionsModel();
@@ -145,42 +151,184 @@ final _change = useState<bool>(false);
 
                   print('INSTRUCTION: ${_instructions.ingredients}');
                   print('INSTRUCTION: ${_instructions.steps}');
-                  return Container(
-                    height: _size.height / 1.9,
-                    child: PageView(
-                      children: [
-                        Column(
-                          children: [
-                            Text(
-                              'ingredients'.tr().toUpperCase(),
-                              style: TextStyle(
-                                fontSize: 17,
+                  return Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.only(
+                                left: 10, right: 10, top: 10, bottom: 5),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                    width: 4,
+                                    color: _recipe.pageIndex == 0
+                                        ? Theme.of(context)
+                                            .appBarTheme
+                                            .titleTextStyle
+                                            .color
+                                        : Colors.transparent),
                               ),
                             ),
-                            _instructions.ingredients != null
-                                ? _IngredientsListView(
-                                    ingredients: _instructions.ingredients,
-                                  )
-                                : _NoInstructions('noIngredients'),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              'instructions'.tr().toUpperCase(),
-                              style: TextStyle(
-                                fontSize: 17,
+                            child: RichText(
+                              text: TextSpan(
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                                children: [
+                                  TextSpan(
+                                    text: 'ingredients'.tr().toUpperCase(),
+                                  ),
+                                  WidgetSpan(
+                                    child: Transform.translate(
+                                      offset: const Offset(0.0, -9.0),
+                                      child: Text(
+                                        _instructions?.ingredients != null
+                                            ? '${_instructions?.ingredients?.keys?.length}'
+                                            : '0',
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            _instructions.steps != null
-                                ? _StepsListView(
-                                    steps: _instructions.steps,
-                                  )
-                                : _NoInstructions('noSteps')
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(
+                                left: 10, right: 10, top: 10, bottom: 5),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                  bottom: BorderSide(
+                                width: 4,
+                                color: _recipe.pageIndex == 1
+                                    ? Theme.of(context)
+                                        .appBarTheme
+                                        .titleTextStyle
+                                        .color
+                                    : Colors.transparent,
+                              )),
+                            ),
+                            child: RichText(
+                              text: TextSpan(
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                                children: [
+                                  TextSpan(
+                                    text: 'steps'.tr().toUpperCase(),
+                                  ),
+                                  WidgetSpan(
+                                    child: Transform.translate(
+                                      offset: const Offset(0.0, -9.0),
+                                      child: Text(
+                                        _instructions?.steps != null
+                                            ? '${_instructions?.steps?.length}'
+                                            : '0',
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(
+                                left: 10, right: 10, top: 10, bottom: 5),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  width: 4,
+                                  color: _recipe.pageIndex == 2
+                                      ? Theme.of(context)
+                                          .appBarTheme
+                                          .titleTextStyle
+                                          .color
+                                      : Colors.transparent,
+                                ),
+                              ),
+                            ),
+                            child: RichText(
+                              text: TextSpan(
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                                children: [
+                                  TextSpan(
+                                    text: 'reviews'.tr().toUpperCase(),
+                                  ),
+                                  WidgetSpan(
+                                    child: Transform.translate(
+                                      offset: const Offset(0.0, -9.0),
+                                      child: Text(
+                                        '00',
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        height: _size.height / 1.9,
+                        child: PageView(
+                          controller: PageController(
+                            initialPage: _recipe.pageIndex,
+                            keepPage: true,
+                          ),
+                          onPageChanged: (index) {
+                            _recipe.changeView(index);
+                          },
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                _instructions.ingredients != null
+                                    ? _IngredientsListView(
+                                        ingredients: _instructions.ingredients,
+                                      )
+                                    : _NoInstructions('noIngredients'),
+                              ],
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                _instructions.steps != null
+                                    ? _StepsListView(
+                                        steps: _instructions.steps,
+                                      )
+                                    : _NoInstructions('noSteps')
+                              ],
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                _instructions.steps != null
+                                    ? Comments(
+                                        indexComments: {},
+                                        commentsKeys: [],
+                                      )
+                                    : _NoInstructions('noReviews')
+                              ],
+                            ),
                           ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   );
                 }),
           ],
@@ -189,6 +337,8 @@ final _change = useState<bool>(false);
     );
   }
 }
+
+List _checkedIngredients = [];
 
 class _IngredientsListView extends HookWidget {
   final Map ingredients;
@@ -199,6 +349,7 @@ class _IngredientsListView extends HookWidget {
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
     List _keys = ingredients.keys.toList();
+    final _change = useState<bool>(false);
     return Container(
       height: _size.height / 2.1,
       width: _size.width / 1,
@@ -208,10 +359,24 @@ class _IngredientsListView extends HookWidget {
           ListView.builder(
             itemCount: _keys.length,
             itemBuilder: (_, int index) {
+              final _checked = _checkedIngredients.contains(_keys[index]);
               return ListTile(
+                onTap: () {
+                  !_checked
+                      ? _checkedIngredients.add(_keys[index])
+                      : _checkedIngredients.remove(_keys[index]);
+                  _change.value = !_change.value;
+                },
                 leading: IconButton(
-                  icon: Icon(Icons.radio_button_unchecked),
-                  onPressed: () {},
+                  icon: _checked
+                      ? Icon(Icons.radio_button_unchecked)
+                      : Icon(Icons.check_circle_outline),
+                  onPressed: () {
+                    !_checked
+                        ? _checkedIngredients.add(_keys[index])
+                        : _checkedIngredients.remove(_keys[index]);
+                    _change.value = !_change.value;
+                  },
                 ),
                 title: Row(
                   children: [
@@ -232,13 +397,16 @@ class _IngredientsListView extends HookWidget {
   }
 }
 
+List _checkedSteps = [];
+
 class _StepsListView extends HookWidget {
   final List steps;
-
   _StepsListView({this.steps});
+
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
+    final _change = useState<bool>(false);
     return Container(
       height: _size.height / 2.1,
       width: _size.width / 1,
@@ -248,10 +416,24 @@ class _StepsListView extends HookWidget {
           ListView.builder(
             itemCount: steps.length,
             itemBuilder: (_, int index) {
+              final _checked = _checkedSteps?.contains(steps[index]);
               return ListTile(
+                onTap: () {
+                  !_checked
+                      ? _checkedSteps.add(steps[index])
+                      : _checkedSteps.remove(steps[index]);
+                  _change.value = !_change.value;
+                },
                 leading: IconButton(
-                  icon: Icon(Icons.radio_button_unchecked),
-                  onPressed: () {},
+                  icon: _checked
+                      ? Icon(Icons.radio_button_unchecked)
+                      : Icon(Icons.check_circle_outline),
+                  onPressed: () {
+                    !_checked
+                        ? _checkedSteps.add(steps[index])
+                        : _checkedSteps.remove(steps[index]);
+                    _change.value = !_change.value;
+                  },
                 ),
                 title: Text(
                   '${steps[index]}',

@@ -33,7 +33,9 @@ class RecipeImage extends HookWidget {
                   ),
                 ),
               )
-            : Center(child: Text('0 ${'image'.tr()}s')),
+            : Center(
+                child: Text('0 ${'image'.tr()}s'),
+              ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: FloatingActionButton(

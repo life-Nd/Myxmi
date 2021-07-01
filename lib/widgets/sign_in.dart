@@ -1,25 +1,34 @@
 import 'dart:io';
 import 'package:myxmi/services/auth.dart';
 import 'package:apple_sign_in/apple_sign_in.dart' as apple_sign_in;
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-TextEditingController _emailCtrl = TextEditingController();
-TextEditingController _passwordCtrl = TextEditingController();
-final FocusNode _passwordNode = FocusNode();
-
 // ignore: must_be_immutable
-class SignIn extends HookWidget {
+class SignIn extends StatefulWidget {
+  createState() => SignInState();
+}
+
+class SignInState extends State<SignIn> {
   bool _obscure = true;
   bool showPassword = false;
   bool showButton = false;
   final AuthHandler _authHandler = AuthHandler();
+  TextEditingController _emailCtrl;
+  TextEditingController _passwordCtrl;
+  FocusNode _passwordNode;
+  @override
+  void initState() {
+    _emailCtrl = TextEditingController();
+    _passwordCtrl = TextEditingController();
+    _passwordNode = FocusNode();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     var _size = MediaQuery.of(context).size;
-    final _change = useState<bool>(false);
+    // final _change = useState<bool>(false);
     return Container(
       height: _size.height,
       decoration: BoxDecoration(
@@ -64,29 +73,31 @@ class SignIn extends HookWidget {
             SizedBox(
               height: 10,
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-              child: TextField(
-                focusNode: _passwordNode,
-                controller: _passwordCtrl,
-                obscureText: _obscure,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  hintText: '${'enterPassword'.tr()}',
-                  suffixIcon: IconButton(
-                    icon: _obscure
-                        ? Icon(Icons.visibility_off)
-                        : Icon(Icons.visibility),
-                    onPressed: () {
-                      _obscure = !_obscure;
-                      _change.value = !_change.value;
-                    },
+            StatefulBuilder(builder: (context, StateSetter setState) {
+              return Padding(
+                padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                child: TextField(
+                  focusNode: _passwordNode,
+                  controller: _passwordCtrl,
+                  obscureText: _obscure,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    hintText: '${'enterPassword'.tr()}',
+                    suffixIcon: IconButton(
+                      icon: _obscure
+                          ? Icon(Icons.visibility_off)
+                          : Icon(Icons.visibility),
+                      onPressed: () {
+                        _obscure = !_obscure;
+                        setState(() {});
+                      },
+                    ),
                   ),
                 ),
-              ),
-            ),
+              );
+            }),
             Container(
               padding: EdgeInsets.only(left: 10),
               alignment: Alignment.centerLeft,
