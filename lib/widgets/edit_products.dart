@@ -27,7 +27,7 @@ class EditProducts extends HookWidget {
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('$indexKey'),
+            
             Text('Type: ${data['IngredientType']}'),
             Text('Mesured in: ${data['MesureType']}'),
             Text('Quantity in stock: ${data['Total']} ${data['MesureType']}'),
@@ -36,18 +36,17 @@ class EditProducts extends HookWidget {
           ],
         ),
         trailing: IconButton(
-            icon: !_prefs.cart.contains(data['Name'])
+            icon: _prefs?.cart != null && _prefs.cart.contains(data['Name'])
                 ? Icon(
-                    Icons.add_shopping_cart,
-                    color: Colors.grey,
-                  )
-                : Icon(
                     Icons.shopping_cart,
                     color: Colors.green,
+                  )
+                : Icon(
+                    Icons.add_shopping_cart,
+                    color: Colors.grey,
                   ),
             onPressed: () async {
               await _prefs.editCart(name: '${data['Name']}');
-              _change.value = !_change.value;
             }),
       ),
     );

@@ -44,15 +44,22 @@ class PreferencesProvider extends ChangeNotifier {
 
   editCart({@required String name}) async {
     final SharedPreferences prefs = await _prefs;
-    cart.contains(name) ? cart.remove(name) : cart.add(name);
+    if (cart == null) cart = [];
+    if (cart.contains(name)) {
+      cart.remove(name);
+    } else {
+      cart.add(name);
+    }
     prefs.setStringList('Cart', cart).then((bool success) {
       print('cart: $cart');
       return cart;
     });
+    notifyListeners();
   }
 
   editItems({@required String item}) async {
     final SharedPreferences prefs = await _prefs;
+    if (checkedItem == null) checkedItem = [];
     checkedItem.contains(item)
         ? checkedItem.remove(item)
         : checkedItem.add(item);
@@ -60,6 +67,7 @@ class PreferencesProvider extends ChangeNotifier {
       print('Item: $checkedItem');
       return checkedItem;
     });
+    notifyListeners();
   }
 
   Future readCart() async {

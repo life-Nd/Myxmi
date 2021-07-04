@@ -33,23 +33,7 @@ class Products extends HookWidget {
                   _pageIndex = index;
                 },
                 children: [
-                  Column(
-                    children: [
-                      _AllCart(
-                        viewIndex: 0,
-                      ),
-                      Expanded(
-                        child: ProductsList(
-                          uid: _user.account.uid,
-                          type: 'EditProducts',
-                          componentsFuture: FirebaseFirestore.instance
-                              .collection('Products')
-                              .doc('${_user.account.uid}')
-                              .get(),
-                        ),
-                      ),
-                    ],
-                  ),
+                  _EditProducts(uid: _user.account.uid),
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -60,10 +44,12 @@ class Products extends HookWidget {
                         child: FutureBuilder(
                           future: _prefs.readCart(),
                           builder: (_, snapshot) {
-                            return ListView.builder(
-                              itemCount: snapshot.data?.length,
-                              itemBuilder: (_, int index) {
-                                if (snapshot.hasData) {
+                            if (snapshot.hasData && snapshot.data.isNotEmpty) {
+                              print('snapshot.hasData: ${snapshot.hasData}');
+                              print('snapshot: ${snapshot.data.runtimeType}');
+                              return ListView.builder(
+                                itemCount: snapshot.data.length,
+                                itemBuilder: (_, int index) {
                                   return ListTile(
                                     leading: IconButton(
                                       icon: _prefs.checkedItem
@@ -82,11 +68,11 @@ class Products extends HookWidget {
                                     ),
                                     title: Text('${snapshot?.data[index]}'),
                                   );
-                                }
-                                return Center(
-                                  child: Text('cartEmpty'.tr()),
-                                );
-                              },
+                                },
+                              );
+                            }
+                            return Center(
+                              child: Text('cartEmpty'.tr()),
                             );
                           },
                         ),
@@ -99,6 +85,43 @@ class Products extends HookWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _EditProducts extends StatefulWidget {
+  const _EditProducts({
+    Key key,
+    @required this.uid,
+  }) : super(key: key);
+
+  final String uid;
+  createState() => _EditProductsState();
+}
+
+class _EditProductsState extends State<_EditProducts> {
+  Future _future;
+  @override
+  void initState() {
+    _future = FirebaseFirestore.instance
+        .collection('Products')
+        .doc('${widget.uid}')
+        .get();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        _AllCart(
+          viewIndex: 0,
+        ),
+        Expanded(
+          child: ProductsList(
+              uid: widget.uid, type: 'EditProducts', componentsFuture: _future),
+        ),
+      ],
     );
   }
 }
