@@ -80,7 +80,7 @@ class _Theme extends HookWidget {
                     style: TextStyle(),
                   ),
                   onPressed: _prefs.theme != 'Light'
-                      ? () {
+                      ? () {    
                           _prefs.changeTheme(newTheme: 'Light');
                         }
                       : () {},

@@ -41,9 +41,6 @@ void main() async {
 }
 
 class MaterialAppWidget extends StatefulWidget {
-  // final String newTheme;
-
-  // MaterialAppWidget({this.newTheme});
   createState() => MaterialAppWidgetState();
 }
 

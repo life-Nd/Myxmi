@@ -38,28 +38,28 @@ class AuthHandler {
     return user;
   }
 
-  Future<dynamic> signInWithEmailPassword({
-    String email,
-    String password,
-    BuildContext context,
-  }) async {
+  Future<dynamic> signInWithEmailPassword(
+      {String email, String password, BuildContext context}) async {
     String _email = email.trim();
     String _password = password.trim();
     final ProgressDialog pr = ProgressDialog(context: context);
     pr.show(max: 100, msg: 'loading'.tr());
     try {
-      await _firebaseAuth.signInWithEmailAndPassword(
-        email: _email,
-        password: _password,
-      );
-      pr.close();
-      Future.delayed(Duration(milliseconds: 444), () {
-        return Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (_) => App(),
-            ),
-            (route) => false);
-      });
+      await _firebaseAuth
+          .signInWithEmailAndPassword(
+            email: _email,
+            password: _password,
+          )
+          .then(
+            (value) => pr.close(),
+          )
+          .whenComplete(
+            () => Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (context) => App(),
+                ),
+                (route) => false),
+          );
     } catch (error) {
       pr.close();
       print('Error-----: $error----');
@@ -255,14 +255,14 @@ class AuthHandler {
     );
   }
 
-  Future sendEmail() {
-    return _firebaseAuth.currentUser.sendEmailVerification();
+  Future sendEmail() async {
+    return await _firebaseAuth.currentUser.sendEmailVerification();
   }
 
-  Future reload() {
-    return _firebaseAuth.currentUser.reload();
+  Future reload() async {
+    return await _firebaseAuth.currentUser.reload();
   }
-
+ 
   static Future<User> signInWithGoogle({@required BuildContext context}) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User user;

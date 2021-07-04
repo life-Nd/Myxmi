@@ -19,8 +19,7 @@ class MoreView extends HookWidget {
       minLaunches:
           5, // Show rate popup after 5 launches of app after minDays is passed.
     );
-    return Container(
-      child: Column(
+    return Column(
         children: [
           Divider(),
           ListTile(
@@ -97,7 +96,7 @@ class MoreView extends HookWidget {
             ),
           ),
         ],
-      ),
+
     );
   }
 }

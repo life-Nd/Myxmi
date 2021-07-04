@@ -10,6 +10,8 @@ class PreferencesProvider extends ChangeNotifier {
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   String theme = 'Light';
   String language = 'English';
+  List<String> cart = [];
+  List<String> checkedItem = [];
   bool opaque = false;
   changeTheme({String newTheme}) async {
     final SharedPreferences prefs = await _prefs;
@@ -40,7 +42,40 @@ class PreferencesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  readTheme() async {
+  editCart({@required String name}) async {
+    final SharedPreferences prefs = await _prefs;
+    cart.contains(name) ? cart.remove(name) : cart.add(name);
+    prefs.setStringList('Cart', cart).then((bool success) {
+      print('cart: $cart');
+      return cart;
+    });
+  }
+
+  editItems({@required String item}) async {
+    final SharedPreferences prefs = await _prefs;
+    checkedItem.contains(item)
+        ? checkedItem.remove(item)
+        : checkedItem.add(item);
+    prefs.setStringList('Items', checkedItem).then((bool success) {
+      print('Item: $checkedItem');
+      return checkedItem;
+    });
+  }
+
+  Future readCart() async {
+    final SharedPreferences prefs = await _prefs;
+    cart = prefs.getStringList('Cart');
+
+    return cart;
+  }
+
+  Future readItem() async {
+    final SharedPreferences prefs = await _prefs;
+    cart = prefs.getStringList('Items');
+    return cart;
+  }
+
+  Future readTheme() async {
     final SharedPreferences prefs = await _prefs;
     theme = prefs.getString('Theme');
     return theme;

@@ -23,7 +23,13 @@ class DetailsTile extends HookWidget {
     return ListTile(
       tileColor: Colors.transparent,
       focusColor: Colors.transparent,
-      leading: leadingWidget,
+      leading: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Padding(
+          padding: const EdgeInsetsDirectional.only(end: 12.0),
+          child: leadingWidget,
+        ),
+      ),
       contentPadding: EdgeInsets.all(1),
       dense: true,
       onTap: onTap,

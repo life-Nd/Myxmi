@@ -4,18 +4,17 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/app.dart';
 import 'package:myxmi/models/instructions.dart';
+import 'package:myxmi/models/recipes.dart';
 import 'package:myxmi/screens/add_recipe.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:myxmi/widgets/comments.dart';
 import '../main.dart';
+import 'home.dart';
 
 class SelectedRecipe extends HookWidget {
   Widget build(BuildContext context) {
     final _recipe = useProvider(recipeProvider);
-    final _user = useProvider(userProvider);
-    final _fav = useProvider(favProvider);
     final Size _size = MediaQuery.of(context).size;
-    final _change = useState<bool>(false);
     return Scaffold(
       appBar: AppBar(
         title: Text('${_recipe.details.title}'),
@@ -60,81 +59,8 @@ class SelectedRecipe extends HookWidget {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        _user.account?.uid == null
-                            ? IconButton(
-                                icon: Icon(
-                                  Icons.favorite_border,
-                                ),
-                                onPressed: () {},
-                              )
-                            : !_fav.favorites.keys
-                                    .contains(_recipe.details.recipeId)
-                                ? IconButton(
-                                    icon: Icon(
-                                      Icons.favorite_border,
-                                      color: Colors.red,
-                                      size: 40,
-                                    ),
-                                    onPressed: () {
-                                      print(
-                                          'DETAILS ${_recipe.details.recipeId}');
-                                      Map<String, dynamic> _data = {};
-                                      print(
-                                          'DETAILS: ${_recipe.details.recipeId}');
-                                      _data[_recipe.details.recipeId] = {
-                                        'UserName':
-                                            '${_user.account.displayName}',
-                                        'Liked':
-                                            '${DateTime.now().millisecondsSinceEpoch}',
-                                      };
-                                      FirebaseFirestore.instance
-                                          .collection('Favorites')
-                                          .doc('${_user.account.uid}')
-                                          .set(_data, SetOptions(merge: true));
-                                      _fav.addFavorites(newFavorite: _data);
-                                      _change.value = !_change.value;
-                                    },
-                                  )
-                                : IconButton(
-                                    icon: Icon(
-                                      Icons.favorite_outlined,
-                                      size: 40,
-                                      color: Colors.red,
-                                    ),
-                                    onPressed: () {
-                                      FirebaseFirestore.instance
-                                          .collection('Favorites')
-                                          .doc('${_user.account.uid}')
-                                          .update({
-                                        '${_recipe.details.recipeId}':
-                                            FieldValue.delete()
-                                      });
-                                      _fav.removeFavorites(
-                                          newFavorite:
-                                              _recipe.details.recipeId);
-                                      _change.value = !_change.value;
-                                    },
-                                  ),
-                        GestureDetector(
-                            child: CircleAvatar(
-                              backgroundColor: Colors.green,
-                              child: Text(
-                                _recipe.details.stars != null
-                                    ? '${_recipe.details.stars}'
-                                    : '0.0',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                            onTap: () {
-                              // changeScore(context: context, keyIndex: keyIndex);
-                            }),
-                      ],
-                    ),
+                  AddToFavoriteButton(
+                    details: _recipe.details,
                   ),
                 ],
               ),
@@ -337,6 +263,96 @@ class SelectedRecipe extends HookWidget {
     );
   }
 }
+
+class AddToFavoriteButton extends HookWidget {
+  final RecipesModel details;
+
+  AddToFavoriteButton({@required this.details});
+  @override
+  Widget build(BuildContext context) {
+    final _user = useProvider(userProvider);
+    final _fav = useProvider(favProvider);
+    final _view = useProvider(viewProvider);
+    final _change = useState<bool>(false);
+
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          GestureDetector(
+            child: CircleAvatar(
+              backgroundColor: Colors.green,
+              child: Text(
+                details?.stars != null ? '${details.stars}' : '0.0',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            onTap: () {
+              // changeScore(context: context, keyIndex: keyIndex);
+            },
+          ),
+          _user.account?.uid == null
+              ? IconButton(
+                  icon: Icon(
+                    Icons.favorite_border,
+                  ),
+                  onPressed: () {
+                    _view.view = 2;
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => Home(),
+                      ),
+                    );
+                  },
+                )
+              : !_fav.favorites.keys.contains(details.recipeId)
+                  ? IconButton(
+                      icon: Icon(
+                        Icons.favorite_border,
+                        color: Colors.red,
+                        size: 40,
+                      ),
+                      onPressed: () {
+                        print('DETAILS ${details.recipeId}');
+                        Map<String, dynamic> _data = {};
+                        print('DETAILS: ${details.recipeId}');
+                        _data[details.recipeId] = {
+                          'UserName': '${_user.account.displayName}',
+                          'Liked': '${DateTime.now().millisecondsSinceEpoch}',
+                        };
+                        FirebaseFirestore.instance
+                            .collection('Favorites')
+                            .doc('${_user.account.uid}')
+                            .set(_data, SetOptions(merge: true));
+                        _fav.addFavorites(newFavorite: _data);
+                        _change.value = !_change.value;
+                      },
+                    )
+                  : IconButton(
+                      icon: Icon(
+                        Icons.favorite_outlined,
+                        size: 40,
+                        color: Colors.red,
+                      ),
+                      onPressed: () {
+                        FirebaseFirestore.instance
+                            .collection('Favorites')
+                            .doc('${_user.account.uid}')
+                            .update(
+                                {'${details.recipeId}': FieldValue.delete()});
+                        _fav.removeFavorites(newFavorite: details.recipeId);
+                        _change.value = !_change.value;
+                      },
+                    ),
+        ],
+      ),
+    );
+  }
+}
+// 23.33
+// 23.50
+// 23.51
 
 List _checkedIngredients = [];
 

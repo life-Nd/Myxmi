@@ -60,3 +60,11 @@ class Favorites extends HookWidget {
     );
   }
 }
+
+// IE4WAOFiJTzwhJLMDTV0
+// 1625273673416
+
+// image_url
+// title
+// ingredients_count
+// steps_count

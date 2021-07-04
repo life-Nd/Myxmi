@@ -24,7 +24,8 @@ class Home extends HookWidget {
     return Scaffold(
       appBar: viewIndex == 0 ||
               viewIndex == 1 && _user.account?.uid != null ||
-              viewIndex == 2 && _user.account?.uid != null
+              viewIndex == 2 && _user.account?.uid != null ||
+              viewIndex == 3 && _user.account?.uid != null
           ? PreferredSize(
               preferredSize: viewIndex == 0 && _view.searching ||
                       viewIndex == 1 &&

@@ -204,7 +204,10 @@
    "image":"Image",
    "drink":"Drink",
    "noIngredients":"No ingredients",
-   "noSteps":"No steps"
+   "noSteps":"No steps",
+   "all":"All",
+   "cart":"Cart",
+   "cartEmpty":"The cart is empty"
 
 
 }

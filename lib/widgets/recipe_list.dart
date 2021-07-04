@@ -107,20 +107,27 @@ class RecipeList extends HookWidget {
                   Expanded(
                     child: Container(
                       width: _size.width / 2,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                        ),
-                        child: Hero(
-                          tag: '${_indexData['image_url']}',
-                          child: FadeInImage.memoryNetwork(
-                            image: '${_indexData['image_url']}',
-                            fit: BoxFit.fitWidth,
-                            imageCacheWidth: 1000,
-                            placeholder: kTransparentImage,
+                      child: Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              topRight: Radius.circular(20),
+                            ),
+                            child: Hero(
+                              tag: '${_indexData['image_url']}',
+                              child: FadeInImage.memoryNetwork(
+                                image: '${_indexData['image_url']}',
+                                fit: BoxFit.fitWidth,
+                                imageCacheWidth: 1000,
+                                placeholder: kTransparentImage,
+                              ),
+                            ),
                           ),
-                        ),
+                          AddToFavoriteButton(
+                            details: _details,
+                          ),
+                        ],
                       ),
                     ),
                   ),

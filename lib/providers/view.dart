@@ -1,6 +1,7 @@
 import 'package:myxmi/screens/favorites.dart';
 import 'package:myxmi/screens/filtering.dart';
 import 'package:myxmi/screens/more.dart';
+import 'package:myxmi/screens/products.dart';
 import 'package:myxmi/screens/recipes.dart';
 import 'package:myxmi/widgets/sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -41,7 +42,7 @@ class ViewProvider extends ChangeNotifier {
       case 2:
         return uid != null ? Favorites() : SignIn();
       case 3:
-        return uid != null ? MoreView() : SignIn();
+        return uid != null ? Products() : SignIn();
       case 4:
         return uid != null ? MoreView() : SignIn();
       default:

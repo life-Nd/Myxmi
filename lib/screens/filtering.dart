@@ -191,7 +191,6 @@ class Filter extends StatefulWidget {
 class _FilterState extends State<Filter> {
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
-    // widget.legend[0].toUpperCase() + widget.legend.substring(1);
     return GestureDetector(
       onTap: () {
         // TODO change the future and switch based on category

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -22,7 +23,6 @@ List steps = [];
 
 // ignore: must_be_immutable
 class AddRecipe extends HookWidget {
-  
   Widget build(BuildContext context) {
     final _recipe = useProvider(recipeProvider);
     final _user = useProvider(userProvider);
@@ -99,7 +99,6 @@ class AddRecipe extends HookWidget {
               ),
               onPageChanged: (index) {
                 _recipe.changeView(index);
-
               },
               children: [
                 SingleChildScrollView(
@@ -296,6 +295,11 @@ class AddRecipe extends HookWidget {
                           padding: const EdgeInsets.all(8),
                           child: ProductsList(
                             uid: _user.account.uid,
+                            type: 'AddRecipe',
+                            componentsFuture: FirebaseFirestore.instance
+                                .collection('Products')
+                                .doc('${_user.account.uid}')
+                                .get(),
                           ),
                         ),
                       ],

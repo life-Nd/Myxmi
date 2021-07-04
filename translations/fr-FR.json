@@ -256,6 +256,9 @@
    "image":"Image",
    "drink":"Boissons",
    "noIngredients":"Pas d'ingrédient",
-   "noSteps":"Pas d'étapes"
+   "noSteps":"Pas d'étapes",
+   "all":"Tout",
+   "cart":"Panier",
+   "cartEmpty":"Le panier est vide"
 
 }
