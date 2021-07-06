@@ -207,7 +207,9 @@
    "noSteps":"No steps",
    "all":"All",
    "cart":"Cart",
-   "cartEmpty":"The cart is empty"
+   "cartEmpty":"The cart is empty",
+   "reviewOf":"Review of",
+   "addScore":"Add a score"
 
 
 }

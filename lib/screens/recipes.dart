@@ -21,7 +21,7 @@ class RecipesScreenState extends State<RecipesScreen> {
   Future getFuture() {
     print('widget.legend: ${widget.legend}');
     String _legend = widget.legend;
-    print('LEGEND: $_legend'); 
+    print('LEGEND: $_legend');
     switch (_legend) {
       case ('All'):
         _future = FirebaseFirestore.instance
@@ -58,7 +58,9 @@ class RecipesScreenState extends State<RecipesScreen> {
           );
         }
         return snapshot.data != null
-            ? RecipeList(snapshot: snapshot.data)
+            ? RecipeList(
+                snapshot: snapshot.data,
+              )
             : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -72,7 +74,6 @@ class RecipesScreenState extends State<RecipesScreen> {
                   ),
                   Text(
                     'noRecipes'.tr(),
-                    // style: TextStyle(color: Colors.white),
                   ),
                 ],
               );

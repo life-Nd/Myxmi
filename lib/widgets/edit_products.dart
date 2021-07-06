@@ -12,7 +12,6 @@ class EditProducts extends HookWidget {
 
   Widget build(BuildContext context) {
     final _prefs = useProvider(prefProvider);
-    final _change = useState<bool>(false);
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
@@ -27,7 +26,6 @@ class EditProducts extends HookWidget {
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            
             Text('Type: ${data['IngredientType']}'),
             Text('Mesured in: ${data['MesureType']}'),
             Text('Quantity in stock: ${data['Total']} ${data['MesureType']}'),

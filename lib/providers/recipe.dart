@@ -65,7 +65,7 @@ class RecipeProvider extends ChangeNotifier {
   changeComposition(
       {@required String key, @required String type, @required String value}) {
     composition[key] = '$value $type';
-    details.productsCount = '${composition.keys.toList().length}';
+    details.ingredientsCount = '${composition.keys.toList().length}';
   }
 
   changeQuantity(

@@ -42,28 +42,24 @@ class AuthHandler {
       {String email, String password, BuildContext context}) async {
     String _email = email.trim();
     String _password = password.trim();
-    final ProgressDialog pr = ProgressDialog(context: context);
+     ProgressDialog pr = ProgressDialog(context: context);
     pr.show(max: 100, msg: 'loading'.tr());
     try {
-      await _firebaseAuth
-          .signInWithEmailAndPassword(
-            email: _email,
-            password: _password,
-          )
-          .then(
-            (value) => pr.close(),
-          )
-          .whenComplete(
-            () => Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                  builder: (context) => App(),
-                ),
-                (route) => false),
-          );
-    } catch (error) {
+      await _firebaseAuth.signInWithEmailAndPassword(
+        email: _email,
+        password: _password,
+      );
       pr.close();
-      print('Error-----: $error----');
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (_) => App(),
+          ),
+          (route) => false);
+    } catch (error) {
+      
+      print('----Error-----: $error----');
       if (error.code != null && error?.code == 'user-not-found') {
+        pr.close();
         dialogNoAccoundFound(context, error, _email, _password);
       } else {
         pr.close();
@@ -262,7 +258,7 @@ class AuthHandler {
   Future reload() async {
     return await _firebaseAuth.currentUser.reload();
   }
- 
+
   static Future<User> signInWithGoogle({@required BuildContext context}) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User user;

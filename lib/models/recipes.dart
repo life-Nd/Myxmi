@@ -1,7 +1,7 @@
 class RecipesModel {
   static const RECIPEID = 'recipe_id';
   static const TITLE = 'title';
-  static const INGREDIENTSCOUNT = 'ingredient_count';
+  static const INGREDIENTSCOUNT = 'ingredients_count';
   static const STEPSCOUNT = 'steps_count';
   static const STARS = 'stars';
   static const USEDCOUNT = 'used_count';
@@ -15,11 +15,11 @@ class RecipesModel {
   static const VEGAN = 'vegan';
   static const REFERENCE = 'reference';
   static const MADE = 'made';
-  static const COMMENTS = 'comments';
+  static const COMMENTSCOUNT = 'comments_count';
 
   String recipeId;
   String title = '';
-  String productsCount;
+  String ingredientsCount;
   String stepsCount;
   String stars;
   String usedCount;
@@ -33,10 +33,10 @@ class RecipesModel {
   String vegan;
   String reference;
   String made;
-  String comments;
+  String commentsCount;
   
   RecipesModel(
-      {this.productsCount,
+      {this.ingredientsCount,
       this.stepsCount,
       this.stars,
       this.usedCount,
@@ -50,11 +50,11 @@ class RecipesModel {
       this.vegan,
       this.reference,
       this.made,
-      this.comments});
+      this.commentsCount});
   void fromSnapshot({Map snapshot, String keyIndex}) {
     recipeId = '$keyIndex';
     title = snapshot[TITLE];
-    productsCount = snapshot[INGREDIENTSCOUNT];
+    ingredientsCount = snapshot[INGREDIENTSCOUNT];
     stepsCount = snapshot[STEPSCOUNT];
     stars = snapshot[STARS];
     usedCount = snapshot[USEDCOUNT];
@@ -67,14 +67,14 @@ class RecipesModel {
     difficulty = snapshot[DIFFICULTY];
     vegan = snapshot[VEGAN];
     reference = snapshot[REFERENCE];
-    comments = snapshot[COMMENTS];
+    commentsCount = snapshot[COMMENTSCOUNT];
     made = snapshot[MADE];
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       TITLE: title.toLowerCase(),
-      INGREDIENTSCOUNT: productsCount,
+      INGREDIENTSCOUNT: ingredientsCount,
       STEPSCOUNT: stepsCount,
       STARS: stars,
       USEDCOUNT: usedCount,
@@ -88,7 +88,7 @@ class RecipesModel {
       VEGAN: vegan,
       REFERENCE: reference,
       MADE: made,
-      COMMENTS: comments
+      COMMENTSCOUNT: commentsCount
     };
   }
 }

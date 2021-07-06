@@ -7,7 +7,8 @@ import 'filtered.dart';
 class FilteringScreen extends HookWidget {
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
-    return Container(
+   
+          return Container(
       height: _size.height / 1.05,
       width: _size.height / 1.1,
       child: ListView(
@@ -20,6 +21,7 @@ class FilteringScreen extends HookWidget {
         ],
       ),
     );
+        
   }
 }
 

@@ -1,8 +1,10 @@
 import 'package:myxmi/screens/add_recipe.dart';
-import 'package:myxmi/widgets/favorite_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:myxmi/widgets/recipe_list.dart';
+import 'package:myxmi/widgets/recipe_tile.dart';
+import 'package:transparent_image/transparent_image.dart';
 import '../app.dart';
 
 class Favorites extends HookWidget {
@@ -12,6 +14,7 @@ class Favorites extends HookWidget {
     List _keys = _data.keys.toList();
     final _recipe = useProvider(recipeProvider);
     final _details = _recipe.details;
+    final Size _size = MediaQuery.of(context).size;
     final _change = useState<bool>(false);
     return RefreshIndicator(
       onRefresh: () async {
@@ -21,14 +24,14 @@ class Favorites extends HookWidget {
       child: ListView.builder(
         itemCount: _keys.length,
         itemBuilder: (_, int index) {
-          int _newIndex = index + 1;
-          Map _indexData = _data[_keys[index]];
-          final Map _comments = {};
-          final List _orderedComments = _comments.keys.toList();
-          _orderedComments.sort();
+          print('FAVORITES: ${_data[_keys[index]]}');
+          _recipe.details.fromSnapshot(
+              keyIndex: _keys[index], snapshot: _data[_keys[index]]);
           return Container(
-            height: 60,
+            height: _size.height / 4,
+            width: _size.width,
             margin: EdgeInsets.all(5),
+            padding: EdgeInsets.all(8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               gradient: LinearGradient(
@@ -46,13 +49,20 @@ class Favorites extends HookWidget {
                 ],
               ),
             ),
-            child: FavoriteTile(
-              indexData: _indexData,
-              // keys: _keys,
-              index: index,
-              keyIndex: _data[index],
-              newIndex: _newIndex,
-              time: '${_indexData['Liked']}',
+            child: Column(
+              children: [
+                Expanded(
+                    child: FadeInImage.memoryNetwork(
+                  image: '${_details.imageUrl}',
+                  fit: BoxFit.fitHeight,
+                  // imageCacheWidth: 1000,
+                  placeholder: kTransparentImage,
+                )),
+                RecipeTile(
+                  recipes: _recipe.details,
+                  type: 'Favorites',
+                ),
+              ],
             ),
           );
         },
@@ -60,11 +70,3 @@ class Favorites extends HookWidget {
     );
   }
 }
-
-// IE4WAOFiJTzwhJLMDTV0
-// 1625273673416
-
-// image_url
-// title
-// ingredients_count
-// steps_count

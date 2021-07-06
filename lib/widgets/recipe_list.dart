@@ -10,6 +10,7 @@ import 'package:transparent_image/transparent_image.dart';
 
 class RecipeList extends HookWidget {
   final QuerySnapshot snapshot;
+
   RecipeList({@required this.snapshot});
 
   // initState() {
@@ -20,12 +21,13 @@ class RecipeList extends HookWidget {
 
   // Widget _image(String type) {
   //   switch (type) {
-  //     case 'Fruit':
+  //     case 'cocktail':
+  //       return Image.asset('assets/cocktail.jpg');
+  //     case 'smoothie':
   //       return Image.asset(
-  //         'assets/fruits.png',
+  //         'assets/smoothie.png',
   //       );
-  //     case 'Vegetable':
-  //       return Image.asset('assets/vegetables.png');
+
   //     case 'Meat':
   //       return Image.asset('assets/meat.png');
   //     case 'Seafood':
@@ -64,13 +66,13 @@ class RecipeList extends HookWidget {
           final RecipesModel _details = RecipesModel();
           Map _indexData = snapshot.docs[index].data();
 
-          print('---INDEXDATA:--${DateTime.now()}- $index $_indexData');
+          // print('---INDEXDATA:--${DateTime.now()}- $index $_indexData');
           String _keyIndex = snapshot.docs[index].id;
           _details.fromSnapshot(snapshot: _indexData, keyIndex: _keyIndex);
           return GestureDetector(
             onTap: () {
-              print('-----${DateTime.now()}- $index $_indexData');
-              print('+++++${DateTime.now()}+ $index $_details');
+              // print('-----${DateTime.now()}- $index $_indexData');
+              // print('+++++${DateTime.now()}+ $index $_details');
 
               _recipe.details.fromSnapshot(
                 keyIndex: _keyIndex,
@@ -109,20 +111,9 @@ class RecipeList extends HookWidget {
                       width: _size.width / 2,
                       child: Stack(
                         children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
-                            ),
-                            child: Hero(
-                              tag: '${_indexData['image_url']}',
-                              child: FadeInImage.memoryNetwork(
-                                image: '${_indexData['image_url']}',
-                                fit: BoxFit.fitWidth,
-                                imageCacheWidth: 1000,
-                                placeholder: kTransparentImage,
-                              ),
-                            ),
+                          RecipeTileImage(
+                            keyIndex: _keyIndex,
+                            details: _details,
                           ),
                           AddToFavoriteButton(
                             details: _details,
@@ -134,14 +125,56 @@ class RecipeList extends HookWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 7.0, right: 10.0),
                     child: RecipeTile(
+                      type: 'All',
                       recipes: _details,
                     ),
-                  ),
+                  )
                 ],
               ),
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class RecipeTileImage extends StatelessWidget {
+  const RecipeTileImage({
+    Key key,
+    @required String keyIndex,
+    @required this.details,
+  })  : _keyIndex = keyIndex,
+        super(key: key);
+
+  final String _keyIndex;
+  final RecipesModel details;
+
+  @override
+  Widget build(BuildContext context) {
+    final Size _size = MediaQuery.of(context).size;
+    return ClipRRect(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(20),
+        topRight: Radius.circular(20),
+      ),
+      child: Hero(
+        tag: '$_keyIndex',
+        child: details.imageUrl != null && details.imageUrl != ''
+            ? FadeInImage.memoryNetwork(
+                image: '${details.imageUrl}',
+                fit: BoxFit.fitWidth,
+                imageCacheWidth: 1000,
+                placeholder: kTransparentImage,
+              )
+            : Image.asset(
+                'assets/${details.subCategory}.jpg',
+                fit: BoxFit.fitHeight,
+                height: _size.height,
+                cacheHeight: 1000,
+                color: Colors.grey.shade500,
+                colorBlendMode: BlendMode.color,
+              ),
       ),
     );
   }

@@ -1,19 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/app.dart';
 import 'package:myxmi/models/instructions.dart';
 import 'package:myxmi/models/recipes.dart';
 import 'package:myxmi/screens/add_recipe.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:myxmi/widgets/comments.dart';
+import 'package:myxmi/widgets/add_reviews.dart';
 import '../main.dart';
 import 'home.dart';
+import 'dart:io';
 
 class SelectedRecipe extends HookWidget {
   Widget build(BuildContext context) {
     final _recipe = useProvider(recipeProvider);
+    final _user = useProvider(userProvider);
+    final _view = useProvider(viewProvider);
     final Size _size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -46,7 +50,7 @@ class SelectedRecipe extends HookWidget {
           children: [
             Expanded(
               child: Stack(
-                alignment: Alignment.topLeft,
+                alignment: Alignment.topRight,
                 children: [
                   Container(
                     width: _size.width / 1,
@@ -54,7 +58,7 @@ class SelectedRecipe extends HookWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: Hero(
-                        tag: 'RecipesHero',
+                        tag: '${_recipe.details.recipeId}',
                         child: _recipe.image,
                       ),
                     ),
@@ -74,9 +78,6 @@ class SelectedRecipe extends HookWidget {
                   final InstructionsModel _instructions = InstructionsModel();
                   if (snapshot.hasData && snapshot?.data?.data() != null)
                     _instructions.fromSnapshot(snapshot: snapshot.data.data());
-
-                  print('INSTRUCTION: ${_instructions.ingredients}');
-                  print('INSTRUCTION: ${_instructions.steps}');
                   return Column(
                     children: [
                       Row(
@@ -243,10 +244,126 @@ class SelectedRecipe extends HookWidget {
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                _instructions.steps != null
-                                    ? Comments(
-                                        indexComments: {},
-                                        commentsKeys: [],
+                                _instructions.reviews == null
+                                    ? Container(
+                                        height: _size.height / 2,
+                                        child: Stack(
+                                          children: [
+                                            StreamBuilder<DocumentSnapshot>(
+                                                stream: FirebaseFirestore
+                                                    .instance
+                                                    .collection('Reviews')
+                                                    .doc(
+                                                        '${_recipe.details.recipeId}')
+                                                    .snapshots(),
+                                                builder: (context,
+                                                    AsyncSnapshot<
+                                                            DocumentSnapshot>
+                                                        snapshot) {
+                                                  if (snapshot.hasData &&
+                                                      snapshot.data != null) {
+                                                    print(
+                                                        'snapshot: ${snapshot.data.data()}');
+                                                    Map _data =
+                                                        snapshot.data.data();
+                                                    List _keys =
+                                                        _data.keys.toList();
+                                                    return Container(
+                                                      child: ListView.builder(
+                                                        itemCount: _keys.length,
+                                                        itemBuilder:
+                                                            (_, int index) {
+                                                          return Card(
+                                                            child: ListTile(
+                                                              contentPadding:
+                                                                  EdgeInsets
+                                                                      .all(1),
+                                                              leading:
+                                                                  CircleAvatar(
+                                                                child: _data[_keys[index]]['photo_url'] !=
+                                                                            null &&
+                                                                        _data[_keys[index]]['photo_url'] !=
+                                                                            'null'
+                                                                    ? Image.network(
+                                                                        '${_data[_keys[index]]['photo_url']}')
+                                                                    : Icon(Icons
+                                                                        .person),
+                                                              ),
+                                                              title: Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceBetween,
+                                                                children: [
+                                                                  Expanded(
+                                                                    child: Text(
+                                                                        '${_data[_keys[index]]['name']}'),
+                                                                  ),
+                                                                  RatingStars(
+                                                                    stars: _data[
+                                                                            _keys[index]]
+                                                                        [
+                                                                        'stars'],
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              subtitle: Column(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Text(
+                                                                      '${_data[_keys[index]]['message']}'),
+                                                                  Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .end,
+                                                                    children: [
+                                                                      Text(
+                                                                          '${DateTime.fromMillisecondsSinceEpoch(int.parse(_keys[index]))}'),
+                                                                    ],
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                      ),
+                                                    );
+                                                  }
+                                                  return Center(
+                                                      child: Text(
+                                                          'noReviews'.tr()));
+                                                }),
+                                            Container(
+                                              alignment: Alignment.bottomRight,
+                                              padding: EdgeInsets.all(7),
+                                              child: FloatingActionButton(
+                                                onPressed: _user.account.uid !=
+                                                        null
+                                                    ? () {
+                                                        Navigator.of(context)
+                                                            .push(
+                                                          MaterialPageRoute(
+                                                            builder: (_) =>
+                                                                AddReviews(),
+                                                          ),
+                                                        );
+                                                      }
+                                                    : () {
+                                                        _view.view = 2;
+                                                        Navigator.of(context)
+                                                            .push(
+                                                          MaterialPageRoute(
+                                                            builder: (_) =>
+                                                                Home(),
+                                                          ),
+                                                        );
+                                                      },
+                                                child: Icon(Icons.add),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       )
                                     : _NoInstructions('noReviews')
                               ],
@@ -264,6 +381,32 @@ class SelectedRecipe extends HookWidget {
   }
 }
 
+class RatingStars extends StatelessWidget {
+  const RatingStars({@required this.stars});
+  final String stars;
+
+  @override
+  Widget build(BuildContext context) {
+    return RatingBar.builder(
+      initialRating: double.parse(stars),
+      minRating: 1,
+      ignoreGestures: true,
+      direction: Axis.horizontal,
+      allowHalfRating: true,
+      itemCount: 5,
+      itemSize: 22,
+      itemPadding: EdgeInsets.symmetric(horizontal: 1.0),
+      itemBuilder: (context, _) => Icon(
+        Icons.star,
+        color: Colors.amber,
+      ),
+      onRatingUpdate: (rating) {
+        print(rating);
+      },
+    );
+  }
+}
+
 class AddToFavoriteButton extends HookWidget {
   final RecipesModel details;
 
@@ -275,92 +418,104 @@ class AddToFavoriteButton extends HookWidget {
     final _view = useProvider(viewProvider);
     final _change = useState<bool>(false);
 
-    return Padding(
-      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          GestureDetector(
-            child: CircleAvatar(
-              backgroundColor: Colors.green,
-              child: Text(
-                details?.stars != null ? '${details.stars}' : '0.0',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-            onTap: () {
-              // changeScore(context: context, keyIndex: keyIndex);
-            },
-          ),
-          _user.account?.uid == null
-              ? IconButton(
-                  icon: Icon(
-                    Icons.favorite_border,
-                  ),
-                  onPressed: () {
-                    _view.view = 2;
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => Home(),
-                      ),
-                    );
-                  },
-                )
-              : !_fav.favorites.keys.contains(details.recipeId)
-                  ? IconButton(
-                      icon: Icon(
-                        Icons.favorite_border,
-                        color: Colors.red,
-                        size: 40,
-                      ),
-                      onPressed: () {
-                        print('DETAILS ${details.recipeId}');
-                        Map<String, dynamic> _data = {};
-                        print('DETAILS: ${details.recipeId}');
-                        _data[details.recipeId] = {
-                          'UserName': '${_user.account.displayName}',
-                          'Liked': '${DateTime.now().millisecondsSinceEpoch}',
-                        };
-                        FirebaseFirestore.instance
-                            .collection('Favorites')
-                            .doc('${_user.account.uid}')
-                            .set(_data, SetOptions(merge: true));
-                        _fav.addFavorites(newFavorite: _data);
-                        _change.value = !_change.value;
-                      },
-                    )
-                  : IconButton(
-                      icon: Icon(
-                        Icons.favorite_outlined,
-                        size: 40,
-                        color: Colors.red,
-                      ),
-                      onPressed: () {
-                        FirebaseFirestore.instance
-                            .collection('Favorites')
-                            .doc('${_user.account.uid}')
-                            .update(
-                                {'${details.recipeId}': FieldValue.delete()});
-                        _fav.removeFavorites(newFavorite: details.recipeId);
-                        _change.value = !_change.value;
-                      },
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            _user.account?.uid == null
+                ? IconButton(
+                    icon: Icon(
+                      Icons.favorite_border,
                     ),
-        ],
-      ),
+                    onPressed: () {
+                      _view.view = 2;
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => Home(),
+                        ),
+                      );
+                    },
+                  )
+                : !_fav.favorites.keys.contains(details.recipeId)
+                    ? IconButton(
+                        icon: Icon(
+                          Icons.favorite_border,
+                          color: Colors.red,
+                          size: 40,
+                        ),
+                        onPressed: () {
+                          print('DETAILS ${details.recipeId}');
+                          Map<String, dynamic> _data = {};
+                          print('DETAILS: ${details.recipeId}');
+                          _data[details.recipeId] = {
+                            'title': '${details.title}',
+                            'image_url': '${details.imageUrl}',
+                            'joined': 'false',
+                            'steps_count': '${details.stepsCount}',
+                            'ingredients_count': '${details.ingredientsCount}'
+                          };
+                          FirebaseFirestore.instance
+                              .collection('Favorites')
+                              .doc('${_user.account.uid}')
+                              .set(_data, SetOptions(merge: true));
+                          _fav.addFavorites(newFavorite: _data);
+                          _change.value = !_change.value;
+                        },
+                      )
+                    : IconButton(
+                        icon: Icon(
+                          Icons.favorite_outlined,
+                          size: 40,
+                          color: Colors.red,
+                        ),
+                        onPressed: () {
+                          FirebaseFirestore.instance
+                              .collection('Favorites')
+                              .doc('${_user.account.uid}')
+                              .update(
+                                  {'${details.recipeId}': FieldValue.delete()});
+                          _fav.removeFavorites(newFavorite: details.recipeId);
+                          _change.value = !_change.value;
+                        },
+                      ),
+            IconButton(
+              icon: Icon(
+                Platform.isIOS
+                    ? Icons.ios_share_outlined
+                    : Icons.share_outlined,
+              ),
+              onPressed: () {},
+            ),
+          ],
+        ),
+        GestureDetector(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: RatingStars(
+              stars: details.stars != null ? '${details.stars}' : '0.0',
+            ),
+          ),
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => AddReviews(),
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 }
-// 23.33
-// 23.50
-// 23.51
 
 List _checkedIngredients = [];
 
 class _IngredientsListView extends HookWidget {
   final Map ingredients;
-
   _IngredientsListView({this.ingredients});
-
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
@@ -378,15 +533,15 @@ class _IngredientsListView extends HookWidget {
               final _checked = _checkedIngredients.contains(_keys[index]);
               return ListTile(
                 onTap: () {
-                  !_checked
-                      ? _checkedIngredients.add(_keys[index])
-                      : _checkedIngredients.remove(_keys[index]);
+                  _checked
+                      ? _checkedIngredients.remove(_keys[index])
+                      : _checkedIngredients.add(_keys[index]);
                   _change.value = !_change.value;
                 },
                 leading: IconButton(
                   icon: _checked
-                      ? Icon(Icons.radio_button_unchecked)
-                      : Icon(Icons.check_circle_outline),
+                      ? Icon(Icons.check_circle_outline)
+                      : Icon(Icons.radio_button_unchecked),
                   onPressed: () {
                     !_checked
                         ? _checkedIngredients.add(_keys[index])
@@ -418,7 +573,6 @@ List _checkedSteps = [];
 class _StepsListView extends HookWidget {
   final List steps;
   _StepsListView({this.steps});
-
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
@@ -435,15 +589,15 @@ class _StepsListView extends HookWidget {
               final _checked = _checkedSteps?.contains(steps[index]);
               return ListTile(
                 onTap: () {
-                  !_checked
-                      ? _checkedSteps.add(steps[index])
-                      : _checkedSteps.remove(steps[index]);
+                  _checked
+                      ? _checkedSteps.remove(steps[index])
+                      : _checkedSteps.add(steps[index]);
                   _change.value = !_change.value;
                 },
                 leading: IconButton(
                   icon: _checked
-                      ? Icon(Icons.radio_button_unchecked)
-                      : Icon(Icons.check_circle_outline),
+                      ? Icon(Icons.check_circle_outline)
+                      : Icon(Icons.radio_button_unchecked),
                   onPressed: () {
                     !_checked
                         ? _checkedSteps.add(steps[index])

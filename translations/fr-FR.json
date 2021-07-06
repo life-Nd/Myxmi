@@ -259,6 +259,8 @@
    "noSteps":"Pas d'étapes",
    "all":"Tout",
    "cart":"Panier",
-   "cartEmpty":"Le panier est vide"
+   "cartEmpty":"Le panier est vide",
+   "reviewOf":"Avis sur",
+   "addScore":"Ajouter un score"
 
 }

@@ -130,7 +130,7 @@ class SignInState extends State<SignIn> {
                       FocusScope.of(context).requestFocus(
                         new FocusNode(),
                       );
-                      await _authHandler.signInWithEmailPassword(
+                       await _authHandler.signInWithEmailPassword(
                         email: _emailCtrl.text,
                         password: _passwordCtrl.text,
                         context: context,

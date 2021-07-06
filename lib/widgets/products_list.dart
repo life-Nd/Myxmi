@@ -80,7 +80,7 @@ class ProductsListState extends State<ProductsList> {
                             ),
                           ),
                         ),
-                        child: widget.type == 'AddRecipes'
+                        child: widget.type == 'AddRecipe'
                             ? Fields(
                                 data: _data[_key],
                                 recipe: _recipe,

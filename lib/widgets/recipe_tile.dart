@@ -4,11 +4,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:myxmi/models/recipes.dart';
 
 class RecipeTile extends HookWidget {
-  RecipeTile({
+  const RecipeTile({
     Key key,
     @required this.recipes,
+    @required this.type
   }) : super(key: key);
   final RecipesModel recipes;
+  final String type;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class RecipeTile extends HookWidget {
           children: [
             Text('${'ingredients'.tr()}: '),
             Text(
-              '${recipes.productsCount}',
+              '${recipes.ingredientsCount}',
               style: TextStyle(fontWeight: FontWeight.w700),
             ),
           ],
@@ -41,15 +43,21 @@ class RecipeTile extends HookWidget {
               style: TextStyle(fontWeight: FontWeight.w700),
             ),
             Spacer(),
-            Icon(
-              Icons.comment,
-              color: Colors.blue,
-              size: 15,
-            ),
-            Text(
-              '${recipes.comments}',
-              style: TextStyle(fontSize: 17),
-            )
+            type == 'All'
+                ? Row(
+                    children: [
+                      Icon(
+                        Icons.comment,
+                        color: Colors.blue,
+                        size: 15,
+                      ),
+                      Text(
+                        '${recipes.commentsCount}',
+                        style: TextStyle(fontSize: 17),
+                      )
+                    ],
+                  )
+                : Container()
           ],
         ),
       ],
