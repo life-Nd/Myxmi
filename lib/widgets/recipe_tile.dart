@@ -52,7 +52,7 @@ class RecipeTile extends HookWidget {
                         size: 15,
                       ),
                       Text(
-                        '${recipes.commentsCount}',
+                        '${recipes.reviewsCount}',
                         style: TextStyle(fontSize: 17),
                       )
                     ],

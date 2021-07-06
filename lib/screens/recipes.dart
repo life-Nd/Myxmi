@@ -16,13 +16,12 @@ class RecipesScreenState extends State<RecipesScreen> {
   @override
   void initState() {
     getFuture();
+
     super.initState();
   }
 
   Future getFuture() {
-    print('widget.legend: ${widget.legend}');
     String _legend = widget.legend;
-    print('LEGEND: $_legend');
     switch (_legend) {
       case ('All'):
         _future = FirebaseFirestore.instance

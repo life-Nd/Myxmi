@@ -68,6 +68,8 @@ class AddReviews extends HookWidget {
                     ? '${_recipe.details.stars}'
                     : '0.0';
                 var _averageStars = (_stars + double.parse(_dbStars)) / 2;
+                int _reviewsCount =
+                    int.parse(_recipe?.details?.reviewsCount) + 1;
                 print('$_stars + $_dbStars = $_averageStars');
                 var _db = FirebaseFirestore.instance
                     .collection('Reviews')
@@ -89,7 +91,10 @@ class AddReviews extends HookWidget {
                   FirebaseFirestore.instance
                       .collection('Recipes')
                       .doc('${_recipe.details.recipeId}')
-                      .update({'stars': '$_averageStars'});
+                      .update({
+                    'stars': '$_averageStars',
+                    'reviews_count': '$_reviewsCount',
+                  });
                   _msgCtrl.clear();
                   _stars = 0.0;
 

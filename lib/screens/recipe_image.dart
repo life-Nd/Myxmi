@@ -4,6 +4,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/providers/image.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+import 'add_recipe.dart';
+
 class RecipeImage extends HookWidget {
   Widget build(BuildContext context) {
     final _image = useProvider(imageProvider);
@@ -44,7 +46,12 @@ class RecipeImage extends HookWidget {
               Icons.add_a_photo,
               color: Theme.of(context).appBarTheme.titleTextStyle.color,
             ),
-            onPressed: () => _image.chooseImageSource(context: context),
+            onPressed: () => _image.chooseImageSource(
+              context: context,
+              route: MaterialPageRoute(
+                builder: (_) => AddRecipe(),
+              ),
+            ),
           ),
         ),
       ],

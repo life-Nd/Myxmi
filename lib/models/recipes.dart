@@ -15,7 +15,7 @@ class RecipesModel {
   static const VEGAN = 'vegan';
   static const REFERENCE = 'reference';
   static const MADE = 'made';
-  static const COMMENTSCOUNT = 'comments_count';
+  static const REVIEWSCOUNT = 'reviews_count';
   static const PORTIONS = 'portions';
 
   String recipeId;
@@ -34,7 +34,7 @@ class RecipesModel {
   String vegan;
   String reference;
   String made;
-  String commentsCount;
+  String reviewsCount;
   String portions;
 
   RecipesModel(
@@ -52,7 +52,7 @@ class RecipesModel {
       this.vegan,
       this.reference,
       this.made,
-      this.commentsCount,
+      this.reviewsCount,
       this.portions});
   void fromSnapshot({Map snapshot, String keyIndex}) {
     recipeId = '$keyIndex';
@@ -70,7 +70,7 @@ class RecipesModel {
     difficulty = snapshot[DIFFICULTY];
     vegan = snapshot[VEGAN];
     reference = snapshot[REFERENCE];
-    commentsCount = snapshot[COMMENTSCOUNT];
+    reviewsCount = snapshot[REVIEWSCOUNT];
     made = snapshot[MADE];
     portions = snapshot[PORTIONS];
   }
@@ -92,7 +92,7 @@ class RecipesModel {
       VEGAN: vegan,
       REFERENCE: reference,
       MADE: made,
-      COMMENTSCOUNT: commentsCount,
+      REVIEWSCOUNT: reviewsCount,
       PORTIONS: portions
     };
   }

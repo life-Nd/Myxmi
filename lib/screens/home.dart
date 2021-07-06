@@ -112,7 +112,7 @@ class Home extends HookWidget {
         ],
         currentIndex: viewIndex,
         onTap: (index) {
-          _view.changeView(newView: index, uid: _user.account.uid);
+          _view.changeView(newView: index, uid: _user?.account?.uid);
           _view.doSearch(false);
           _favorites.showFilter(false);
         },

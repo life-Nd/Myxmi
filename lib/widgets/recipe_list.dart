@@ -8,6 +8,8 @@ import 'package:myxmi/screens/selected_recipe.dart';
 import 'recipe_tile.dart';
 import 'package:transparent_image/transparent_image.dart';
 
+// TODO use SliverAppBar, InteractiveViewer
+
 class RecipeList extends HookWidget {
   final QuerySnapshot snapshot;
 

@@ -6,6 +6,9 @@ import 'package:myxmi/services/auth.dart';
 import 'package:myxmi/widgets/details_tile.dart';
 import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 import '../main.dart';
+import 'package:myxmi/providers/image.dart';
+
+import 'upload_user_photo.dart';
 
 final TextEditingController _nameCtrl = TextEditingController();
 final _nameNode = FocusNode();
@@ -15,6 +18,7 @@ class AccountScreen extends HookWidget {
     final _user = useProvider(userProvider);
     final Size _size = MediaQuery.of(context).size;
     final ProgressDialog pr = ProgressDialog(context: context);
+    final _image = useProvider(imageProvider);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -22,7 +26,7 @@ class AccountScreen extends HookWidget {
       ),
       body: Container(
           height: _size.height,
-          width: _size.width / 1.05,
+          width: _size.width / 1.01,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -30,22 +34,64 @@ class AccountScreen extends HookWidget {
             scrollDirection: Axis.vertical,
             padding: EdgeInsets.all(1),
             children: [
-              RawMaterialButton(
-                shape: CircleBorder(),
-                onPressed: () {},
-                child: CircleAvatar(
-                  radius: _size.height / 9,
-                  child: _user.account.photoURL == null
-                      ? Icon(
-                          Icons.person,
-                          size: 100,
-                        )
-                      : Icon(Icons.add_a_photo),
-                  backgroundImage: _user.account.photoURL != null
-                      ? NetworkImage(
-                          '${_user.account.photoURL}',
-                        )
-                      : null,
+              Center(
+                child: Stack(
+                  children: [
+                    RawMaterialButton(
+                      shape: CircleBorder(),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (_) {
+                            return AlertDialog(
+                              contentPadding: EdgeInsets.all(1),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              content: Hero(
+                                tag: '${_user.account.photoURL}',
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: InteractiveViewer(
+                                    child: Image.network(
+                                      '${_user.account.photoURL}',
+                                      cacheHeight: 1000,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: Hero(
+                        tag: '${_user.account.photoURL}',
+                        child: CircleAvatar(
+                                radius: _size.width / 5,
+                          foregroundImage: NetworkImage(
+                            '${_user.account.photoURL}',
+                          ),
+                          child: Icon(
+                            Icons.person,
+                            size: 100,
+                          ),
+                        ),
+                      ),
+                    ),
+                    FloatingActionButton(
+                      mini: true,
+                      backgroundColor: Colors.deepOrange.shade300,
+                      onPressed: () {
+                        _image.chooseImageSource(
+                          context: context,
+                          route: MaterialPageRoute(
+                            builder: (_) => UploadUserPhoto(),
+                          ),
+                        );
+                      },
+                      child: Icon(Icons.camera_alt),
+                    ),
+                  ],
                 ),
               ),
               SizedBox(

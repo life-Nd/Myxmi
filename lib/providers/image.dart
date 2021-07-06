@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:math';
-import 'package:myxmi/screens/add_recipe.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -19,7 +18,8 @@ class ImageProvider extends ChangeNotifier {
   String added;
   final picker = ImagePicker();
 
-  chooseImageSource({@required BuildContext context}) {
+  chooseImageSource(
+      {@required BuildContext context, @required MaterialPageRoute route}) {
     showDialog(
       context: context,
       builder: (_) {
@@ -49,11 +49,7 @@ class ImageProvider extends ChangeNotifier {
                       onPressed: () {
                         pickImage(ImageSource.gallery).then(
                           (a) {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => AddRecipe(),
-                              ),
-                            );
+                            Navigator.of(context).push(route);
                           },
                         );
                       },
@@ -76,11 +72,7 @@ class ImageProvider extends ChangeNotifier {
                       onPressed: () {
                         pickImage(ImageSource.camera).then(
                           (a) {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => AddRecipe(),
-                              ),
-                            );
+                            Navigator.of(context).push(route);
                           },
                         );
                       },

@@ -210,7 +210,11 @@
    "cartEmpty":"The cart is empty",
    "reviewOf":"Review of",
    "addScore":"Add a score",
-   "portions":"Portions"
+   "portions":"Portions",
+   "email":"Email",
+   "phone":"Phone",
+   "uploadingImage":"Uploading image",
+   "uploadImage":"Upload an image"
 
 
 }

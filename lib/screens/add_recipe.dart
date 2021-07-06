@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/widgets/drinks_subcategories.dart';
 import 'package:myxmi/widgets/food_subcategories.dart';
@@ -17,7 +16,7 @@ import 'recipe_image.dart';
 
 TextEditingController _titleCtrl = TextEditingController();
 TextEditingController _durationCtrl = TextEditingController();
-double _portions = 0.0;
+TextEditingController _portionsCtrl = TextEditingController();
 final recipeProvider =
     ChangeNotifierProvider<RecipeProvider>((ref) => RecipeProvider());
 List steps = [];
@@ -238,11 +237,11 @@ class AddRecipe extends HookWidget {
                                 padding: const EdgeInsets.only(
                                     left: 100, right: 100),
                                 child: TextField(
-                                  controller: _durationCtrl,
+                                  controller: _portionsCtrl,
                                   keyboardType: TextInputType.number,
                                   onSubmitted: (submitted) {
                                     _recipe.changePortions(
-                                        newPortions: _durationCtrl.text);
+                                        newPortions: _portionsCtrl.text);
                                     FocusScope.of(context)
                                         .requestFocus(FocusNode());
                                   },
