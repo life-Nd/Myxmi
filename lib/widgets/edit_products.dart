@@ -3,7 +3,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:myxmi/app.dart';
-import 'package:myxmi/screens/add_product.dart';
 
 class EditProducts extends HookWidget {
   final Map data;
@@ -17,11 +16,6 @@ class EditProducts extends HookWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: ListTile(
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (_) => NewProduct(),
-          ));
-        },
         title: Center(child: Text('${data['Name']}')),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -16,7 +16,6 @@ final viewProvider = ChangeNotifierProvider<ViewProvider>(
 // TODO Add screen for MyRecipes
 class Home extends HookWidget {
   Widget build(BuildContext context) {
-    
     final Size _size = MediaQuery.of(context).size;
     final _view = useProvider(viewProvider);
     final _favorites = useProvider(favProvider);
@@ -48,7 +47,6 @@ class Home extends HookWidget {
               automaticallyImplyLeading: false,
               title: Text('Myxmi'),
             ),
-            
       floatingActionButton:
           viewIndex == 0 || viewIndex == 1 && _user.account?.uid != null
               ? _user.account?.uid != null
@@ -114,7 +112,7 @@ class Home extends HookWidget {
         ],
         currentIndex: viewIndex,
         onTap: (index) {
-          _view.changeView(newView: index);
+          _view.changeView(newView: index, uid: _user.account.uid);
           _view.doSearch(false);
           _favorites.showFilter(false);
         },

@@ -342,7 +342,7 @@ class NewProduct extends HookWidget {
                     items: [
                       DropdownMenuItem(
                         child: Text(
-                          'g'.tr(),
+                          'g',
                           style: TextStyle(
                               fontSize: 17, fontWeight: FontWeight.bold),
                         ),
@@ -353,7 +353,7 @@ class NewProduct extends HookWidget {
                       ),
                       DropdownMenuItem(
                         child: Text(
-                          'ml'.tr(),
+                          'ml',
                           style: TextStyle(
                               fontSize: 17, fontWeight: FontWeight.bold),
                         ),

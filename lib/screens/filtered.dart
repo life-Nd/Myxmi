@@ -17,7 +17,9 @@ class _FilteredState extends State<Filtered> {
       ),
       body: Container(
         height: _size.height,
-        child: RecipesScreen(widget.legend),
+        child: RecipesScreen(
+          legend: widget.legend,
+        ),
       ),
     );
   }

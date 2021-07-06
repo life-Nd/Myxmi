@@ -7,6 +7,8 @@ import 'package:myxmi/main.dart';
 import 'package:myxmi/widgets/products_list.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+import 'add_product.dart';
+
 int _pageIndex = 0;
 
 class Products extends HookWidget {
@@ -112,15 +114,36 @@ class _EditProductsState extends State<_EditProducts> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
       children: [
-        _AllCart(
-          viewIndex: 0,
+        Column(
+          children: [
+            _AllCart(
+              viewIndex: 0,
+            ),
+            Expanded(
+              child: ProductsList(
+                  uid: widget.uid,
+                  type: 'EditProducts',
+                  componentsFuture: _future),
+            ),
+          ],
         ),
-        Expanded(
-          child: ProductsList(
-              uid: widget.uid, type: 'EditProducts', componentsFuture: _future),
-        ),
+        Container(
+          padding: EdgeInsets.all(8),
+          alignment: Alignment.bottomRight,
+          child: FloatingActionButton(
+            backgroundColor: Colors.green,
+            child: Icon(Icons.add),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => NewProduct(),
+                ),
+              );
+            },
+          ),
+        )
       ],
     );
   }

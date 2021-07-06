@@ -261,6 +261,7 @@
    "cart":"Panier",
    "cartEmpty":"Le panier est vide",
    "reviewOf":"Avis sur",
-   "addScore":"Ajouter un score"
+   "addScore":"Ajouter un score",
+   "portions":"Portions"
 
 }

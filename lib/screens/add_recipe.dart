@@ -1,22 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/widgets/drinks_subcategories.dart';
 import 'package:myxmi/widgets/food_subcategories.dart';
+import 'package:myxmi/widgets/products_list.dart';
 import 'package:myxmi/widgets/save_recipe.dart';
 import 'package:myxmi/widgets/vape_subcategories.dart';
 import '../main.dart';
 import '../providers/recipe.dart';
 import 'package:easy_localization/easy_localization.dart';
-import '../widgets/products_list.dart';
 import 'add_product.dart';
 import 'recipe_instructions.dart';
 import 'recipe_image.dart';
 
 TextEditingController _titleCtrl = TextEditingController();
 TextEditingController _durationCtrl = TextEditingController();
-
+double _portions = 0.0;
 final recipeProvider =
     ChangeNotifierProvider<RecipeProvider>((ref) => RecipeProvider());
 List steps = [];
@@ -193,13 +194,16 @@ class AddRecipe extends HookWidget {
                           ),
                         ),
                         Text('duration'.tr()),
+                        SizedBox(
+                          height: 4,
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Expanded(
                               child: Padding(
                                 padding:
-                                    const EdgeInsets.only(left: 80, right: 80),
+                                    const EdgeInsets.only(left: 60, right: 60),
                                 child: TextField(
                                   controller: _durationCtrl,
                                   keyboardType: TextInputType.number,
@@ -221,6 +225,42 @@ class AddRecipe extends HookWidget {
                               ),
                             ),
                           ],
+                        ),
+                        SizedBox(
+                          height: 4,
+                        ),
+                        Text('portions'.tr()),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 100, right: 100),
+                                child: TextField(
+                                  controller: _durationCtrl,
+                                  keyboardType: TextInputType.number,
+                                  onSubmitted: (submitted) {
+                                    _recipe.changePortions(
+                                        newPortions: _durationCtrl.text);
+                                    FocusScope.of(context)
+                                        .requestFocus(FocusNode());
+                                  },
+                                  decoration: InputDecoration(
+                                    prefixIcon:
+                                        Icon(Icons.local_pizza_outlined),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    hintText: 'portions'.tr(),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 4,
                         ),
                         Text('${'category'.tr()}'),
                         SingleChildScrollView(

@@ -16,6 +16,7 @@ class RecipesModel {
   static const REFERENCE = 'reference';
   static const MADE = 'made';
   static const COMMENTSCOUNT = 'comments_count';
+  static const PORTIONS = 'portions';
 
   String recipeId;
   String title = '';
@@ -34,7 +35,8 @@ class RecipesModel {
   String reference;
   String made;
   String commentsCount;
-  
+  String portions;
+
   RecipesModel(
       {this.ingredientsCount,
       this.stepsCount,
@@ -50,7 +52,8 @@ class RecipesModel {
       this.vegan,
       this.reference,
       this.made,
-      this.commentsCount});
+      this.commentsCount,
+      this.portions});
   void fromSnapshot({Map snapshot, String keyIndex}) {
     recipeId = '$keyIndex';
     title = snapshot[TITLE];
@@ -69,6 +72,7 @@ class RecipesModel {
     reference = snapshot[REFERENCE];
     commentsCount = snapshot[COMMENTSCOUNT];
     made = snapshot[MADE];
+    portions = snapshot[PORTIONS];
   }
 
   Map<String, dynamic> toMap() {
@@ -88,7 +92,8 @@ class RecipesModel {
       VEGAN: vegan,
       REFERENCE: reference,
       MADE: made,
-      COMMENTSCOUNT: commentsCount
+      COMMENTSCOUNT: commentsCount,
+      PORTIONS: portions
     };
   }
 }

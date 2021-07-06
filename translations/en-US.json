@@ -209,7 +209,8 @@
    "cart":"Cart",
    "cartEmpty":"The cart is empty",
    "reviewOf":"Review of",
-   "addScore":"Add a score"
+   "addScore":"Add a score",
+   "portions":"Portions"
 
 
 }

@@ -249,91 +249,101 @@ class SelectedRecipe extends HookWidget {
                                         height: _size.height / 2,
                                         child: Stack(
                                           children: [
+                                           
                                             StreamBuilder<DocumentSnapshot>(
-                                                stream: FirebaseFirestore
-                                                    .instance
-                                                    .collection('Reviews')
-                                                    .doc(
-                                                        '${_recipe.details.recipeId}')
-                                                    .snapshots(),
-                                                builder: (context,
-                                                    AsyncSnapshot<
-                                                            DocumentSnapshot>
-                                                        snapshot) {
-                                                  if (snapshot.hasData &&
-                                                      snapshot.data != null) {
-                                                    print(
-                                                        'snapshot: ${snapshot.data.data()}');
-                                                    Map _data =
-                                                        snapshot.data.data();
-                                                    List _keys =
-                                                        _data.keys.toList();
-                                                    return Container(
-                                                      child: ListView.builder(
-                                                        itemCount: _keys.length,
-                                                        itemBuilder:
-                                                            (_, int index) {
-                                                          return Card(
-                                                            child: ListTile(
-                                                              contentPadding:
-                                                                  EdgeInsets
-                                                                      .all(1),
-                                                              leading:
-                                                                  CircleAvatar(
-                                                                child: _data[_keys[index]]['photo_url'] !=
-                                                                            null &&
-                                                                        _data[_keys[index]]['photo_url'] !=
-                                                                            'null'
-                                                                    ? Image.network(
-                                                                        '${_data[_keys[index]]['photo_url']}')
-                                                                    : Icon(Icons
-                                                                        .person),
-                                                              ),
-                                                              title: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                children: [
-                                                                  Expanded(
-                                                                    child: Text(
-                                                                        '${_data[_keys[index]]['name']}'),
-                                                                  ),
-                                                                  RatingStars(
-                                                                    stars: _data[
-                                                                            _keys[index]]
-                                                                        [
-                                                                        'stars'],
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              subtitle: Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
-                                                                children: [
-                                                                  Text(
-                                                                      '${_data[_keys[index]]['message']}'),
-                                                                  Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .end,
-                                                                    children: [
-                                                                      Text(
-                                                                          '${DateTime.fromMillisecondsSinceEpoch(int.parse(_keys[index]))}'),
-                                                                    ],
-                                                                  ),
-                                                                ],
-                                                              ),
+                                              stream: FirebaseFirestore.instance
+                                                  .collection('Reviews')
+                                                  .doc(
+                                                      '${_recipe.details.recipeId}')
+                                                  .snapshots(),
+                                              builder: (context,
+                                                  AsyncSnapshot<
+                                                          DocumentSnapshot>
+                                                      snapshot) {
+                                                if (snapshot.hasData &&
+                                                    snapshot.data.data() !=
+                                                        null) {
+                                                  print(
+                                                      'snapshot: ${snapshot.data.data()}');
+                                                  Map _data =
+                                                      snapshot.data.data();
+                                                  List _keys = _data?.keys !=
+                                                          null
+                                                      ? _data?.keys?.toList()
+                                                      : [];
+                                                  return Container(
+                                                    child: ListView.builder(
+                                                      itemCount: _keys.length,
+                                                      itemBuilder:
+                                                          (_, int index) {
+                                                        return Card(
+                                                          child: ListTile(
+                                                            contentPadding:
+                                                                EdgeInsets.all(
+                                                                    1),
+                                                            leading:
+                                                                CircleAvatar(
+                                                              child: _data[_keys[index]]
+                                                                              [
+                                                                              'photo_url'] !=
+                                                                          null &&
+                                                                      _data[_keys[index]]
+                                                                              [
+                                                                              'photo_url'] !=
+                                                                          'null'
+                                                                  ? Image.network(
+                                                                      '${_data[_keys[index]]['photo_url']}')
+                                                                  : Icon(Icons
+                                                                      .person),
                                                             ),
-                                                          );
-                                                        },
-                                                      ),
-                                                    );
-                                                  }
-                                                  return Center(
-                                                      child: Text(
-                                                          'noReviews'.tr()));
-                                                }),
+                                                            title: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                Expanded(
+                                                                  child: Text(
+                                                                      '${_data[_keys[index]]['name']}'),
+                                                                ),
+                                                                RatingStars(
+                                                                  stars: _data[
+                                                                          _keys[
+                                                                              index]]
+                                                                      ['stars'],
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            subtitle: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Text(
+                                                                    '${_data[_keys[index]]['message']}'),
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .end,
+                                                                  children: [
+                                                                    Text(
+                                                                        '${DateTime.fromMillisecondsSinceEpoch(int.parse(_keys[index]))}'),
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                    ),
+                                                  );
+                                                }
+                                                return Center(
+                                                  child: Text(
+                                                    'noReviews'.tr(),
+                                                  ),
+                                                );
+                                              },
+                                            ),
                                             Container(
                                               alignment: Alignment.bottomRight,
                                               padding: EdgeInsets.all(7),

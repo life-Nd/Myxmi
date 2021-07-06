@@ -35,6 +35,10 @@ class RecipeProvider extends ChangeNotifier {
     details.duration = newDuration;
     notifyListeners();
   }
+   changePortions({@required String newPortions}) {
+    details.portions = newPortions;
+    notifyListeners();
+  }
 
   changeDifficulty({double newDifficultyValue}) {
     difficultyValue = newDifficultyValue;

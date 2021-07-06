@@ -5,7 +5,8 @@ import 'package:myxmi/widgets/recipe_list.dart';
 
 class RecipesScreen extends StatefulWidget {
   final String legend;
-  RecipesScreen(this.legend);
+  final String uid;
+  RecipesScreen({this.legend, this.uid});
   createState() => RecipesScreenState();
 }
 
@@ -27,6 +28,12 @@ class RecipesScreenState extends State<RecipesScreen> {
         _future = FirebaseFirestore.instance
             .collection('Recipes')
             .where('category', isEqualTo: '$_legend')
+            .get();
+        return _future;
+      case ('MyRecipes'):
+        _future = FirebaseFirestore.instance
+            .collection('Recipes')
+            .where('uid', isEqualTo: '${widget.uid}')
             .get();
         return _future;
       default:

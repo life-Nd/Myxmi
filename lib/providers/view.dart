@@ -38,7 +38,12 @@ class ViewProvider extends ChangeNotifier {
         //         .orderBy('Made', descending: true)
         //         .limit(20)
         //         .get());
-        return uid != null ? RecipesScreen('Breakfast') : SignIn();
+        return uid != null
+            ? RecipesScreen(
+                legend: 'MyRecipes',
+                uid: '$uid',
+              )
+            : SignIn();
       case 2:
         return uid != null ? Favorites() : SignIn();
       case 3:

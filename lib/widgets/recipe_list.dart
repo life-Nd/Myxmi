@@ -13,37 +13,6 @@ class RecipeList extends HookWidget {
 
   RecipeList({@required this.snapshot});
 
-  // initState() {
-  //   _data = widget.snapshot.docChanges.asMap();
-  //   _keys = _data.keys?.toList();
-  //   super.initState();
-  // }
-
-  // Widget _image(String type) {
-  //   switch (type) {
-  //     case 'cocktail':
-  //       return Image.asset('assets/cocktail.jpg');
-  //     case 'smoothie':
-  //       return Image.asset(
-  //         'assets/smoothie.png',
-  //       );
-
-  //     case 'Meat':
-  //       return Image.asset('assets/meat.png');
-  //     case 'Seafood':
-  //       return Image.asset('assets/seafood.png');
-  //     case 'Dairy':
-  //       return Image.asset('assets/dairy.png');
-  //     case 'Eliquid':
-  //       return Image.asset('assets/eliquid.png');
-  //     default:
-  //       return Image.network(
-  //         'assets/$type.png',
-  //         fit: BoxFit.fitWidth,
-  //       );
-  //   }
-  // }
-
   Widget build(BuildContext context) {
     final _recipe = useProvider(recipeProvider);
     Map _data;
@@ -65,15 +34,10 @@ class RecipeList extends HookWidget {
         itemBuilder: (_, int index) {
           final RecipesModel _details = RecipesModel();
           Map _indexData = snapshot.docs[index].data();
-
-          // print('---INDEXDATA:--${DateTime.now()}- $index $_indexData');
           String _keyIndex = snapshot.docs[index].id;
           _details.fromSnapshot(snapshot: _indexData, keyIndex: _keyIndex);
           return GestureDetector(
             onTap: () {
-              // print('-----${DateTime.now()}- $index $_indexData');
-              // print('+++++${DateTime.now()}+ $index $_details');
-
               _recipe.details.fromSnapshot(
                 keyIndex: _keyIndex,
                 snapshot: _indexData,
