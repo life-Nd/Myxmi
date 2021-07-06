@@ -67,7 +67,7 @@ class AccountScreen extends HookWidget {
                       child: Hero(
                         tag: '${_user.account.photoURL}',
                         child: CircleAvatar(
-                                radius: _size.width / 5,
+                          radius: _size.width / 5,
                           foregroundImage: NetworkImage(
                             '${_user.account.photoURL}',
                           ),
@@ -124,9 +124,8 @@ class AccountScreen extends HookWidget {
                             _nameNode.unfocus();
                             _nameNode.canRequestFocus = false;
                             pr.show(max: 100, msg: 'loading'.tr());
-                            _user.account
-                                .updateDisplayName('${_nameCtrl.text}');
-                            AuthHandler().reload();
+                            _user.changeUsername(newName: '${_nameCtrl.text}');
+                            // AuthHandler().reload();
                             Future.delayed(Duration(seconds: 2), () {
                               pr.close();
                             });

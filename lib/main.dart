@@ -8,7 +8,8 @@ import 'app.dart';
 import 'package:time_machine/time_machine.dart';
 import 'providers/user.dart';
 
-final userProvider = Provider<UserProvider>((ref) => UserProvider());
+final userProvider =
+    ChangeNotifierProvider<UserProvider>((ref) => UserProvider());
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

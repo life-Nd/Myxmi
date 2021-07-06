@@ -34,7 +34,7 @@ class UploadUserPhoto extends HookWidget {
           onPressed: () {
             pr.show(max: 100, msg: '${'uploadingImage'.tr()} ...');
             _image.addImageToDb(context: context).whenComplete(() async {
-              _user.account.updatePhotoURL(_image.imageLink).whenComplete(
+              _user.changeUserPhoto(newPhoto: _image.imageLink).whenComplete(
                 () {
                   _user.account.reload();
                   Future.delayed(Duration(seconds: 1), () {
