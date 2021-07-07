@@ -13,7 +13,6 @@ final viewProvider = ChangeNotifierProvider<ViewProvider>(
 );
 // int viewIndex = 0;
 
-// TODO Add screen for MyRecipes
 class Home extends HookWidget {
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;

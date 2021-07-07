@@ -195,9 +195,6 @@ class _FilterState extends State<Filter> {
     final Size _size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
-        // TODO change the future and switch based on category
-        // and subcategory.
-
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (_) => Filtered(

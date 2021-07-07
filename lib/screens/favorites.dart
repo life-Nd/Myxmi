@@ -15,7 +15,7 @@ class Favorites extends HookWidget {
     final _fav = useProvider(favProvider);
     final _user = useProvider(userProvider);
     final _recipe = useProvider(recipeProvider);
-    Map _data = _fav.showFiltered ? _fav.filtered : _fav.favorites;
+    Map _data = _fav.showFiltered ? _fav.filtered : _fav.allRecipes;
     List _keys = _data.keys.toList();
 
     final _details = _recipe.details;
@@ -29,6 +29,7 @@ class Favorites extends HookWidget {
       child: ListView.builder(
         itemCount: _keys.length,
         itemBuilder: (_, int index) {
+          print('KEYINDEX: ${_keys[index]}');
           String _keyIndex = _keys[index];
           Map _indexData = _data[_keys[index]];
           print('FAVORITES: ${_data[_keys[index]]}');
@@ -43,7 +44,7 @@ class Favorites extends HookWidget {
                   .update(
                 {'$_keyIndex': FieldValue.delete()},
               );
-              _fav.removeFavorites(newFavorite: _keyIndex);
+              _fav.removeFavorite(newFavorite: _keyIndex);
               _change.value = !_change.value;
             },
             background: Padding(

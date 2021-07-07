@@ -12,6 +12,7 @@ import 'favorites.dart';
 class ViewProvider extends ChangeNotifier {
   int view = 0;
   bool searching = false;
+  String searchText = '';
   Future future;
   Future search;
 
@@ -39,10 +40,16 @@ class ViewProvider extends ChangeNotifier {
         //         .limit(20)
         //         .get());
         return uid != null
-            ? RecipesScreen(
-                legend: 'MyRecipes',
-                uid: '$uid',
-              )
+            ? !searching
+                ? RecipesScreen(
+                    legend: 'MyRecipes',
+                    uid: '$uid',
+                  )
+                : RecipesScreen(
+                    legend: 'Searching',
+                    uid: '$uid',
+                    searchText: searchText,
+                  )
             : SignIn();
       case 2:
         return uid != null ? Favorites() : SignIn();
@@ -77,20 +84,24 @@ class ViewProvider extends ChangeNotifier {
                 .collection('Recipes')
                 .where('$filter', isEqualTo: '${text.trim()}')
                 .get());
+        changeView(newView: 0, uid: uid);
+        notifyListeners();
         return;
       case 1:
         fav.showFilter(true);
+        print('FILTER: $filter ${text.trim()}');
         changeSearch(
             newSearch: FirebaseFirestore.instance
                 .collection('Recipes')
-                .where('Uid', isEqualTo: '$uid')
-                .where('$filter', isEqualTo: '$text')
+                .where('$filter', isEqualTo: '${text.trim()}')
                 .get());
+        changeView(newView: 1, uid: uid);
+        notifyListeners();
         return;
       case 2:
         fav.showFilter(true);
         fav.filter(filter: filter, text: text);
-
+        changeView(newView: 2, uid: uid);
         return;
       default:
         changeSearch(

@@ -8,7 +8,7 @@ import '../main.dart';
 
 TextEditingController _searchCtrl = TextEditingController();
 FocusNode _searchNode = FocusNode();
-String _searchFilter = 'Reference';
+String _searchFilter = 'title';
 
 class SearchRecipes extends HookWidget {
   final bool showFilter;
@@ -24,9 +24,13 @@ class SearchRecipes extends HookWidget {
         onTap: () {
           _view.doSearch(true);
         },
+        onChanged: (value) {
+          _view.searchText = value;
+        },
         controller: _searchCtrl,
         focusNode: _searchNode,
         onEditingComplete: () {
+
           _view.searchRecipe(
             filter: _searchFilter,
             text: _searchCtrl.text,

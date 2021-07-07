@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 class FavoritesProvider {
-  Map favorites = {};
+  Map allRecipes = {};
   Map filtered = {};
   bool showFiltered = false;
 
   addFavorites({Map<String, dynamic> newFavorite}) {
-    favorites.addAll(newFavorite);
+    allRecipes.addAll(newFavorite);
   }
 
-  removeFavorites({String newFavorite}) {
-    favorites.remove(newFavorite);
+  removeFavorite({String newFavorite}) {
+    allRecipes.remove(newFavorite);
     
   }
 
@@ -20,13 +20,12 @@ class FavoritesProvider {
   }
 
   filter({@required String filter, @required String text}) async {
-    Iterable _filter = favorites.values.where((entry) {
-      return entry?.containsValue('$text');
+    Iterable _filter = allRecipes.entries.where((entry) {
+      print('ENTRY: $entry');
+      return Map<String, dynamic>.from(entry.value).containsValue('$text');
     });
-    filtered = Map?.fromIterable(_filter);
+    print('FILTERING: $_filter');
+    filtered = Map?.fromEntries(_filter);
+    print('FILTERED: $filtered');
   }
-
-  clearFiltered() {
-  }
-
 }

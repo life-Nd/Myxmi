@@ -449,7 +449,7 @@ class AddToFavoriteButton extends HookWidget {
                       );
                     },
                   )
-                : !_fav.favorites.keys.contains(details.recipeId)
+                : !_fav.allRecipes.keys.contains(details.recipeId)
                     ? IconButton(
                         icon: Icon(
                           Icons.favorite_border,
@@ -487,7 +487,7 @@ class AddToFavoriteButton extends HookWidget {
                               .doc('${_user.account.uid}')
                               .update(
                                   {'${details.recipeId}': FieldValue.delete()});
-                          _fav.removeFavorites(newFavorite: details.recipeId);
+                          _fav.removeFavorite(newFavorite: details.recipeId);
                           _change.value = !_change.value;
                         },
                       ),

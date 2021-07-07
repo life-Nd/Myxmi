@@ -10,17 +10,23 @@ class Filtered extends StatefulWidget {
 
 class _FilteredState extends State<Filtered> {
   Widget build(BuildContext context) {
-    final Size _size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        title: Text('${widget.legend.tr()}s'),
-      ),
-      body: Container(
-        height: _size.height,
-        child: RecipesScreen(
-          legend: widget.legend,
+      body: CustomScrollView(slivers: [
+        SliverAppBar(
+          title: Text('${widget.legend.tr()}s'),
+          // expandedHeight: 80.0,
+          stretch: true,
+          floating: false,
+          pinned: true,
         ),
-      ),
+        SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
+            return RecipesScreen(
+              legend: widget.legend,
+            );
+          }),
+        ),
+      ]),
     );
   }
 }
