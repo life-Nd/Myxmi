@@ -10,10 +10,10 @@ import '../app.dart';
 import '../main.dart';
 import 'add_reviews.dart';
 
-class AddToFavoriteButton extends HookWidget {
+class AddFavoriteButton extends HookWidget {
   final RecipeModel recipe;
 
-  const AddToFavoriteButton({@required this.recipe});
+  const AddFavoriteButton({@required this.recipe});
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +21,6 @@ class AddToFavoriteButton extends HookWidget {
     final _fav = useProvider(favProvider);
     final _view = useProvider(viewProvider);
     final _change = useState<bool>(false);
-    debugPrint('recipe.stars: ${recipe.stars}');
-
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -54,9 +52,7 @@ class AddToFavoriteButton extends HookWidget {
                         size: 40,
                       ),
                       onPressed: () {
-                        debugPrint('DETAILS ${recipe.recipeId}');
                         final Map<String, dynamic> _data = {};
-                        debugPrint('DETAILS: ${recipe.recipeId}');
                         _data[recipe.recipeId] = {
                           'title': recipe.title,
                           'image_url': recipe.imageUrl,
@@ -68,7 +64,7 @@ class AddToFavoriteButton extends HookWidget {
                             .collection('Favorites')
                             .doc(_user.account.uid)
                             .set(_data, SetOptions(merge: true));
-                        _fav.addFavorites(newFavorite: _data);
+                        _fav.addFavorite(newFavorite: _data);
                         _change.value = !_change.value;
                       },
                     )

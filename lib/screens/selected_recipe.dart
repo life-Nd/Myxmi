@@ -18,7 +18,6 @@ class SelectedRecipe extends HookWidget {
     final _user = useProvider(userProvider);
     final _view = useProvider(viewProvider);
     final Size _size = MediaQuery.of(context).size;
-    debugPrint('RECIPEID: ${_recipe.recipeModel.recipeId}');
     return Scaffold(
       appBar: AppBar(
         title: Text(_recipe.recipeModel.title),
@@ -62,7 +61,7 @@ class SelectedRecipe extends HookWidget {
                       child: InteractiveViewer(child: _recipe.image),
                     ),
                   ),
-                  AddToFavoriteButton(
+                  AddFavoriteButton(
                     recipe: _recipe.recipeModel,
                   ),
                 ],

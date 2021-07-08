@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:myxmi/models/recipe.dart';
 import 'package:myxmi/screens/add_recipe.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -9,33 +10,32 @@ import 'package:easy_localization/easy_localization.dart';
 import '../app.dart';
 import '../main.dart';
 
-
 class Favorites extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final _fav = useProvider(favProvider);
     final _user = useProvider(userProvider);
     final Map _data = _fav.showFiltered ? _fav.filtered : _fav.allRecipes;
-    final List _keys = _data.keys.toList();
+    // final List _keys = _data.keys.toList();
     final Size _size = MediaQuery.of(context).size;
     final _change = useState<bool>(false);
-    final _recipe = useProvider(recipeProvider);
-    final _details = _recipe.recipeModel;
+    // final _recipe = useProvider(recipeProvider);
+    // final _details = _recipe.recipeModel;
+    final List<RecipeModel> _recipes = _data.entries.map((MapEntry data) {
+      return RecipeModel.fromSnapshot(
+        snapshot: data.value as Map<String, dynamic>,
+        keyIndex: data.key as String,
+      );
+    }).toList();
+
     return RefreshIndicator(
       onRefresh: () async {
         _fav.showFilter(value: false);
         _change.value = !_change.value;
       },
       child: ListView.builder(
-        itemCount: _keys.length,
+        itemCount: _recipes.length,
         itemBuilder: (_, int index) {
-          debugPrint('KEYINDEX: ${_keys[index]}');
-          final String _keyIndex = '${_keys[index]}';
-          // final Map _indexData = _data[_keys[index]] as Map;
-          debugPrint('FAVORITES: ${_data[_keys[index]]}');
-          // _recipe.recipeModel.fromSnapshot(
-          //     keyIndex: _keys[index] as String,
-          //     snapshot: _indexData as Map<String, dynamic>);
           return Dismissible(
             key: UniqueKey(),
             onDismissed: (direction) {
@@ -43,9 +43,9 @@ class Favorites extends HookWidget {
                   .collection('Favorites')
                   .doc(_user.account.uid)
                   .update(
-                {_keyIndex: FieldValue.delete()},
+                {_recipes[index].recipeId: FieldValue.delete()},
               );
-              _fav.removeFavorite(newFavorite: _keyIndex);
+              _fav.removeFavorite(newFavorite: _recipes[index].recipeId);
               _change.value = !_change.value;
             },
             background: Padding(
@@ -75,24 +75,25 @@ class Favorites extends HookWidget {
             ),
             child: GestureDetector(
               onTap: () {
-                // _recipe.recipeModel.fromSnapshot(
-                //   keyIndex: _keyIndex,
-                //   snapshot: _indexData as Map<String, dynamic>,
-                // );
-                // _recipe.image = FadeInImage.memoryNetwork(
-                //   image: '${_indexData['image_url']}',
-                //   fit: BoxFit.fitWidth,
-                //   imageCacheWidth: 1000,
-                //   placeholder: kTransparentImage,
-                // );
-                // Navigator.of(context).push(
-                //   MaterialPageRoute(
-                //     builder: (_) => SelectedRecipe(
-                //       recipe: _recipe.recipeModel,
+              //   _recipe.recipeModel.fromSnapshot(
+                //     keyIndex: _keyIndex,
+                //     snapshot: _indexData as Map<String, dynamic>,
+                //   );
+                //   _recipe.image = FadeInImage.memoryNetwork(
+                //     image: '${_indexData['image_url']}',
+                //     fit: BoxFit.fitWidth,
+                //     imageCacheWidth: 1000,
+                //     placeholder: kTransparentImage,
+                //   );
+                //   Navigator.of(context).push(
+                //     MaterialPageRoute(
+                //       builder: (_) => SelectedRecipe(
+                //         recipe: _recipe.recipeModel,
+                //       ),
                 //     ),
-                //   ),
-                // );
+              //   );
               },
+              
               child: Container(
                 height: _size.height / 2,
                 width: _size.width,
@@ -103,12 +104,12 @@ class Favorites extends HookWidget {
                   gradient: LinearGradient(
                     colors: [
                       Theme.of(context).cardColor,
-                      if (_details.difficulty == 'easy')
+                      if (_recipes[index].difficulty == 'easy')
                         Colors.yellow.shade700
                       else
-                        _details.difficulty == 'medium'
+                        _recipes[index].difficulty == 'medium'
                             ? Colors.orange.shade900
-                            : _details.difficulty == 'hard'
+                            : _recipes[index].difficulty == 'hard'
                                 ? Colors.red.shade700
                                 : Colors.grey.shade700,
                     ],
@@ -119,16 +120,18 @@ class Favorites extends HookWidget {
                     Expanded(
                         child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: FadeInImage.memoryNetwork(
-                        image: _details.imageUrl,
-                        fit: BoxFit.fitWidth,
-                        imageCacheWidth: 1000,
-                        placeholder: kTransparentImage,
-                      ),
+                      child: _recipes[index].imageUrl != null
+                          ? FadeInImage.memoryNetwork(
+                              image: _recipes[index].imageUrl,
+                              fit: BoxFit.fitWidth,
+                              imageCacheWidth: 1000,
+                              placeholder: kTransparentImage,
+                            )
+                          : const Text('null'),
                     )),
                     RecipeTile(
                       type: 'Favorites',
-                      recipe: _details,
+                      recipe: _recipes[index],
                     ),
                   ],
                 ),

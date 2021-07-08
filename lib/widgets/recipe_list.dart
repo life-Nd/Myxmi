@@ -46,7 +46,6 @@ class _RecipeListState extends State<RecipeList> {
         itemCount: _recipes().length,
         itemBuilder: (_, int index) {
           final RecipeModel _recipe = _recipes()[index];
-          debugPrint(_recipes()[index].toString());
           return Consumer(builder: (context, watch, child) {
             return Container(
               margin: const EdgeInsets.all(5),
@@ -73,7 +72,7 @@ class _RecipeListState extends State<RecipeList> {
                               recipe: _recipe,
                             ),
                           ),
-                          AddToFavoriteButton(
+                          AddFavoriteButton(
                             recipe: _recipe,
                           ),
                         ],

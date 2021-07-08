@@ -5,12 +5,13 @@ class FavoritesProvider extends ChangeNotifier {
   Map filtered = {};
   bool showFiltered = false;
 
-  void addFavorites({Map<String, dynamic> newFavorite}) {
-    allRecipes.addAll(newFavorite);
-  }
+  // void addFavorites({Map<String, dynamic> newFavorite}) {
+  //   allRecipes.addAll(newFavorite);
+  // }
 
   void addFavorite({Map<String, dynamic> newFavorite}) {
-    // allRecipes.addEntries(newFavorite);
+    allRecipes.addAll(newFavorite);
+    notifyListeners();
   }
 
   void removeFavorite({String newFavorite}) {

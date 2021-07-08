@@ -21,7 +21,6 @@ final prefProvider =
 class App extends HookWidget {
   @override
   Widget build(BuildContext context) {
-
     final _userProvider = useProvider(userProvider);
     final _prefProvider = useProvider(prefProvider);
     return FutureBuilder(
@@ -40,8 +39,7 @@ class App extends HookWidget {
                         (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                       if (snapshot.hasData && snapshot.data.data() != null) {
                         final _data = snapshot.data.data();
-                        _favProvider.addFavorites(
-                            newFavorite: _data as Map<String, dynamic>);
+                        _favProvider.allRecipes = _data as Map<String, dynamic>;
                       }
                       return Home();
                     },
