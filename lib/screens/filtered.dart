@@ -1,32 +1,24 @@
 import 'package:flutter/material.dart';
-import 'recipes.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'recipes_screen.dart';
 
 class Filtered extends StatefulWidget {
   final String legend;
-  Filtered(this.legend);
-  createState() => _FilteredState();
+  const Filtered(this.legend);
+  @override
+  State<StatefulWidget> createState() => _FilteredState();
 }
 
 class _FilteredState extends State<Filtered> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(slivers: [
-        SliverAppBar(
-          title: Text('${widget.legend.tr()}s'),
-          // expandedHeight: 80.0,
-          stretch: true,
-          floating: false,
-          pinned: true,
-        ),
-        SliverList(
-          delegate: SliverChildBuilderDelegate((context, index) {
-            return RecipesScreen(
-              legend: widget.legend,
-            );
-          }),
-        ),
-      ]),
+      appBar: AppBar(
+        title: Text('${widget.legend.tr()}s'),
+      ),
+      body: RecipesScreen(
+        legend: widget.legend,
+      ),
     );
   }
 }

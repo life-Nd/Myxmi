@@ -17,6 +17,7 @@ bool _explainQuantity = false;
 bool _explainExpiration = false;
 
 class NewProduct extends HookWidget {
+  @override
   Widget build(BuildContext context) {
     final _change = useState<bool>(false);
     final _user = useProvider(userProvider);
@@ -31,20 +32,19 @@ class NewProduct extends HookWidget {
               borderRadius: BorderRadius.circular(20),
             ),
             fillColor: Colors.green,
-            child: Text('save'.tr()),
             onPressed: _nameCtrl.text.isNotEmpty && _mesureType != null
                 ? () async {
                     await FirebaseFirestore.instance
                         .collection('Products')
-                        .doc('${_user.account.uid}')
+                        .doc(_user.account.uid)
                         .set(
                       {
                         '${DateTime.now().millisecondsSinceEpoch}': {
-                          'Name': '${_nameCtrl.text}',
-                          'MesureType': '$_mesureType',
-                          'IngredientType': '$_ingredientType',
+                          'Name': _nameCtrl.text,
+                          'MesureType': _mesureType,
+                          'IngredientType': _ingredientType,
                           'Expiration': '$_expiration',
-                          'Total': '${_quantityCtrl.text}'
+                          'Total': _quantityCtrl.text
                         },
                       },
                       SetOptions(merge: true),
@@ -58,17 +58,17 @@ class NewProduct extends HookWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         backgroundColor: Colors.red,
-                        content: Text('${'fieldsEmpty'.tr()}'),
+                        content: Text('fieldsEmpty'.tr()),
                       ),
                     );
                   },
+            child: Text('save'.tr()),
           )
         ],
       ),
-      body: Container(
+      body: SizedBox(
         height: _size.height,
         child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -80,7 +80,7 @@ class NewProduct extends HookWidget {
                 ),
                 title: Text(
                   'enterProductName'.tr(),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                   ),
                 ),
@@ -91,7 +91,7 @@ class NewProduct extends HookWidget {
                     : null,
                 trailing: _explainAccess
                     ? IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.close,
                           color: Colors.red,
                           size: 30,
@@ -107,7 +107,7 @@ class NewProduct extends HookWidget {
                           _explainAccess = true;
                           _change.value = !_change.value;
                         },
-                        icon: Icon(Icons.help),
+                        icon: const Icon(Icons.help),
                       ),
               ),
               Padding(
@@ -122,26 +122,24 @@ class NewProduct extends HookWidget {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 4,
               ),
               ListTile(
                 dense: true,
                 title: Text(
-                  '${'productType'.tr()}',
-                  style: TextStyle(
+                  'productType'.tr(),
+                  style: const TextStyle(
                     fontSize: 17,
                   ),
                 ),
               ),
               Container(
                 height: _size.height < 700 ? 240 : 300,
-                padding: EdgeInsets.only(left: 20, right: 20),
+                padding: const EdgeInsets.only(left: 20, right: 20),
                 child: GridView(
-                  scrollDirection: Axis.vertical,
-                  padding: EdgeInsets.symmetric(vertical: 0),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: 1,
+                  padding: const EdgeInsets.symmetric(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
                     crossAxisSpacing: 1,
                     mainAxisSpacing: 4,
@@ -184,7 +182,7 @@ class NewProduct extends HookWidget {
                         _change.value = !_change.value;
                       },
                       child: Padding(
-                        padding: EdgeInsets.only(left: 4, right: 4),
+                        padding: const EdgeInsets.only(left: 4, right: 4),
                         child: Column(
                           children: [
                             Expanded(
@@ -209,7 +207,7 @@ class NewProduct extends HookWidget {
                         _change.value = !_change.value;
                       },
                       child: Padding(
-                        padding: EdgeInsets.only(left: 4, right: 4),
+                        padding: const EdgeInsets.only(left: 4, right: 4),
                         child: Column(
                           children: [
                             Expanded(
@@ -234,7 +232,7 @@ class NewProduct extends HookWidget {
                         _change.value = !_change.value;
                       },
                       child: Padding(
-                        padding: EdgeInsets.only(left: 4, right: 4),
+                        padding: const EdgeInsets.only(left: 4, right: 4),
                         child: Column(
                           children: [
                             Expanded(
@@ -317,14 +315,14 @@ class NewProduct extends HookWidget {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               ListTile(
                 dense: true,
                 title: Text(
-                  '${'mesuredIn'.tr()}',
-                  style: TextStyle(
+                  'mesuredIn'.tr(),
+                  style: const TextStyle(
                     fontSize: 17,
                   ),
                 ),
@@ -332,7 +330,7 @@ class NewProduct extends HookWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  DropdownButton(
+                  DropdownButton<int>(
                     dropdownColor: Colors.grey.shade100,
                     value: _mesureValue,
                     onChanged: (val) {
@@ -341,70 +339,70 @@ class NewProduct extends HookWidget {
                     },
                     items: [
                       DropdownMenuItem(
-                        child: Text(
-                          'g',
-                          style: TextStyle(
-                              fontSize: 17, fontWeight: FontWeight.bold),
-                        ),
                         value: 0,
                         onTap: () {
                           _mesureType = 'g';
                         },
-                      ),
-                      DropdownMenuItem(
-                        child: Text(
-                          'ml',
+                        child: const Text(
+                          'g',
                           style: TextStyle(
                               fontSize: 17, fontWeight: FontWeight.bold),
                         ),
+                      ),
+                      DropdownMenuItem(
                         value: 1,
                         onTap: () {
                           _mesureType = 'ml';
                         },
-                      ),
-                      DropdownMenuItem(
-                        child: Text(
-                          'drops'.tr(),
+                        child: const Text(
+                          'ml',
                           style: TextStyle(
                               fontSize: 17, fontWeight: FontWeight.bold),
                         ),
+                      ),
+                      DropdownMenuItem(
                         value: 2,
                         onTap: () {
                           _mesureType = 'drops';
                         },
-                      ),
-                      DropdownMenuItem(
                         child: Text(
-                          'teaspoons'.tr(),
-                          style: TextStyle(
+                          'drops'.tr(),
+                          style: const TextStyle(
                               fontSize: 17, fontWeight: FontWeight.bold),
                         ),
+                      ),
+                      DropdownMenuItem(
                         value: 3,
                         onTap: () {
                           _mesureType = 'teaspoons';
                         },
-                      ),
-                      DropdownMenuItem(
                         child: Text(
-                          'tablespoons'.tr(),
-                          style: TextStyle(
+                          'teaspoons'.tr(),
+                          style: const TextStyle(
                               fontSize: 17, fontWeight: FontWeight.bold),
                         ),
+                      ),
+                      DropdownMenuItem(
                         value: 4,
                         onTap: () {
                           _mesureType = 'tablespoons';
                         },
-                      ),
-                      DropdownMenuItem(
                         child: Text(
-                          'pieces'.tr(),
-                          style: TextStyle(
+                          'tablespoons'.tr(),
+                          style: const TextStyle(
                               fontSize: 17, fontWeight: FontWeight.bold),
                         ),
+                      ),
+                      DropdownMenuItem(
                         value: 5,
                         onTap: () {
                           _mesureType = 'pieces';
                         },
+                        child: Text(
+                          'pieces'.tr(),
+                          style: const TextStyle(
+                              fontSize: 17, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ],
                   ),
@@ -417,13 +415,13 @@ class NewProduct extends HookWidget {
                 ),
                 title: Text(
                   '${'quantityInHand'.tr()} ${'optional'.tr()}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 17,
                   ),
                 ),
                 trailing: _explainQuantity
                     ? IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.close,
                           color: Colors.red,
                           size: 30,
@@ -440,7 +438,7 @@ class NewProduct extends HookWidget {
                           _explainQuantity = true;
                           _change.value = !_change.value;
                         },
-                        icon: Icon(Icons.help),
+                        icon: const Icon(Icons.help),
                       ),
                 subtitle:
                     _explainQuantity ? Text('enterTotalQuantity'.tr()) : null,
@@ -452,14 +450,14 @@ class NewProduct extends HookWidget {
                   controller: _quantityCtrl,
                   decoration: InputDecoration(
                     isDense: true,
-                    hintText: '$_mesureType',
+                    hintText: _mesureType,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 4,
               ),
               ListTile(
@@ -471,7 +469,7 @@ class NewProduct extends HookWidget {
                   children: [
                     Text(
                       '${'selectExpirationDate'.tr()} ',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 17,
                       ),
                     ),
@@ -479,7 +477,7 @@ class NewProduct extends HookWidget {
                 ),
                 trailing: _explainExpiration
                     ? IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.close,
                           color: Colors.red,
                           size: 30,
@@ -496,46 +494,49 @@ class NewProduct extends HookWidget {
                           _explainExpiration = true;
                           _change.value = !_change.value;
                         },
-                        icon: Icon(Icons.help),
+                        icon: const Icon(Icons.help),
                       ),
                 subtitle:
                     _explainExpiration ? Text('expirationDate'.tr()) : null,
               ),
               RawMaterialButton(
                 onPressed: () async {
-                  var _date = await showDatePicker(
+                  final _date = await showDatePicker(
                       context: context,
                       currentDate: _expiration,
                       initialDate: DateTime.now(),
-                      firstDate: DateTime.now().subtract(Duration(days: 5)),
+                      firstDate:
+                          DateTime.now().subtract(const Duration(days: 5)),
                       lastDate: DateTime.now().add(
-                        Duration(days: 1200),
+                        const Duration(days: 1200),
                       ),
                       builder: (_, child) {
                         return child;
                       });
-                  if (_date != null && _date != _expiration)
+                  if (_date != null && _date != _expiration) {
                     _expiration = _date;
+                  }
                   _change.value = !_change.value;
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _expiration != null
-                        ? Text(
-                            '${DateFormat.yMMMMEEEEd().format(_expiration)}',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        : Text(''),
-                    Icon(
+                    if (_expiration != null)
+                      Text(
+                        DateFormat.yMMMMEEEEd().format(_expiration),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    else
+                      const Text(''),
+                    const Icon(
                       Icons.calendar_today_outlined,
                     ),
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 4,
               ),
             ],

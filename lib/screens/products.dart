@@ -12,6 +12,7 @@ import 'add_product.dart';
 int _pageIndex = 0;
 
 class Products extends HookWidget {
+  @override
   Widget build(BuildContext context) {
     final _fav = useProvider(favProvider);
     final _user = useProvider(userProvider);
@@ -20,7 +21,7 @@ class Products extends HookWidget {
 
     return RefreshIndicator(
       onRefresh: () async {
-        await _fav.showFilter(false);
+        _fav.showFilter(value: false);
         _change.value = !_change.value;
       },
       child: Padding(
@@ -29,8 +30,7 @@ class Products extends HookWidget {
           children: [
             Expanded(
               child: PageView(
-                controller:
-                    PageController(initialPage: _pageIndex, keepPage: true),
+                controller: PageController(initialPage: _pageIndex),
                 onPageChanged: (index) {
                   _pageIndex = index;
                 },
@@ -39,33 +39,38 @@ class Products extends HookWidget {
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      _AllCart(
+                      const _AllCart(
                         viewIndex: 1,
                       ),
                       Expanded(
                         child: FutureBuilder(
                           future: _prefs.readCart(),
-                          builder: (_, snapshot) {
-                            if (snapshot.hasData && snapshot.data.isNotEmpty) {
-                              print('snapshot.hasData: ${snapshot.hasData}');
-                              print('snapshot: ${snapshot.data.runtimeType}');
+                          builder: (_, AsyncSnapshot snapshot) {
+                            if (snapshot.hasData &&
+                                snapshot.data.isNotEmpty as bool) {
+                              debugPrint(
+                                  'snapshot.hasData: ${snapshot.hasData}');
+                              debugPrint(
+                                  'snapshot: ${snapshot.data.runtimeType}');
                               return ListView.builder(
-                                itemCount: snapshot.data.length,
+                                itemCount: snapshot.data.length as int,
                                 itemBuilder: (_, int index) {
                                   return ListTile(
                                     leading: IconButton(
                                       icon: _prefs.checkedItem
                                               .contains(snapshot?.data[index])
-                                          ? Icon(
+                                          ? const Icon(
                                               Icons.check_circle_outline,
                                               color: Colors.green,
                                             )
-                                          : Icon(Icons.radio_button_unchecked),
+                                          : const Icon(
+                                              Icons.radio_button_unchecked),
                                       onPressed: () async {
                                         await _prefs.editItems(
-                                            item: snapshot.data[index]);
+                                            item: '${snapshot.data[index]}');
                                         _change.value = !_change.value;
-                                        print('ITEMS: ${_prefs.checkedItem}');
+                                        debugPrint(
+                                            'ITEMS: ${_prefs.checkedItem}');
                                       },
                                     ),
                                     title: Text('${snapshot?.data[index]}'),
@@ -74,7 +79,9 @@ class Products extends HookWidget {
                               );
                             }
                             return Center(
-                              child: Text('cartEmpty'.tr()),
+                              child: Text(
+                                'cartEmpty'.tr(),
+                              ),
                             );
                           },
                         ),
@@ -98,17 +105,16 @@ class _EditProducts extends StatefulWidget {
   }) : super(key: key);
 
   final String uid;
-  createState() => _EditProductsState();
+  @override
+  State<StatefulWidget> createState() => _EditProductsState();
 }
 
 class _EditProductsState extends State<_EditProducts> {
   Future _future;
   @override
   void initState() {
-    _future = FirebaseFirestore.instance
-        .collection('Products')
-        .doc('${widget.uid}')
-        .get();
+    _future =
+        FirebaseFirestore.instance.collection('Products').doc(widget.uid).get();
     super.initState();
   }
 
@@ -118,7 +124,7 @@ class _EditProductsState extends State<_EditProducts> {
       children: [
         Column(
           children: [
-            _AllCart(
+            const _AllCart(
               viewIndex: 0,
             ),
             Expanded(
@@ -130,11 +136,10 @@ class _EditProductsState extends State<_EditProducts> {
           ],
         ),
         Container(
-          padding: EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
           alignment: Alignment.bottomRight,
           child: FloatingActionButton(
             backgroundColor: Colors.green,
-            child: Icon(Icons.add),
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -142,6 +147,7 @@ class _EditProductsState extends State<_EditProducts> {
                 ),
               );
             },
+            child: const Icon(Icons.add),
           ),
         )
       ],
@@ -159,7 +165,8 @@ class _AllCart extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Container(
-          padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 5),
+          padding:
+              const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 5),
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(
@@ -171,7 +178,7 @@ class _AllCart extends StatelessWidget {
           ),
           child: RichText(
             text: TextSpan(
-              style: TextStyle(
+              style: const TextStyle(
                   color: Colors.black,
                   fontSize: 16,
                   fontWeight: FontWeight.bold),
@@ -182,7 +189,7 @@ class _AllCart extends StatelessWidget {
                 WidgetSpan(
                   child: Transform.translate(
                     offset: const Offset(0.0, -9.0),
-                    child: Text(
+                    child: const Text(
                       '',
                       style:
                           TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
@@ -194,7 +201,8 @@ class _AllCart extends StatelessWidget {
           ),
         ),
         Container(
-          padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 5),
+          padding:
+              const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 5),
           decoration: BoxDecoration(
             border: Border(
                 bottom: BorderSide(
@@ -206,7 +214,7 @@ class _AllCart extends StatelessWidget {
           ),
           child: RichText(
             text: TextSpan(
-              style: TextStyle(
+              style: const TextStyle(
                   color: Colors.black,
                   fontSize: 16,
                   fontWeight: FontWeight.bold),
@@ -217,7 +225,7 @@ class _AllCart extends StatelessWidget {
                 WidgetSpan(
                   child: Transform.translate(
                     offset: const Offset(0.0, -9.0),
-                    child: Text(
+                    child: const Text(
                       '',
                       style:
                           TextStyle(fontSize: 14, fontWeight: FontWeight.bold),

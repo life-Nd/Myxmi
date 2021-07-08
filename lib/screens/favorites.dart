@@ -5,44 +5,45 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/widgets/recipe_tile.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../app.dart';
 import '../main.dart';
-import 'selected_recipe.dart';
-import 'package:easy_localization/easy_localization.dart';
+
 
 class Favorites extends HookWidget {
+  @override
   Widget build(BuildContext context) {
     final _fav = useProvider(favProvider);
     final _user = useProvider(userProvider);
-    final _recipe = useProvider(recipeProvider);
-    Map _data = _fav.showFiltered ? _fav.filtered : _fav.allRecipes;
-    List _keys = _data.keys.toList();
-
-    final _details = _recipe.details;
+    final Map _data = _fav.showFiltered ? _fav.filtered : _fav.allRecipes;
+    final List _keys = _data.keys.toList();
     final Size _size = MediaQuery.of(context).size;
     final _change = useState<bool>(false);
+    final _recipe = useProvider(recipeProvider);
+    final _details = _recipe.recipeModel;
     return RefreshIndicator(
       onRefresh: () async {
-        await _fav.showFilter(false);
+        _fav.showFilter(value: false);
         _change.value = !_change.value;
       },
       child: ListView.builder(
         itemCount: _keys.length,
         itemBuilder: (_, int index) {
-          print('KEYINDEX: ${_keys[index]}');
-          String _keyIndex = _keys[index];
-          Map _indexData = _data[_keys[index]];
-          print('FAVORITES: ${_data[_keys[index]]}');
-          _recipe.details
-              .fromSnapshot(keyIndex: _keys[index], snapshot: _indexData);
+          debugPrint('KEYINDEX: ${_keys[index]}');
+          final String _keyIndex = '${_keys[index]}';
+          // final Map _indexData = _data[_keys[index]] as Map;
+          debugPrint('FAVORITES: ${_data[_keys[index]]}');
+          // _recipe.recipeModel.fromSnapshot(
+          //     keyIndex: _keys[index] as String,
+          //     snapshot: _indexData as Map<String, dynamic>);
           return Dismissible(
             key: UniqueKey(),
             onDismissed: (direction) {
               FirebaseFirestore.instance
                   .collection('Favorites')
-                  .doc('${_user.account.uid}')
+                  .doc(_user.account.uid)
                   .update(
-                {'$_keyIndex': FieldValue.delete()},
+                {_keyIndex: FieldValue.delete()},
               );
               _fav.removeFavorite(newFavorite: _keyIndex);
               _change.value = !_change.value;
@@ -59,56 +60,57 @@ class Favorites extends HookWidget {
                   children: [
                     Text(
                       'delete'.tr(),
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 17,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 40,
                     ),
-                    Icon(Icons.delete),
+                    const Icon(Icons.delete),
                   ],
                 ),
               ),
             ),
             child: GestureDetector(
               onTap: () {
-                _recipe.details.fromSnapshot(
-                  keyIndex: _keyIndex,
-                  snapshot: _indexData,
-                );
-                _recipe.image = FadeInImage.memoryNetwork(
-                  image: '${_indexData['image_url']}',
-                  fit: BoxFit.fitWidth,
-                  imageCacheWidth: 1000,
-                  placeholder: kTransparentImage,
-                );
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => SelectedRecipe(),
-                  ),
-                );
+                // _recipe.recipeModel.fromSnapshot(
+                //   keyIndex: _keyIndex,
+                //   snapshot: _indexData as Map<String, dynamic>,
+                // );
+                // _recipe.image = FadeInImage.memoryNetwork(
+                //   image: '${_indexData['image_url']}',
+                //   fit: BoxFit.fitWidth,
+                //   imageCacheWidth: 1000,
+                //   placeholder: kTransparentImage,
+                // );
+                // Navigator.of(context).push(
+                //   MaterialPageRoute(
+                //     builder: (_) => SelectedRecipe(
+                //       recipe: _recipe.recipeModel,
+                //     ),
+                //   ),
+                // );
               },
               child: Container(
                 height: _size.height / 2,
                 width: _size.width,
-                margin: EdgeInsets.all(5),
-                padding: EdgeInsets.all(8),
+                margin: const EdgeInsets.all(5),
+                padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   gradient: LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
                     colors: [
                       Theme.of(context).cardColor,
-                      _details.difficulty == 'easy'
-                          ? Colors.yellow.shade700
-                          : _details.difficulty == 'medium'
-                              ? Colors.orange.shade900
-                              : _details.difficulty == 'hard'
-                                  ? Colors.red.shade700
-                                  : Colors.grey.shade700,
+                      if (_details.difficulty == 'easy')
+                        Colors.yellow.shade700
+                      else
+                        _details.difficulty == 'medium'
+                            ? Colors.orange.shade900
+                            : _details.difficulty == 'hard'
+                                ? Colors.red.shade700
+                                : Colors.grey.shade700,
                     ],
                   ),
                 ),
@@ -118,15 +120,15 @@ class Favorites extends HookWidget {
                         child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: FadeInImage.memoryNetwork(
-                        image: '${_details.imageUrl}',
+                        image: _details.imageUrl,
                         fit: BoxFit.fitWidth,
                         imageCacheWidth: 1000,
                         placeholder: kTransparentImage,
                       ),
                     )),
                     RecipeTile(
-                      recipes: _recipe.details,
                       type: 'Favorites',
+                      recipe: _details,
                     ),
                   ],
                 ),

@@ -6,7 +6,8 @@ import 'package:easy_localization/easy_localization.dart';
 
 // ignore: must_be_immutable
 class SignIn extends StatefulWidget {
-  createState() => SignInState();
+  @override
+  State<StatefulWidget> createState() => SignInState();
 }
 
 class SignInState extends State<SignIn> {
@@ -27,12 +28,12 @@ class SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
-    var _size = MediaQuery.of(context).size;
+    final _size = MediaQuery.of(context).size;
     return Container(
       height: _size.height,
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor,
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topRight: Radius.circular(
             20,
           ),
@@ -42,14 +43,13 @@ class SignInState extends State<SignIn> {
         ),
       ),
       child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
               title: Text(
-                '${'signIn'.tr()}',
-                style: TextStyle(
+                'signIn'.tr(),
+                style: const TextStyle(
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
                 ),
@@ -65,11 +65,11 @@ class SignInState extends State<SignIn> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20)),
-                  hintText: '${'enterEmail'.tr()}',
+                  hintText: 'enterEmail'.tr(),
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             StatefulBuilder(builder: (context, StateSetter setState) {
@@ -83,11 +83,11 @@ class SignInState extends State<SignIn> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    hintText: '${'enterPassword'.tr()}',
+                    hintText: 'enterPassword'.tr(),
                     suffixIcon: IconButton(
                       icon: _obscure
-                          ? Icon(Icons.visibility_off)
-                          : Icon(Icons.visibility),
+                          ? const Icon(Icons.visibility_off)
+                          : const Icon(Icons.visibility),
                       onPressed: () {
                         _obscure = !_obscure;
                         setState(() {});
@@ -98,44 +98,44 @@ class SignInState extends State<SignIn> {
               );
             }),
             Container(
-              padding: EdgeInsets.only(left: 10),
+              padding: const EdgeInsets.only(left: 10),
               alignment: Alignment.centerLeft,
               child: RawMaterialButton(
-                child: Text(
-                  'forgotPass'.tr(),
-                  style: TextStyle(color: Colors.red),
-                ),
                 onPressed: () {
                   _authHandler.dialogResetLink(
                       context, _emailCtrl.text, _passwordCtrl.text);
                 },
+                child: Text(
+                  'forgotPass'.tr(),
+                  style: const TextStyle(color: Colors.red),
+                ),
               ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 RawMaterialButton(
-                    fillColor: Color.fromRGBO(64, 123, 255, 32),
+                    fillColor: const Color.fromRGBO(64, 123, 255, 32),
                     elevation: 15,
-                    shape: RoundedRectangleBorder(
+                    shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(
                         Radius.circular(30),
                       ),
                     ),
-                    child: Text(
-                      '${'signIn'.tr()}',
-                      style: TextStyle(color: Colors.white),
-                    ),
                     onPressed: () async {
                       FocusScope.of(context).requestFocus(
-                        new FocusNode(),
+                        FocusNode(),
                       );
-                       await _authHandler.signInWithEmailPassword(
+                      await _authHandler.signInWithEmailPassword(
                         email: _emailCtrl.text,
                         password: _passwordCtrl.text,
                         context: context,
                       );
-                    }),
+                    },
+                    child: Text(
+                      'signIn'.tr(),
+                      style: const TextStyle(color: Colors.white),
+                    )),
               ],
             ),
             SizedBox(
@@ -145,51 +145,52 @@ class SignInState extends State<SignIn> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 RawMaterialButton(
-                  padding: EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(8),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
                   fillColor: Colors.white,
+                  onPressed: () {
+                    AuthHandler.signInWithGoogle(context: context);
+                  },
                   child: Row(
                     children: [
                       Container(
                         height: 30,
                         width: 30,
-                        padding: EdgeInsets.all(4),
+                        padding: const EdgeInsets.all(4),
                         child: Image.asset('assets/google_logo.png'),
                       ),
                       Text(
-                        '${'signInWithGoogle'.tr()}',
-                        style: TextStyle(color: Colors.black),
+                        'signInWithGoogle'.tr(),
+                        style: const TextStyle(color: Colors.black),
                       ),
                     ],
                   ),
-                  onPressed: () {
-                    AuthHandler.signInWithGoogle(context: context);
-                  },
                 ),
               ],
             ),
             SizedBox(
               height: _size.height / 20,
             ),
-            !Platform.isAndroid
-                ? Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    width: _size.width / 3,
-                    alignment: Alignment.center,
-                    child: apple_sign_in.AppleSignInButton(
-                      style: apple_sign_in.ButtonStyle.black,
-                      cornerRadius: 20,
-                      type: apple_sign_in.ButtonType.continueButton,
-                      onPressed: () {
-                        _signInWithApple(context);
-                      },
-                    ),
-                  )
-                : Text(''),
+            if (!Platform.isAndroid)
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                width: _size.width / 3,
+                alignment: Alignment.center,
+                child: apple_sign_in.AppleSignInButton(
+                  style: apple_sign_in.ButtonStyle.black,
+                  cornerRadius: 20,
+                  type: apple_sign_in.ButtonType.continueButton,
+                  onPressed: () {
+                    _signInWithApple(context);
+                  },
+                ),
+              )
+            else
+              const Text(''),
           ],
         ),
       ),
@@ -202,9 +203,9 @@ class SignInState extends State<SignIn> {
       final user = await authHandler.signInWithApple(
           scopes: [apple_sign_in.Scope.email, apple_sign_in.Scope.fullName],
           context: context);
-      print('uid: ${user.uid}');
+      debugPrint('uid: ${user.uid}');
     } catch (e) {
-      print(e);
+      debugPrint('$e');
     }
   }
 }

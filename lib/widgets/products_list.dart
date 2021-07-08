@@ -10,25 +10,28 @@ class ProductsList extends StatefulWidget {
   final String uid;
   final String type;
   final Future componentsFuture;
-  ProductsList(
+  const ProductsList(
       {@required this.uid,
       @required this.type,
       @required this.componentsFuture});
-  createState() => ProductsListState();
+  @override
+  State<StatefulWidget> createState() => ProductsListState();
 }
 
 class ProductsListState extends State<ProductsList> {
-  initState() {
+  @override
+  void initState() {
     super.initState();
   }
 
+  @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
     return FutureBuilder(
       future: widget.componentsFuture,
       builder: (_, AsyncSnapshot snapshot) {
         if (snapshot.hasError) {
-          return Text('${'error'}');
+          return const Text('error');
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Container(
@@ -37,13 +40,14 @@ class ProductsListState extends State<ProductsList> {
           );
         }
         if (snapshot.data != null) {
-          Map _data =
-              widget.type == 'AddToCart' ? snapshot : snapshot.data.data();
+          final Map _data = widget.type == 'AddToCart'
+              ? snapshot as Map
+              : snapshot.data.data() as Map;
           return Consumer(
             builder: (context, watch, child) {
               final _recipe = watch(recipeProvider);
               final _keys = _data.keys.toList();
-              return Container(
+              return SizedBox(
                 height: _size.height / 1.2,
                 child: ListView.builder(
                   itemCount: _keys.length,
@@ -53,7 +57,7 @@ class ProductsListState extends State<ProductsList> {
                         key: UniqueKey(),
                         onDismissed: (direction) {
                           _data.remove(_data[index]);
-                          _recipe.hide(component: _keys[index]);
+                          _recipe.hide(component: _keys[index] as String);
                         },
                         background: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -67,25 +71,27 @@ class ProductsListState extends State<ProductsList> {
                               children: [
                                 Text(
                                   'delete'.tr(),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 17,
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 40,
                                 ),
-                                Icon(Icons.delete),
+                                const Icon(Icons.delete),
                               ],
                             ),
                           ),
                         ),
                         child: widget.type == 'AddRecipe'
                             ? Fields(
-                                data: _data[_key],
+                                data: _data[_key] as Map,
                                 recipe: _recipe,
                               )
-                            : EditProducts(data: _data[_key], indexKey: _key));
+                            : EditProducts(
+                                indexKey: _key as String,
+                                data: _data[_key] as Map));
                   },
                 ),
               );

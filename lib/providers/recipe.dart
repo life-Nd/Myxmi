@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:myxmi/models/instructions.dart';
-import 'package:myxmi/models/recipes.dart';
+import 'package:myxmi/models/recipe.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class RecipeProvider extends ChangeNotifier {
-  RecipesModel details = RecipesModel();
+  RecipeModel recipeModel = RecipeModel();
   InstructionsModel instructions =
       InstructionsModel(ingredients: {}, steps: []);
   Map<String, double> quantity = {};
@@ -14,65 +14,64 @@ class RecipeProvider extends ChangeNotifier {
   List hidden = [];
   double difficultyValue = 0.0;
   int pageIndex = 0;
-  FadeInImage image;
+  Widget image;
 
-  FadeInImage imageViewer({@required FadeInImage newImage}) {
-    image = newImage;
-    return image;
+  Widget imageViewer({@required Widget newImage}) {
+    return image = newImage;
   }
 
-  changeView(int index) {
+  void changeView(int index) {
     pageIndex = index;
     notifyListeners();
   }
 
-  changeTitle({@required String newName}) {
-    details.title = newName;
+  void changeTitle({@required String newName}) {
+    recipeModel.title = newName;
     notifyListeners();
   }
 
-  changeDuration({@required String newDuration}) {
-    details.duration = newDuration;
-    notifyListeners();
-  }
-   changePortions({@required String newPortions}) {
-    details.portions = newPortions;
+  void changeDuration({@required String newDuration}) {
+    recipeModel.duration = newDuration;
     notifyListeners();
   }
 
-  changeDifficulty({double newDifficultyValue}) {
+  void changePortions({@required String newPortions}) {
+    recipeModel.portions = newPortions;
+    notifyListeners();
+  }
+
+  void changeDifficulty({double newDifficultyValue}) {
     difficultyValue = newDifficultyValue;
     notifyListeners();
   }
 
   String getDifficulty() {
-    details.difficulty = difficultyValue == 0.0
+    return recipeModel.difficulty = difficultyValue == 0.0
         ? 'easy'.tr()
         : difficultyValue == 0.5
             ? 'medium'.tr()
             : difficultyValue == 1.0
                 ? 'hard'.tr()
                 : '-';
-    return details.difficulty;
   }
 
-  changeCategory({String newCategory}) {
-    details.category = newCategory;
+  void changeCategory({String newCategory}) {
+    recipeModel.category = newCategory;
     notifyListeners();
   }
 
-  changeSubCategory({String newSubCategory}) {
-    details.subCategory = newSubCategory;
+  void changeSubCategory({String newSubCategory}) {
+    recipeModel.subCategory = newSubCategory;
     notifyListeners();
   }
 
-  changeComposition(
+  void changeComposition(
       {@required String key, @required String type, @required String value}) {
     composition[key] = '$value $type';
-    details.ingredientsCount = '${composition.keys.toList().length}';
+    recipeModel.ingredientsCount = '${composition.keys.toList().length}';
   }
 
-  changeQuantity(
+  void changeQuantity(
       {@required String key, @required String type, @required String value}) {
     if (type == 'g') {
       quantity[key] =
@@ -110,28 +109,28 @@ class RecipeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  saveToDb() {
-    details.toMap();
+  void saveToDb() {
+    recipeModel.toMap();
   }
 
-  changeEstimatedWeight() {
+  void changeEstimatedWeight() {
     estimatedWeight = quantity.values.reduce(
       (sum, element) => sum + element,
     );
     notifyListeners();
   }
 
-  hide({String component}) {
+ void hide({String component}) {
     hidden.add(component);
   }
 
-  unhide() {
+void unhide() {
     hidden.clear();
     notifyListeners();
   }
 
-  reset() {
-    details = RecipesModel();
+ void reset() {
+    recipeModel = RecipeModel();
     instructions = InstructionsModel();
     quantity.clear();
     composition.clear();

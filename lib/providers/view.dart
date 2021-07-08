@@ -2,12 +2,9 @@ import 'package:myxmi/screens/favorites.dart';
 import 'package:myxmi/screens/filtering.dart';
 import 'package:myxmi/screens/more.dart';
 import 'package:myxmi/screens/products.dart';
-import 'package:myxmi/screens/recipes.dart';
+import 'package:myxmi/screens/recipes_screen.dart';
 import 'package:myxmi/widgets/sign_in.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
-import 'favorites.dart';
 
 class ViewProvider extends ChangeNotifier {
   int view = 0;
@@ -16,38 +13,21 @@ class ViewProvider extends ChangeNotifier {
   Future future;
   Future search;
 
-  changeView({@required int newView, String uid}) {
+  Widget changeView({@required int newView, String uid}) {
     view = newView;
     switch (view) {
       case 0:
-        // changeFuture(
-        //     newFuture: FirebaseFirestore.instance
-        //         .collection('Recipes')
-        //         .orderBy('Made', descending: true)
-        //         .limit(20)
-        //         .get());
-
         return FilteringScreen();
       case 1:
-        // changeFuture(
-        //     newFuture: FirebaseFirestore.instance
-        //         .collection('Recipes')
-        //         .where(
-        //           'Uid',
-        //           isEqualTo: '$uid',
-        //         )
-        //         .orderBy('Made', descending: true)
-        //         .limit(20)
-        //         .get());
         return uid != null
             ? !searching
                 ? RecipesScreen(
                     legend: 'MyRecipes',
-                    uid: '$uid',
+                    uid: uid,
                   )
                 : RecipesScreen(
                     legend: 'Searching',
-                    uid: '$uid',
+                    uid: uid,
                     searchText: searchText,
                   )
             : SignIn();
@@ -58,71 +38,46 @@ class ViewProvider extends ChangeNotifier {
       case 4:
         return uid != null ? MoreView() : SignIn();
       default:
-        // changeFuture(
-        //     newFuture: FirebaseFirestore.instance
-        //         .collection('Recipes')
-        //         .orderBy('Made', descending: true)
-        //         .limit(20)
-        //         .get());
         return FilteringScreen();
     }
   }
 
 // TODO fix this search
-  searchRecipe(
-      {@required String filter,
-      @required String text,
-      @required String uid,
-      FavoritesProvider fav}) {
-    doSearch(true);
-    switch (view) {
-      case 0:
-        fav.showFilter(true);
-        print('FILTER: $filter ${text.trim()}');
-        changeSearch(
-            newSearch: FirebaseFirestore.instance
-                .collection('Recipes')
-                .where('$filter', isEqualTo: '${text.trim()}')
-                .get());
-        changeView(newView: 0, uid: uid);
-        notifyListeners();
-        return;
-      case 1:
-        fav.showFilter(true);
-        print('FILTER: $filter ${text.trim()}');
-        changeSearch(
-            newSearch: FirebaseFirestore.instance
-                .collection('Recipes')
-                .where('$filter', isEqualTo: '${text.trim()}')
-                .get());
-        changeView(newView: 1, uid: uid);
-        notifyListeners();
-        return;
-      case 2:
-        fav.showFilter(true);
-        fav.filter(filter: filter, text: text);
-        changeView(newView: 2, uid: uid);
-        return;
-      default:
-        changeSearch(
-            newSearch: FirebaseFirestore.instance
-                .collection('Recipes')
-                .where('$filter', isEqualTo: '${text.trim()}')
-                .get());
-        return;
-    }
-  }
+  // searchRecipe(
+  //     {@required String filter,
+  //     @required String text,
+  //     @required String uid,
+  //     FavoritesProvider fav}) {
+  //   switch (view) {
+  //     case 0:
+  //       return;
+  //     case 1:
+  //       return;
+  //     case 2:
+  //       fav.filter(filter: filter, text: text);
+  //       return;
+  //     default:
+  //       changeSearch(
+  //           newSearch: FirebaseFirestore.instance
+  //               .collection('Recipes')
+  //               .where('$filter', isEqualTo: '${text.trim()}')
+  //               .get());
+  //       return;
+  //   }
+  // }
 
-  doSearch(bool value) {
+  void doSearch({bool value}) {
     searching = value;
     notifyListeners();
   }
 
-  changeFuture({@required Future newFuture}) {
-    future = newFuture;
-  }
+//  void changeFuture({@required Future newFuture}) {
+//     future = newFuture;
 
-  changeSearch({@required Future newSearch}) {
+//   }
+
+  void changeSearch({@required Future newSearch}) {
     search = newSearch;
+    notifyListeners();
   }
 }

@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'main.dart';
-import 'screens/home.dart';
 import 'providers/prefs.dart';
+import 'screens/home.dart';
 
 final firebaseAuth = Provider<FirebaseAuth>((ref) {
   return FirebaseAuth.instance;
@@ -19,7 +19,9 @@ final prefProvider =
     ChangeNotifierProvider<PreferencesProvider>((ref) => PreferencesProvider());
 
 class App extends HookWidget {
+  @override
   Widget build(BuildContext context) {
+
     final _userProvider = useProvider(userProvider);
     final _prefProvider = useProvider(prefProvider);
     return FutureBuilder(
@@ -32,13 +34,14 @@ class App extends HookWidget {
                 ? StreamBuilder<DocumentSnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('Favorites')
-                        .doc('${_userProvider.account.uid}')
+                        .doc(_userProvider.account.uid)
                         .snapshots(),
                     builder:
                         (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                       if (snapshot.hasData && snapshot.data.data() != null) {
-                        var _data = snapshot.data.data();
-                        _favProvider.addFavorites(newFavorite: _data);
+                        final _data = snapshot.data.data();
+                        _favProvider.addFavorites(
+                            newFavorite: _data as Map<String, dynamic>);
                       }
                       return Home();
                     },

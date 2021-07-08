@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 class PlatformAlertDialog extends StatelessWidget {
-  PlatformAlertDialog({
+  const PlatformAlertDialog({
     @required this.title,
     @required this.content,
     this.cancelActionText,
@@ -42,23 +42,23 @@ class PlatformAlertDialog extends StatelessWidget {
       actions.add(
         PlatformAlertDialogAction(
           color: Colors.white,
+          onPressed: () => Navigator.of(context).pop(false),
           child: Text(
             cancelActionText,
-            style: TextStyle(color: Colors.black),
+            style: const TextStyle(color: Colors.black),
           ),
-          onPressed: () => Navigator.of(context).pop(false),
         ),
       );
     }
     actions.add(
       PlatformAlertDialogAction(
         color: Colors.red,
+        onPressed: () => Navigator.of(context).pop(true),
         child: Text(
           defaultActionText,
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
           // key: Key(Keys.alertDefault),
         ),
-        onPressed: () => Navigator.of(context).pop(true),
       ),
     );
     return actions;
@@ -66,7 +66,7 @@ class PlatformAlertDialog extends StatelessWidget {
 }
 
 class PlatformAlertDialogAction extends StatelessWidget {
-  PlatformAlertDialogAction({this.child, this.onPressed, this.color});
+  const PlatformAlertDialogAction({this.child, this.onPressed, this.color});
   final Color color;
   final Widget child;
   final VoidCallback onPressed;
@@ -81,8 +81,8 @@ class PlatformAlertDialogAction extends StatelessWidget {
         ),
       ),
       elevation: 20,
-      child: child,
       onPressed: onPressed,
+      child: child,
     );
   }
 }

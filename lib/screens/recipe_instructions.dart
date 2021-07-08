@@ -7,18 +7,19 @@ import 'package:myxmi/screens/add_recipe.dart';
 TextEditingController _stepCtrl = TextEditingController();
 
 class RecipeInstructions extends HookWidget {
+  @override
   Widget build(BuildContext context) {
     final _recipe = useProvider(recipeProvider);
-    List _steps = _recipe?.instructions?.steps;
-    int _keys = _steps?.length != null ? _steps.length : 0;
-    int _newKey = _keys + 1;
+    final List _steps = _recipe?.instructions?.steps;
+    final int _keys = _steps?.length != null ? _steps.length : 0;
+    final int _newKey = _keys + 1;
     return Column(
       children: [
         Expanded(
           child: ListView.builder( 
             itemCount: _keys,
             itemBuilder: (_, int index) {
-              int _index = index + 1;
+              final int _index = index + 1;
               return Card(
                 color: Theme.of(context).scaffoldBackgroundColor,
                 child: ListTile(
@@ -49,9 +50,9 @@ class RecipeInstructions extends HookWidget {
               ),
             ),
             IconButton(
-              icon: Icon(Icons.send, color: Colors.green),
+             icon: const Icon(Icons.send, color: Colors.green),
               onPressed: () {
-                _recipe.addStep(step: '${_stepCtrl.text}');
+                _recipe.addStep(step: _stepCtrl.text);
                 _stepCtrl.clear();
                 FocusScope.of(context).requestFocus(FocusNode());
               },

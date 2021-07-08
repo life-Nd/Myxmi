@@ -4,14 +4,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'app.dart';
 import 'package:time_machine/time_machine.dart';
+import 'app.dart';
+
 import 'providers/user.dart';
 
 final userProvider =
     ChangeNotifierProvider<UserProvider>((ref) => UserProvider());
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await TimeMachine.initialize({'rootBundle': rootBundle});
   await Firebase.initializeApp();
@@ -22,7 +23,7 @@ void main() async {
   runApp(
     EasyLocalization(
       path: 'translations',
-      supportedLocales: [Locale('en', 'US'), Locale('fr', 'FR')],
+      supportedLocales: const [Locale('en', 'US'), Locale('fr', 'FR')],
       child: ProviderScope(
         child: Consumer(
           builder: (context, watch, child) {
@@ -42,7 +43,8 @@ void main() async {
 }
 
 class MaterialAppWidget extends StatefulWidget {
-  createState() => MaterialAppWidgetState();
+  @override
+  State<StatefulWidget> createState() => MaterialAppWidgetState();
 }
 
 class MaterialAppWidgetState extends State<MaterialAppWidget> {
@@ -66,8 +68,8 @@ class MaterialAppWidgetState extends State<MaterialAppWidget> {
 
 ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
-  visualDensity: VisualDensity(vertical: 0.5, horizontal: 0.5),
-  primarySwatch: MaterialColor(
+  visualDensity: const VisualDensity(vertical: 0.5, horizontal: 0.5),
+  primarySwatch: const MaterialColor(
     0xFFF5E0C3,
     <int, Color>{
       50: Color(0x1aF5E0C3),
@@ -87,12 +89,12 @@ ThemeData lightTheme = ThemeData(
   primaryColorLight: Colors.grey.shade100,
   primaryColorDark: Colors.grey.shade800,
   canvasColor: Colors.transparent,
-  accentColor: Color(0xff457BE0),
+  accentColor: const Color(0xff457BE0),
   accentColorBrightness: Brightness.light,
   fontFamily: 'Georgia',
   scaffoldBackgroundColor: Colors.white,
-  textTheme: TextTheme(),
-  appBarTheme: AppBarTheme(
+  textTheme: const TextTheme(),
+  appBarTheme: const AppBarTheme(
     shadowColor: Colors.white,
     brightness: Brightness.light,
     color: Colors.white,
@@ -103,19 +105,19 @@ ThemeData lightTheme = ThemeData(
     elevation: 1,
     systemOverlayStyle: SystemUiOverlayStyle.dark,
   ),
-  cardColor: Color(0xaaF5E0C3),
-  dividerColor: Color(0x1f6D42CE),
-  iconTheme: IconThemeData(color: Colors.black),
-  focusColor: Color(0xDD000000),
-  cardTheme: CardTheme(
+  cardColor: const Color(0xaaF5E0C3),
+  dividerColor: const Color(0x1f6D42CE),
+  iconTheme: const IconThemeData(color: Colors.black),
+  focusColor: const Color(0xDD000000),
+  cardTheme: const CardTheme(
     margin: EdgeInsets.all(2),
   ),
 );
 
 ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
-  visualDensity: VisualDensity(vertical: 0.5, horizontal: 0.5),
-  primarySwatch: MaterialColor(0xFFF5E0C3, <int, Color>{
+  visualDensity: const VisualDensity(vertical: 0.5, horizontal: 0.5),
+  primarySwatch: const MaterialColor(0xFFF5E0C3, <int, Color>{
     50: Color(0x1a5D4524),
     100: Color(0xa15D4524),
     200: Color(0xaa5D4524),
@@ -127,30 +129,30 @@ ThemeData darkTheme = ThemeData(
     800: Color(0xaf2F1E06),
     900: Color(0xff2F1E06),
   }),
-  primaryColor: Color(0xFF212121),
+  primaryColor: const Color(0xFF212121),
   fontFamily: 'Georgia',
   primaryColorBrightness: Brightness.dark,
   primaryColorLight: Colors.grey.shade200,
   primaryColorDark: Colors.grey.shade800,
   canvasColor: Colors.transparent,
-  accentColor: Color(0xff457BE0),
+  accentColor: const Color(0xff457BE0),
   accentColorBrightness: Brightness.dark,
-  scaffoldBackgroundColor: Color(0xDD000000),
-  iconTheme: IconThemeData(color: Colors.white),
-  textTheme: TextTheme(),
-  appBarTheme: AppBarTheme(
+  scaffoldBackgroundColor: const Color(0xDD000000),
+  iconTheme: const IconThemeData(color: Colors.white),
+  textTheme: const TextTheme(),
+  appBarTheme: const AppBarTheme(
     brightness: Brightness.dark,
     color: Colors.black,
     systemOverlayStyle: SystemUiOverlayStyle.light,
     titleTextStyle: TextStyle(color: Colors.white),
     elevation: 1,
   ),
-  bottomAppBarColor: Color(0xff6D42CE),
-  cardColor: Color(0xFF303030),
-  dividerColor: Color(0x1f6D42CE),
-  buttonColor: Color(0xFF303030),
-  focusColor: Color(0xFFFFFFFF),
-  cardTheme: CardTheme(
+  bottomAppBarColor: const Color(0xff6D42CE),
+  cardColor: const Color(0xFF303030),
+  dividerColor: const Color(0x1f6D42CE),
+  buttonColor: const Color(0xFF303030),
+  focusColor: const Color(0xFFFFFFFF),
+  cardTheme: const CardTheme(
     margin: EdgeInsets.all(2),
   ),
 );

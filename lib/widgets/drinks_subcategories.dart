@@ -5,6 +5,7 @@ import 'package:myxmi/screens/add_recipe.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class DrinksSubCategories extends HookWidget {
+  @override
   Widget build(BuildContext context) {
     final _recipe = useProvider(recipeProvider);
     return SingleChildScrollView(
@@ -13,57 +14,57 @@ class DrinksSubCategories extends HookWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           RawMaterialButton(
-            child: Text('cocktail'.tr()),
             onPressed: () {
               _recipe.changeSubCategory(newSubCategory: 'cocktail');
             },
-            fillColor: _recipe.details.subCategory == 'cocktail'
+            fillColor: _recipe.recipeModel.subCategory == 'cocktail'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            child: Text('cocktail'.tr()),
           ),
-          SizedBox(
+          const SizedBox(
             width: 7,
           ),
           RawMaterialButton(
-            child: Text('smoothie'.tr()),
             onPressed: () {
               _recipe.changeSubCategory(newSubCategory: 'smoothie');
             },
-            fillColor: _recipe.details.subCategory == 'smoothie'
+            fillColor: _recipe.recipeModel.subCategory == 'smoothie'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            child: Text('smoothie'.tr()),
           ),
-          SizedBox(
+          const SizedBox(
             width: 7,
           ),
           RawMaterialButton(
-            child: Text('shake'.tr()),
             onPressed: () {
               _recipe.changeSubCategory(newSubCategory: 'shake');
             },
-            fillColor: _recipe.details.subCategory == 'shake'
+            fillColor: _recipe.recipeModel.subCategory == 'shake'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            child: Text('shake'.tr()),
           ),
-          SizedBox(
+          const SizedBox(
             width: 7,
           ),
           RawMaterialButton(
-            child: Text('other'.tr()),
             onPressed: () {
               _recipe.changeSubCategory(newSubCategory: 'other');
             },
-            fillColor: _recipe.details.subCategory == 'other'
+            fillColor: _recipe.recipeModel.subCategory == 'other'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            child: Text('other'.tr()),
           )
         ],
       ),

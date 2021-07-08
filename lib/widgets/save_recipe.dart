@@ -18,39 +18,40 @@ class SaveButton extends HookWidget {
     final _image = useProvider(imageProvider);
     final _user = useProvider(userProvider);
     return IconButton(
-      icon: Icon(
+      icon: const Icon(
         Icons.save,
         color: Colors.green,
       ),
-      onPressed: _recipe.details.title.isNotEmpty
+      onPressed: _recipe.recipeModel.title.isNotEmpty
           ? () async {
               String _key;
 
-              var rng = new Random();
-              var _random = rng.nextInt(9000) + 1000;
-              _recipe.details.reference = '$_random';
-              _recipe.details.uid = '${_user.account.uid}';
-              _recipe.details.access = 'Public';
-              _recipe.details.usedCount = '1';
-              _recipe.details.stepsCount =
+              final rng = Random();
+              final _random = rng.nextInt(9000) + 1000;
+              _recipe.recipeModel.reference = '$_random';
+              _recipe.recipeModel.uid = _user.account.uid;
+              _recipe.recipeModel.access = 'Public';
+              _recipe.recipeModel.usedCount = '1';
+              _recipe.recipeModel.stepsCount =
                   '${_recipe.instructions.steps.length}';
               _recipe.instructions.ingredients = _recipe.composition;
-              _recipe.details.made = '${DateTime.now().millisecondsSinceEpoch}';
+              _recipe.recipeModel.made =
+                  '${DateTime.now().millisecondsSinceEpoch}';
               _image.addImageToDb(context: context).whenComplete(() async {
                 pr.show(max: 100, msg: '${'loading'.tr()} ${'recipe'.tr()}...');
-                _recipe.details.imageUrl = _image.imageLink;
-                DocumentReference _db = await FirebaseFirestore.instance
+                _recipe.recipeModel.imageUrl = _image.imageLink;
+                final DocumentReference _db = await FirebaseFirestore.instance
                     .collection('Recipes')
-                    .add(_recipe.details.toMap());
+                    .add(_recipe.recipeModel.toMap());
 
                 _key = _db.id;
-                print('----KeyID: $_key');
+                debugPrint('----KeyID: $_key');
               }).whenComplete(() async {
-                print(
+                debugPrint(
                     'Instructions: ${_recipe.instructions.ingredients} \n ${_recipe.instructions.steps} ');
                 await FirebaseFirestore.instance
                     .collection('Instructions')
-                    .doc('$_key')
+                    .doc(_key)
                     .set(_recipe.instructions.toMap());
               }).whenComplete(() {
                 pr.close();
@@ -66,7 +67,7 @@ class SaveButton extends HookWidget {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   backgroundColor: Colors.red,
-                  content: Text('${'fieldsEmpty'.tr()}'),
+                  content: Text('fieldsEmpty'.tr()),
                 ),
               );
             },

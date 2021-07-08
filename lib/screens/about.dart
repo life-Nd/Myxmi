@@ -4,10 +4,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:package_info/package_info.dart';
 
 class AboutView extends HookWidget {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${'about'.tr()}'),
+        title: Text('about'.tr()),
         centerTitle: true,
       ),
       body: Column(
@@ -20,19 +21,20 @@ class AboutView extends HookWidget {
 }
 
 class _Version extends HookWidget {
+  @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(Icons.layers),
+      leading: const Icon(Icons.layers),
       title: Row(
         children: [
-          Text('${'appVersion'.tr()}'),
+          Text('appVersion'.tr()),
           FutureBuilder(
             future: PackageInfo.fromPlatform(),
             builder: (_, AsyncSnapshot<PackageInfo> data) {
               if (data != null) {
-                return Text('${data.data.version}');
+                return Text(data.data.version);
               }
-              return Text('-');
+              return const Text('-');
             },
           ),
         ],

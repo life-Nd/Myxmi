@@ -1,8 +1,8 @@
 class ProductsModel {
-  static const NAME = 'name';
-  static const QUANTITY = 'quantity';
-  static const VALUETYPE = 'valueType';
-  static const CATEGORY = 'category';
+  static const constName = 'name';
+  static const constQuantity = 'quantity';
+  static const constValueType = 'valueType';
+  static const constCategory = 'category';
 
   String name;
   String quantity;
@@ -10,19 +10,19 @@ class ProductsModel {
   String category;
 
   ProductsModel({this.name, this.quantity, this.valueType, this.category});
-  void fromSnapshot({Map snapshot, String keyIndex}) {
-    name = snapshot[NAME];
-    quantity = snapshot[QUANTITY];
-    valueType = snapshot[VALUETYPE];
-    category = snapshot[CATEGORY];
+  void fromSnapshot({Map<String, String> snapshot, String keyIndex}) {
+    name = snapshot[constName];
+    quantity = snapshot[constQuantity];
+    valueType = snapshot[constValueType];
+    category = snapshot[constCategory];
   }
 
   Map<dynamic, dynamic> toMap() {
     return <dynamic, dynamic>{
-      NAME: name,
-      QUANTITY: quantity,
-      VALUETYPE: valueType,
-      CATEGORY: category,
+      constName: name,
+      constQuantity: quantity,
+      constValueType: valueType,
+      constCategory: category,
     };
   }
 }

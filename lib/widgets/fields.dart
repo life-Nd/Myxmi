@@ -6,17 +6,18 @@ TextEditingController textCtrl = TextEditingController();
 class Fields extends StatefulWidget {
   final Map data;
   final RecipeProvider recipe;
-  Fields({@required this.data, @required this.recipe});
-  createState() => FieldsState();
+  const Fields({@required this.data, @required this.recipe});
+  @override
+  State<StatefulWidget> createState() => FieldsState();
 }
 
 class FieldsState extends State<Fields> {
-
+  @override
   Widget build(BuildContext context) {
-    List _ingredientName =
+    final List _ingredientName =
         widget.recipe.composition[widget.data['Name']].toString().split(' ');
     textCtrl = _ingredientName[0] != 'null'
-        ? TextEditingController(text: _ingredientName[0])
+        ? TextEditingController(text: _ingredientName[0] as String)
         : TextEditingController();
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -28,13 +29,13 @@ class FieldsState extends State<Fields> {
         },
         onChanged: (value) {
           widget.recipe.changeComposition(
-              key: widget.data['Name'],
-              value: '$value',
-              type: widget.data['MesureType']);
+              key: widget.data['Name'] as String,
+              value: value,
+              type: widget.data['MesureType'] as String);
           widget.recipe.changeQuantity(
             key: widget.data.keys.toString(),
-            value: '$value',
-            type: widget.data['MesureType'],
+            value: value,
+            type: widget.data['MesureType'] as String,
           );
         },
         onEditingComplete: () {

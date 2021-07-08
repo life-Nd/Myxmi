@@ -7,7 +7,7 @@ class DetailsTile extends HookWidget {
   final Function onTap;
   final Widget leadingWidget;
 
-  DetailsTile({
+  const DetailsTile({
     @required this.legend,
     @required this.value,
     @required this.onTap,
@@ -16,7 +16,7 @@ class DetailsTile extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle _titleStyle = TextStyle(
+    const TextStyle _titleStyle = TextStyle(
       fontSize: 15,
       fontWeight: FontWeight.w700,
     );
@@ -30,15 +30,15 @@ class DetailsTile extends HookWidget {
           child: leadingWidget,
         ),
       ),
-      contentPadding: EdgeInsets.all(1),
+      contentPadding: const EdgeInsets.all(1),
       dense: true,
-      onTap: onTap,
+      onTap: () => onTap,
       title: Text(
-        '$legend',
+        legend,
         style: _titleStyle,
       ),
       subtitle: Padding(
-        padding: EdgeInsets.only(left: 4),
+        padding: const EdgeInsets.only(left: 4),
         child: value,
       ),
     );

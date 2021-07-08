@@ -18,19 +18,19 @@ class ImageProvider extends ChangeNotifier {
   String added;
   final picker = ImagePicker();
 
-  chooseImageSource(
+  void chooseImageSource(
       {@required BuildContext context, @required MaterialPageRoute route}) {
     showDialog(
       context: context,
       builder: (_) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(25),
             ),
           ),
-          title: Center(child: Text('${'chooseSource'.tr()}')),
-          content: Container(
+          title: Center(child: Text('chooseSource'.tr())),
+          content: SizedBox(
             height: 100,
             width: 150,
             child: Row(
@@ -38,14 +38,11 @@ class ImageProvider extends ChangeNotifier {
               children: <Widget>[
                 Column(
                   children: <Widget>[
-                    Text('${'gallery'.tr()}'),
-                    SizedBox(
+                    Text('gallery'.tr()),
+                    const SizedBox(
                       height: 7,
                     ),
                     FloatingActionButton(
-                      child: Icon(
-                        Icons.image,
-                      ),
                       onPressed: () {
                         pickImage(ImageSource.gallery).then(
                           (a) {
@@ -53,22 +50,20 @@ class ImageProvider extends ChangeNotifier {
                           },
                         );
                       },
+                      child: const Icon(
+                        Icons.image,
+                      ),
                     )
                   ],
                 ),
                 Column(
                   children: <Widget>[
-                    Text('${'camera'.tr()}'),
-                    SizedBox(
+                    Text('camera'.tr()),
+                    const SizedBox(
                       height: 7,
                     ),
                     FloatingActionButton(
                       backgroundColor: Colors.red,
-                      child: Center(
-                        child: Icon(
-                          Icons.image,
-                        ),
-                      ),
                       onPressed: () {
                         pickImage(ImageSource.camera).then(
                           (a) {
@@ -76,6 +71,11 @@ class ImageProvider extends ChangeNotifier {
                           },
                         );
                       },
+                      child: const Center(
+                        child: Icon(
+                          Icons.image,
+                        ),
+                      ),
                     )
                   ],
                 ),
@@ -90,11 +90,11 @@ class ImageProvider extends ChangeNotifier {
   Future pickImage(ImageSource source) async {
     final pickedFile = await picker.getImage(source: source, imageQuality: 50);
     changeImageSample(pickedFile.path);
-    print("GetImage: $added");
+    debugPrint("GetImage: $added");
     notifyListeners();
   }
 
-  changeImageSample(String path) {
+  void changeImageSample(String path) {
     imageSample = File(path);
     notifyListeners();
   }
@@ -105,9 +105,9 @@ class ImageProvider extends ChangeNotifier {
       GlobalKey<ScaffoldState> scaffoldKey}) async {
     final ProgressDialog pr = ProgressDialog(context: context);
     firebase_storage.UploadTask task;
-    String timeStamp = DateTime.now().millisecondsSinceEpoch.toString();
-    var rng = new Random();
-    var _random = rng.nextInt(90000) + 10000;
+    final String timeStamp = DateTime.now().millisecondsSinceEpoch.toString();
+    final rng = Random();
+    final _random = rng.nextInt(90000) + 10000;
     pr.show(max: 100, msg: '${'loading'.tr()} ${'image'.tr()}...');
     imageId = '$timeStamp-$_random}';
 
@@ -118,16 +118,16 @@ class ImageProvider extends ChangeNotifier {
     await task.whenComplete(() {
       added = addedImage;
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      print("AddImageToDb: $added");
+      debugPrint("AddImageToDb: $added");
       notifyListeners();
     }).then((value) async {
-      var downUrl = await value.ref.getDownloadURL();
-      print('DOWNURL: $downUrl');
-      imageLink = '$downUrl';
+      final downUrl = await value.ref.getDownloadURL();
+      debugPrint('DOWNURL: $downUrl');
+      imageLink = downUrl;
       urlString = downUrl.toString();
       pr.close();
     });
-    print("Url for Download: $urlString");
+    debugPrint("Url for Download: $urlString");
   }
 
   void delete() {

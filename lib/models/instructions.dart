@@ -1,24 +1,24 @@
 class InstructionsModel {
-  static const INGREDIENTS = 'ingredients';
-  static const STEPS = 'steps';
-static const REVIEWS = 'reviews';
-  List<dynamic> steps = [];
+  static const constIngredients = 'ingredients';
+  static const constSteps = 'steps';
+  static const constReviews = 'reviews';
+  List steps = [];
   Map ingredients = {};
-  List<dynamic> reviews = [];
+  List reviews = [];
 
   InstructionsModel({this.ingredients, this.steps, this.reviews});
 
-  void fromSnapshot({Map snapshot}) {
-    ingredients = snapshot[INGREDIENTS];
-    steps = snapshot[STEPS];
-    reviews = snapshot[REVIEWS];
+  void fromSnapshot({Map<String, dynamic> snapshot}) {
+    ingredients = snapshot[constIngredients] as Map;
+    steps = snapshot[constSteps] as List;
+    reviews = snapshot[constReviews] as List;
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      INGREDIENTS: ingredients,
-      STEPS: steps,
-      REVIEWS: reviews,
+      constIngredients: ingredients,
+      constSteps: steps,
+      constReviews: reviews,
     };
   }
 }

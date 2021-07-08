@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 String language = 'en';
-const String LAGUAGE_CODE = 'languageCode';
-const String ENGLISH = 'en';
-const String FRENCH = 'fr';
+const String constLanguageCode = 'languageCode';
+const String constEnglish = 'en';
+const String constFrench = 'fr';
 
 class PreferencesProvider extends ChangeNotifier {
-  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   String theme = 'Light';
   String language = 'English';
   List<String> cart = [];
   List<String> checkedItem = [];
   bool opaque = false;
-  changeTheme({String newTheme}) async {
+  Future changeTheme({String newTheme}) async {
     final SharedPreferences prefs = await _prefs;
     theme = newTheme;
     prefs.setString('Theme', theme).then((bool success) {
@@ -22,7 +22,7 @@ class PreferencesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  changeOpaque({bool newOpaque}) async {
+  Future changeOpaque({bool newOpaque}) async {
     final SharedPreferences prefs = await _prefs;
     opaque = newOpaque;
     prefs.setBool('Opaque', opaque).then((bool success) {
@@ -32,7 +32,7 @@ class PreferencesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  changeLanguage({String newLanguage}) async {
+  Future changeLanguage({String newLanguage}) async {
     final SharedPreferences prefs = await _prefs;
     language = newLanguage;
     prefs.setString('Language', language).then((bool success) {
@@ -42,29 +42,29 @@ class PreferencesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  editCart({@required String name}) async {
+  Future editCart({@required String name}) async {
     final SharedPreferences prefs = await _prefs;
-    if (cart == null) cart = [];
+    cart ??= [];
     if (cart.contains(name)) {
       cart.remove(name);
     } else {
       cart.add(name);
     }
     prefs.setStringList('Cart', cart).then((bool success) {
-      print('cart: $cart');
+      debugPrint('cart: $cart');
       return cart;
     });
     notifyListeners();
   }
 
-  editItems({@required String item}) async {
+  Future editItems({@required String item}) async {
     final SharedPreferences prefs = await _prefs;
-    if (checkedItem == null) checkedItem = [];
+    checkedItem ??= [];
     checkedItem.contains(item)
         ? checkedItem.remove(item)
         : checkedItem.add(item);
     prefs.setStringList('Items', checkedItem).then((bool success) {
-      print('Item: $checkedItem');
+      debugPrint('Item: $checkedItem');
       return checkedItem;
     });
     notifyListeners();
@@ -72,49 +72,46 @@ class PreferencesProvider extends ChangeNotifier {
 
   Future readCart() async {
     final SharedPreferences prefs = await _prefs;
-    cart = prefs.getStringList('Cart');
 
-    return cart;
+    return cart = prefs.getStringList('Cart');
   }
 
   Future readItem() async {
     final SharedPreferences prefs = await _prefs;
-    cart = prefs.getStringList('Items');
-    return cart;
+    return cart = prefs.getStringList('Items');
   }
 
   Future readTheme() async {
     final SharedPreferences prefs = await _prefs;
-    theme = prefs.getString('Theme');
-    return theme;
+    return theme = prefs.getString('Theme');
   }
 
-  readLanguage() async {
+  Future readLanguage() async {
     final SharedPreferences prefs = await _prefs;
-    language = prefs.getString('Language');
-    return language;
+    // language = ;
+    return language = prefs.getString('Language');
   }
 
   Locale _locale(String languageCode) {
     switch (languageCode) {
-      case ENGLISH:
-        return Locale(ENGLISH, 'US');
-      case FRENCH:
-        return Locale(FRENCH, 'FR');
+      case constEnglish:
+        return const Locale(constEnglish, 'US');
+      case constFrench:
+        return const Locale(constFrench, 'FR');
       default:
-        return Locale(ENGLISH, 'US');
+        return const Locale(constEnglish, 'US');
     }
   }
 
   Future<Locale> setLocale(String languageCode) async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    await _prefs.setString(LAGUAGE_CODE, languageCode);
+    final SharedPreferences _prefs = await SharedPreferences.getInstance();
+    await _prefs.setString(constLanguageCode, languageCode);
     return _locale(languageCode);
   }
 
   Future<Locale> getLocale() async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    String languageCode = _prefs.getString(LAGUAGE_CODE) ?? 'en';
+    final SharedPreferences _prefs = await SharedPreferences.getInstance();
+    final String languageCode = _prefs.getString(constLanguageCode) ?? 'en';
     return _locale(languageCode);
   }
 

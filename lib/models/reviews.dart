@@ -1,10 +1,10 @@
 class ReviewsModel {
-  static const MESSAGE = 'message';
-  static const SENT = 'sent';
-  static const UID = 'uid';
-  static const MESSAGEID = 'messageId';
-  static const AVATAR = 'avatar';
-  static const TRIED = 'tried';
+  static const constMessage = 'message';
+  static const constSent = 'sent';
+  static const constUid = 'uid';
+  static const constMessageId = 'messageId';
+  static const constAvatar = 'avatar';
+  static const constTried = 'tried';
   String message;
   String messageId;
   String sent;
@@ -18,23 +18,25 @@ class ReviewsModel {
       this.uid,
       this.avatar,
       this.tried});
-  fromSnapshot({Map snapshot, String keyIndex}) {
-    message = snapshot[MESSAGE];
-    messageId = snapshot[MESSAGEID];
-    sent = snapshot[SENT];
-    uid = snapshot[UID];
-    avatar = snapshot[AVATAR];
-    tried = snapshot[TRIED];
+  ReviewsModel.fromSnapshot({
+    Map<String, String> snapshot,
+  }) {
+    message = snapshot[constMessage];
+    messageId = snapshot[constMessageId];
+    sent = snapshot[constSent];
+    uid = snapshot[constUid];
+    avatar = snapshot[constAvatar];
+    tried = snapshot[constTried];
   }
 
   Map<dynamic, dynamic> toMap() {
     return <dynamic, dynamic>{
-      MESSAGE: message,
-      MESSAGEID: messageId,
-      SENT: sent,
-      UID: uid,
-      AVATAR: avatar,
-      TRIED: tried,
+      constMessage: message,
+      constMessageId: messageId,
+      constSent: sent,
+      constUid: uid,
+      constAvatar: avatar,
+      constTried: tried,
     };
   }
 }

@@ -7,12 +7,12 @@ import 'package:myxmi/widgets/food_subcategories.dart';
 import 'package:myxmi/widgets/products_list.dart';
 import 'package:myxmi/widgets/save_recipe.dart';
 import 'package:myxmi/widgets/vape_subcategories.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../main.dart';
 import '../providers/recipe.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'add_product.dart';
-import 'recipe_instructions.dart';
 import 'recipe_image.dart';
+import 'recipe_instructions.dart';
 
 TextEditingController _titleCtrl = TextEditingController();
 TextEditingController _durationCtrl = TextEditingController();
@@ -23,19 +23,20 @@ List steps = [];
 
 // ignore: must_be_immutable
 class AddRecipe extends HookWidget {
+  @override
   Widget build(BuildContext context) {
     final _recipe = useProvider(recipeProvider);
     final _user = useProvider(userProvider);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
             _recipe.unhide();
             Navigator.of(context).pop();
           },
         ),
-        title: Text('${'addRecipe'.tr()}'),
+        title: Text('addRecipe'.tr()),
         actions: [
           SaveButton(),
         ],
@@ -46,7 +47,7 @@ class AddRecipe extends HookWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Container(
-                padding: EdgeInsets.only(left: 10, right: 10),
+                padding: const EdgeInsets.only(left: 10, right: 10),
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(
@@ -58,10 +59,10 @@ class AddRecipe extends HookWidget {
                   ),
                 ),
                 child: Text('details'.tr().toUpperCase(),
-                    style: TextStyle(fontWeight: FontWeight.bold)),
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
               ),
               Container(
-                padding: EdgeInsets.only(left: 10, right: 10),
+                padding: const EdgeInsets.only(left: 10, right: 10),
                 decoration: BoxDecoration(
                   border: Border(
                       bottom: BorderSide(
@@ -72,10 +73,10 @@ class AddRecipe extends HookWidget {
                   )),
                 ),
                 child: Text('instructions'.tr().toUpperCase(),
-                    style: TextStyle(fontWeight: FontWeight.bold)),
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
               ),
               Container(
-                padding: EdgeInsets.only(left: 10, right: 10),
+                padding: const EdgeInsets.only(left: 10, right: 10),
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(
@@ -87,7 +88,7 @@ class AddRecipe extends HookWidget {
                   ),
                 ),
                 child: Text('image'.tr().toUpperCase(),
-                    style: TextStyle(fontWeight: FontWeight.bold)),
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
               ),
             ],
           ),
@@ -95,14 +96,12 @@ class AddRecipe extends HookWidget {
             child: PageView(
               controller: PageController(
                 initialPage: _recipe.pageIndex,
-                keepPage: true,
               ),
               onPageChanged: (index) {
                 _recipe.changeView(index);
               },
               children: [
                 SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
                   child: Padding(
                     padding: const EdgeInsets.only(right: 10.0),
                     child: Column(
@@ -123,7 +122,7 @@ class AddRecipe extends HookWidget {
                                         left: 10),
                                     child: Text(
                                       '± ${_recipe.estimatedWeight.toStringAsFixed(3)} g',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -151,49 +150,45 @@ class AddRecipe extends HookWidget {
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 4,
                         ),
-                        Container(
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text('${'difficulty'.tr()}: '),
-                                  Text(
-                                    _recipe.getDifficulty(),
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18),
-                                  )
-                                ],
-                              ),
-                              Slider(
-                                value: _recipe.difficultyValue,
-                                onChanged: (value) {
-                                  _recipe.changeDifficulty(
-                                      newDifficultyValue: value);
-                                  print("VALUE: $value");
-                                },
-                                activeColor: _recipe.difficultyValue == 0.0
-                                    ? Colors.green
-                                    : _recipe.difficultyValue == 0.5
-                                        ? Colors.yellow
-                                        : _recipe.difficultyValue == 1.0
-                                            ? Colors.red
-                                            : Colors.grey,
-                                max: 1.0,
-                                min: 0.0,
-                                divisions: 2,
-                                label: _recipe.details.difficulty,
-                                inactiveColor: Colors.grey,
-                              ),
-                            ],
-                          ),
+                        Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('${'difficulty'.tr()}: '),
+                                Text(
+                                  _recipe.getDifficulty(),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
+                                )
+                              ],
+                            ),
+                            Slider(
+                              value: _recipe.difficultyValue,
+                              onChanged: (value) {
+                                _recipe.changeDifficulty(
+                                    newDifficultyValue: value);
+                                debugPrint("VALUE: $value");
+                              },
+                              activeColor: _recipe.difficultyValue == 0.0
+                                  ? Colors.green
+                                  : _recipe.difficultyValue == 0.5
+                                      ? Colors.yellow
+                                      : _recipe.difficultyValue == 1.0
+                                          ? Colors.red
+                                          : Colors.grey,
+                              divisions: 2,
+                              label: _recipe.recipeModel.difficulty,
+                              inactiveColor: Colors.grey,
+                            ),
+                          ],
                         ),
                         Text('duration'.tr()),
-                        SizedBox(
+                        const SizedBox(
                           height: 4,
                         ),
                         Row(
@@ -213,7 +208,7 @@ class AddRecipe extends HookWidget {
                                         .requestFocus(FocusNode());
                                   },
                                   decoration: InputDecoration(
-                                    prefixIcon: Icon(Icons.timer),
+                                    prefixIcon: const Icon(Icons.timer),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(20),
                                     ),
@@ -225,7 +220,7 @@ class AddRecipe extends HookWidget {
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 4,
                         ),
                         Text('portions'.tr()),
@@ -247,7 +242,7 @@ class AddRecipe extends HookWidget {
                                   },
                                   decoration: InputDecoration(
                                     prefixIcon:
-                                        Icon(Icons.local_pizza_outlined),
+                                        const Icon(Icons.local_pizza_outlined),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(20),
                                     ),
@@ -258,10 +253,10 @@ class AddRecipe extends HookWidget {
                             ),
                           ],
                         ),
-                        SizedBox(
+                       const SizedBox(
                           height: 4,
                         ),
-                        Text('${'category'.tr()}'),
+                        Text('category'.tr()),
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
@@ -270,19 +265,21 @@ class AddRecipe extends HookWidget {
                                 RawMaterialButton(
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20)),
-                                  fillColor: _recipe.details.category == 'drink'
+                                  fillColor:
+                                      _recipe.recipeModel.category == 'drink'
                                       ? Colors.green
                                       : Theme.of(context).cardColor,
                                   onPressed: () {
                                     _recipe.changeCategory(
                                         newCategory: 'drink');
                                   },
-                                  child: Text('${'drink'.tr()}'),
+                                  child: Text('drink'.tr()),
                                 ),
                                 RawMaterialButton(
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20)),
-                                  fillColor: _recipe.details.category == 'food'
+                                  fillColor:
+                                      _recipe.recipeModel.category == 'food'
                                       ? Colors.green
                                       : Theme.of(context).cardColor,
                                   onPressed: () {
@@ -293,36 +290,38 @@ class AddRecipe extends HookWidget {
                                 RawMaterialButton(
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20)),
-                                  fillColor: _recipe.details.category == 'vape'
+                                  fillColor:
+                                      _recipe.recipeModel.category == 'vape'
                                       ? Colors.green
                                       : Theme.of(context).cardColor,
                                   onPressed: () {
                                     _recipe.changeCategory(newCategory: 'vape');
                                   },
-                                  child: Text('${'vape'.tr()}'),
+                                  child: Text('vape'.tr()),
                                 ),
                                 RawMaterialButton(
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20)),
-                                  fillColor: _recipe.details.category == 'other'
+                                  fillColor:
+                                      _recipe.recipeModel.category == 'other'
                                       ? Colors.green
                                       : Theme.of(context).cardColor,
                                   onPressed: () {
                                     _recipe.changeCategory(
                                         newCategory: 'other');
                                   },
-                                  child: Text('${'other'.tr()}'),
+                                  child: Text('other'.tr()),
                                 )
                               ]),
                         ),
-                        subCategory(category: _recipe.details.category),
+                        subCategory(category: _recipe.recipeModel.category),
                         ListTile(
                           title: Text(
                             'products'.tr(),
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           trailing: IconButton(
-                            icon: Icon(Icons.add),
+                            icon: const Icon(Icons.add),
                             onPressed: () => Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (_) => NewProduct(),
@@ -337,7 +336,7 @@ class AddRecipe extends HookWidget {
                             type: 'AddRecipe',
                             componentsFuture: FirebaseFirestore.instance
                                 .collection('Products')
-                                .doc('${_user.account.uid}')
+                                .doc(_user.account.uid)
                                 .get(),
                           ),
                         ),
@@ -358,29 +357,29 @@ class AddRecipe extends HookWidget {
   Widget subCategory({String category}) {
     Widget _subCategory;
     switch (category) {
-      case ('food'):
+      case 'food':
         _subCategory = Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('${'subCategory'.tr()}'),
+            Text('subCategory'.tr()),
             FoodSubCategories(),
           ],
         );
         return _subCategory;
-      case ('drink'):
+      case 'drink':
         _subCategory = Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('${'subCategory'.tr()}'),
+            Text('subCategory'.tr()),
             DrinksSubCategories(),
           ],
         );
         return _subCategory;
-      case ('vape'):
+      case 'vape':
         _subCategory = Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('${'subCategory'.tr()}'),
+            Text('subCategory'.tr()),
             VapeSubCategories(),
           ],
         );

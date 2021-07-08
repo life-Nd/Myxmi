@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:myxmi/models/recipes.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:myxmi/models/recipe.dart';
 
 class RecipeTile extends HookWidget {
-  const RecipeTile({
-    Key key,
-    @required this.recipes,
-    @required this.type
-  }) : super(key: key);
-  final RecipesModel recipes;
+  final RecipeModel recipe;
   final String type;
+  const RecipeTile({@required this.recipe, @required this.type});
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +15,8 @@ class RecipeTile extends HookWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          '${recipes.title}',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+          recipe.title,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
         ),
         Divider(
           color: Theme.of(context).appBarTheme.titleTextStyle.color,
@@ -30,8 +26,8 @@ class RecipeTile extends HookWidget {
           children: [
             Text('${'ingredients'.tr()}: '),
             Text(
-              '${recipes.ingredientsCount}',
-              style: TextStyle(fontWeight: FontWeight.w700),
+              recipe.ingredientsCount,
+              style: const TextStyle(fontWeight: FontWeight.w700),
             ),
           ],
         ),
@@ -39,25 +35,26 @@ class RecipeTile extends HookWidget {
           children: [
             Text('${'steps'.tr()}: '),
             Text(
-              '${recipes.stepsCount}',
-              style: TextStyle(fontWeight: FontWeight.w700),
+              recipe.stepsCount,
+              style: const TextStyle(fontWeight: FontWeight.w700),
             ),
-            Spacer(),
-            type == 'All'
-                ? Row(
-                    children: [
-                      Icon(
-                        Icons.comment,
-                        color: Colors.blue,
-                        size: 15,
-                      ),
-                      Text(
-                        '${recipes.reviewsCount}',
-                        style: TextStyle(fontSize: 17),
-                      )
-                    ],
+            const Spacer(),
+            if (type == 'All')
+              Row(
+                children: [
+                  const Icon(
+                    Icons.comment,
+                    color: Colors.blue,
+                    size: 15,
+                  ),
+                  Text(
+                    recipe.reviewsCount,
+                    style: const TextStyle(fontSize: 17),
                   )
-                : Container()
+                ],
+              )
+            else
+              Container()
           ],
         ),
       ],

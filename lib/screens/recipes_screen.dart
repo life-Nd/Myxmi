@@ -7,65 +7,66 @@ class RecipesScreen extends StatefulWidget {
   final String legend;
   final String uid;
   final String searchText;
-  RecipesScreen({this.legend, this.uid, this.searchText});
-  createState() => RecipesScreenState();
+  const RecipesScreen({this.legend, this.uid, this.searchText});
+  @override
+  State<RecipesScreen> createState() => RecipesScreenState();
 }
 
 class RecipesScreenState extends State<RecipesScreen> {
-  Future _future;
+  Stream<QuerySnapshot> _stream;
   Widget futureBuilder;
+
   @override
   void initState() {
-    getFuture();
+    getStream();
 
     super.initState();
   }
 
-  Future getFuture() {
-    String _legend = widget.legend;
-    print('LEGEND: $_legend');
+  Stream getStream() {
+    final String _legend = widget.legend;
     switch (_legend) {
-      case ('All'):
-        _future = FirebaseFirestore.instance
+      case 'All':
+        _stream = FirebaseFirestore.instance
             .collection('Recipes')
-            .where('category', isEqualTo: '$_legend')
-            .get();
-        return _future;
-      case ('MyRecipes'):
-        _future = FirebaseFirestore.instance
+            .where('category', isEqualTo: _legend)
+            .snapshots();
+        return _stream;
+      case 'MyRecipes':
+        _stream = FirebaseFirestore.instance
             .collection('Recipes')
-            .where('uid', isEqualTo: '${widget.uid}')
-            .get();
-        return _future;
-      case ('Searching'):
-        _future = FirebaseFirestore.instance
+            .where('uid', isEqualTo: widget.uid)
+            .snapshots();
+        return _stream;
+      case 'Searching':
+        _stream = FirebaseFirestore.instance
             .collection('Recipes')
-            .where('title', isEqualTo: '${widget.searchText}')
-            .get();
-        return _future;
+            .where('title', isEqualTo: widget.searchText)
+            .snapshots();
+        return _stream;
       default:
-        _future = FirebaseFirestore.instance
+        _stream = FirebaseFirestore.instance
             .collection('Recipes')
-            .where('sub_category', isEqualTo: '$_legend')
-            .get();
-        return _future;
+            .where('sub_category', isEqualTo: _legend)
+            .snapshots();
+        return _stream;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _future,
-      builder: (_, AsyncSnapshot snapshot) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: _stream,
+      builder: (_, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
           return Text(
             'somethingWentWrong'.tr(),
-            style: TextStyle(color: Colors.white),
+            style: const TextStyle(color: Colors.white),
           );
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Container(
-            alignment: Alignment.center,
+          debugPrint('Loading....');
+          return Center(
             child: Text(
               "${'loading'.tr()}...",
             ),
@@ -78,9 +79,9 @@ class RecipesScreenState extends State<RecipesScreen> {
             : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        bottom: 20.0, left: 40, right: 40.0),
+                  const Padding(
+                    padding:
+                        EdgeInsets.only(bottom: 20.0, left: 40, right: 40.0),
                     child: LinearProgressIndicator(
                       color: Colors.white,
                       backgroundColor: Colors.black,

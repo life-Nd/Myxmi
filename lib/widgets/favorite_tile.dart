@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class FavoriteTile extends HookWidget {
-  FavoriteTile({
+  const FavoriteTile({
     Key key,
     @required this.indexData,
     @required this.index,

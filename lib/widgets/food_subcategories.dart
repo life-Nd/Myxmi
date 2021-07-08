@@ -5,6 +5,7 @@ import 'package:myxmi/screens/add_recipe.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class FoodSubCategories extends HookWidget {
+  @override
   Widget build(BuildContext context) {
     final _recipe = useProvider(recipeProvider);
     return SingleChildScrollView(
@@ -13,78 +14,77 @@ class FoodSubCategories extends HookWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           RawMaterialButton(
-            child: Text('breakfast'.tr()),
             onPressed: () {
               _recipe.changeSubCategory(newSubCategory: 'breakfast');
             },
-            fillColor: _recipe.details.subCategory == 'breakfast'
+            fillColor: _recipe.recipeModel.subCategory == 'breakfast'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            child: Text('breakfast'.tr()),
           ),
-          SizedBox(
+          const SizedBox(
             width: 4,
           ),
           RawMaterialButton(
-            child: Text('appetizer'.tr()),
             onPressed: () {
               _recipe.changeSubCategory(newSubCategory: 'appetizer');
             },
-            fillColor: _recipe.details.subCategory == 'appetizer'
+            fillColor: _recipe.recipeModel.subCategory == 'appetizer'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            child: Text('appetizer'.tr()),
           ),
-          SizedBox(
+          const SizedBox(
             width: 4,
           ),
           RawMaterialButton(
-            child: Text('salad'.tr()),
             onPressed: () {
               _recipe.changeSubCategory(newSubCategory: 'salad');
             },
-            fillColor: _recipe.details.subCategory == 'salad'
+            fillColor: _recipe.recipeModel.subCategory == 'salad'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            child: Text('salad'.tr()),
           ),
-          SizedBox(
+          const SizedBox(
             width: 4,
           ),
           RawMaterialButton(
-            child: Text('soup'.tr()),
             onPressed: () {
               _recipe.changeSubCategory(newSubCategory: 'soup');
             },
-            fillColor: _recipe.details.subCategory == 'soup'
+            fillColor: _recipe.recipeModel.subCategory == 'soup'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            child: Text('soup'.tr()),
           ),
-          SizedBox(
+          const SizedBox(
             width: 4,
           ),
           RawMaterialButton(
-            child: Text('dinner'.tr()),
             onPressed: () {
               _recipe.changeSubCategory(newSubCategory: 'dinner');
             },
-            fillColor: _recipe.details.subCategory == 'dinner'
+            fillColor: _recipe.recipeModel.subCategory == 'dinner'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            child: Text('dinner'.tr()),
           ),
-          SizedBox(
+          const SizedBox(
             width: 4,
           ),
           RawMaterialButton(
-            child: Text('dessert'.tr()),
-            fillColor: _recipe.details.subCategory == 'dessert'
+            fillColor: _recipe.recipeModel.subCategory == 'dessert'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             onPressed: () {
@@ -92,20 +92,21 @@ class FoodSubCategories extends HookWidget {
             },
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            child: Text('dessert'.tr()),
           ),
-          SizedBox(
+          const SizedBox(
             width: 4,
           ),
           RawMaterialButton(
-            child: Text('other'.tr()),
             onPressed: () {
               _recipe.changeSubCategory(newSubCategory: 'other');
             },
-            fillColor: _recipe.details.subCategory == 'other'
+            fillColor: _recipe.recipeModel.subCategory == 'other'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            child: Text('other'.tr()),
           )
         ],
       ),

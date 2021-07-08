@@ -7,8 +7,9 @@ import 'package:myxmi/app.dart';
 class EditProducts extends HookWidget {
   final Map data;
   final String indexKey;
-  EditProducts({@required this.data, @required this.indexKey});
+  const EditProducts({@required this.data, @required this.indexKey});
 
+  @override
   Widget build(BuildContext context) {
     final _prefs = useProvider(prefProvider);
     return Card(
@@ -24,16 +25,16 @@ class EditProducts extends HookWidget {
             Text('Mesured in: ${data['MesureType']}'),
             Text('Quantity in stock: ${data['Total']} ${data['MesureType']}'),
             Text(
-                'Expiry Date: ${DateFormat('EEE, MMM d, ' 'yy').format(DateTime.parse(data['Expiration']))}'),
+                'Expiry Date: ${DateFormat('EEE, MMM d, ' 'yy').format(DateTime.parse(data['Expiration'] as String))}'),
           ],
         ),
         trailing: IconButton(
             icon: _prefs?.cart != null && _prefs.cart.contains(data['Name'])
-                ? Icon(
+                ? const Icon(
                     Icons.shopping_cart,
                     color: Colors.green,
                   )
-                : Icon(
+                : const Icon(
                     Icons.add_shopping_cart,
                     color: Colors.grey,
                   ),

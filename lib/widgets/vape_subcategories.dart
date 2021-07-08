@@ -5,6 +5,7 @@ import 'package:myxmi/screens/add_recipe.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class VapeSubCategories extends HookWidget {
+  @override
   Widget build(BuildContext context) {
     final _recipe = useProvider(recipeProvider);
     return SingleChildScrollView(
@@ -13,57 +14,57 @@ class VapeSubCategories extends HookWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           RawMaterialButton(
-            child: Text('nicotine'.tr()),
             onPressed: () {
               _recipe.changeSubCategory(newSubCategory: 'nicotine');
             },
-            fillColor: _recipe.details.subCategory == 'nicotine'
+            fillColor: _recipe.recipeModel.subCategory == 'nicotine'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            child: Text('nicotine'.tr()),
           ),
-          SizedBox(
+          const SizedBox(
             width: 4,
           ),
           RawMaterialButton(
-            child: Text('thc'.tr()),
             onPressed: () {
               _recipe.changeSubCategory(newSubCategory: 'thc');
             },
-            fillColor: _recipe.details.subCategory == 'thc'
+            fillColor: _recipe.recipeModel.subCategory == 'thc'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            child: Text('thc'.tr()),
           ),
-          SizedBox(
+          const SizedBox(
             width: 4,
           ),
                RawMaterialButton(
-            child: Text('cbd'.tr()),
             onPressed: () {
               _recipe.changeSubCategory(newSubCategory: 'cbd');
             },
-            fillColor: _recipe.details.subCategory == 'cbd'
+            fillColor: _recipe.recipeModel.subCategory == 'cbd'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            child: Text('cbd'.tr()),
           ),
-          SizedBox(
+          const SizedBox(
             width: 4,
           ),
           RawMaterialButton(
-            child: Text('other'.tr()),
             onPressed: () {
               _recipe.changeSubCategory(newSubCategory: 'other');
             },
-            fillColor: _recipe.details.subCategory == 'other'
+            fillColor: _recipe.recipeModel.subCategory == 'other'
                 ? Colors.green
                 : Theme.of(context).cardColor,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            child: Text('other'.tr()),
           )
         ],
       ),

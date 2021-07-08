@@ -1,68 +1,58 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/models/recipes.dart';
-import 'package:myxmi/screens/add_recipe.dart';
-import 'package:myxmi/screens/selected_recipe.dart';
+import 'package:myxmi/models/recipe.dart';
+import 'add_favorite.dart';
 import 'recipe_tile.dart';
-import 'package:transparent_image/transparent_image.dart';
+import 'recipe_tile_image.dart';
 
 // TODO use SliverAppBar, InteractiveViewer
 
-class RecipeList extends HookWidget {
+class RecipeList extends StatefulWidget {
   final QuerySnapshot snapshot;
+  const RecipeList({@required this.snapshot});
+  @override
+  State<StatefulWidget> createState() => _RecipeListState();
+}
 
-  RecipeList({@required this.snapshot});
+class _RecipeListState extends State<RecipeList> {
+  @override
+  void initState() {
+    _recipes();
+    super.initState();
+  }
 
+  List<RecipeModel> _recipes() {
+    return widget.snapshot.docs.map((QueryDocumentSnapshot data) {
+      return RecipeModel.fromSnapshot(
+        snapshot: data.data() as Map<String, dynamic>,
+        keyIndex: data.id,
+      );
+    }).toList();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final _recipe = useProvider(recipeProvider);
-    Map _data;
-    List _keys = [];
     final Size _size = MediaQuery.of(context).size;
-    _data = snapshot.docs.asMap();
-    _keys = _data.keys?.toList();
-
-    return Container(
+    return SizedBox(
       height: _size.height / 1,
       width: _size.width / 1,
       child: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           childAspectRatio: 0.6,
           crossAxisCount: 2,
         ),
-        padding: EdgeInsets.all(1),
-        itemCount: _keys.length,
+        padding: const EdgeInsets.all(1),
+        itemCount: _recipes().length,
         itemBuilder: (_, int index) {
-          final RecipesModel _details = RecipesModel();
-          Map _indexData = snapshot.docs[index].data();
-          String _keyIndex = snapshot.docs[index].id;
-          _details.fromSnapshot(snapshot: _indexData, keyIndex: _keyIndex);
-          return GestureDetector(
-            onTap: () {
-              _recipe.details.fromSnapshot(
-                keyIndex: _keyIndex,
-                snapshot: _indexData,
-              );
-              _recipe.image = FadeInImage.memoryNetwork(
-                image: '${_indexData['image_url']}',
-                fit: BoxFit.fitWidth,
-                imageCacheWidth: 1000,
-                placeholder: kTransparentImage,
-              );
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => SelectedRecipe(),
-                ),
-              );
-            },
-            child: Container(
-              margin: EdgeInsets.all(5),
+          final RecipeModel _recipe = _recipes()[index];
+          debugPrint(_recipes()[index].toString());
+          return Consumer(builder: (context, watch, child) {
+            return Container(
+              margin: const EdgeInsets.all(5),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 gradient: LinearGradient(
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
                   colors: [
                     Theme.of(context).cardColor,
                     Theme.of(context).scaffoldBackgroundColor,
@@ -73,74 +63,38 @@ class RecipeList extends HookWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Expanded(
-                    child: Container(
+                    child: SizedBox(
                       width: _size.width / 2,
                       child: Stack(
                         children: [
-                          RecipeTileImage(
-                            keyIndex: _keyIndex,
-                            details: _details,
+                          Hero(
+                            tag: _recipe.recipeId,
+                            child: RecipeTileImage(
+                              recipe: _recipe,
+                            ),
                           ),
                           AddToFavoriteButton(
-                            details: _details,
+                            recipe: _recipe,
                           ),
                         ],
                       ),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 7.0, right: 10.0),
+                    padding: const EdgeInsets.only(
+                      left: 7.0,
+                      right: 10.0,
+                    ),
                     child: RecipeTile(
                       type: 'All',
-                      recipes: _details,
+                      recipe: _recipe,
                     ),
                   )
                 ],
               ),
-            ),
-          );
+            );
+          });
         },
-      ),
-    );
-  }
-}
-
-class RecipeTileImage extends StatelessWidget {
-  const RecipeTileImage({
-    Key key,
-    @required String keyIndex,
-    @required this.details,
-  })  : _keyIndex = keyIndex,
-        super(key: key);
-
-  final String _keyIndex;
-  final RecipesModel details;
-
-  @override
-  Widget build(BuildContext context) {
-    final Size _size = MediaQuery.of(context).size;
-    return ClipRRect(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(20),
-        topRight: Radius.circular(20),
-      ),
-      child: Hero(
-        tag: '$_keyIndex',
-        child: details.imageUrl != null && details.imageUrl != ''
-            ? FadeInImage.memoryNetwork(
-                image: '${details.imageUrl}',
-                fit: BoxFit.fitWidth,
-                imageCacheWidth: 1000,
-                placeholder: kTransparentImage,
-              )
-            : Image.asset(
-                'assets/${details.subCategory}.jpg',
-                fit: BoxFit.fitHeight,
-                height: _size.height,
-                cacheHeight: 1000,
-                color: Colors.grey.shade500,
-                colorBlendMode: BlendMode.color,
-              ),
       ),
     );
   }

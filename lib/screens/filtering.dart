@@ -5,14 +5,14 @@ import 'package:easy_localization/easy_localization.dart';
 import 'filtered.dart';
 
 class FilteringScreen extends HookWidget {
+  @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
-   
-          return Container(
+
+    return SizedBox(
       height: _size.height / 1.05,
       width: _size.height / 1.1,
       child: ListView(
-        scrollDirection: Axis.vertical,
         children: [
           _DrinksFilter(),
           _FoodsFilter(),
@@ -21,11 +21,11 @@ class FilteringScreen extends HookWidget {
         ],
       ),
     );
-        
   }
 }
 
 class _FoodsFilter extends HookWidget {
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,7 +34,7 @@ class _FoodsFilter extends HookWidget {
           padding: const EdgeInsets.all(8.0),
           child: Text(
             'food'.tr(),
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 17,
             ),
@@ -43,7 +43,7 @@ class _FoodsFilter extends HookWidget {
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
-            children: [
+            children: const [
               Filter(
                 'breakfast',
               ),
@@ -74,6 +74,7 @@ class _FoodsFilter extends HookWidget {
 }
 
 class _DrinksFilter extends HookWidget {
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,14 +82,14 @@ class _DrinksFilter extends HookWidget {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            '${'drinks'.tr()}',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+            'drinks'.tr(),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
           ),
         ),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
-            children: [
+            children: const [
               Filter(
                 'cocktail',
               ),
@@ -110,6 +111,7 @@ class _DrinksFilter extends HookWidget {
 }
 
 class _VapesFilter extends HookWidget {
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,7 +120,7 @@ class _VapesFilter extends HookWidget {
           padding: const EdgeInsets.all(8.0),
           child: Text(
             '${'vape'.tr()}s',
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 17,
             ),
@@ -127,7 +129,7 @@ class _VapesFilter extends HookWidget {
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
-            children: [
+            children: const [
               Filter(
                 'nicotine',
               ),
@@ -149,6 +151,7 @@ class _VapesFilter extends HookWidget {
 }
 
 class _DietsFilter extends HookWidget {
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,13 +160,13 @@ class _DietsFilter extends HookWidget {
           padding: const EdgeInsets.all(8.0),
           child: Text(
             'diet'.tr(),
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
           ),
         ),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
-            children: [
+            children: const [
               Filter(
                 'vegan',
               ),
@@ -184,13 +187,16 @@ class _DietsFilter extends HookWidget {
   }
 }
 
+@immutable
 class Filter extends StatefulWidget {
   final String legend;
-  Filter(this.legend);
-  createState() => _FilterState();
+  const Filter(this.legend);
+  @override
+  State<StatefulWidget> createState() => _FilterState();
 }
 
 class _FilterState extends State<Filter> {
+  @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
     return GestureDetector(
@@ -208,24 +214,23 @@ class _FilterState extends State<Filter> {
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
+            SizedBox(
               height: _size.height / 3,
               width: _size.width / 2,
               child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
                 child: Image.asset(
                   'assets/${widget.legend}.jpg',
                   cacheHeight: 1000,
                   cacheWidth: 1000,
                   fit: BoxFit.fitHeight,
                 ),
-                borderRadius: BorderRadius.circular(20),
               ),
             ),
             Text(
-              '${widget.legend}'.tr(),
-              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+              widget.legend.tr(),
+              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
             ),
           ],
         ),

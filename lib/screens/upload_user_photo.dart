@@ -8,6 +8,7 @@ import 'package:sn_progress_dialog/progress_dialog.dart';
 import '../app.dart';
 
 class UploadUserPhoto extends HookWidget {
+  @override
   Widget build(BuildContext context) {
     final _image = useProvider(imageProvider);
     final Size _size = MediaQuery.of(context).size;
@@ -18,7 +19,7 @@ class UploadUserPhoto extends HookWidget {
         title: Text('uploadImage'.tr()),
       ),
       body: Container(
-        decoration: BoxDecoration(shape: BoxShape.circle),
+        decoration: const BoxDecoration(shape: BoxShape.circle),
         child: InteractiveViewer(
           child: _image.imageSample != null
               ? Image.file(
@@ -30,14 +31,13 @@ class UploadUserPhoto extends HookWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.save),
           onPressed: () {
             pr.show(max: 100, msg: '${'uploadingImage'.tr()} ...');
             _image.addImageToDb(context: context).whenComplete(() async {
               _user.changeUserPhoto(newPhoto: _image.imageLink).whenComplete(
                 () {
                   _user.account.reload();
-                  Future.delayed(Duration(seconds: 1), () {
+                  Future.delayed(const Duration(seconds: 1), () {
                     pr.close();
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -48,7 +48,8 @@ class UploadUserPhoto extends HookWidget {
                 },
               );
             });
-          }),
+          },
+          child: const Icon(Icons.save)),
     );
   }
 }

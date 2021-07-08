@@ -11,41 +11,37 @@ double _stars = 0;
 TextEditingController _msgCtrl = TextEditingController();
 
 class AddReviews extends HookWidget {
+  @override
   Widget build(BuildContext context) {
     final _recipe = useProvider(recipeProvider);
     final _user = useProvider(userProvider);
     return Scaffold(
       appBar: AppBar(
-        title: Text('${'reviewOf'.tr()} ${_recipe.details.title}'),
+        title: Text('${'reviewOf'.tr()} ${_recipe.recipeModel.title}'),
       ),
       body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               'addScore'.tr(),
             ),
             Center(
               child: RatingBar.builder(
-                initialRating: 0,
                 minRating: 1,
-                direction: Axis.horizontal,
                 allowHalfRating: true,
-                itemCount: 5,
-                itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                itemBuilder: (context, _) => Icon(
+                itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                itemBuilder: (context, _) => const Icon(
                   Icons.star,
                   color: Colors.amber,
                 ),
                 onRatingUpdate: (rating) {
                   _stars = rating;
-                  print(rating);
+                  debugPrint('$rating');
                 },
               ),
             ),
             Container(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               child: TextField(
                 controller: _msgCtrl,
                 decoration: InputDecoration(
@@ -64,33 +60,29 @@ class AddReviews extends HookWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
               onPressed: () {
-                String _dbStars = _recipe.details.stars != null
-                    ? '${_recipe.details.stars}'
-                    : '0.0';
-                var _averageStars = (_stars + double.parse(_dbStars)) / 2;
-                int _reviewsCount =
-                    int.parse(_recipe?.details?.reviewsCount) + 1;
-                print('$_stars + $_dbStars = $_averageStars');
-                var _db = FirebaseFirestore.instance
+                final String _dbStars = _recipe.recipeModel.stars ?? '0.0';
+                final _averageStars = (_stars + double.parse(_dbStars)) / 2;
+                final int _reviewsCount =
+                    int.parse(_recipe?.recipeModel?.reviewsCount) + 1;
+                debugPrint('$_stars + $_dbStars = $_averageStars');
+                final _db = FirebaseFirestore.instance
                     .collection('Reviews')
-                    .doc('${_recipe.details.recipeId}');
+                    .doc(_recipe.recipeModel.recipeId);
                 _db.set(
                   {
                     '${DateTime.now().millisecondsSinceEpoch}': {
-                      'message': '${_msgCtrl.text}',
-                      'name': _user.account.displayName != null
-                          ? '${_user.account.displayName}'
-                          : '${_user.account.email}',
+                      'message': _msgCtrl.text,
+                      'name': _user.account.displayName ?? _user.account.email,
                       'stars': '$_stars',
-                      'uid': '${_user.account.uid}',
-                      'photo_url': '${_user.account.photoURL}'
+                      'uid': _user.account.uid,
+                      'photo_url': _user.account.photoURL
                     },
                   },
                   SetOptions(merge: true),
                 ).whenComplete(() {
                   FirebaseFirestore.instance
                       .collection('Recipes')
-                      .doc('${_recipe.details.recipeId}')
+                      .doc(_recipe.recipeModel.recipeId)
                       .update({
                     'stars': '$_averageStars',
                     'reviews_count': '$_reviewsCount',
