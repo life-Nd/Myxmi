@@ -178,10 +178,11 @@ class _AllCart extends StatelessWidget {
           ),
           child: RichText(
             text: TextSpan(
-              style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold),
+              style: TextStyle(
+                color: Theme.of(context).appBarTheme.titleTextStyle.color,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
               children: [
                 TextSpan(
                   text: 'all'.tr().toUpperCase(),
@@ -214,8 +215,8 @@ class _AllCart extends StatelessWidget {
           ),
           child: RichText(
             text: TextSpan(
-              style: const TextStyle(
-                  color: Colors.black,
+              style: TextStyle(
+                  color: Theme.of(context).appBarTheme.titleTextStyle.color,
                   fontSize: 16,
                   fontWeight: FontWeight.bold),
               children: [

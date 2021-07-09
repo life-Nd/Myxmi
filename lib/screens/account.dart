@@ -7,7 +7,6 @@ import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 import 'package:myxmi/providers/image.dart';
 import '../main.dart';
 
-
 import 'upload_user_photo.dart';
 
 final TextEditingController _nameCtrl = TextEditingController();
@@ -36,6 +35,7 @@ class AccountScreen extends HookWidget {
             children: [
               Center(
                 child: Stack(
+                  alignment: Alignment.bottomRight,
                   children: [
                     RawMaterialButton(
                       shape: const CircleBorder(),
@@ -79,7 +79,7 @@ class AccountScreen extends HookWidget {
                       ),
                     ),
                     FloatingActionButton(
-                      mini: true,
+                      // mini: false,
                       backgroundColor: Colors.deepOrange.shade300,
                       onPressed: () {
                         _image.chooseImageSource(
@@ -89,7 +89,9 @@ class AccountScreen extends HookWidget {
                           ),
                         );
                       },
-                      child: const Icon(Icons.camera_alt),
+                      child: const Icon(
+                        Icons.camera_alt,
+                      ),
                     ),
                   ],
                 ),
@@ -112,11 +114,11 @@ class AccountScreen extends HookWidget {
                   hintText: _user?.account?.displayName,
                   suffixIcon: _nameCtrl.text.isEmpty
                       ? IconButton(
-                         icon: const Icon(Icons.edit),
+                          icon: const Icon(Icons.edit),
                           onPressed: () {},
                         )
                       : IconButton(
-                         icon: const Icon(
+                          icon: const Icon(
                             Icons.send,
                             color: Colors.green,
                           ),

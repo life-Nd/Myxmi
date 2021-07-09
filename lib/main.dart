@@ -105,7 +105,7 @@ ThemeData lightTheme = ThemeData(
     elevation: 1,
     systemOverlayStyle: SystemUiOverlayStyle.dark,
   ),
-  cardColor: const Color(0xaaF5E0C3),
+  cardColor: const Color(0xFFF5F5F5),
   dividerColor: const Color(0x1f6D42CE),
   iconTheme: const IconThemeData(color: Colors.black),
   focusColor: const Color(0xDD000000),

@@ -73,6 +73,10 @@ class Home extends HookWidget {
                       ),
                     )
               : null,
+      body: _view.changeView(
+        uid: _user.account?.uid,
+        newView: viewIndex,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -114,10 +118,6 @@ class Home extends HookWidget {
           _view.doSearch(value: false);
           _favorites.showFilter(value: false);
         },
-      ),
-      body: _view.changeView(
-        uid: _user.account?.uid,
-        newView: viewIndex,
       ),
     );
   }

@@ -16,11 +16,8 @@ class Favorites extends HookWidget {
     final _fav = useProvider(favProvider);
     final _user = useProvider(userProvider);
     final Map _data = _fav.showFiltered ? _fav.filtered : _fav.allRecipes;
-    // final List _keys = _data.keys.toList();
     final Size _size = MediaQuery.of(context).size;
     final _change = useState<bool>(false);
-    // final _recipe = useProvider(recipeProvider);
-    // final _details = _recipe.recipeModel;
     final List<RecipeModel> _recipes = _data.entries.map((MapEntry data) {
       return RecipeModel.fromSnapshot(
         snapshot: data.value as Map<String, dynamic>,
@@ -75,7 +72,7 @@ class Favorites extends HookWidget {
             ),
             child: GestureDetector(
               onTap: () {
-              //   _recipe.recipeModel.fromSnapshot(
+                //   _recipe.recipeModel.fromSnapshot(
                 //     keyIndex: _keyIndex,
                 //     snapshot: _indexData as Map<String, dynamic>,
                 //   );
@@ -91,9 +88,8 @@ class Favorites extends HookWidget {
                 //         recipe: _recipe.recipeModel,
                 //       ),
                 //     ),
-              //   );
+                //   );
               },
-              
               child: Container(
                 height: _size.height / 2,
                 width: _size.width,

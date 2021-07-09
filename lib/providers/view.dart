@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:myxmi/screens/favorites.dart';
 import 'package:myxmi/screens/filtering.dart';
 import 'package:myxmi/screens/more.dart';
@@ -10,14 +11,20 @@ class ViewProvider extends ChangeNotifier {
   int view = 0;
   bool searching = false;
   String searchText = '';
-  Future future;
-  Future search;
+  // Future future;
+  Stream<QuerySnapshot> search;
 
   Widget changeView({@required int newView, String uid}) {
     view = newView;
     switch (view) {
       case 0:
-        return FilteringScreen();
+        return !searching
+            ? FilteringScreen()
+            : RecipesScreen(
+                legend: 'Searching',
+                uid: uid,
+                searchText: searchText,
+              );
       case 1:
         return uid != null
             ? !searching
@@ -27,7 +34,7 @@ class ViewProvider extends ChangeNotifier {
                   )
                 : RecipesScreen(
                     legend: 'Searching',
-                    uid: uid,
+                    uid: '',
                     searchText: searchText,
                   )
             : SignIn();
@@ -76,7 +83,7 @@ class ViewProvider extends ChangeNotifier {
 
 //   }
 
-  void changeSearch({@required Future newSearch}) {
+  void changeSearch({@required Stream<QuerySnapshot> newSearch}) {
     search = newSearch;
     notifyListeners();
   }
