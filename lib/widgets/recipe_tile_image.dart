@@ -18,11 +18,10 @@ class RecipeTileImage extends HookWidget {
     return InkWell(
       onTap: () {
         _recipeProvider.image = recipe.imageUrl != null
-            ? FadeInImage.memoryNetwork(
-                image: recipe.imageUrl,
+            ? Image.network(
+                recipe.imageUrl,
                 fit: BoxFit.fitWidth,
-                imageCacheWidth: 1000,
-                placeholder: kTransparentImage,
+                cacheWidth: 1000,
               )
             : Stack(
                 alignment: Alignment.center,
@@ -59,11 +58,10 @@ class RecipeTileImage extends HookWidget {
           topRight: Radius.circular(20),
         ),
         child: recipe.imageUrl != null
-            ? FadeInImage.memoryNetwork(
-                image: recipe.imageUrl,
+            ? Image.network(
+                recipe.imageUrl,
                 fit: BoxFit.fitWidth,
-                imageCacheWidth: 1000,
-                placeholder: kTransparentImage,
+                cacheWidth: 1000,
               )
             : Stack(
                 alignment: Alignment.center,

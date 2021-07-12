@@ -30,6 +30,26 @@
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-firestore.js"></script>
+  <script>
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    var firebaseConfig = {
+      apiKey: "AIzaSyBJyeuhPdrjr0ksHJpItUUMbLM6MGI2XmE",
+      authDomain: "myxmi-94982.firebaseapp.com",
+      projectId: "myxmi-94982",
+      storageBucket: "myxmi-94982.appspot.com",
+      messagingSenderId: "660865086897",
+      appId: "1:660865086897:web:69d231bdde4c7828ffb990",
+      measurementId: "G-QDCEFDYYRD"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+  </script>
+  
   <script>
     var serviceWorkerVersion = null;
     var scriptLoaded = false;

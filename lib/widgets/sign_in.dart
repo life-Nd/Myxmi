@@ -1,8 +1,8 @@
-import 'dart:io';
 import 'package:myxmi/services/auth.dart';
 import 'package:apple_sign_in/apple_sign_in.dart' as apple_sign_in;
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:universal_io/io.dart';
 
 // ignore: must_be_immutable
 class SignIn extends StatefulWidget {
@@ -72,31 +72,33 @@ class SignInState extends State<SignIn> {
             const SizedBox(
               height: 10,
             ),
-            StatefulBuilder(builder: (context, StateSetter setState) {
-              return Padding(
-                padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                child: TextField(
-                  focusNode: _passwordNode,
-                  controller: _passwordCtrl,
-                  obscureText: _obscure,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    hintText: 'enterPassword'.tr(),
-                    suffixIcon: IconButton(
-                      icon: _obscure
-                          ? const Icon(Icons.visibility_off)
-                          : const Icon(Icons.visibility),
-                      onPressed: () {
-                        _obscure = !_obscure;
-                        setState(() {});
-                      },
+            StatefulBuilder(
+              builder: (context, StateSetter setState) {
+                return Padding(
+                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                  child: TextField(
+                    focusNode: _passwordNode,
+                    controller: _passwordCtrl,
+                    obscureText: _obscure,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      hintText: 'enterPassword'.tr(),
+                      suffixIcon: IconButton(
+                        icon: _obscure
+                            ? const Icon(Icons.visibility_off)
+                            : const Icon(Icons.visibility),
+                        onPressed: () {
+                          _obscure = !_obscure;
+                          setState(() {});
+                        },
+                      ),
                     ),
                   ),
-                ),
-              );
-            }),
+                );
+              },
+            ),
             Container(
               padding: const EdgeInsets.only(left: 10),
               alignment: Alignment.centerLeft,
@@ -173,7 +175,7 @@ class SignInState extends State<SignIn> {
             SizedBox(
               height: _size.height / 20,
             ),
-            if (!Platform.isAndroid)
+            if (!Platform.isAndroid && Platform.isIOS)
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),

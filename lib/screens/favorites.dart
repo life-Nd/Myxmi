@@ -117,11 +117,10 @@ class Favorites extends HookWidget {
                         child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: _recipes[index].imageUrl != null
-                          ? FadeInImage.memoryNetwork(
-                              image: _recipes[index].imageUrl,
+                          ? Image.network(
+                              _recipes[index].imageUrl,
                               fit: BoxFit.fitWidth,
-                              imageCacheWidth: 1000,
-                              placeholder: kTransparentImage,
+                              cacheWidth: 1000,
                             )
                           : const Text('null'),
                     )),

@@ -4,7 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:time_machine/time_machine.dart';
+// import 'package:time_machine/time_machine.dart';
 import 'app.dart';
 
 import 'providers/user.dart';
@@ -14,7 +14,7 @@ final userProvider =
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await TimeMachine.initialize({'rootBundle': rootBundle});
+  // await TimeMachine.initialize({'rootBundle': rootBundle});
   await Firebase.initializeApp();
   await EasyLocalization.ensureInitialized();
   SystemChrome.setPreferredOrientations([

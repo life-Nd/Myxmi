@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:easy_localization/easy_localization.dart';
-
 import 'filtered.dart';
+
 
 class FilteringScreen extends HookWidget {
   @override
@@ -11,7 +11,7 @@ class FilteringScreen extends HookWidget {
 
     return SizedBox(
       height: _size.height / 1.05,
-      width: _size.height / 1.1,
+      width: _size.width / 1,
       child: ListView(
         children: [
           _DrinksFilter(),
@@ -224,7 +224,7 @@ class _FilterState extends State<Filter> {
                   'assets/${widget.legend}.jpg',
                   cacheHeight: 1000,
                   cacheWidth: 1000,
-                  fit: BoxFit.fitHeight,
+                  fit: BoxFit.fitWidth,
                 ),
               ),
             ),
