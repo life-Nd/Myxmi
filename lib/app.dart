@@ -4,9 +4,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter/foundation.dart' as foundation;
 import 'main.dart';
 import 'providers/prefs.dart';
 import 'screens/home.dart';
+import 'utils/hot_restart_bypass.dart';
 
 final firebaseAuth = Provider<FirebaseAuth>((ref) {
   return FirebaseAuth.instance;
@@ -40,6 +42,14 @@ class App extends HookWidget {
                       if (snapshot.hasData && snapshot.data.data() != null) {
                         final _data = snapshot.data.data();
                         _favProvider.allRecipes = _data as Map<String, dynamic>;
+                      }
+                      if (foundation.kDebugMode && foundation.kIsWeb) {
+                        //---------------------HOT RESTART BYPASS--------------------------
+                        return HotRestartByPassBuilder(
+                          destinationFragment: Home(),
+                          loginFragment: Home(),
+                        );
+                        //-----------------------------------------------------------------
                       }
                       return Home();
                     },

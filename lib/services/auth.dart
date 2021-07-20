@@ -4,13 +4,34 @@ import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:apple_sign_in/apple_sign_in.dart';
+import 'package:myxmi/providers/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 import '../app.dart';
 import 'platform_dialog.dart';
 import 'platform_exception_dialog.dart';
 
-class AuthHandler {
+class AuthServices {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  Stream<User> userStream() {
+    final Stream<User> _stream = _firebaseAuth.userChanges();
+    _firebaseAuth.setPersistence(Persistence.LOCAL);
+    return _stream;
+  }
+
+  Future getUser({UserProvider userProvider}) async {
+    // Initialize Firebase
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final bool authSignedIn = prefs.getBool('auth') ?? false;
+    final User user = _firebaseAuth.currentUser;
+    if (authSignedIn == true) {
+      if (user != null) {
+        userProvider.changeUser(newUser: user);
+      }
+    }
+  }
+  
 
   Future<User> newUserEmailPassword({
     String email,
@@ -19,7 +40,6 @@ class AuthHandler {
   }) async {
     final String _email = email.trim();
     final String _password = password.trim();
-
     final currentUser = await _firebaseAuth
         .createUserWithEmailAndPassword(
       email: _email,
@@ -44,13 +64,16 @@ class AuthHandler {
     final String _password = password.trim();
     final ProgressDialog pr = ProgressDialog(context: context);
     pr.show(max: 100, msg: 'loading'.tr());
+    _firebaseAuth.setPersistence(Persistence.LOCAL);
     try {
       await _firebaseAuth
           .signInWithEmailAndPassword(
         email: _email,
         password: _password,
       )
-          .whenComplete(() {
+          .whenComplete(() async {
+        final SharedPreferences prefs = await _prefs;
+        prefs.setBool('is_logged_in', true);
         pr.close();
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
@@ -417,6 +440,8 @@ class AuthHandler {
     pr.show(max: 100, msg: 'loading'.tr());
     try {
       await signOut(context);
+      final SharedPreferences prefs = await _prefs;
+      prefs.setBool('is_logged_in', false);
       pr.close();
     } on PlatformException catch (e) {
       await PlatformExceptionAlertDialog(

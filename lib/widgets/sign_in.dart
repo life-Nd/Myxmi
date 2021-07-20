@@ -1,10 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:myxmi/services/auth.dart';
 import 'package:apple_sign_in/apple_sign_in.dart' as apple_sign_in;
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:universal_io/io.dart';
 
-// ignore: must_be_immutable
 class SignIn extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => SignInState();
@@ -14,7 +14,8 @@ class SignInState extends State<SignIn> {
   bool _obscure = true;
   bool showPassword = false;
   bool showButton = false;
-  final AuthHandler _authHandler = AuthHandler();
+  bool _isEditingEmail = false;
+  final AuthServices _authServices = AuthServices();
   TextEditingController _emailCtrl;
   TextEditingController _passwordCtrl;
   FocusNode _passwordNode;
@@ -28,6 +29,19 @@ class SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
+    String _validateEmail(String value) {
+      value.trim();
+      if (_emailCtrl.text != null) {
+        if (value.isEmpty) {
+          return "Email can't be empty";
+        } else if (!value.contains(RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+"))) {
+          return 'Enter a correct email address';
+        }
+      }
+      return null;
+    }
+
     final _size = MediaQuery.of(context).size;
     return Container(
       height: _size.height,
@@ -59,6 +73,11 @@ class SignInState extends State<SignIn> {
               padding: const EdgeInsets.only(left: 10.0, right: 10.0),
               child: TextField(
                 controller: _emailCtrl,
+                onChanged: (value) {
+                  setState(() {
+                    _isEditingEmail = true;
+                  });
+                },
                 onSubmitted: (submitted) {
                   FocusScope.of(context).requestFocus(_passwordNode);
                 },
@@ -66,6 +85,8 @@ class SignInState extends State<SignIn> {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20)),
                   hintText: 'enterEmail'.tr(),
+                  errorText:
+                      _isEditingEmail ? _validateEmail(_emailCtrl.text) : null,
                 ),
               ),
             ),
@@ -104,7 +125,7 @@ class SignInState extends State<SignIn> {
               alignment: Alignment.centerLeft,
               child: RawMaterialButton(
                 onPressed: () {
-                  _authHandler.dialogResetLink(
+                  _authServices.dialogResetLink(
                       context, _emailCtrl.text, _passwordCtrl.text);
                 },
                 child: Text(
@@ -117,27 +138,28 @@ class SignInState extends State<SignIn> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 RawMaterialButton(
-                    fillColor: const Color.fromRGBO(64, 123, 255, 32),
-                    elevation: 15,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(30),
-                      ),
+                  fillColor: const Color.fromRGBO(64, 123, 255, 32),
+                  elevation: 15,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(30),
                     ),
-                    onPressed: () async {
-                      FocusScope.of(context).requestFocus(
-                        FocusNode(),
-                      );
-                      await _authHandler.signInWithEmailPassword(
-                        email: _emailCtrl.text,
-                        password: _passwordCtrl.text,
-                        context: context,
-                      );
-                    },
-                    child: Text(
-                      'signIn'.tr(),
-                      style: const TextStyle(color: Colors.white),
-                    )),
+                  ),
+                  onPressed: () async {
+                    FocusScope.of(context).requestFocus(
+                      FocusNode(),
+                    );
+                    await _authServices.signInWithEmailPassword(
+                      email: _emailCtrl.text,
+                      password: _passwordCtrl.text,
+                      context: context,
+                    );
+                  },
+                  child: Text(
+                    'signIn'.tr(),
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
               ],
             ),
             SizedBox(
@@ -153,7 +175,7 @@ class SignInState extends State<SignIn> {
                   ),
                   fillColor: Colors.white,
                   onPressed: () {
-                    AuthHandler.signInWithGoogle(context: context);
+                    AuthServices.signInWithGoogle(context: context);
                   },
                   child: Row(
                     children: [
@@ -201,8 +223,8 @@ class SignInState extends State<SignIn> {
 
   Future<void> _signInWithApple(BuildContext context) async {
     try {
-      final AuthHandler authHandler = AuthHandler();
-      final user = await authHandler.signInWithApple(
+      final AuthServices _authServices = AuthServices();
+      final user = await _authServices.signInWithApple(
           scopes: [apple_sign_in.Scope.email, apple_sign_in.Scope.fullName],
           context: context);
       debugPrint('uid: ${user.uid}');

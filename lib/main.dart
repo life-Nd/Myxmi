@@ -4,35 +4,58 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-// import 'package:time_machine/time_machine.dart';
+import 'package:myxmi/services/auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'app.dart';
-
 import 'providers/user.dart';
+
 
 final userProvider =
     ChangeNotifierProvider<UserProvider>((ref) => UserProvider());
-
+final AuthServices _authServices = AuthServices();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await TimeMachine.initialize({'rootBundle': rootBundle});
   await Firebase.initializeApp();
   await EasyLocalization.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
+  final Future<SharedPreferences> prefs = SharedPreferences.getInstance();
+  Future<bool> getLoginStatus() async {
+    final SharedPreferences _prefs = await prefs;
+    return _prefs.getBool('is_logged_in') ?? false;
+  }
+
   runApp(
     EasyLocalization(
       path: 'translations',
       supportedLocales: const [Locale('en', 'US'), Locale('fr', 'FR')],
+      //  TODO use saved language
       child: ProviderScope(
         child: Consumer(
           builder: (context, watch, child) {
             final _userProvider = watch(userProvider);
-            return StreamBuilder<User>(
-              stream: FirebaseAuth.instance.authStateChanges(),
-              builder: (context, AsyncSnapshot<User> snapUser) {
-                _userProvider.changeUser(newUser: snapUser.data);
-                return MaterialAppWidget();
+
+            return FutureBuilder<bool>(
+              future: getLoginStatus(),
+              builder: (context, AsyncSnapshot<bool> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return MaterialAppWidget(userProvider: _userProvider);
+                }
+                if (snapshot.data) {
+                  final User user = FirebaseAuth.instance.currentUser;
+                  _userProvider.changeUser(newUser: user);
+                  return MaterialAppWidget(userProvider: _userProvider);
+                } else {
+                  return StreamBuilder<User>(
+                    stream: _authServices.userStream(),
+                    builder: (context, AsyncSnapshot<User> snapUser) {
+                      _userProvider.changeUser(newUser: snapUser.data);
+                      // _authServices.getUser(userProvider: _userProvider);
+                      return MaterialAppWidget(userProvider: _userProvider);
+                    },
+                  );
+                }
               },
             );
           },
@@ -43,47 +66,57 @@ Future<void> main() async {
 }
 
 class MaterialAppWidget extends StatefulWidget {
+  final UserProvider userProvider;
+  const MaterialAppWidget({Key key, this.userProvider}) : super(key: key);
   @override
   State<StatefulWidget> createState() => MaterialAppWidgetState();
 }
 
 class MaterialAppWidgetState extends State<MaterialAppWidget> {
   @override
+  void initState() {
+    _authServices.getUser(userProvider: widget.userProvider);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Consumer(builder: (context, watch, child) {
-      final _pref = watch(prefProvider);
-      return MaterialApp(
-        localizationsDelegates: context.localizationDelegates,
-        supportedLocales: context.supportedLocales,
-        locale: context.locale,
-        theme: _pref.theme == null || _pref.theme == 'Light'
-            ? lightTheme
-            : darkTheme,
-        debugShowCheckedModeBanner: false,
-        home: App(),
-      );
-    });
+    return Consumer(
+      builder: (context, watch, child) {
+        final _pref = watch(prefProvider);
+        return MaterialApp(
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          locale: context.locale,
+          theme: _pref.theme == null || _pref.theme == 'Light'
+              ? lightTheme
+              : darkTheme,
+          debugShowCheckedModeBanner: false,
+          home: App(),
+        );
+      },
+    );
   }
 }
 
 ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
   visualDensity: const VisualDensity(vertical: 0.5, horizontal: 0.5),
-  primarySwatch: const MaterialColor(
-    0xFFF5E0C3,
-    <int, Color>{
-      50: Color(0x1aF5E0C3),
-      100: Color(0xa1F5E0C3),
-      200: Color(0xaaF5E0C3),
-      300: Color(0xafF5E0C3),
-      400: Color(0xffF5E0C3),
-      500: Color(0xffEDD5B3),
-      600: Color(0xffDEC29B),
-      700: Color(0xffC9A87C),
-      800: Color(0xffB28E5E),
-      900: Color(0xff936F3E)
-    },
-  ),
+  // primarySwatch: const MaterialColor(
+  //   0xFFF5E0C3,
+  //   <int, Color>{
+  //     50: Color(0x1aF5E0C3),
+  //     100: Color(0xaaa5E0C3),
+  //     200: Color(0xaaF5E0C3),
+  //     300: Color(0xafF5E0C3),
+  //     400: Color(0xffF5E0C3),
+  //     500: Color(0xffEDD5B3),
+  //     600: Color(0xffDEC29B),
+  //     700: Color(0xffC9A87C),
+  //     800: Color(0xffB28E5E),
+  //     900: Color(0xff936F3E)
+  //   },
+  // ),
   primaryColor: Colors.white,
   primaryColorBrightness: Brightness.light,
   primaryColorLight: Colors.grey.shade100,

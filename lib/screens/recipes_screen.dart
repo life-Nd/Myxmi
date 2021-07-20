@@ -17,11 +17,10 @@ class RecipesScreen extends StatefulWidget {
 class RecipesScreenState extends State<RecipesScreen> {
   Stream<QuerySnapshot> _stream;
   Widget futureBuilder;
-
+  
   @override
   void initState() {
     getStream();
-
     super.initState();
   }
 

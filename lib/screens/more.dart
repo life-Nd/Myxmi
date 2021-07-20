@@ -88,7 +88,7 @@ class MoreView extends HookWidget {
           fillColor: Colors.red,
           onPressed: () {
             _view.view = 0;
-            AuthHandler().confirmSignOut(context);
+            AuthServices().confirmSignOut(context);
           },
           child: Text(
             'logout'.tr(),

@@ -22,7 +22,7 @@ class SaveButton extends HookWidget {
         Icons.save,
         color: Colors.green,
       ),
-      onPressed: _recipe.recipeModel.title.isNotEmpty
+      onPressed: _recipe.recipeModel.title != null 
           ? () async {
               String _key;
 

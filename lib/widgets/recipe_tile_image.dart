@@ -4,7 +4,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/recipe.dart';
 import 'package:myxmi/screens/add_recipe.dart';
 import 'package:myxmi/screens/selected_recipe.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class RecipeTileImage extends HookWidget {
   final RecipeModel recipe;
@@ -34,6 +33,7 @@ class RecipeTileImage extends HookWidget {
                       height: _size.height,
                       width: _size.width,
                       cacheWidth: 1000,
+                      cacheHeight: 1000,
                       colorBlendMode: BlendMode.color,
                     ),
                   ),
@@ -46,9 +46,7 @@ class RecipeTileImage extends HookWidget {
         _recipeProvider.recipeModel = recipe;
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (_) => SelectedRecipe(
-                // recipe: _recipe,
-                ),
+            builder: (_) => SelectedRecipe(),
           ),
         );
       },

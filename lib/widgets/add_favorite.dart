@@ -31,8 +31,13 @@ class AddFavoriteButton extends HookWidget {
           children: [
             if (_user.account?.uid == null)
               IconButton(
-                icon: const Icon(
-                  Icons.favorite_border,
+                icon: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.white,
+                  ),
+                  padding: const EdgeInsets.all(4),
+                  child: const Icon(Icons.favorite_border, color: Colors.black),
                 ),
                 onPressed: () {
                   _view.view = 2;
@@ -46,10 +51,16 @@ class AddFavoriteButton extends HookWidget {
             else
               !_fav.allRecipes.keys.contains(recipe.recipeId)
                   ? IconButton(
-                      icon: const Icon(
-                        Icons.favorite_border,
-                        color: Colors.red,
-                        size: 40,
+                      icon: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white,
+                        ),
+                        padding: const EdgeInsets.all(4),
+                        child: const Icon(
+                          Icons.favorite_border,
+                          color: Colors.red,
+                        ),
                       ),
                       onPressed: () {
                         final Map<String, dynamic> _data = {};
@@ -69,10 +80,16 @@ class AddFavoriteButton extends HookWidget {
                       },
                     )
                   : IconButton(
-                      icon: const Icon(
-                        Icons.favorite_outlined,
-                        size: 40,
-                        color: Colors.red,
+                      icon: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white,
+                        ),
+                        padding: const EdgeInsets.all(4),
+                        child: const Icon(
+                          Icons.favorite_outlined,
+                          color: Colors.red,
+                        ),
                       ),
                       onPressed: () {
                         FirebaseFirestore.instance
@@ -84,10 +101,17 @@ class AddFavoriteButton extends HookWidget {
                       },
                     ),
             IconButton(
-              icon: Icon(
-                Platform.isIOS
-                    ? Icons.ios_share_outlined
-                    : Icons.share_outlined,
+              icon: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.white,
+                ),
+                padding: const EdgeInsets.all(4),
+                child: Icon(
+                    Platform.isIOS
+                        ? Icons.ios_share_outlined
+                        : Icons.share_outlined,
+                      color: Colors.black),
               ),
               onPressed: () {},
             ),

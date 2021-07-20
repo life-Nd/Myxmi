@@ -2,11 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/recipe.dart';
+import 'package:flutter/foundation.dart';
 import 'add_favorite.dart';
 import 'recipe_tile.dart';
 import 'recipe_tile_image.dart';
-
-// TODO use SliverAppBar, InteractiveViewer
 
 class RecipeList extends StatefulWidget {
   final QuerySnapshot snapshot;
@@ -40,7 +39,7 @@ class _RecipeListState extends State<RecipeList> {
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           childAspectRatio: 0.6,
-          crossAxisCount: 2,
+          crossAxisCount: kIsWeb ? 4 : 2,
         ),
         padding: const EdgeInsets.all(1),
         itemCount: _recipes().length,

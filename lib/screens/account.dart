@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -67,7 +68,7 @@ class AccountScreen extends HookWidget {
                       child: Hero(
                         tag: _user?.account?.photoURL,
                         child: CircleAvatar(
-                          radius: _size.width / 5,
+                          radius: kIsWeb ? _size.width / 10 : _size.width / 5,
                           foregroundImage: NetworkImage(
                             _user.account.photoURL,
                           ),
@@ -127,7 +128,7 @@ class AccountScreen extends HookWidget {
                             _nameNode.canRequestFocus = false;
                             pr.show(max: 100, msg: 'loading'.tr());
                             _user.changeUsername(newName: _nameCtrl.text);
-                            // AuthHandler().reload();
+                            // AuthServices().reload();
                             Future.delayed(const Duration(seconds: 2), () {
                               pr.close();
                             });
