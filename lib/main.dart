@@ -35,7 +35,6 @@ Future<void> main() async {
         child: Consumer(
           builder: (context, watch, child) {
             final _userProvider = watch(userProvider);
-
             return FutureBuilder<bool>(
               future: getLoginStatus(),
               builder: (context, AsyncSnapshot<bool> snapshot) {
@@ -51,7 +50,6 @@ Future<void> main() async {
                     stream: _authServices.userStream(),
                     builder: (context, AsyncSnapshot<User> snapUser) {
                       _userProvider.changeUser(newUser: snapUser.data);
-                      // _authServices.getUser(userProvider: _userProvider);
                       return MaterialAppWidget(userProvider: _userProvider);
                     },
                   );
