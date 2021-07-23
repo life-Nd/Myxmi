@@ -31,8 +31,8 @@ class _FilterState extends State<Filter> {
         child: Column(
           children: [
             SizedBox(
-              height: _size.height / 3,
-              width: kIsWeb ? _size.width / 4 : _size.height / 3,
+              height: kIsWeb ? _size.height / 3 : _size.height / 3.7,
+              width: kIsWeb ? _size.width / 4 : _size.width / 1.8,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: Image(

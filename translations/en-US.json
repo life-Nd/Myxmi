@@ -215,7 +215,9 @@
    "phone":"Phone",
    "uploadingImage":"Uploading image",
    "uploadImage":"Upload an image",
-   "noPhone":"No phone"
+   "noPhone":"No phone",
+   "unknownErrorOccured":"An unkown error occured."
+   
 
 
 }

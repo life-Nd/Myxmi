@@ -81,15 +81,21 @@ class PreferencesProvider extends ChangeNotifier {
     return cart = prefs.getStringList('Items');
   }
 
-  Future readTheme() async {
+  Future _readTheme() async {
     final SharedPreferences prefs = await _prefs;
     return theme = prefs.getString('Theme');
   }
 
-  Future readLanguage() async {
+  Future _readLanguage() async {
     final SharedPreferences prefs = await _prefs;
     // language = ;
     return language = prefs.getString('Language');
+  }
+
+  Future readPrefs() {
+    return _readTheme().then(
+      (value) => _readLanguage(),
+    );
   }
 
   Locale _locale(String languageCode) {

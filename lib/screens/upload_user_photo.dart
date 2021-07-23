@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/main.dart';
 import 'package:myxmi/providers/image.dart';
 import 'package:sn_progress_dialog/progress_dialog.dart';
-import '../app.dart';
+import 'home.dart';
 
 class UploadUserPhoto extends HookWidget {
   @override
@@ -41,7 +41,8 @@ class UploadUserPhoto extends HookWidget {
                     pr.close();
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (_) => App(),
+                        //Changed this from path to App()
+                        builder: (_) => Home(),
                       ),
                     );
                   });

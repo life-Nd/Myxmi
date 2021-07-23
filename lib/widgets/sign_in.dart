@@ -1,9 +1,19 @@
 import 'package:flutter/foundation.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:myxmi/main.dart';
+import 'package:myxmi/screens/home.dart';
 import 'package:myxmi/services/auth.dart';
 import 'package:apple_sign_in/apple_sign_in.dart' as apple_sign_in;
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:universal_io/io.dart';
+import 'dialog_no_account_found.dart';
+import 'dialog_reset_password.dart';
+import 'dialog_unknown_error.dart';
+import 'dialog_wrong_password.dart';
+
+TextEditingController _emailCtrl;
+TextEditingController _passwordCtrl;
 
 class SignIn extends StatefulWidget {
   @override
@@ -11,13 +21,14 @@ class SignIn extends StatefulWidget {
 }
 
 class SignInState extends State<SignIn> {
+  final GlobalKey _containerKey = GlobalKey();
+
   bool _obscure = true;
   bool showPassword = false;
   bool showButton = false;
   bool _isEditingEmail = false;
   final AuthServices _authServices = AuthServices();
-  TextEditingController _emailCtrl;
-  TextEditingController _passwordCtrl;
+
   FocusNode _passwordNode;
   @override
   void initState() {
@@ -27,23 +38,24 @@ class SignInState extends State<SignIn> {
     super.initState();
   }
 
+  String _validateEmail(String value) {
+    value.trim();
+    if (_emailCtrl.text != null) {
+      if (value.isEmpty) {
+        return "Email can't be empty";
+      } else if (!value.contains(RegExp(
+          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+"))) {
+        return 'Enter a correct email address';
+      }
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
-    String _validateEmail(String value) {
-      value.trim();
-      if (_emailCtrl.text != null) {
-        if (value.isEmpty) {
-          return "Email can't be empty";
-        } else if (!value.contains(RegExp(
-            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+"))) {
-          return 'Enter a correct email address';
-        }
-      }
-      return null;
-    }
-
     final _size = MediaQuery.of(context).size;
     return Container(
+      key: _containerKey,
       height: _size.height,
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor,
@@ -125,8 +137,10 @@ class SignInState extends State<SignIn> {
               alignment: Alignment.centerLeft,
               child: RawMaterialButton(
                 onPressed: () {
-                  _authServices.dialogResetLink(
-                      context, _emailCtrl.text, _passwordCtrl.text);
+                  dialogResetPassword(
+                    context: context,
+                    email: _emailCtrl.text,
+                  );
                 },
                 child: Text(
                   'forgotPass'.tr(),
@@ -137,29 +151,62 @@ class SignInState extends State<SignIn> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                RawMaterialButton(
-                  fillColor: const Color.fromRGBO(64, 123, 255, 32),
-                  elevation: 15,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(30),
+                Consumer(builder: (context, watch, child) {
+                  final _view = watch(viewProvider);
+                  return RawMaterialButton(
+                    fillColor: const Color.fromRGBO(64, 123, 255, 32),
+                    elevation: 15,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(30),
+                      ),
                     ),
-                  ),
-                  onPressed: () async {
-                    FocusScope.of(context).requestFocus(
-                      FocusNode(),
-                    );
-                    await _authServices.signInWithEmailPassword(
-                      email: _emailCtrl.text,
-                      password: _passwordCtrl.text,
-                      context: context,
-                    );
-                  },
-                  child: Text(
-                    'signIn'.tr(),
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ),
+                    onPressed: () {
+                      FocusScope.of(context).requestFocus(
+                        FocusNode(),
+                      );
+                      _view.view = 0;
+                      _authServices
+                          .signInWithEmailPassword(
+                              email: _emailCtrl.text,
+                              password: _passwordCtrl.text,
+                              context: context)
+                          .whenComplete(
+                        () {
+                          debugPrint('Status value:${_authServices.status}');
+                          switch (_authServices.status) {
+                            case 'success':
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(builder: (_) => Root()),
+                                  (route) => false);
+                              break;
+                            case 'user-not-found':
+                              dialogNoAccountFound(
+                                context: context,
+                                email: _emailCtrl.text,
+                                password: _passwordCtrl.text,
+                                error: _authServices.error,
+                              );
+                              break;
+                            case 'wrong-password':
+                              dialogWrongPassword(
+                                context: context,
+                                email: _emailCtrl.text,
+                                error: _authServices.error,
+                              );
+                              break;
+                            default:
+                              dialogUnknownError(context: context);
+                          }
+                        },
+                      );
+                    },
+                    child: Text(
+                      'signIn'.tr(),
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  );
+                }),
               ],
             ),
             SizedBox(

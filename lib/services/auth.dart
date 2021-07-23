@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -6,283 +7,86 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:myxmi/providers/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sn_progress_dialog/sn_progress_dialog.dart';
-import '../app.dart';
+import 'package:sn_progress_dialog/progress_dialog.dart';
+import 'package:flutter/foundation.dart' as foundation;
+import '../main.dart';
 import 'platform_dialog.dart';
 import 'platform_exception_dialog.dart';
 
 class AuthServices {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  String status;
+  FirebaseAuthException error;
+
   Stream<User> userStream() {
-    final Stream<User> _stream = _firebaseAuth.userChanges();
-    _firebaseAuth.setPersistence(Persistence.LOCAL);
+    final Stream<User> _stream = firebaseAuth.userChanges();
     return _stream;
   }
 
   Future getUser({UserProvider userProvider}) async {
-    // Initialize Firebase
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final bool authSignedIn = prefs.getBool('auth') ?? false;
-    final User user = _firebaseAuth.currentUser;
+    final User user = firebaseAuth.currentUser;
     if (authSignedIn == true) {
       if (user != null) {
         userProvider.changeUser(newUser: user);
       }
     }
   }
-  
 
   Future<User> newUserEmailPassword({
+    @required BuildContext context,
     String email,
     String password,
-    BuildContext context,
   }) async {
     final String _email = email.trim();
     final String _password = password.trim();
-    final currentUser = await _firebaseAuth
-        .createUserWithEmailAndPassword(
-      email: _email,
-      password: _password,
-    )
+    final currentUser = await firebaseAuth
+        .createUserWithEmailAndPassword(email: _email, password: _password)
         .whenComplete(() async {
-      await signInWithEmailPassword(
-        email: _email,
-        password: _password,
-        context: context,
-      );
-
+      signInWithEmailPassword(
+          email: _email, password: _password, context: context);
       await sendEmail();
     });
     final User user = currentUser.user;
     return user;
   }
 
-  Future signInWithEmailPassword(
-      {String email, String password, BuildContext context}) async {
+  Future<dynamic> signInWithEmailPassword(
+      {@required BuildContext context, String email, String password}) async {
     final String _email = email.trim();
     final String _password = password.trim();
+    final SharedPreferences prefs = await _prefs;
     final ProgressDialog pr = ProgressDialog(context: context);
-    pr.show(max: 100, msg: 'loading'.tr());
-    _firebaseAuth.setPersistence(Persistence.LOCAL);
+    pr.show(max: 1000, msg: '${'loading'.tr()}...', barrierDismissible: true);
     try {
-      await _firebaseAuth
-          .signInWithEmailAndPassword(
-        email: _email,
-        password: _password,
-      )
+      await firebaseAuth
+          .signInWithEmailAndPassword(email: _email, password: _password)
           .whenComplete(() async {
-        final SharedPreferences prefs = await _prefs;
+        pr.close();
+        if (!foundation.kDebugMode && !foundation.kIsWeb) return;
         prefs.setBool('is_logged_in', true);
-        pr.close();
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (_) => App(),
-            ),
-            (route) => false);
+        status = 'success';
       });
-    } on PlatformException catch (error) {
+
+      return status;
+    } on FirebaseAuthException catch (_error) {
       debugPrint('----Error-----: $error----');
-      if (error.code != null && error?.code == 'user-not-found') {
-        pr.close();
-        dialogNoAccoundFound(context, error, _email, _password);
-      } else {
-        pr.close();
-        dialogWrongPassword(context, error, _email, email);
-      }
+      debugPrint('errorCode:$_error');
+      pr.close();
+      error = _error;
+      if (error?.code != null) status = error.code;
+      return status;
     }
   }
 
-  Future<dynamic> dialogNoAccoundFound(BuildContext context,
-      PlatformException error, String _email, String _password) {
-    return showDialog(
-      context: context,
-      builder: (_) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          insetPadding: const EdgeInsets.only(top: 40, bottom: 40),
-          title: Center(
-            child: Text(
-              'error'.tr(),
-              style: const TextStyle(color: Colors.red),
-            ),
-          ),
-          content: ListTile(
-            subtitle: Text(error.message.toString()),
-            title: Text(
-              'noAccountFound'.tr(),
-              style: const TextStyle(
-                fontWeight: FontWeight.w700,
-                fontSize: 17,
-              ),
-            ),
-          ),
-          actions: [
-            const _RetryButton(),
-            RawMaterialButton(
-              padding: const EdgeInsets.all(4),
-              elevation: 20,
-              fillColor: Colors.green,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              onPressed: () {
-                newUserEmailPassword(
-                  email: _email,
-                  password: _password,
-                  context: context,
-                );
-              },
-              child: Text(
-                'signUp'.tr(),
-                style: const TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-            )
-          ],
-        );
-      },
-    );
-  }
-
-  Future<dynamic> dialogWrongPassword(BuildContext context,
-      PlatformException error, String _email, String email) {
-    return showDialog(
-        context: context,
-        builder: (_) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            insetPadding: const EdgeInsets.only(top: 40, bottom: 40),
-            title: Center(
-              child: Text(
-                'error'.tr(),
-                style: const TextStyle(color: Colors.red),
-              ),
-            ),
-            content: ListTile(
-              title: Text(error?.message.toString()),
-              subtitle: RawMaterialButton(
-                onPressed: () {
-                  dialogResetLink(context, _email, email);
-                },
-                child: Text(
-                  'forgotPass'.tr(),
-                  style: const TextStyle(color: Colors.red),
-                ),
-              ),
-            ),
-            actions: const [_RetryButton()],
-          );
-        });
-  }
-
-  Future<dynamic> dialogResetLink(
-      BuildContext context, String _email, String email) {
-    return showDialog(
-      context: context,
-      builder: (_) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          insetPadding:
-              const EdgeInsets.only(top: 40, bottom: 40, left: 1, right: 1.0),
-          title: Text('sendResetLink'.tr()),
-          content: ListTile(
-            title: _email.isNotEmpty
-                ? Row(
-                    children: [
-                      Text('${'emailLabel'.tr()}: '),
-                      Expanded(
-                        child: Text(
-                          ' $_email',
-                          style: const TextStyle(
-                              fontSize: 17, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
-                  )
-                : Text(
-                    'invalidEmailEmpty'.tr(),
-                    style: const TextStyle(fontSize: 17, color: Colors.red),
-                  ),
-            subtitle: Text(
-              _email.isNotEmpty
-                  ? '1.${'sendResetLink'.tr()} \n 2.${'checkEmail'.tr()}'
-                  : '${'please'.tr()} ${'enterEmail'.tr().toLowerCase()}',
-            ),
-          ),
-          actions: [
-            if (_email.isNotEmpty)
-              RawMaterialButton(
-                onPressed: () {
-                  resetPassword(emailCtrl: _email);
-                  showDialog(
-                    context: context,
-                    builder: (_) {
-                      return AlertDialog(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        insetPadding:
-                            const EdgeInsets.only(top: 40, bottom: 40),
-                        content: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              'checkEmail'.tr(),
-                            ),
-                            const SizedBox(
-                              height: 100,
-                            ),
-                            const CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation(Colors.white),
-                              backgroundColor: Colors.green,
-                            ),
-                          ],
-                        ),
-                        actions: [
-                          RawMaterialButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Text(
-                              'close'.tr(),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                child: Text('Send'.tr()),
-              )
-            else
-              RawMaterialButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(
-                  'close'.tr(),
-                ),
-              ),
-          ],
-        );
-      },
-    );
-  }
-
   Future sendEmail() async {
-    return _firebaseAuth.currentUser.sendEmailVerification();
+    return firebaseAuth.currentUser.sendEmailVerification();
   }
 
   Future reload() async {
-    return _firebaseAuth.currentUser.reload();
+    return firebaseAuth.currentUser.reload();
   }
 
   static Future<User> signInWithGoogle({@required BuildContext context}) async {
@@ -303,11 +107,11 @@ class AuthServices {
         user = userCredential.user;
 
         debugPrint("USER: ${user.email}");
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (_) => App(),
-            ),
-            (route) => false);
+        // Navigator.of(context).pushAndRemoveUntil(
+        //     MaterialPageRoute(
+        //       builder: (_) => Root(),
+        //     ),
+        //     (route) => false);
       } on FirebaseAuthException catch (e) {
         if (e.code == 'account-exists-with-different-credential') {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -336,10 +140,8 @@ class AuthServices {
     return user;
   }
 
-  Future<User> signInWithApple({
-    List<Scope> scopes = const [],
-    BuildContext context,
-  }) async {
+  Future<User> signInWithApple(
+      {List<Scope> scopes = const [], BuildContext context}) async {
     User user;
     final result = await AppleSignIn.performRequests(
         [AppleIdRequest(requestedScopes: scopes)]);
@@ -373,11 +175,11 @@ class AuthServices {
 
           debugPrint("USER: ${user.email}");
           // _showLoading = false;
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (_) => App(),
-              ),
-              (route) => false);
+          // Navigator.of(context).pushAndRemoveUntil(
+          //     MaterialPageRoute(
+          //       builder: (_) => Root(),
+          //     ),
+          //     (route) => false);
         } on FirebaseAuthException catch (e) {
           if (e.code == 'account-exists-with-different-credential') {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -408,11 +210,11 @@ class AuthServices {
   }
 
   Future<dynamic> resetPassword({String emailCtrl}) async {
-    await _firebaseAuth.sendPasswordResetEmail(email: emailCtrl);
+    await firebaseAuth.sendPasswordResetEmail(email: emailCtrl);
   }
 
   Future<dynamic> signInAnonymously() {
-    return _firebaseAuth.signInAnonymously().then(
+    return firebaseAuth.signInAnonymously().then(
       (firebaseUser) {
         return firebaseUser.user;
       },
@@ -420,7 +222,7 @@ class AuthServices {
   }
 
   Future<dynamic> deleteUser() {
-    return _firebaseAuth.currentUser.delete();
+    return firebaseAuth.currentUser.delete();
   }
 
   Future<void> confirmSignOut(BuildContext context) async {
@@ -437,13 +239,20 @@ class AuthServices {
 
   Future<void> _signOut(BuildContext context) async {
     final ProgressDialog pr = ProgressDialog(context: context);
-    pr.show(max: 100, msg: 'loading'.tr());
+    pr.show(max: 10000, msg: '${'loading'.tr()}...', barrierDismissible: true);
     try {
-      await signOut(context);
-      final SharedPreferences prefs = await _prefs;
-      prefs.setBool('is_logged_in', false);
-      pr.close();
+      signOut(context).whenComplete(() async {
+        pr.close();
+        final SharedPreferences prefs = await _prefs;
+        prefs.setBool('is_logged_in', false);
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (_) => Root(),
+            ),
+            (route) => false);
+      });
     } on PlatformException catch (e) {
+      pr.close();
       await PlatformExceptionAlertDialog(
         title: 'logoutFailed'.tr(),
         exception: e,
@@ -459,14 +268,14 @@ class AuthServices {
       googleSignIn.currentUser.clearAuthCache();
       googleSignIn.signOut().then((google) {
         google.clearAuthCache();
-        _firebaseAuth.signOut().then(
+        firebaseAuth.signOut().then(
           (firebase) {
             debugPrint('Firebase of Google Signed-Out user');
           },
         );
       });
     } else {
-      _firebaseAuth.signOut().then(
+      firebaseAuth.signOut().then(
         (firebase) {
           debugPrint('Firebase Signed-Out user');
         },
@@ -481,29 +290,6 @@ class AuthServices {
       content: Text(
         content,
         style: const TextStyle(color: Colors.redAccent, letterSpacing: 0.5),
-      ),
-    );
-  }
-}
-
-class _RetryButton extends StatelessWidget {
-  const _RetryButton({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(20),
-        ),
-      ),
-      child: RawMaterialButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        child: Text('retry'.tr()),
       ),
     );
   }

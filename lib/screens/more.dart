@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rate_my_app/rate_my_app.dart';
+// import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 import '../services/auth.dart';
 import 'about.dart';
 import 'account.dart';
@@ -13,6 +14,7 @@ import 'support.dart';
 class MoreView extends HookWidget {
   @override
   Widget build(BuildContext context) {
+    // final ProgressDialog pr = ProgressDialog(context: context);
     final _view = useProvider(viewProvider);
     final RateMyApp rateMyApp = RateMyApp(
       minDays: 0, // Show rate popup on first day of install.
@@ -21,7 +23,7 @@ class MoreView extends HookWidget {
     );
     return Column(
       children: [
-       const Divider(),
+        const Divider(),
         ListTile(
           leading: const Icon(Icons.person),
           title: Text('profile'.tr()),
@@ -34,7 +36,7 @@ class MoreView extends HookWidget {
             );
           },
         ),
-       const Divider(),
+        const Divider(),
         ListTile(
           leading: const Icon(Icons.settings),
           title: Text('settings'.tr()),
@@ -47,7 +49,7 @@ class MoreView extends HookWidget {
             );
           },
         ),
-       const Divider(),
+        const Divider(),
         ListTile(
           leading: const Icon(Icons.rate_review),
           title: Text('rateMyxmi'.tr()),
@@ -56,7 +58,7 @@ class MoreView extends HookWidget {
             rateMyApp.showRateDialog(context);
           },
         ),
-       const Divider(),
+        const Divider(),
         ListTile(
           leading: const Icon(Icons.support),
           title: Text('support'.tr()),
@@ -67,7 +69,7 @@ class MoreView extends HookWidget {
             ));
           },
         ),
-       const Divider(),
+        const Divider(),
         ListTile(
           leading: const Icon(Icons.more_horiz),
           title: Text('about'.tr()),
@@ -80,13 +82,14 @@ class MoreView extends HookWidget {
             );
           },
         ),
-      const Divider(),
+        const Divider(),
         RawMaterialButton(
           padding: const EdgeInsets.all(8),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           fillColor: Colors.red,
           onPressed: () {
+            
             _view.view = 0;
             AuthServices().confirmSignOut(context);
           },

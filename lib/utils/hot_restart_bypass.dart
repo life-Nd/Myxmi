@@ -1,8 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../main.dart';
 
-class HotRestartByPassBuilder extends StatelessWidget {
+class HotRestartByPassBuilder extends HookWidget {
   final Widget destinationFragment;
   final Widget loginFragment;
   const HotRestartByPassBuilder({
@@ -14,14 +18,6 @@ class HotRestartByPassBuilder extends StatelessWidget {
   static final Future<SharedPreferences> prefs =
       SharedPreferences.getInstance();
 
-  ///Saves the Login State (true) for LoggedIn and (false) for LoggedOut
-  Future saveLoginState({bool isLoggedIn}) async {
-    //Ignore Operation if Not in DebugMode on Web
-    if (!foundation.kDebugMode && !foundation.kIsWeb) return;
-    final SharedPreferences _prefs = await prefs;
-    _prefs.setBool('is_logged_in', isLoggedIn);
-  }
-
   ///Gets the login status from SharedPreferences
   static Future<bool> getLoginStatus() async {
     final SharedPreferences _prefs = await prefs;
@@ -30,11 +26,14 @@ class HotRestartByPassBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _userProvider = useProvider(userProvider);
     return FutureBuilder<bool>(
       future: getLoginStatus(),
       builder: (context, AsyncSnapshot<bool> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data) {
+            _userProvider.changeUser(
+                newUser: FirebaseAuth?.instance?.currentUser);
             return destinationFragment;
           } else {
             return loginFragment;
@@ -46,26 +45,3 @@ class HotRestartByPassBuilder extends StatelessWidget {
     );
   }
 }
-
-
-// //Usage In StreamBuilder
-// StreamBuilder(
-//   stream: FirebaseAuth.instance.authStateChanges(),
-//   builder: (context, snapshot) {
-//       if (snapshot.hasData) {
-//         return HomePage();
-//       } else {
-//         //Only in Debug Mode & in Web
-//         if (Foundation.kDebugMode && Foundation.kIsWeb) {
-//           //---------------------HOT RESTART BYPASS--------------------------
-//           return HotRestartByPassBuilder(
-//             destinationFragment: HomePage(),
-//             loginFragment: LoginPage(),
-//           );
-//           //-----------------------------------------------------------------
-//         } else {
-//           return LoginPage();
-//         }
-//       }
-//     },
-// );

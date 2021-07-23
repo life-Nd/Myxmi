@@ -265,5 +265,6 @@
    "portions":"Portions",
    "uploadingImage":"Téléchargement de l'image",
    "uploadImage":"Télécharger une image",
-   "noNumber":"Pas de téléphone"
+   "noNumber":"Pas de téléphone",
+   "unknownErrorOccured":"Une erreur inconnue est arrivée"
 }
