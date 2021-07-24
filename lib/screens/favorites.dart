@@ -48,16 +48,19 @@ class Favorites extends HookWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     gradient: LinearGradient(
+                      begin: Alignment.center,
+                      end: Alignment.bottomCenter,
                       colors: [
                         Theme.of(context).cardColor,
-                        if (_recipes[index].difficulty == 'easy')
-                          Colors.yellow.shade300
-                        else
-                          _recipes[index].difficulty == 'medium'
-                              ? Colors.orange.shade300
-                              : _recipes[index].difficulty == 'hard'
-                                  ? Colors.red.shade300
-                                  : Colors.grey.shade300,
+                        Theme.of(context).scaffoldBackgroundColor,
+                        // if (_recipes[index].difficulty == 'easy')
+                        //   Colors.yellow.shade300
+                        // else
+                        //   _recipes[index].difficulty == 'medium'
+                        //       ? Colors.orange.shade300
+                        //       : _recipes[index].difficulty == 'hard'
+                        //           ? Colors.red.shade300
+                        //           : Colors.grey.shade300,
                       ],
                     ),
                   ),

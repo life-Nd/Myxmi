@@ -33,16 +33,15 @@ class SelectedRecipe extends HookWidget {
             end: Alignment.bottomCenter,
             colors: [
               Theme.of(context).cardColor,
-              Theme.of(context).cardColor,
-              Theme.of(context).cardColor,
-              if (_recipe.recipeModel.difficulty == 'easy')
-                Colors.yellow.shade400
-              else
-                _recipe.recipeModel.difficulty == 'medium'
-                    ? Colors.orange.shade400
-                    : _recipe.recipeModel.difficulty == 'hard'
-                        ? Colors.red.shade400
-                        : Colors.grey.shade400,
+              Theme.of(context).scaffoldBackgroundColor,
+              // if (_recipe.recipeModel.difficulty == 'easy')
+              //   Colors.yellow.shade400
+              // else
+              //   _recipe.recipeModel.difficulty == 'medium'
+              //       ? Colors.orange.shade400
+              //       : _recipe.recipeModel.difficulty == 'hard'
+              //           ? Colors.red.shade400
+              //           : Colors.grey.shade400,
             ],
           ),
         ),
