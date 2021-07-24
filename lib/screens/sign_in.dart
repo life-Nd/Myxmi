@@ -6,10 +6,10 @@ import 'package:apple_sign_in/apple_sign_in.dart' as apple_sign_in;
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:universal_io/io.dart';
-import 'dialog_no_account_found.dart';
-import 'dialog_reset_password.dart';
-import 'dialog_unknown_error.dart';
-import 'dialog_wrong_password.dart';
+import '../widgets/dialog_no_account_found.dart';
+import '../widgets/dialog_reset_password.dart';
+import '../widgets/dialog_unknown_error.dart';
+import '../widgets/dialog_wrong_password.dart';
 
 TextEditingController _emailCtrl;
 TextEditingController _passwordCtrl;
@@ -160,18 +160,20 @@ class SignInState extends State<SignIn> {
                         Radius.circular(30),
                       ),
                     ),
-                    onPressed: () async {
-                      _view.view = 0;
-                      await _authServices
+                    onPressed: ()  {
+
+                       _authServices
                           .signInWithEmailPassword(
                               email: _emailCtrl.text,
                               password: _passwordCtrl.text,
                               context: context)
-                          .whenComplete(
-                        () {
+                          .then(
+                        (value) {
+                          debugPrint('Value:$value');
                           debugPrint('Status value:${_authServices.status}');
                           switch (_authServices.status) {
                             case 'success':
+                              _view.view = 0;
                               break;
                             case 'user-not-found':
                               dialogNoAccountFound(

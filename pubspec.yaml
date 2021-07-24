@@ -37,6 +37,8 @@ dependencies:
     sdk: flutter
   flutter_hooks: ^0.17.0
   flutter_html: ^2.1.0
+  flutter_launcher_icons: ^0.9.0
+  flutter_native_splash: ^1.1.8
   flutter_rating_bar: ^4.0.0
   google_sign_in: ^5.0.1
   hooks_riverpod: ^0.14.0+4
@@ -50,9 +52,14 @@ dependencies:
   timetable: 
   transparent_image: ^2.0.0
   universal_io: ^2.0.4
-  
 
   
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/mix-icon.png"
+
   
 
 
@@ -75,8 +82,7 @@ flutter:
   assets:
     - assets/
     - translations/
-    # - packages/time_machine/data/cultures/cultures.bin
-    # - packages/time_machine/data/tzdb/tzdb.bin
+
  
 
   # An image asset can refer to one or more resolution-specific "variants", see

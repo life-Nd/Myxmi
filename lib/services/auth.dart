@@ -63,13 +63,13 @@ class AuthServices {
     try {
       await firebaseAuth
           .signInWithEmailAndPassword(email: _email, password: _password)
-          .whenComplete(() {
-        pr.close();
+          .whenComplete(()async {
+         pr.close();
         if (!foundation.kDebugMode && !foundation.kIsWeb) return;
         prefs.setBool('is_logged_in', true);
         status = 'success';
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (_) => Root()), (route) => false);
+         Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context1) => Root()), (route) => false);
       });
 
       return status;

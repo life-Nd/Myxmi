@@ -31,7 +31,7 @@ class Home extends HookWidget {
         'Searchable:$_searchable kIsWeb: $kIsWeb ${_searchable || kIsWeb}');
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: kIsWeb ? Size(_size.width, 200) : Size(_size.width, 60),
+        preferredSize: kIsWeb ? Size(_size.width, 200) : Size(_size.width, 100),
         child: SafeArea(
           child: Column(
             mainAxisSize: MainAxisSize.min,

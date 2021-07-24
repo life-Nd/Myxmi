@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:myxmi/widgets/diets_filter.dart';
 import 'package:myxmi/widgets/drinks_filter.dart';
 import 'package:myxmi/widgets/food_filters.dart';
-import 'package:myxmi/widgets/vapes_filter.dart';
 
-class FilteringScreen extends HookWidget {
+class FilteringScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
@@ -17,7 +15,7 @@ class FilteringScreen extends HookWidget {
           DrinksFilter(),
           FoodsFilter(),
           DietsFilter(),
-          VapesFilter(),
+          // VapesFilter(),
         ],
       ),
     );

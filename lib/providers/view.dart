@@ -4,7 +4,7 @@ import 'package:myxmi/screens/filtering.dart';
 import 'package:myxmi/screens/more.dart';
 import 'package:myxmi/screens/products.dart';
 import 'package:myxmi/screens/recipes_screen.dart';
-import 'package:myxmi/widgets/sign_in.dart';
+import 'package:myxmi/screens/sign_in.dart';
 import 'package:flutter/material.dart';
 
 class ViewProvider extends ChangeNotifier {

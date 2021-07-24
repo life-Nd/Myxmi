@@ -28,8 +28,10 @@ class App extends HookWidget {
                     .doc(_userProvider.account.uid)
                     .snapshots(),
                 builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                  debugPrint('UID: ${_userProvider.account.uid}');
                   if (snapshot.hasData && snapshot.data.data() != null) {
                     final _data = snapshot.data.data();
+                    debugPrint('DATA: $_data');
                     _favProvider.allRecipes = _data as Map<String, dynamic>;
                   }
                   return Home();

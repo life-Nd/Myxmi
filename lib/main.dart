@@ -108,6 +108,7 @@ Future<void> main() async {
             theme: _pref.theme == null || _pref.theme == 'Light'
                 ? lightTheme
                 : darkTheme,
+            darkTheme: darkTheme,
             debugShowCheckedModeBanner: false,
             home: Root(),
           );

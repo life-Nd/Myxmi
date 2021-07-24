@@ -25,7 +25,6 @@ class AddRecipe extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final _recipe = useProvider(recipeProvider);
-    final _user = useProvider(userProvider);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
