@@ -17,80 +17,77 @@ class SearchRecipes extends HookWidget {
     final _view = useProvider(viewProvider);
     final _change = useState<bool>(false);
     final _fav = useProvider(favProvider);
-    return ListTile(
-      dense: true,
-      title: TextField(
-        onTap: () {},
-        onChanged: (value) {
-          _view.searchText = value;
-        },
-        controller: _searchCtrl,
-        focusNode: _searchNode,
-        onEditingComplete: () {
-          _view.view == 2
-              ? _fav.filter(filter: _searchFilter, text: _searchCtrl.text)
-              : debugPrint('not favorite screen');
-          _view.doSearch(value: true);
-          // _view.searchRecipe(
-          //   filter: _searchFilter,
-          //   text: _searchCtrl.text,
-          //   uid: _user.account.uid,
-          //   fav: _fav,
-          // );
-          FocusScope.of(context).requestFocus(FocusNode());
-          Future.delayed(const Duration(seconds: 2), () {
-            _searchCtrl.clear();
-          });
-          _change.value = !_change.value;
-        },
-        onSubmitted: (submitted) {
-          _view.view == 2
-              ? _fav.filter(filter: _searchFilter, text: _searchCtrl.text)
-              : debugPrint('not favorite screen');
-          _view.doSearch(value: true);
-          // _view.searchRecipe(
-          //   filter: _searchFilter,
-          //   text: _searchCtrl.text,
-          //   uid: _user.account.uid,
-          //   fav: _fav,
-          // );
-          FocusScope.of(context).requestFocus(FocusNode());
-          Future.delayed(const Duration(seconds: 2), () {
-            _searchCtrl.clear();
-          });
-          _change.value = !_change.value;
-        },
-        decoration: InputDecoration(
-          isDense: true,
-          border: OutlineInputBorder(
-              gapPadding: 2.0, borderRadius: BorderRadius.circular(20)),
-          hintText: 'search'.tr(),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ListTile(
+        dense: true,
+        title: TextField(
+          onTap: () {},
+          onChanged: (value) {
+            _view.searchText = value;
+          },
+          controller: _searchCtrl,
+          focusNode: _searchNode,
+          onEditingComplete: _searchCtrl.text.isNotEmpty
+              ? () {
+                  _view.view == 2 ??
+                      _fav.filter(
+                          filter: _searchFilter, text: _searchCtrl.text);
+                  _view.doSearch(value: true);
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  Future.delayed(const Duration(seconds: 4), () {
+                    _searchCtrl.clear();
+                  });
+                  _change.value = !_change.value;
+                }
+              : () {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                },
+          onSubmitted: _searchCtrl.text.isNotEmpty
+              ? (submitted) {
+                  _view.view == 2 ??
+                      _fav.filter(
+                          filter: _searchFilter, text: _searchCtrl.text);
+                  _view.doSearch(value: true);
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  Future.delayed(const Duration(seconds: 2), () {
+                    _searchCtrl.clear();
+                  });
+                  _change.value = !_change.value;
+                }
+              : (submitted) {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                },
+          decoration: InputDecoration(
+            isDense: true,
+            border: OutlineInputBorder(
+                gapPadding: 2.0, borderRadius: BorderRadius.circular(20)),
+            hintText: 'search'.tr(),
+          ),
         ),
-      ),
-      trailing: IconButton(
-        icon: const Icon(
-          Icons.search,
+        trailing: IconButton(
+          icon: const Icon(
+            Icons.search,
+          ),
+          onPressed: _searchCtrl.text.isNotEmpty
+              ? () {
+                  debugPrint("IconButton Search filter: $_searchFilter");
+                  debugPrint("IconButton Search text: ${_searchCtrl.text}");
+                  _view.view == 2
+                      ? _fav.filter(
+                          filter: _searchFilter, text: _searchCtrl.text)
+                      : debugPrint('not favorite screen');
+                  _view.doSearch(value: true);
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  Future.delayed(const Duration(seconds: 2), () {
+                    _searchCtrl.clear();
+                  });
+                  _change.value = !_change.value;
+                }
+              : () {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                },
         ),
-        onPressed: () {
-          debugPrint("IconButton Search filter: $_searchFilter");
-          debugPrint("IconButton Search text: ${_searchCtrl.text}");
-
-          _view.view == 2
-              ? _fav.filter(filter: _searchFilter, text: _searchCtrl.text)
-              : debugPrint('not favorite screen');
-          _view.doSearch(value: true);
-          // _view.searchRecipe(
-          //   filter: _searchFilter,
-          //   text: _searchCtrl.text,
-          //   uid: _user.account.uid,
-          //   fav: _fav,
-          // );
-          FocusScope.of(context).requestFocus(FocusNode());
-          Future.delayed(const Duration(seconds: 2), () {
-            _searchCtrl.clear();
-          });
-          _change.value = !_change.value;
-        },
       ),
     );
   }

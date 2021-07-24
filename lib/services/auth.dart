@@ -63,11 +63,13 @@ class AuthServices {
     try {
       await firebaseAuth
           .signInWithEmailAndPassword(email: _email, password: _password)
-          .whenComplete(() async {
+          .whenComplete(() {
         pr.close();
         if (!foundation.kDebugMode && !foundation.kIsWeb) return;
         prefs.setBool('is_logged_in', true);
         status = 'success';
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (_) => Root()), (route) => false);
       });
 
       return status;
@@ -239,7 +241,8 @@ class AuthServices {
 
   Future<void> _signOut(BuildContext context) async {
     final ProgressDialog pr = ProgressDialog(context: context);
-    pr.show(max: 10000, msg: '${'loading'.tr()}...', barrierDismissible: true);
+    Navigator.of(context).pop();
+    pr.show(max: 1000, msg: '${'loading'.tr()}...', barrierDismissible: true);
     try {
       signOut(context).whenComplete(() async {
         pr.close();

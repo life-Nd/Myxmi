@@ -24,25 +24,25 @@ class FoodsFilter extends HookWidget {
           child: Row(
             children: const [
               Filter(
-                'breakfast',
+                legend: 'breakfast',
               ),
               Filter(
-                'appetizer',
+                legend: 'appetizer',
               ),
               Filter(
-                'salad',
+                legend: 'salad',
               ),
               Filter(
-                'soup',
+                legend: 'soup',
               ),
               Filter(
-                'dinner',
+                legend: 'dinner',
               ),
               Filter(
-                'dessert',
+                legend: 'dessert',
               ),
               Filter(
-                'allFoods',
+              legend: 'allFoods',
               ),
             ],
           ),

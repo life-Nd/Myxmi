@@ -92,10 +92,9 @@ class PreferencesProvider extends ChangeNotifier {
     return language = prefs.getString('Language');
   }
 
-  Future readPrefs() {
-    return _readTheme().then(
-      (value) => _readLanguage(),
-    );
+  void readPrefs() {
+    _readTheme();
+    _readLanguage();
   }
 
   Locale _locale(String languageCode) {

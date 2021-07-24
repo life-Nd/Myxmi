@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:myxmi/widgets/details_tile.dart';
+import 'package:myxmi/widgets/user_avatar.dart';
 import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 import 'package:myxmi/providers/image.dart';
 import '../main.dart';
@@ -65,18 +66,9 @@ class AccountScreen extends HookWidget {
                           },
                         );
                       },
-                      child: Hero(
-                        tag: _user?.account?.photoURL,
-                        child: CircleAvatar(
-                          radius: kIsWeb ? _size.width / 10 : _size.width / 5,
-                          foregroundImage: NetworkImage(
-                            _user.account.photoURL,
-                          ),
-                          child: const Icon(
-                            Icons.person,
-                            size: 100,
-                          ),
-                        ),
+                      child: UserAvatar(
+                        photoURL: _user?.account?.photoURL,
+                        radius: kIsWeb ? _size.width / 10 : _size.width / 5,
                       ),
                     ),
                     FloatingActionButton(

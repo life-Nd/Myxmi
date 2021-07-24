@@ -41,59 +41,70 @@ class ProductsListState extends State<ProductsList> {
         }
         if (snapshot.data != null) {
           final Map _data = widget.type == 'AddToCart'
+          
               ? snapshot as Map
               : snapshot.data.data() as Map;
           return Consumer(
             builder: (context, watch, child) {
               final _recipe = watch(recipeProvider);
-              final _keys = _data.keys.toList();
+              final _keys = _data != null ? _data?.keys?.toList() : [];
               return SizedBox(
                 height: _size.height / 1.2,
-                child: ListView.builder(
-                  itemCount: _keys.length,
-                  itemBuilder: (context, index) {
-                    final _key = _keys[index];
-                    return Dismissible(
-                        key: UniqueKey(),
-                        onDismissed: (direction) {
-                          _data.remove(_data[index]);
-                          _recipe.hide(component: _keys[index] as String);
-                        },
-                        background: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Card(
-                            color: Colors.red,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  'delete'.tr(),
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 17,
+                child: _keys.isNotEmpty
+                    ? ListView.builder(
+                        itemCount: _keys.length,
+                        itemBuilder: (context, index) {
+                          final _key = _keys[index];
+                          return Dismissible(
+                              key: UniqueKey(),
+                              onDismissed: (direction) {
+                                _data.remove(_data[index]);
+                                _recipe.hide(component: _keys[index] as String);
+                              },
+                              background: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Card(
+                                  color: Colors.red,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        widget.type == 'AddRecipe'
+                                            ? 'delete'.tr()
+                                            : 'hide'.tr(),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 17,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 40,
+                                      ),
+                                      Icon(widget.type == 'AddRecipe'
+                                          ? Icons.delete
+                                          : Icons.visibility_off),
+                                    ],
                                   ),
                                 ),
-                                const SizedBox(
-                                  width: 40,
-                                ),
-                                const Icon(Icons.delete),
-                              ],
-                            ),
-                          ),
+                              ),
+                              child: widget.type == 'AddRecipe'
+                                  ? Fields(
+                                      data: _data[_key] as Map,
+                                      recipe: _recipe,
+                                    )
+                                  : EditProducts(
+                                      indexKey: _key as String,
+                                      data: _data[_key] as Map));
+                        },
+                      )
+                    : Center(
+                        child: Text(
+                          'productsEmpty'.tr(),
                         ),
-                        child: widget.type == 'AddRecipe'
-                            ? Fields(
-                                data: _data[_key] as Map,
-                                recipe: _recipe,
-                              )
-                            : EditProducts(
-                                indexKey: _key as String,
-                                data: _data[_key] as Map));
-                  },
-                ),
+                      ),
               );
             },
           );
@@ -101,6 +112,7 @@ class ProductsListState extends State<ProductsList> {
         return Center(
           child: Text(
             'productsEmpty'.tr(),
+            
           ),
         );
       },

@@ -266,5 +266,6 @@
    "uploadingImage":"Téléchargement de l'image",
    "uploadImage":"Télécharger une image",
    "noNumber":"Pas de téléphone",
-   "unknownErrorOccured":"Une erreur inconnue est arrivée"
+   "unknownErrorOccured":"Une erreur inconnue est arrivée",
+   "hide":"Cacher"
 }

@@ -24,16 +24,16 @@ class VapesFilter extends HookWidget {
           child: Row(
             children: const [
               Filter(
-                'nicotine',
+                legend: 'nicotine',
               ),
               Filter(
-                'thc',
+                legend: 'thc',
               ),
               Filter(
-                'cbd',
+                legend: 'cbd',
               ),
               Filter(
-                'allVapes',
+                legend: 'allVapes',
               ),
             ],
           ),

@@ -25,6 +25,7 @@ Future<void> main() async {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
+  debugPrint('kIsWeb: $kIsWeb');
   kIsWeb
       ? FirebaseAuth.instance.setPersistence(Persistence.LOCAL)
       : debugPrint('Persistence not set');

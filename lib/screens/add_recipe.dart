@@ -10,7 +10,6 @@ import 'package:myxmi/widgets/vape_subcategories.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../main.dart';
 import '../providers/recipe.dart';
-import 'add_product.dart';
 import 'recipe_image.dart';
 import 'recipe_instructions.dart';
 
@@ -43,54 +42,71 @@ class AddRecipe extends HookWidget {
       ),
       body: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Container(
-                padding: const EdgeInsets.only(left: 10, right: 10),
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      width: 4,
-                      color: _recipe.pageIndex == 0
-                          ? Theme.of(context).appBarTheme.titleTextStyle.color
-                          : Theme.of(context).scaffoldBackgroundColor,
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        width: 4,
+                        color: _recipe.pageIndex == 0
+                            ? Theme.of(context).appBarTheme.titleTextStyle.color
+                            : Theme.of(context).scaffoldBackgroundColor,
+                      ),
                     ),
                   ),
+                  child: Text('details'.tr().toUpperCase(),
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
                 ),
-                child: Text('details'.tr().toUpperCase(),
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
-              ),
-              Container(
-                padding: const EdgeInsets.only(left: 10, right: 10),
-                decoration: BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(
-                    width: 4,
-                    color: _recipe.pageIndex == 1
-                        ? Theme.of(context).appBarTheme.titleTextStyle.color
-                        : Theme.of(context).scaffoldBackgroundColor,
-                  )),
+                Container(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  decoration: BoxDecoration(
+                    border: Border(
+                        bottom: BorderSide(
+                      width: 4,
+                      color: _recipe.pageIndex == 1
+                          ? Theme.of(context).appBarTheme.titleTextStyle.color
+                          : Theme.of(context).scaffoldBackgroundColor,
+                    )),
+                  ),
+                  child: Text('products'.tr().toUpperCase(),
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
                 ),
-                child: Text('instructions'.tr().toUpperCase(),
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
-              ),
-              Container(
-                padding: const EdgeInsets.only(left: 10, right: 10),
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
+                Container(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  decoration: BoxDecoration(
+                    border: Border(
+                        bottom: BorderSide(
                       width: 4,
                       color: _recipe.pageIndex == 2
                           ? Theme.of(context).appBarTheme.titleTextStyle.color
                           : Theme.of(context).scaffoldBackgroundColor,
+                    )),
+                  ),
+                  child: Text('instructions'.tr().toUpperCase(),
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                ),
+                Container(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        width: 4,
+                        color: _recipe.pageIndex == 3
+                            ? Theme.of(context).appBarTheme.titleTextStyle.color
+                            : Theme.of(context).scaffoldBackgroundColor,
+                      ),
                     ),
                   ),
+                  child: Text('image'.tr().toUpperCase(),
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
                 ),
-                child: Text('image'.tr().toUpperCase(),
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
-              ),
-            ],
+              ],
+            ),
           ),
           Expanded(
             child: PageView(
@@ -106,49 +122,22 @@ class AddRecipe extends HookWidget {
                     padding: const EdgeInsets.only(right: 10.0),
                     child: Column(
                       children: [
-                        Stack(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 15.0),
-                              child: Container(
-                                alignment: Alignment.topRight,
-                                child: Card(
-                                  color: Colors.grey.shade700,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 8.0,
-                                        bottom: 8.0,
-                                        right: 10,
-                                        left: 10),
-                                    child: Text(
-                                      '± ${_recipe.estimatedWeight.toStringAsFixed(3)} g',
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                ),
-                              ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: 8, bottom: 2, right: 40, left: 40),
+                          child: TextField(
+                            controller: _titleCtrl,
+                            decoration: InputDecoration(
+                              isDense: true,
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              hintText: 'recipeName'.tr(),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 8, bottom: 2, right: 40, left: 40),
-                              child: TextField(
-                                controller: _titleCtrl,
-                                decoration: InputDecoration(
-                                  isDense: true,
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20)),
-                                  hintText: 'recipeName'.tr(),
-                                ),
-                                onSubmitted: (submitted) {
-                                  _recipe.changeTitle(newName: _titleCtrl.text);
-                                  FocusScope.of(context)
-                                      .requestFocus(FocusNode());
-                                },
-                              ),
-                            ),
-                          ],
+                            onSubmitted: (submitted) {
+                              _recipe.changeTitle(newName: _titleCtrl.text);
+                              FocusScope.of(context).requestFocus(FocusNode());
+                            },
+                          ),
                         ),
                         const SizedBox(
                           height: 4,
@@ -253,7 +242,7 @@ class AddRecipe extends HookWidget {
                             ),
                           ],
                         ),
-                       const SizedBox(
+                        const SizedBox(
                           height: 4,
                         ),
                         Text('category'.tr()),
@@ -267,8 +256,8 @@ class AddRecipe extends HookWidget {
                                       borderRadius: BorderRadius.circular(20)),
                                   fillColor:
                                       _recipe.recipeModel.category == 'drink'
-                                      ? Colors.green
-                                      : Theme.of(context).cardColor,
+                                          ? Colors.green
+                                          : Theme.of(context).cardColor,
                                   onPressed: () {
                                     _recipe.changeCategory(
                                         newCategory: 'drink');
@@ -280,8 +269,8 @@ class AddRecipe extends HookWidget {
                                       borderRadius: BorderRadius.circular(20)),
                                   fillColor:
                                       _recipe.recipeModel.category == 'food'
-                                      ? Colors.green
-                                      : Theme.of(context).cardColor,
+                                          ? Colors.green
+                                          : Theme.of(context).cardColor,
                                   onPressed: () {
                                     _recipe.changeCategory(newCategory: 'food');
                                   },
@@ -292,8 +281,8 @@ class AddRecipe extends HookWidget {
                                       borderRadius: BorderRadius.circular(20)),
                                   fillColor:
                                       _recipe.recipeModel.category == 'vape'
-                                      ? Colors.green
-                                      : Theme.of(context).cardColor,
+                                          ? Colors.green
+                                          : Theme.of(context).cardColor,
                                   onPressed: () {
                                     _recipe.changeCategory(newCategory: 'vape');
                                   },
@@ -304,8 +293,8 @@ class AddRecipe extends HookWidget {
                                       borderRadius: BorderRadius.circular(20)),
                                   fillColor:
                                       _recipe.recipeModel.category == 'other'
-                                      ? Colors.green
-                                      : Theme.of(context).cardColor,
+                                          ? Colors.green
+                                          : Theme.of(context).cardColor,
                                   onPressed: () {
                                     _recipe.changeCategory(
                                         newCategory: 'other');
@@ -315,35 +304,11 @@ class AddRecipe extends HookWidget {
                               ]),
                         ),
                         subCategory(category: _recipe.recipeModel.category),
-                        ListTile(
-                          title: Text(
-                            'products'.tr(),
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.add),
-                            onPressed: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => NewProduct(),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: ProductsList(
-                            uid: _user.account.uid,
-                            type: 'AddRecipe',
-                            componentsFuture: FirebaseFirestore.instance
-                                .collection('Products')
-                                .doc(_user.account.uid)
-                                .get(),
-                          ),
-                        ),
                       ],
                     ),
                   ),
                 ),
+                _ProductsView(),
                 RecipeInstructions(),
                 RecipeImage(),
               ],
@@ -388,5 +353,46 @@ class AddRecipe extends HookWidget {
         _subCategory = Container();
         return _subCategory;
     }
+  }
+}
+
+class _ProductsView extends HookWidget {
+  @override
+  Widget build(BuildContext context) {
+    final _user = useProvider(userProvider);
+    final _recipe = useProvider(recipeProvider);
+    return Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 15.0),
+          child: Container(
+            alignment: Alignment.topRight,
+            child: Card(
+              color: Colors.grey.shade700,
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    top: 8.0, bottom: 8.0, right: 10, left: 10),
+                child: Text(
+                  '± ${_recipe.estimatedWeight.toStringAsFixed(3)} g',
+                  style: const TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: ProductsList(
+            uid: _user.account.uid,
+            type: 'AddRecipe',
+            componentsFuture: FirebaseFirestore.instance
+                .collection('Products')
+                .doc(_user.account.uid)
+                .get(),
+          ),
+        ),
+      ],
+    );
   }
 }

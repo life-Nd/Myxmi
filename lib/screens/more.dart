@@ -11,7 +11,7 @@ import 'home.dart';
 import 'settings.dart';
 import 'support.dart';
 
-class MoreView extends HookWidget {
+class More extends HookWidget {
   @override
   Widget build(BuildContext context) {
     // final ProgressDialog pr = ProgressDialog(context: context);

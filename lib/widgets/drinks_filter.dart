@@ -21,16 +21,16 @@ class DrinksFilter extends HookWidget {
           child: Row(
             children: const [
               Filter(
-                'cocktail',
+              legend: 'cocktail',
               ),
               Filter(
-                'smoothie',
+              legend: 'smoothie',
               ),
               Filter(
-                'shake',
+              legend: 'shake',
               ),
               Filter(
-                'allDrinks',
+              legend: 'allDrinks',
               ),
             ],
           ),

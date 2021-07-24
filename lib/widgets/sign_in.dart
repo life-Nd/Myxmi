@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/main.dart';
 import 'package:myxmi/screens/home.dart';
 import 'package:myxmi/services/auth.dart';
 import 'package:apple_sign_in/apple_sign_in.dart' as apple_sign_in;
@@ -161,12 +160,9 @@ class SignInState extends State<SignIn> {
                         Radius.circular(30),
                       ),
                     ),
-                    onPressed: () {
-                      FocusScope.of(context).requestFocus(
-                        FocusNode(),
-                      );
+                    onPressed: () async {
                       _view.view = 0;
-                      _authServices
+                      await _authServices
                           .signInWithEmailPassword(
                               email: _emailCtrl.text,
                               password: _passwordCtrl.text,
@@ -176,9 +172,6 @@ class SignInState extends State<SignIn> {
                           debugPrint('Status value:${_authServices.status}');
                           switch (_authServices.status) {
                             case 'success':
-                              Navigator.of(context).pushAndRemoveUntil(
-                                  MaterialPageRoute(builder: (_) => Root()),
-                                  (route) => false);
                               break;
                             case 'user-not-found':
                               dialogNoAccountFound(
@@ -195,7 +188,7 @@ class SignInState extends State<SignIn> {
                                 error: _authServices.error,
                               );
                               break;
-                            default:
+                            case 'null':
                               dialogUnknownError(context: context);
                           }
                         },
@@ -227,8 +220,8 @@ class SignInState extends State<SignIn> {
                   child: Row(
                     children: [
                       Container(
-                        height: 30,
-                        width: 30,
+                        height: 70,
+                        width: 70,
                         padding: const EdgeInsets.all(4),
                         child: Image.asset('assets/google_logo.png'),
                       ),
@@ -278,5 +271,14 @@ class SignInState extends State<SignIn> {
     } catch (e) {
       debugPrint('$e');
     }
+  }
+
+  @override
+  void dispose() {
+    _emailCtrl.dispose();
+    _passwordCtrl.dispose();
+    _passwordNode.dispose();
+
+    super.dispose();
   }
 }

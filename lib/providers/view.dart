@@ -13,9 +13,13 @@ class ViewProvider extends ChangeNotifier {
   String searchText = '';
   // Future future;
   Stream<QuerySnapshot> search;
+  void changeViewIndex({int index}) {
+    view = index;
+    notifyListeners();
+  }
 
-  Widget changeView({@required int newView, String uid}) {
-    view = newView;
+  Widget viewBuilder({@required int index, String uid}) {
+    view = index;
     switch (view) {
       case 0:
         return !searching
@@ -43,7 +47,9 @@ class ViewProvider extends ChangeNotifier {
       case 3:
         return uid != null ? Products() : SignIn();
       case 4:
-        return uid != null ? MoreView() : SignIn();
+        return uid != null ? More() : SignIn();
+      case 5:
+        return uid != null ? More() : SignIn();
       default:
         return FilteringScreen();
     }

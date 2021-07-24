@@ -22,16 +22,16 @@ class DietsFilter extends HookWidget {
           child: Row(
             children: const [
               Filter(
-                'vegan',
+                legend: 'vegan',
               ),
               Filter(
-                'vegetarian',
+                legend: 'vegetarian',
               ),
               Filter(
-                'keto',
+                legend: 'keto',
               ),
               Filter(
-                'allDiets',
+                legend: 'allDiets',
               ),
             ],
           ),
