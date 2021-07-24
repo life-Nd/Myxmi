@@ -6,10 +6,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/widgets/recipe_tile.dart';
 import 'package:myxmi/widgets/recipe_tile_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../app.dart';
 import '../main.dart';
-
-
 
 class Favorites extends HookWidget {
   @override
@@ -32,79 +31,84 @@ class Favorites extends HookWidget {
         _fav.showFilter(value: false);
         _change.value = !_change.value;
       },
-      child: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          childAspectRatio: 0.6,
-          crossAxisCount: kIsWeb ? 4 : 2,
-        ),
-        padding: const EdgeInsets.all(1),
-        itemCount: _recipes.length,
-        itemBuilder: (_, int index) {
-          return Container(
-            height: _size.height / 2,
-            width: _size.width,
-            margin: const EdgeInsets.all(5),
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              gradient: LinearGradient(
-                colors: [
-                  Theme.of(context).cardColor,
-                  if (_recipes[index].difficulty == 'easy')
-                    Colors.yellow.shade700
-                  else
-                    _recipes[index].difficulty == 'medium'
-                        ? Colors.orange.shade900
-                        : _recipes[index].difficulty == 'hard'
-                            ? Colors.red.shade700
-                            : Colors.grey.shade700,
-                ],
+      child: _recipes.isNotEmpty
+          ? GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                childAspectRatio: 0.6,
+                crossAxisCount: kIsWeb ? 4 : 2,
               ),
-            ),
-            child: Stack(
-              alignment: Alignment.topRight,
-              children: [
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Expanded(
-                      child: SizedBox(
-                        width: _size.width / 2,
-                        child: Hero(
-                          tag: _recipes[index].recipeId,
-                          child: RecipeTileImage(
+              padding: const EdgeInsets.all(1),
+              itemCount: _recipes.length,
+              itemBuilder: (_, int index) {
+                return Container(
+                  height: _size.height / 2,
+                  width: _size.width,
+                  margin: const EdgeInsets.all(5),
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    gradient: LinearGradient(
+                      colors: [
+                        Theme.of(context).cardColor,
+                        if (_recipes[index].difficulty == 'easy')
+                          Colors.yellow.shade300
+                        else
+                          _recipes[index].difficulty == 'medium'
+                              ? Colors.orange.shade300
+                              : _recipes[index].difficulty == 'hard'
+                                  ? Colors.red.shade300
+                                  : Colors.grey.shade300,
+                      ],
+                    ),
+                  ),
+                  child: Stack(
+                    alignment: Alignment.topRight,
+                    children: [
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Expanded(
+                            child: SizedBox(
+                              width: _size.width / 2,
+                              child: Hero(
+                                tag: _recipes[index].recipeId,
+                                child: RecipeTileImage(
+                                  recipe: _recipes[index],
+                                ),
+                              ),
+                            ),
+                          ),
+                          RecipeTile(
+                            type: 'Favorites',
                             recipe: _recipes[index],
                           ),
-                        ),
+                        ],
                       ),
-                    ),
-                    RecipeTile(
-                      type: 'Favorites',
-                      recipe: _recipes[index],
-                    ),
-                  ],
-                ),
-                IconButton(
-                  icon: const Icon(
-                    Icons.delete_outline_outlined,
-                    color: Colors.red,
+                      IconButton(
+                        icon: const Icon(
+                          Icons.delete_outline_outlined,
+                          color: Colors.red,
+                        ),
+                        onPressed: () {
+                          FirebaseFirestore.instance
+                              .collection('Favorites')
+                              .doc(_user.account.uid)
+                              .update(
+                            {_recipes[index].recipeId: FieldValue.delete()},
+                          );
+                          _fav.removeFavorite(
+                              newFavorite: _recipes[index].recipeId);
+                          _change.value = !_change.value;
+                        },
+                      ),
+                    ],
                   ),
-                  onPressed: () {
-                    FirebaseFirestore.instance
-                        .collection('Favorites')
-                        .doc(_user.account.uid)
-                        .update(
-                      {_recipes[index].recipeId: FieldValue.delete()},
-                    );
-                    _fav.removeFavorite(newFavorite: _recipes[index].recipeId);
-                    _change.value = !_change.value;
-                  },
-                ),
-              ],
+                );
+              },
+            )
+          : Center(
+              child: Text('noFavorites'.tr()),
             ),
-          );
-        },
-      ),
     );
   }
 }

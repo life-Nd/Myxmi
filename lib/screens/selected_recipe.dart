@@ -29,20 +29,20 @@ class SelectedRecipe extends HookWidget {
           borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(20), topRight: Radius.circular(20)),
           gradient: LinearGradient(
-            begin: Alignment.topCenter,
+            begin: Alignment.center,
             end: Alignment.bottomCenter,
             colors: [
               Theme.of(context).cardColor,
               Theme.of(context).cardColor,
               Theme.of(context).cardColor,
               if (_recipe.recipeModel.difficulty == 'easy')
-                Colors.yellow.shade700
+                Colors.yellow.shade400
               else
                 _recipe.recipeModel.difficulty == 'medium'
-                    ? Colors.orange.shade900
+                    ? Colors.orange.shade400
                     : _recipe.recipeModel.difficulty == 'hard'
-                        ? Colors.red.shade700
-                        : Colors.grey.shade700,
+                        ? Colors.red.shade400
+                        : Colors.grey.shade400,
             ],
           ),
         ),

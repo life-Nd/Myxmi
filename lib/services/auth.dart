@@ -58,13 +58,12 @@ class AuthServices {
     final String _email = email.trim();
     final String _password = password.trim();
     final SharedPreferences prefs = await _prefs;
-    final ProgressDialog pr = ProgressDialog(context: context);
-    pr.show(max: 1000, msg: '${'loading'.tr()}...', barrierDismissible: true);
+  
     try {
       await firebaseAuth
           .signInWithEmailAndPassword(email: _email, password: _password)
           .whenComplete(()async {
-         pr.close();
+         
         if (!foundation.kDebugMode && !foundation.kIsWeb) return;
         prefs.setBool('is_logged_in', true);
         status = 'success';
@@ -76,7 +75,7 @@ class AuthServices {
     } on FirebaseAuthException catch (_error) {
       debugPrint('----Error-----: $error----');
       debugPrint('errorCode:$_error');
-      pr.close();
+
       error = _error;
       if (error?.code != null) status = error.code;
       return status;

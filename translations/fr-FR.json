@@ -268,5 +268,6 @@
    "uploadImage":"Télécharger une image",
    "noNumber":"Pas de téléphone",
    "unknownErrorOccured":"Une erreur inconnue est arrivée",
-   "hide":"Cacher"
+   "hide":"Cacher",
+   "noFavorites":"Pas de favoris encore"
 }
