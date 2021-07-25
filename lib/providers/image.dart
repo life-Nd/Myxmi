@@ -88,7 +88,8 @@ class ImageProvider extends ChangeNotifier {
   }
 
   Future pickImage(ImageSource source) async {
-    final pickedFile = await picker.pickImage(source: source, imageQuality: 50);
+    final pickedFile = await picker.pickImage(
+        source: source, imageQuality: 50, maxWidth: 320, maxHeight: 320);
     changeImageSample(pickedFile.path);
     debugPrint("GetImage: $added");
     notifyListeners();
@@ -108,7 +109,7 @@ class ImageProvider extends ChangeNotifier {
     final String timeStamp = DateTime.now().millisecondsSinceEpoch.toString();
     final rng = Random();
     final _random = rng.nextInt(90000) + 10000;
-    pr.show(max: 100, msg: '${'loading'.tr()} ${'image'.tr()}...');
+    pr.show(max: 1000, msg: '${'loading'.tr()} ${'image'.tr()}...');
     imageId = '$timeStamp-$_random}';
 
     final firebaseStorageRef = firebase_storage.FirebaseStorage.instance

@@ -25,7 +25,7 @@ class SignIn extends StatefulWidget {
 }
 
 class SignInState extends State<SignIn> {
-  final GlobalKey _containerKey = GlobalKey();
+  static final GlobalKey _containerKey = GlobalKey();
 
   bool showPassword = false;
   bool showButton = false;
@@ -70,9 +70,7 @@ class SignInState extends State<SignIn> {
               ),
             ),
             _EmailWithValidator(),
-            const SizedBox(
-              height: 10,
-            ),
+            const SizedBox(height: 10),
             _PasswordField(),
             Container(
               padding: const EdgeInsets.only(left: 10),

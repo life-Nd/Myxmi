@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/recipe.dart';
@@ -7,14 +7,15 @@ import 'add_favorite.dart';
 import 'recipe_tile.dart';
 import 'recipe_tile_image.dart';
 
-class RecipeList extends StatefulWidget {
-  final QuerySnapshot snapshot;
-  const RecipeList({@required this.snapshot});
+class RecipesGrid extends StatefulWidget {
+  final List<RecipeModel> recipes;
+  final String type;
+  const RecipesGrid({@required this.recipes, @required this.type});
   @override
-  State<StatefulWidget> createState() => _RecipeListState();
+  State<StatefulWidget> createState() => _RecipesGridState();
 }
 
-class _RecipeListState extends State<RecipeList> {
+class _RecipesGridState extends State<RecipesGrid> {
   @override
   void initState() {
     _recipes();
@@ -22,12 +23,7 @@ class _RecipeListState extends State<RecipeList> {
   }
 
   List<RecipeModel> _recipes() {
-    return widget.snapshot.docs.map((QueryDocumentSnapshot data) {
-      return RecipeModel.fromSnapshot(
-        snapshot: data.data() as Map<String, dynamic>,
-        keyIndex: data.id,
-      );
-    }).toList();
+    return widget.recipes;
   }
 
   @override
@@ -84,7 +80,7 @@ class _RecipeListState extends State<RecipeList> {
                       right: 10.0,
                     ),
                     child: RecipeTile(
-                      type: 'All',
+                      type: widget.type,
                       recipe: _recipe,
                     ),
                   )

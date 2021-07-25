@@ -2,8 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:myxmi/models/recipe.dart';
 import 'package:myxmi/screens/home.dart';
-import 'package:myxmi/widgets/recipe_list.dart';
+import 'package:myxmi/widgets/recipes_grid.dart';
 
 class RecipesScreen extends StatefulWidget {
   final String legend;
@@ -17,7 +18,7 @@ class RecipesScreen extends StatefulWidget {
 class RecipesScreenState extends State<RecipesScreen> {
   Stream<QuerySnapshot> _stream;
   Widget futureBuilder;
-  
+
   @override
   void initState() {
     getStream();
@@ -76,9 +77,11 @@ class RecipesScreenState extends State<RecipesScreen> {
                 ),
               );
             }
+
             return snapshot.data != null
-                ? RecipeList(
-                    snapshot: snapshot.data,
+                ? RecipesGrid(
+                    recipes: _recipes(querySnapshot: snapshot.data),
+                    type: 'All',
                   )
                 : Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -101,4 +104,13 @@ class RecipesScreenState extends State<RecipesScreen> {
       },
     );
   }
+}
+
+List<RecipeModel> _recipes({QuerySnapshot querySnapshot}) {
+  return querySnapshot.docs.map((QueryDocumentSnapshot data) {
+    return RecipeModel.fromSnapshot(
+      snapshot: data.data() as Map<String, dynamic>,
+      keyIndex: data.id,
+    );
+  }).toList();
 }

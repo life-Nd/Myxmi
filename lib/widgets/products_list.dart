@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/screens/add_recipe.dart';
 
+import '../main.dart';
 import 'edit_products.dart';
 import 'fields.dart';
 
@@ -41,12 +43,12 @@ class ProductsListState extends State<ProductsList> {
         }
         if (snapshot.data != null) {
           final Map _data = widget.type == 'AddToCart'
-          
               ? snapshot as Map
               : snapshot.data.data() as Map;
           return Consumer(
             builder: (context, watch, child) {
               final _recipe = watch(recipeProvider);
+              final _user = watch(userProvider);
               final _keys = _data != null ? _data?.keys?.toList() : [];
               return SizedBox(
                 height: _size.height / 1.2,
@@ -60,6 +62,12 @@ class ProductsListState extends State<ProductsList> {
                               onDismissed: (direction) {
                                 _data.remove(_data[index]);
                                 _recipe.hide(component: _keys[index] as String);
+                                FirebaseFirestore.instance
+                                    .collection('Favorites')
+                                    .doc(_user.account.uid)
+                                    .update({
+                                  '${_keys[index]}': FieldValue.delete()
+                                });
                               },
                               background: Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -112,7 +120,6 @@ class ProductsListState extends State<ProductsList> {
         return Center(
           child: Text(
             'productsEmpty'.tr(),
-            
           ),
         );
       },

@@ -67,9 +67,8 @@ class AuthServices {
         prefs.setBool('is_logged_in', true);
         status = 'success';
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context1) => Root()), (route) => false);
+            MaterialPageRoute(builder: (context) => Root()), (route) => false);
       });
-
       return status;
     } on FirebaseAuthException catch (_error) {
       debugPrint('errorCode:$_error');

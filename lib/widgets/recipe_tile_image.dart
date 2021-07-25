@@ -68,14 +68,16 @@ class RecipeTileImage extends HookWidget {
                 children: [
                   Opacity(
                     opacity: 0.3,
-                    child: Image.asset(
-                      'assets/${recipe.subCategory}.jpg',
-                      fit: BoxFit.fitWidth,
-                      height: _size.height,
-                      width: _size.width,
-                      cacheWidth: 1000,
-                      colorBlendMode: BlendMode.color,
-                    ),
+                    child: recipe.subCategory != null
+                        ? Image.asset(
+                            'assets/${recipe.subCategory}.jpg',
+                            fit: BoxFit.fitWidth,
+                            height: _size.height,
+                            width: _size.width,
+                            cacheWidth: 1000,
+                            colorBlendMode: BlendMode.color,
+                          )
+                        : null,
                   ),
                   const Icon(
                     Icons.no_photography,

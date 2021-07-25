@@ -307,7 +307,11 @@ class NewProduct extends HookWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   DropdownButton<int>(
-                    dropdownColor: Colors.grey.shade100,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                    ),
                     value: _mesureValue,
                     onChanged: (val) {
                       _mesureValue = val;
@@ -321,8 +325,6 @@ class NewProduct extends HookWidget {
                         },
                         child: const Text(
                           'g',
-                          style: TextStyle(
-                              fontSize: 17, fontWeight: FontWeight.bold),
                         ),
                       ),
                       DropdownMenuItem(
@@ -332,8 +334,6 @@ class NewProduct extends HookWidget {
                         },
                         child: const Text(
                           'ml',
-                          style: TextStyle(
-                              fontSize: 17, fontWeight: FontWeight.bold),
                         ),
                       ),
                       DropdownMenuItem(
@@ -343,8 +343,6 @@ class NewProduct extends HookWidget {
                         },
                         child: Text(
                           'drops'.tr(),
-                          style: const TextStyle(
-                              fontSize: 17, fontWeight: FontWeight.bold),
                         ),
                       ),
                       DropdownMenuItem(
@@ -354,8 +352,6 @@ class NewProduct extends HookWidget {
                         },
                         child: Text(
                           'teaspoons'.tr(),
-                          style: const TextStyle(
-                              fontSize: 17, fontWeight: FontWeight.bold),
                         ),
                       ),
                       DropdownMenuItem(
@@ -365,8 +361,6 @@ class NewProduct extends HookWidget {
                         },
                         child: Text(
                           'tablespoons'.tr(),
-                          style: const TextStyle(
-                              fontSize: 17, fontWeight: FontWeight.bold),
                         ),
                       ),
                       DropdownMenuItem(
@@ -376,8 +370,6 @@ class NewProduct extends HookWidget {
                         },
                         child: Text(
                           'pieces'.tr(),
-                          style: const TextStyle(
-                              fontSize: 17, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],

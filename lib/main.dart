@@ -29,6 +29,7 @@ Future<void> main() async {
   kIsWeb
       ? FirebaseAuth.instance.setPersistence(Persistence.LOCAL)
       : debugPrint('Persistence not set');
+      
   final ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     visualDensity: const VisualDensity(vertical: 0.5, horizontal: 0.5),
@@ -36,7 +37,7 @@ Future<void> main() async {
     primaryColorBrightness: Brightness.light,
     primaryColorLight: Colors.grey.shade100,
     primaryColorDark: Colors.grey.shade800,
-    canvasColor: Colors.transparent,
+    canvasColor: Colors.grey.shade400,
     accentColor: const Color(0xff457BE0),
     accentColorBrightness: Brightness.light,
     fontFamily: 'Georgia',
@@ -55,6 +56,7 @@ Future<void> main() async {
     ),
     cardColor: const Color(0xFFF5F5F5),
     dividerColor: const Color(0x1f6D42CE),
+    highlightColor: Colors.white,
     iconTheme: const IconThemeData(color: Colors.black),
     focusColor: const Color(0xDD000000),
     cardTheme: const CardTheme(
@@ -70,7 +72,7 @@ Future<void> main() async {
     primaryColorBrightness: Brightness.dark,
     primaryColorLight: Colors.grey.shade200,
     primaryColorDark: Colors.grey.shade800,
-    canvasColor: Colors.transparent,
+    canvasColor: Colors.grey.shade400,
     accentColor: const Color(0xff457BE0),
     accentColorBrightness: Brightness.dark,
     scaffoldBackgroundColor: const Color(0xDD000000),
@@ -88,6 +90,7 @@ Future<void> main() async {
     dividerColor: const Color(0x1f6D42CE),
     buttonColor: const Color(0xFF303030),
     focusColor: const Color(0xFFFFFFFF),
+    highlightColor: Colors.black,
     cardTheme: const CardTheme(
       margin: EdgeInsets.all(2),
     ),
