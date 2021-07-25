@@ -13,7 +13,7 @@ class DietsFilter extends HookWidget {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            'diet'.tr(),
+            'diets'.tr(),
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
           ),
         ),
@@ -31,7 +31,7 @@ class DietsFilter extends HookWidget {
                 legend: 'keto',
               ),
               Filter(
-                legend: 'allDiets',
+                legend: 'diets',
               ),
             ],
           ),

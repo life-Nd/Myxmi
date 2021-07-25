@@ -12,7 +12,7 @@ class FoodsFilter extends HookWidget {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            'food'.tr(),
+            'foods'.tr(),
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 17,
@@ -42,7 +42,7 @@ class FoodsFilter extends HookWidget {
                 legend: 'dessert',
               ),
               Filter(
-              legend: 'allFoods',
+              legend: 'foods',
               ),
             ],
           ),

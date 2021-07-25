@@ -273,19 +273,20 @@ class AddRecipe extends HookWidget {
                                   onPressed: () {
                                     _recipe.changeCategory(newCategory: 'food');
                                   },
-                                  child: Text('food'.tr()),
+                                  child: Text('foods'.tr()),
                                 ),
                                 RawMaterialButton(
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20)),
                                   fillColor:
-                                      _recipe.recipeModel.category == 'vape'
+                                      _recipe.recipeModel.category == 'vapes'
                                           ? Colors.green
                                           : Theme.of(context).cardColor,
                                   onPressed: () {
-                                    _recipe.changeCategory(newCategory: 'vape');
+                                    _recipe.changeCategory(
+                                        newCategory: 'vapes');
                                   },
-                                  child: Text('vape'.tr()),
+                                  child: Text('vapes'.tr()),
                                 ),
                                 RawMaterialButton(
                                   shape: RoundedRectangleBorder(
@@ -321,7 +322,7 @@ class AddRecipe extends HookWidget {
   Widget subCategory({String category}) {
     Widget _subCategory;
     switch (category) {
-      case 'food':
+      case 'foods':
         _subCategory = Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -330,7 +331,7 @@ class AddRecipe extends HookWidget {
           ],
         );
         return _subCategory;
-      case 'drink':
+      case 'drinks':
         _subCategory = Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -339,7 +340,7 @@ class AddRecipe extends HookWidget {
           ],
         );
         return _subCategory;
-      case 'vape':
+      case 'vapes':
         _subCategory = Column(
           mainAxisSize: MainAxisSize.min,
           children: [

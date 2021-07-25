@@ -88,7 +88,7 @@ class ImageProvider extends ChangeNotifier {
   }
 
   Future pickImage(ImageSource source) async {
-    final pickedFile = await picker.getImage(source: source, imageQuality: 50);
+    final pickedFile = await picker.pickImage(source: source, imageQuality: 50);
     changeImageSample(pickedFile.path);
     debugPrint("GetImage: $added");
     notifyListeners();

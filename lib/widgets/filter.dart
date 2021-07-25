@@ -16,6 +16,10 @@ class _FilterState extends State<Filter> {
   final bool _kIsWeb = kIsWeb;
   @override
   Widget build(BuildContext context) {
+// WEB: height:240.33333333333334
+//      width: 320
+// S20: Height:304.76190476190476
+//      Width: 102.85714285714286
     final Size _size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {

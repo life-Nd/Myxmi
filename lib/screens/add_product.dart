@@ -145,31 +145,7 @@ class NewProduct extends HookWidget {
                     mainAxisSpacing: 4,
                   ),
                   children: [
-                    RawMaterialButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      fillColor: _ingredientType == 'Fruit'
-                          ? Colors.orange.shade500
-                          : Theme.of(context).scaffoldBackgroundColor,
-                      onPressed: () {
-                        _ingredientType = 'Fruit';
-                        _change.value = !_change.value;
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 4),
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: Image.asset('assets/fruits.png'),
-                            ),
-                            Text(
-                              'fruit'.tr(),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    _FoodTypeSelector(change: _change),
                     RawMaterialButton(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
@@ -541,6 +517,45 @@ class NewProduct extends HookWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _FoodTypeSelector extends StatelessWidget {
+  const _FoodTypeSelector({
+    Key key,
+    @required ValueNotifier<bool> change,
+  })  : _change = change,
+        super(key: key);
+
+  final ValueNotifier<bool> _change;
+
+  @override
+  Widget build(BuildContext context) {
+    return RawMaterialButton(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      fillColor: _ingredientType == 'Fruit'
+          ? Colors.orange.shade500
+          : Theme.of(context).scaffoldBackgroundColor,
+      onPressed: () {
+        _ingredientType = 'Fruit';
+        _change.value = !_change.value;
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(right: 4),
+        child: Column(
+          children: [
+            Expanded(
+              child: Image.asset('assets/fruits.png'),
+            ),
+            Text(
+              'fruit'.tr(),
+            ),
+          ],
         ),
       ),
     );

@@ -112,15 +112,20 @@ class WebAppBar extends HookWidget {
             ),
           if (_user?.account?.uid != null)
             Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(100),
+                  bottomLeft: Radius.circular(100),
+                  topRight: Radius.circular(20),
+                  bottomRight: Radius.circular(20),
+                ),
               ),
               elevation: 20,
               child: Padding(
                 padding: const EdgeInsets.only(right: 10.0),
                 child: Row(
                   children: [
-                    UserAvatar(photoURL: _user?.account?.photoURL, radius: 30),
+                    UserAvatar(photoURL: _user?.account?.photoURL, radius: 33),
                     if (_user?.account?.displayName != null)
                       Text(_user?.account?.displayName)
                     else

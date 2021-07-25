@@ -27,8 +27,6 @@ class Home extends HookWidget {
         _viewIndex == 1 && _user.account?.uid != null ||
         _viewIndex == 2 && _user.account?.uid != null ||
         _viewIndex == 3 && _user.account?.uid != null;
-    debugPrint(
-        'Searchable:$_searchable kIsWeb: $kIsWeb ${_searchable || kIsWeb}');
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: kIsWeb ? Size(_size.width, 200) : Size(_size.width, 100),

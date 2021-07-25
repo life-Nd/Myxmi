@@ -30,7 +30,7 @@ class DrinksFilter extends HookWidget {
               legend: 'shake',
               ),
               Filter(
-              legend: 'allDrinks',
+              legend: 'drinks',
               ),
             ],
           ),

@@ -11,7 +11,13 @@ class ViewProvider extends ChangeNotifier {
   int view = 0;
   bool searching = false;
   String searchText = '';
-  // Future future;
+  bool authenticating = false;
+
+  void loadingAuth({bool loading}) {
+    authenticating = loading;
+    notifyListeners();
+  }
+
   Stream<QuerySnapshot> search;
   void changeViewIndex({int index}) {
     view = index;

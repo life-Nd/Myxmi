@@ -13,14 +13,6 @@ class PreferencesProvider extends ChangeNotifier {
   List<String> cart = [];
   List<String> checkedItem = [];
   bool opaque = false;
-  Future changeTheme({String newTheme}) async {
-    final SharedPreferences prefs = await _prefs;
-    theme = newTheme;
-    prefs.setString('Theme', theme).then((bool success) {
-      return theme;
-    });
-    notifyListeners();
-  }
 
   Future changeOpaque({bool newOpaque}) async {
     final SharedPreferences prefs = await _prefs;
@@ -81,20 +73,32 @@ class PreferencesProvider extends ChangeNotifier {
     return cart = prefs.getStringList('Items');
   }
 
-  Future _readTheme() async {
+  Future changeTheme({String newTheme}) async {
     final SharedPreferences prefs = await _prefs;
+    theme = newTheme;
+    prefs.setString('Theme', theme).then((bool success) {
+      return theme;
+    });
+    notifyListeners();
+  }
+
+  Future readTheme() async {
+    final SharedPreferences prefs = await _prefs;
+    await _readLanguage();
     return theme = prefs.getString('Theme');
   }
 
   Future _readLanguage() async {
     final SharedPreferences prefs = await _prefs;
-    // language = ;
     return language = prefs.getString('Language');
   }
 
-  void readPrefs() {
-    _readTheme();
-    _readLanguage();
+  Future readPrefs() {
+    final Future _data = Future.wait([
+      readTheme(),
+      _readLanguage(),
+    ]);
+    return _data;
   }
 
   Locale _locale(String languageCode) {

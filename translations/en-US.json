@@ -148,8 +148,7 @@
    "category":"Category",
    "subCategory":"Subcategory",
    "drinks":"Drinks",
-   "food":"Food",
-   "vape":"Vape",
+   "foods":"Foods",
    "other":"Other",
    "appetizer":"Appetizer",
    "salad":"Salad",
@@ -186,10 +185,10 @@
    "duration":"Duration",
    "time":"Time",
    "add":"Add",
-   "diet":"Diet",
-   "allFoods":"All",
-   "allDrinks":"All",
-   "allVapes":"All",
+   "diets":"Diets",
+   "allFoods":"Foods",
+   "allDrinks":"Drinks",
+   "vapes":"vapes",
    "nicotine":"Nicotine",
    "thc":"THC",
    "cbd":"CBD",
@@ -198,7 +197,7 @@
    "vegan":"Vegan",
    "vegetarian":"Vegetarian",
    "keto":"Keto",
-   "allDiets":"All",
+   "Diets":"Diets",
    "steps":"Steps",
    "details":"Details",
    "image":"Image",
@@ -218,7 +217,9 @@
    "noPhone":"No phone",
    "unknownErrorOccured":"An unkown error occured.",
     "hide":"Hide",
-    "noFavorites":"No favorites yet"
+    "noFavorites":"No favorites yet",
+    "signingIn":"Signing in",
+    "signingOut":"Signing out"
 
 
 }

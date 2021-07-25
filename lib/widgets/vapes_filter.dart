@@ -12,7 +12,7 @@ class VapesFilter extends HookWidget {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            '${'vape'.tr()}s',
+            'vapes'.tr(),
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 17,
@@ -33,7 +33,7 @@ class VapesFilter extends HookWidget {
                 legend: 'cbd',
               ),
               Filter(
-                legend: 'allVapes',
+                legend: 'vapes',
               ),
             ],
           ),

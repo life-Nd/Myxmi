@@ -69,7 +69,7 @@ class RecipesScreenState extends State<RecipesScreen> {
               );
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
-              debugPrint('Loading....');
+              debugPrint('Loading from db....');
               return Center(
                 child: Text(
                   "${'loading'.tr()}...",

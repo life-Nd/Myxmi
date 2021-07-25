@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myxmi/widgets/diets_filter.dart';
 import 'package:myxmi/widgets/drinks_filter.dart';
 import 'package:myxmi/widgets/food_filters.dart';
+import 'package:myxmi/widgets/vapes_filter.dart';
 
 class FilteringScreen extends StatelessWidget {
   @override
@@ -15,7 +16,7 @@ class FilteringScreen extends StatelessWidget {
           DrinksFilter(),
           FoodsFilter(),
           DietsFilter(),
-          // VapesFilter(),
+          VapesFilter(),
         ],
       ),
     );

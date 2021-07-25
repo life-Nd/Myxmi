@@ -11,8 +11,13 @@ import '../widgets/dialog_reset_password.dart';
 import '../widgets/dialog_unknown_error.dart';
 import '../widgets/dialog_wrong_password.dart';
 
+final _fieldsProvider =
+    ChangeNotifierProvider<_FieldsNotifier>((ref) => _FieldsNotifier());
+
 TextEditingController _emailCtrl;
 TextEditingController _passwordCtrl;
+final AuthServices _authServices = AuthServices();
+FocusNode _passwordNode;
 
 class SignIn extends StatefulWidget {
   @override
@@ -22,13 +27,9 @@ class SignIn extends StatefulWidget {
 class SignInState extends State<SignIn> {
   final GlobalKey _containerKey = GlobalKey();
 
-  bool _obscure = true;
   bool showPassword = false;
   bool showButton = false;
-  bool _isEditingEmail = false;
-  final AuthServices _authServices = AuthServices();
 
-  FocusNode _passwordNode;
   @override
   void initState() {
     _emailCtrl = TextEditingController();
@@ -37,22 +38,10 @@ class SignInState extends State<SignIn> {
     super.initState();
   }
 
-  String _validateEmail(String value) {
-    value.trim();
-    if (_emailCtrl.text != null) {
-      if (value.isEmpty) {
-        return "Email can't be empty";
-      } else if (!value.contains(RegExp(
-          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+"))) {
-        return 'Enter a correct email address';
-      }
-    }
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
     final _size = MediaQuery.of(context).size;
+    debugPrint('Building widget');
     return Container(
       key: _containerKey,
       height: _size.height,
@@ -80,57 +69,11 @@ class SignInState extends State<SignIn> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-              child: TextField(
-                controller: _emailCtrl,
-                onChanged: (value) {
-                  setState(() {
-                    _isEditingEmail = true;
-                  });
-                },
-                onSubmitted: (submitted) {
-                  FocusScope.of(context).requestFocus(_passwordNode);
-                },
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  hintText: 'enterEmail'.tr(),
-                  errorText:
-                      _isEditingEmail ? _validateEmail(_emailCtrl.text) : null,
-                ),
-              ),
-            ),
+            _EmailWithValidator(),
             const SizedBox(
               height: 10,
             ),
-            StatefulBuilder(
-              builder: (context, StateSetter setState) {
-                return Padding(
-                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                  child: TextField(
-                    focusNode: _passwordNode,
-                    controller: _passwordCtrl,
-                    obscureText: _obscure,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      hintText: 'enterPassword'.tr(),
-                      suffixIcon: IconButton(
-                        icon: _obscure
-                            ? const Icon(Icons.visibility_off)
-                            : const Icon(Icons.visibility),
-                        onPressed: () {
-                          _obscure = !_obscure;
-                          setState(() {});
-                        },
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
+            _PasswordField(),
             Container(
               padding: const EdgeInsets.only(left: 10),
               alignment: Alignment.centerLeft,
@@ -152,55 +95,62 @@ class SignInState extends State<SignIn> {
               children: <Widget>[
                 Consumer(builder: (context, watch, child) {
                   final _view = watch(viewProvider);
-                  return RawMaterialButton(
-                    fillColor: const Color.fromRGBO(64, 123, 255, 32),
-                    elevation: 15,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(30),
-                      ),
-                    ),
-                    onPressed: ()  {
-
-                       _authServices
-                          .signInWithEmailPassword(
-                              email: _emailCtrl.text,
-                              password: _passwordCtrl.text,
-                              context: context)
-                          .then(
-                        (value) {
-                          debugPrint('Value:$value');
-                          debugPrint('Status value:${_authServices.status}');
-                          switch (_authServices.status) {
-                            case 'success':
-                              _view.view = 0;
-                              break;
-                            case 'user-not-found':
-                              dialogNoAccountFound(
-                                context: context,
-                                email: _emailCtrl.text,
-                                password: _passwordCtrl.text,
-                                error: _authServices.error,
-                              );
-                              break;
-                            case 'wrong-password':
-                              dialogWrongPassword(
-                                context: context,
-                                email: _emailCtrl.text,
-                                error: _authServices.error,
-                              );
-                              break;
-                            case 'null':
-                              dialogUnknownError(context: context);
-                          }
-                        },
-                      );
-                    },
-                    child: Text(
-                      'signIn'.tr(),
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                  );
+                  debugPrint('Building row');
+                  return _view.authenticating
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : RawMaterialButton(
+                          fillColor: const Color.fromRGBO(64, 123, 255, 32),
+                          elevation: 15,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(30),
+                            ),
+                          ),
+                          onPressed: () {
+                            _view.loadingAuth(loading: true);
+                            _authServices
+                                .signInWithEmailPassword(
+                                    email: _emailCtrl.text,
+                                    password: _passwordCtrl.text,
+                                    context: context)
+                                .then(
+                              (value) {
+                                debugPrint('Value:$value');
+                                _view.loadingAuth(loading: false);
+                                debugPrint(
+                                    'Status value:${_authServices.status}');
+                                switch (_authServices.status) {
+                                  case 'success':
+                                    _view.view = 0;
+                                    break;
+                                  case 'user-not-found':
+                                    dialogNoAccountFound(
+                                      context: context,
+                                      email: _emailCtrl.text,
+                                      password: _passwordCtrl.text,
+                                      error: _authServices.error,
+                                    );
+                                    break;
+                                  case 'wrong-password':
+                                    dialogWrongPassword(
+                                      context: context,
+                                      email: _emailCtrl.text,
+                                      error: _authServices.error,
+                                    );
+                                    break;
+                                  case 'null':
+                                    dialogUnknownError(context: context);
+                                }
+                              },
+                            );
+                          },
+                          child: Text(
+                            'signIn'.tr(),
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        );
                 }),
               ],
             ),
@@ -274,13 +224,106 @@ class SignInState extends State<SignIn> {
       debugPrint('$e');
     }
   }
+}
 
+class _EmailWithValidator extends StatelessWidget {
   @override
-  void dispose() {
-    _emailCtrl.dispose();
-    _passwordCtrl.dispose();
-    _passwordNode.dispose();
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 10.0,
+        right: 10.0,
+      ),
+      child: Consumer(builder: (_, watch, __) {
+        final _fields = watch(_fieldsProvider);
+        return TextField(
+          controller: _emailCtrl,
+          onChanged: (value) {
+            _fields.validateEmail(value);
+          },
+          onSubmitted: (submitted) {
+            FocusScope.of(context).requestFocus(_passwordNode);
+          },
+          decoration: InputDecoration(
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+            hintText: 'enterEmail'.tr(),
+            errorText: _fields.errorMsgEmail,
+          ),
+        );
+      }),
+    );
+  }
+}
 
-    super.dispose();
+class _PasswordField extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+      child: Consumer(builder: (_, watch, __) {
+        final _fields = watch(_fieldsProvider);
+        return TextField(
+          focusNode: _passwordNode,
+          controller: _passwordCtrl,
+          obscureText: _fields.obscurePassword,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            hintText: 'enterPassword'.tr(),
+            suffixIcon: IconButton(
+              icon: _fields.obscurePassword
+                  ? const Icon(Icons.visibility_off)
+                  : const Icon(Icons.visibility),
+              onPressed: () {
+                _fields.togglePasswordVisibity();
+              },
+            ),
+          ),
+        );
+      }),
+    );
+  }
+}
+
+class _FieldsNotifier with ChangeNotifier {
+  String errorMsgEmail;
+  String errorMsgPassword;
+  bool obscurePassword = true;
+  void validateEmail(String value) {
+    value.trim();
+    if (_emailCtrl.text != null) {
+      if (value.isEmpty) {
+        errorMsgEmail = "Email can't be empty";
+      } else if (!value.contains(RegExp(
+          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+"))) {
+        errorMsgEmail = 'Enter a correct email address';
+      } else {
+        errorMsgEmail = null;
+      }
+
+      notifyListeners();
+    }
+  }
+
+  void validatePassword(String value) {
+    value.trim();
+    if (_emailCtrl.text != null) {
+      if (value.isEmpty) {
+        errorMsgPassword = "Email can't be empty";
+      } else if (!value.contains(RegExp(
+          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+"))) {
+        errorMsgPassword = 'Enter a correct email address';
+      } else {
+        errorMsgPassword = null;
+      }
+
+      notifyListeners();
+    }
+  }
+
+  void togglePasswordVisibity() {
+    obscurePassword = !obscurePassword;
+    notifyListeners();
   }
 }

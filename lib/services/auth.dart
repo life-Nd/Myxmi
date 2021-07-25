@@ -58,25 +58,23 @@ class AuthServices {
     final String _email = email.trim();
     final String _password = password.trim();
     final SharedPreferences prefs = await _prefs;
-  
+    // openLoadingDialog(context, '${'signingIn'.tr()}...');
     try {
       await firebaseAuth
           .signInWithEmailAndPassword(email: _email, password: _password)
-          .whenComplete(()async {
-         
+          .whenComplete(() async {
         if (!foundation.kDebugMode && !foundation.kIsWeb) return;
         prefs.setBool('is_logged_in', true);
         status = 'success';
-         Navigator.of(context).pushAndRemoveUntil(
+        Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context1) => Root()), (route) => false);
       });
 
       return status;
     } on FirebaseAuthException catch (_error) {
-      debugPrint('----Error-----: $error----');
       debugPrint('errorCode:$_error');
-
       error = _error;
+      debugPrint('----Error-----: $error----');
       if (error?.code != null) status = error.code;
       return status;
     }
