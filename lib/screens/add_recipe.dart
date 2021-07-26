@@ -10,7 +10,7 @@ import 'package:myxmi/widgets/vape_subcategories.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../main.dart';
 import '../providers/recipe.dart';
-import 'recipe_image.dart';
+import '../widgets/new_recipe_image.dart';
 import 'recipe_instructions.dart';
 
 TextEditingController _titleCtrl = TextEditingController();
@@ -20,7 +20,6 @@ final recipeProvider =
     ChangeNotifierProvider<RecipeProvider>((ref) => RecipeProvider());
 List steps = [];
 
-// ignore: must_be_immutable
 class AddRecipe extends HookWidget {
   @override
   Widget build(BuildContext context) {
@@ -41,70 +40,78 @@ class AddRecipe extends HookWidget {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        width: 4,
-                        color: _recipe.pageIndex == 0
-                            ? Theme.of(context).appBarTheme.titleTextStyle.color
-                            : Theme.of(context).scaffoldBackgroundColor,
+          ListTile(
+            title: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          width: 4,
+                          color: _recipe.pageIndex == 0
+                              ? Theme.of(context)
+                                  .appBarTheme
+                                  .titleTextStyle
+                                  .color
+                              : Theme.of(context).scaffoldBackgroundColor,
+                        ),
                       ),
                     ),
+                    child: Text('details'.tr().toUpperCase(),
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
                   ),
-                  child: Text('details'.tr().toUpperCase(),
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  decoration: BoxDecoration(
-                    border: Border(
-                        bottom: BorderSide(
-                      width: 4,
-                      color: _recipe.pageIndex == 1
-                          ? Theme.of(context).appBarTheme.titleTextStyle.color
-                          : Theme.of(context).scaffoldBackgroundColor,
-                    )),
-                  ),
-                  child: Text('products'.tr().toUpperCase(),
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  decoration: BoxDecoration(
-                    border: Border(
-                        bottom: BorderSide(
-                      width: 4,
-                      color: _recipe.pageIndex == 2
-                          ? Theme.of(context).appBarTheme.titleTextStyle.color
-                          : Theme.of(context).scaffoldBackgroundColor,
-                    )),
-                  ),
-                  child: Text('instructions'.tr().toUpperCase(),
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
+                  Container(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
                         width: 4,
-                        color: _recipe.pageIndex == 3
+                        color: _recipe.pageIndex == 1
                             ? Theme.of(context).appBarTheme.titleTextStyle.color
                             : Theme.of(context).scaffoldBackgroundColor,
+                      )),
+                    ),
+                    child: Text('products'.tr().toUpperCase(),
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
+                        width: 4,
+                        color: _recipe.pageIndex == 2
+                            ? Theme.of(context).appBarTheme.titleTextStyle.color
+                            : Theme.of(context).scaffoldBackgroundColor,
+                      )),
+                    ),
+                    child: Text('instructions'.tr().toUpperCase(),
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          width: 4,
+                          color: _recipe.pageIndex == 3
+                              ? Theme.of(context)
+                                  .appBarTheme
+                                  .titleTextStyle
+                                  .color
+                              : Theme.of(context).scaffoldBackgroundColor,
+                        ),
                       ),
                     ),
+                    child: Text('image'.tr().toUpperCase(),
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
                   ),
-                  child: Text('image'.tr().toUpperCase(),
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           Expanded(
@@ -116,201 +123,198 @@ class AddRecipe extends HookWidget {
                 _recipe.changeView(index);
               },
               children: [
-                SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 10.0),
-                    child: Column(
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          top: 8, bottom: 2, right: 40, left: 40),
+                      child: TextField(
+                        controller: _titleCtrl,
+                        decoration: InputDecoration(
+                          isDense: true,
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          hintText: 'recipeName'.tr(),
+                        ),
+                        onSubmitted: (submitted) {
+                          _recipe.changeTitle(newName: _titleCtrl.text);
+                          FocusScope.of(context).requestFocus(FocusNode());
+                        },
+                      ),
+                    ),
+                    Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              top: 8, bottom: 2, right: 40, left: 40),
-                          child: TextField(
-                            controller: _titleCtrl,
-                            decoration: InputDecoration(
-                              isDense: true,
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20)),
-                              hintText: 'recipeName'.tr(),
-                            ),
-                            onSubmitted: (submitted) {
-                              _recipe.changeTitle(newName: _titleCtrl.text);
-                              FocusScope.of(context).requestFocus(FocusNode());
-                            },
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text('${'difficulty'.tr()}: '),
-                                Text(
-                                  _recipe.getDifficulty(),
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18),
-                                )
-                              ],
-                            ),
-                            Slider(
-                              value: _recipe.difficultyValue,
-                              onChanged: (value) {
-                                _recipe.changeDifficulty(
-                                    newDifficultyValue: value);
-                                debugPrint("VALUE: $value");
-                              },
-                              activeColor: _recipe.difficultyValue == 0.0
-                                  ? Colors.green
-                                  : _recipe.difficultyValue == 0.5
-                                      ? Colors.yellow
-                                      : _recipe.difficultyValue == 1.0
-                                          ? Colors.red
-                                          : Colors.grey,
-                              divisions: 2,
-                              label: _recipe.recipeModel.difficulty,
-                              inactiveColor: Colors.grey,
-                            ),
-                          ],
-                        ),
-                        Text('duration'.tr()),
-                        const SizedBox(
-                          height: 4,
-                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Expanded(
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 60, right: 60),
-                                child: TextField(
-                                  controller: _durationCtrl,
-                                  keyboardType: TextInputType.number,
-                                  onSubmitted: (submitted) {
-                                    _recipe.changeDuration(
-                                        newDuration: _durationCtrl.text);
-                                    FocusScope.of(context)
-                                        .requestFocus(FocusNode());
-                                  },
-                                  decoration: InputDecoration(
-                                    prefixIcon: const Icon(Icons.timer),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    hintText: 'time'.tr(),
-                                    suffixText: 'min',
-                                  ),
-                                ),
-                              ),
-                            ),
+                            Text('${'difficulty'.tr()}: '),
+                            Text(
+                              _recipe.getDifficulty(),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 18),
+                            )
                           ],
                         ),
-                        const SizedBox(
-                          height: 4,
+                        Slider(
+                          value: _recipe.difficultyValue,
+                          onChanged: (value) {
+                            _recipe.changeDifficulty(newDifficultyValue: value);
+                            debugPrint("VALUE: $value");
+                          },
+                          activeColor: _recipe.difficultyValue == 0.0
+                              ? Colors.green
+                              : _recipe.difficultyValue == 0.5
+                                  ? Colors.yellow
+                                  : _recipe.difficultyValue == 1.0
+                                      ? Colors.red
+                                      : Colors.grey,
+                          divisions: 2,
+                          label: _recipe.recipeModel.difficulty,
+                          inactiveColor: Colors.grey,
                         ),
-                        Text('portions'.tr()),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 100, right: 100),
-                                child: TextField(
-                                  controller: _portionsCtrl,
-                                  keyboardType: TextInputType.number,
-                                  onSubmitted: (submitted) {
-                                    _recipe.changePortions(
-                                        newPortions: _portionsCtrl.text);
-                                    FocusScope.of(context)
-                                        .requestFocus(FocusNode());
-                                  },
-                                  decoration: InputDecoration(
-                                    prefixIcon:
-                                        const Icon(Icons.local_pizza_outlined),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    hintText: 'portions'.tr(),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        Text('category'.tr()),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                RawMaterialButton(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
-                                  fillColor:
-                                      _recipe.recipeModel.category == 'drink'
-                                          ? Colors.green
-                                          : Theme.of(context).cardColor,
-                                  onPressed: () {
-                                    _recipe.changeCategory(
-                                        newCategory: 'drink');
-                                  },
-                                  child: Text('drink'.tr()),
-                                ),
-                                RawMaterialButton(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
-                                  fillColor:
-                                      _recipe.recipeModel.category == 'food'
-                                          ? Colors.green
-                                          : Theme.of(context).cardColor,
-                                  onPressed: () {
-                                    _recipe.changeCategory(newCategory: 'food');
-                                  },
-                                  child: Text('foods'.tr()),
-                                ),
-                                RawMaterialButton(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
-                                  fillColor:
-                                      _recipe.recipeModel.category == 'vapes'
-                                          ? Colors.green
-                                          : Theme.of(context).cardColor,
-                                  onPressed: () {
-                                    _recipe.changeCategory(
-                                        newCategory: 'vapes');
-                                  },
-                                  child: Text('vapes'.tr()),
-                                ),
-                                RawMaterialButton(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
-                                  fillColor:
-                                      _recipe.recipeModel.category == 'other'
-                                          ? Colors.green
-                                          : Theme.of(context).cardColor,
-                                  onPressed: () {
-                                    _recipe.changeCategory(
-                                        newCategory: 'other');
-                                  },
-                                  child: Text('other'.tr()),
-                                )
-                              ]),
-                        ),
-                        subCategory(category: _recipe.recipeModel.category),
                       ],
                     ),
-                  ),
+                    Text('duration'.tr()),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 60, right: 60),
+                            child: TextField(
+                              controller: _durationCtrl,
+                              keyboardType: TextInputType.number,
+                              onSubmitted: (submitted) {
+                                _recipe.changeDuration(
+                                    newDuration: _durationCtrl.text);
+                                FocusScope.of(context)
+                                    .requestFocus(FocusNode());
+                              },
+                              decoration: InputDecoration(
+                                prefixIcon: const Icon(Icons.timer),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                hintText: 'time'.tr(),
+                                suffixText: 'min',
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Text('portions'.tr()),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.only(left: 100, right: 100),
+                            child: TextField(
+                              controller: _portionsCtrl,
+                              keyboardType: TextInputType.number,
+                              onSubmitted: (submitted) {
+                                _recipe.changePortions(
+                                    newPortions: _portionsCtrl.text);
+                                FocusScope.of(context)
+                                    .requestFocus(FocusNode());
+                              },
+                              decoration: InputDecoration(
+                                prefixIcon:
+                                    const Icon(Icons.local_pizza_outlined),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                hintText: 'portions'.tr(),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Text('category'.tr()),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            RawMaterialButton(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              fillColor: _recipe.recipeModel.category == 'drink'
+                                  ? Colors.green
+                                  : Theme.of(context).cardColor,
+                              onPressed: () {
+                                _recipe.changeCategory(newCategory: 'drink');
+                              },
+                              child: Text('drink'.tr()),
+                            ),
+                            RawMaterialButton(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              fillColor: _recipe.recipeModel.category == 'food'
+                                  ? Colors.green
+                                  : Theme.of(context).cardColor,
+                              onPressed: () {
+                                _recipe.changeCategory(newCategory: 'food');
+                              },
+                              child: Text('food'.tr()),
+                            ),
+                            RawMaterialButton(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              fillColor: _recipe.recipeModel.category == 'vapes'
+                                  ? Colors.green
+                                  : Theme.of(context).cardColor,
+                              onPressed: () {
+                                _recipe.changeCategory(newCategory: 'vapes');
+                              },
+                              child: Text('vapes'.tr()),
+                            ),
+                            RawMaterialButton(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              fillColor: _recipe.recipeModel.category == 'other'
+                                  ? Colors.green
+                                  : Theme.of(context).cardColor,
+                              onPressed: () {
+                                _recipe.changeCategory(newCategory: 'other');
+                              },
+                              child: Text('other'.tr()),
+                            )
+                          ]),
+                    ),
+                    subCategory(category: _recipe.recipeModel.category),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        RawMaterialButton(
+                          elevation: 20,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          fillColor: Colors.blue,
+                          onPressed: () {},
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: const [
+                                Icon(
+                                  Icons.navigate_next_rounded,
+                                  color: Colors.white,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
                 _ProductsView(),
                 RecipeInstructions(),
-                RecipeImage(),
+                NewRecipeImage(),
               ],
             ),
           ),
@@ -322,7 +326,7 @@ class AddRecipe extends HookWidget {
   Widget subCategory({String category}) {
     Widget _subCategory;
     switch (category) {
-      case 'foods':
+      case 'food':
         _subCategory = Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -331,7 +335,7 @@ class AddRecipe extends HookWidget {
           ],
         );
         return _subCategory;
-      case 'drinks':
+      case 'drink':
         _subCategory = Column(
           mainAxisSize: MainAxisSize.min,
           children: [

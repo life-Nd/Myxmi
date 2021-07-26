@@ -3,9 +3,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/providers/image.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'add_recipe.dart';
+import '../screens/add_recipe.dart';
 
-class RecipeImage extends HookWidget {
+class NewRecipeImage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final _image = useProvider(imageProvider);

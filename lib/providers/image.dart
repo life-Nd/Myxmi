@@ -105,13 +105,12 @@ class ImageProvider extends ChangeNotifier {
       BuildContext context,
       GlobalKey<ScaffoldState> scaffoldKey}) async {
     final ProgressDialog pr = ProgressDialog(context: context);
+    pr.show(max: 1000, msg: '${'loading'.tr()} ${'image'.tr()}...');
     firebase_storage.UploadTask task;
     final String timeStamp = DateTime.now().millisecondsSinceEpoch.toString();
     final rng = Random();
     final _random = rng.nextInt(90000) + 10000;
-    pr.show(max: 1000, msg: '${'loading'.tr()} ${'image'.tr()}...');
     imageId = '$timeStamp-$_random}';
-
     final firebaseStorageRef = firebase_storage.FirebaseStorage.instance
         .ref()
         .child("$timeStamp-$_random.jpg");

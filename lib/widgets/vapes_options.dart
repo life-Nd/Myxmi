@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'filter.dart';
+import 'menu_item.dart';
 
-class FoodsFilter extends HookWidget {
+class VapeOptions extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -12,7 +12,7 @@ class FoodsFilter extends HookWidget {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            'foods'.tr(),
+            'vapes'.tr(),
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 17,
@@ -23,26 +23,17 @@ class FoodsFilter extends HookWidget {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: const [
-              Filter(
-                legend: 'breakfast',
+              MenuItem(
+                legend: 'nicotine',
               ),
-              Filter(
-                legend: 'appetizer',
+              MenuItem(
+                legend: 'thc',
               ),
-              Filter(
-                legend: 'salad',
+              MenuItem(
+                legend: 'cbd',
               ),
-              Filter(
-                legend: 'soup',
-              ),
-              Filter(
-                legend: 'dinner',
-              ),
-              Filter(
-                legend: 'dessert',
-              ),
-              Filter(
-              legend: 'foods',
+              MenuItem(
+                legend: 'vapes',
               ),
             ],
           ),

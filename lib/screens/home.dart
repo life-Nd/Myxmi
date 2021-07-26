@@ -22,7 +22,7 @@ class Home extends HookWidget {
     final _favorites = useProvider(favProvider);
     final _user = useProvider(userProvider);
     final _change = useState<bool>(false);
-    int _viewIndex = _view.view;
+    final int _viewIndex = _view.view;
     final bool _searchable = _viewIndex == 0 ||
         _viewIndex == 1 && _user.account?.uid != null ||
         _viewIndex == 2 && _user.account?.uid != null ||
@@ -64,7 +64,7 @@ class Home extends HookWidget {
                   : FloatingActionButton(
                       backgroundColor: Colors.red,
                       onPressed: () {
-                        _viewIndex = 3;
+                        _view.changeViewIndex(index: 4);
                         _change.value = !_change.value;
                       },
                       child: const Icon(

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:myxmi/screens/favorites.dart';
-import 'package:myxmi/screens/filtering.dart';
+import 'package:myxmi/screens/menu.dart';
 import 'package:myxmi/screens/more.dart';
 import 'package:myxmi/screens/products.dart';
 import 'package:myxmi/screens/recipes_screen.dart';
@@ -12,13 +12,13 @@ class ViewProvider extends ChangeNotifier {
   bool searching = false;
   String searchText = '';
   bool authenticating = false;
+  Stream<QuerySnapshot> search;
 
   void loadingAuth({bool loading}) {
     authenticating = loading;
     notifyListeners();
   }
 
-  Stream<QuerySnapshot> search;
   void changeViewIndex({int index}) {
     view = index;
     notifyListeners();
@@ -29,7 +29,7 @@ class ViewProvider extends ChangeNotifier {
     switch (view) {
       case 0:
         return !searching
-            ? FilteringScreen()
+            ? MenuScreen()
             : RecipesScreen(
                 legend: 'Searching',
                 uid: uid,
@@ -57,7 +57,7 @@ class ViewProvider extends ChangeNotifier {
       case 5:
         return uid != null ? More() : SignIn();
       default:
-        return FilteringScreen();
+        return MenuScreen();
     }
   }
 

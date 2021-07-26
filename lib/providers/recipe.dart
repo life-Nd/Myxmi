@@ -15,6 +15,12 @@ class RecipeProvider extends ChangeNotifier {
   double difficultyValue = 0.0;
   int pageIndex = 0;
   Widget image;
+  PageController pageController = PageController();
+
+  void changePageController(int index) {
+    pageController.jumpToPage(index);
+    notifyListeners();
+  }
 
   Widget imageViewer({@required Widget newImage}) {
     return image = newImage;
@@ -120,16 +126,16 @@ class RecipeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
- void hide({String component}) {
+  void hide({String component}) {
     hidden.add(component);
   }
 
-void unhide() {
+  void unhide() {
     hidden.clear();
     notifyListeners();
   }
 
- void reset() {
+  void reset() {
     recipeModel = RecipeModel();
     instructions = InstructionsModel();
     quantity.clear();

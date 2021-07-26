@@ -17,12 +17,8 @@ class SaveButton extends HookWidget {
     final _recipe = useProvider(recipeProvider);
     final _image = useProvider(imageProvider);
     final _user = useProvider(userProvider);
-    return IconButton(
-      icon: const Icon(
-        Icons.save,
-        color: Colors.green,
-      ),
-      onPressed: _recipe.recipeModel.title != null 
+    return RawMaterialButton(
+      onPressed: _recipe.recipeModel.title != null
           ? () async {
               String _key;
 
@@ -71,6 +67,14 @@ class SaveButton extends HookWidget {
                 ),
               );
             },
+      child: Text(
+        'save'.tr(),
+        style: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: Colors.green,
+        ),
+      ),
     );
   }
 }

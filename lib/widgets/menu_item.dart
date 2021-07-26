@@ -3,23 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:myxmi/screens/filtered.dart';
 
-class Filter extends StatefulWidget {
+class MenuItem extends StatefulWidget {
   final String legend;
-
-  const Filter({Key key, this.legend}) : super(key: key);
-
+  const MenuItem({Key key, this.legend}) : super(key: key);
   @override
-  State<StatefulWidget> createState() => _FilterState();
+  State<StatefulWidget> createState() => _MenuItemState();
 }
 
-class _FilterState extends State<Filter> {
+class _MenuItemState extends State<MenuItem> {
   final bool _kIsWeb = kIsWeb;
   @override
   Widget build(BuildContext context) {
-// WEB: height:240.33333333333334
-//      width: 320
-// S20: Height:304.76190476190476
-//      Width: 102.85714285714286
     final Size _size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {

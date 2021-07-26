@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'menu_item.dart';
 
-import 'filter.dart';
-
-class DietsFilter extends HookWidget {
+class DietOptions extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -21,16 +20,16 @@ class DietsFilter extends HookWidget {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: const [
-              Filter(
+              MenuItem(
                 legend: 'vegan',
               ),
-              Filter(
+              MenuItem(
                 legend: 'vegetarian',
               ),
-              Filter(
+              MenuItem(
                 legend: 'keto',
               ),
-              Filter(
+              MenuItem(
                 legend: 'diets',
               ),
             ],

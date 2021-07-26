@@ -5,10 +5,10 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/recipe.dart';
 import 'package:myxmi/screens/home.dart';
-import 'package:myxmi/screens/selected_recipe.dart';
 import '../app.dart';
 import '../main.dart';
 import 'add_reviews.dart';
+import 'rating_stars.dart';
 
 class AddFavoriteButton extends HookWidget {
   final RecipeModel recipe;

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'filter.dart';
+import 'menu_item.dart';
 
-class DrinksFilter extends HookWidget {
+class DrinkItems extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -20,17 +20,17 @@ class DrinksFilter extends HookWidget {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: const [
-              Filter(
-              legend: 'cocktail',
+              MenuItem(
+                legend: 'cocktail',
               ),
-              Filter(
-              legend: 'smoothie',
+              MenuItem(
+                legend: 'smoothie',
               ),
-              Filter(
-              legend: 'shake',
+              MenuItem(
+                legend: 'shake',
               ),
-              Filter(
-              legend: 'drinks',
+              MenuItem(
+                legend: 'drinks',
               ),
             ],
           ),
