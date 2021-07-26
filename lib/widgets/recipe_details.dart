@@ -26,7 +26,7 @@ class RecipeDetails extends StatelessWidget {
       return PageView(
         controller: _recipe.pageController,
         onPageChanged: (index) {
-          _recipe.changeView(index);
+          _recipe.changePageController(index);
         },
         children: [
           Column(

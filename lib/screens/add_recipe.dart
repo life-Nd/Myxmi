@@ -11,7 +11,7 @@ import 'package:easy_localization/easy_localization.dart';
 import '../main.dart';
 import '../providers/recipe.dart';
 import '../widgets/new_recipe_image.dart';
-import 'recipe_instructions.dart';
+import '../widgets/recipe_instructions.dart';
 
 TextEditingController _titleCtrl = TextEditingController();
 TextEditingController _durationCtrl = TextEditingController();
@@ -116,11 +116,9 @@ class AddRecipe extends HookWidget {
           ),
           Expanded(
             child: PageView(
-              controller: PageController(
-                initialPage: _recipe.pageIndex,
-              ),
+              controller: _recipe.pageController,
               onPageChanged: (index) {
-                _recipe.changeView(index);
+                _recipe.changePageController(index);
               },
               children: [
                 Column(

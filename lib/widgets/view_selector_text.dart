@@ -28,7 +28,9 @@ class ViewSelectorText extends StatelessWidget {
             border: Border(
               bottom: BorderSide(
                   width: 4,
-                  color: _recipe.pageIndex == viewIndex
+                  color: (_recipe.pageController.hasClients &&
+                              _recipe.pageController.page == viewIndex) ||
+                          (!_recipe.pageController.hasClients && viewIndex == 0)
                       ? Theme.of(context).appBarTheme.titleTextStyle.color
                       : Colors.transparent),
             ),
