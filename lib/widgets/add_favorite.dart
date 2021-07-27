@@ -7,12 +7,9 @@ import 'package:myxmi/models/recipe.dart';
 import 'package:myxmi/screens/home.dart';
 import '../app.dart';
 import '../main.dart';
-import 'add_reviews.dart';
-import 'rating_stars.dart';
 
 class AddFavoriteButton extends HookWidget {
   final RecipeModel recipe;
-
   const AddFavoriteButton({@required this.recipe});
 
   @override
@@ -21,116 +18,94 @@ class AddFavoriteButton extends HookWidget {
     final _fav = useProvider(favProvider);
     final _view = useProvider(viewProvider);
     final _change = useState<bool>(false);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            if (_user.account?.uid == null)
-              IconButton(
-                icon: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.white,
+        if (_user.account?.uid == null)
+          IconButton(
+            icon: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.white,
+              ),
+              padding: const EdgeInsets.all(4),
+              child: const Icon(Icons.favorite_border, color: Colors.black),
+            ),
+            onPressed: () {
+              _view.view = 2;
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => Home(),
+                ),
+              );
+            },
+          )
+        else
+          !_fav.allRecipes.keys.contains(recipe.recipeId)
+              ? IconButton(
+                  icon: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+                    ),
+                    padding: const EdgeInsets.all(4),
+                    child: const Icon(
+                      Icons.favorite_border,
+                      color: Colors.red,
+                    ),
                   ),
-                  padding: const EdgeInsets.all(4),
-                  child: const Icon(Icons.favorite_border, color: Colors.black),
-                ),
-                onPressed: () {
-                  _view.view = 2;
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => Home(),
+                  onPressed: () {
+                    final Map<String, dynamic> _data = {};
+                    _data[recipe.recipeId] = {
+                      'title': recipe.title,
+                      'image_url': recipe.imageUrl,
+                      'joined': 'false',
+                      'steps_count': recipe.stepsCount,
+                      'ingredients_count': recipe.ingredientsCount
+                    };
+                    FirebaseFirestore.instance
+                        .collection('Favorites')
+                        .doc(_user.account.uid)
+                        .set(_data, SetOptions(merge: true));
+                    _fav.addFavorite(newFavorite: _data);
+                    _change.value = !_change.value;
+                  },
+                )
+              : IconButton(
+                  icon: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
                     ),
-                  );
-                },
-              )
-            else
-              !_fav.allRecipes.keys.contains(recipe.recipeId)
-                  ? IconButton(
-                      icon: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.white,
-                        ),
-                        padding: const EdgeInsets.all(4),
-                        child: const Icon(
-                          Icons.favorite_border,
-                          color: Colors.red,
-                        ),
-                      ),
-                      onPressed: () {
-                        final Map<String, dynamic> _data = {};
-                        _data[recipe.recipeId] = {
-                          'title': recipe.title,
-                          'image_url': recipe.imageUrl,
-                          'joined': 'false',
-                          'steps_count': recipe.stepsCount,
-                          'ingredients_count': recipe.ingredientsCount
-                        };
-                        FirebaseFirestore.instance
-                            .collection('Favorites')
-                            .doc(_user.account.uid)
-                            .set(_data, SetOptions(merge: true));
-                        _fav.addFavorite(newFavorite: _data);
-                        _change.value = !_change.value;
-                      },
-                    )
-                  : IconButton(
-                      icon: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.white,
-                        ),
-                        padding: const EdgeInsets.all(4),
-                        child: const Icon(
-                          Icons.favorite_outlined,
-                          color: Colors.red,
-                        ),
-                      ),
-                      onPressed: () {
-                        FirebaseFirestore.instance
-                            .collection('Favorites')
-                            .doc(_user.account.uid)
-                            .update({recipe.recipeId: FieldValue.delete()});
-                        _fav.removeFavorite(newFavorite: recipe.recipeId);
-                        _change.value = !_change.value;
-                      },
+                    padding: const EdgeInsets.all(4),
+                    child: const Icon(
+                      Icons.favorite_outlined,
+                      color: Colors.red,
                     ),
-            IconButton(
-              icon: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.white,
+                  ),
+                  onPressed: () {
+                    FirebaseFirestore.instance
+                        .collection('Favorites')
+                        .doc(_user.account.uid)
+                        .update({recipe.recipeId: FieldValue.delete()});
+                    _fav.removeFavorite(newFavorite: recipe.recipeId);
+                    _change.value = !_change.value;
+                  },
                 ),
-                padding: const EdgeInsets.all(4),
-                child: Icon(
-                    Platform.isIOS
-                        ? Icons.ios_share_outlined
-                        : Icons.share_outlined,
-                      color: Colors.black),
-              ),
-              onPressed: () {},
+        IconButton(
+          icon: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: Colors.white,
             ),
-          ],
-        ),
-        GestureDetector(
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => AddReviews(),
-              ),
-            );
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: RatingStars(
-              stars: recipe.stars ?? '0.0',
-            ),
+            padding: const EdgeInsets.all(4),
+            child: Icon(
+                Platform.isIOS
+                    ? Icons.ios_share_outlined
+                    : Icons.share_outlined,
+                color: Colors.black),
           ),
+          onPressed: () {},
         ),
       ],
     );

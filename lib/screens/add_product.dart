@@ -134,9 +134,9 @@ class NewProduct extends HookWidget {
                   ),
                 ),
               ),
-              Container(
-                height: _size.height < 700 ? 240 : 300,
-                padding: const EdgeInsets.only(left: 20, right: 20),
+              Expanded(
+                // height: _size.height < 700 ? 240 : 300,
+                // padding: const EdgeInsets.only(left: 20, right: 20),
                 child: GridView(
                   padding: const EdgeInsets.symmetric(),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

@@ -27,18 +27,24 @@ class RecipeTileImage extends HookWidget {
                 children: [
                   Opacity(
                     opacity: 0.3,
-                    child: Image.asset(
-                      'assets/${recipe.subCategory}.jpg',
-                      fit: BoxFit.fitWidth,
-                      height: _size.height,
-                      width: _size.width,
-                      cacheWidth: 1000,
-                      cacheHeight: 1000,
-                      colorBlendMode: BlendMode.color,
-                    ),
+                    child: recipe.subCategory != null
+                        ? Image.asset(
+                            'assets/${recipe.subCategory}.jpg',
+                            fit: BoxFit.fitWidth,
+                            height: _size.height,
+                            width: _size.width,
+                            cacheWidth: 1000,
+                            cacheHeight: 1000,
+                            colorBlendMode: BlendMode.color,
+                          )
+                        : const Icon(
+                            Icons.no_photography,
+                            color: Colors.red,
+                          ),
                   ),
                   const Icon(
                     Icons.no_photography,
+                    color: Colors.red,
                     size: 40,
                   ),
                 ],
@@ -46,7 +52,9 @@ class RecipeTileImage extends HookWidget {
         _recipeProvider.recipeModel = recipe;
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (_) => const SelectedRecipe(),
+            builder: (_) => SelectedRecipe(
+              recipeId: recipe.recipeId,
+            ),
           ),
         );
       },
@@ -77,9 +85,12 @@ class RecipeTileImage extends HookWidget {
                           )
                         : null,
                   ),
-                  const Icon(
-                    Icons.no_photography,
-                    size: 40,
+                  const Center(
+                    child: Icon(
+                      Icons.no_photography,
+                      color: Colors.red,
+                      size: 40,
+                    ),
                   ),
                 ],
               ),

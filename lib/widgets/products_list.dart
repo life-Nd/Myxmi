@@ -8,121 +8,118 @@ import '../main.dart';
 import 'edit_products.dart';
 import 'fields.dart';
 
-class ProductsList extends StatefulWidget {
-  final String uid;
+class ProductsList extends StatelessWidget {
   final String type;
-  final Future componentsFuture;
-  const ProductsList(
-      {@required this.uid,
-      @required this.type,
-      @required this.componentsFuture});
-  @override
-  State<StatefulWidget> createState() => ProductsListState();
-}
 
-class ProductsListState extends State<ProductsList> {
-  @override
-  void initState() {
-    super.initState();
-  }
+  const ProductsList({
+    @required this.type,
+  });
 
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
-    return FutureBuilder(
-      future: widget.componentsFuture,
-      builder: (_, AsyncSnapshot snapshot) {
-        if (snapshot.hasError) {
-          return const Text('error');
-        }
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Container(
-            alignment: Alignment.center,
-            child: Text('${'loading'.tr()}...'),
-          );
-        }
-        if (snapshot.data != null) {
-          final Map _data = widget.type == 'AddToCart'
-              ? snapshot as Map
-              : snapshot.data.data() as Map;
-          return Consumer(
-            builder: (context, watch, child) {
-              final _recipe = watch(recipeProvider);
-              final _user = watch(userProvider);
-              final _keys = _data != null ? _data?.keys?.toList() : [];
-              return SizedBox(
-                height: _size.height / 1.2,
-                child: _keys.isNotEmpty
-                    ? ListView.builder(
-                        itemCount: _keys.length,
-                        itemBuilder: (context, index) {
-                          final _key = _keys[index];
-                          return Dismissible(
-                              key: UniqueKey(),
-                              onDismissed: (direction) {
-                                _data.remove(_data[index]);
-                                _recipe.hide(component: _keys[index] as String);
-                                FirebaseFirestore.instance
-                                    .collection('Favorites')
-                                    .doc(_user.account.uid)
-                                    .update({
-                                  '${_keys[index]}': FieldValue.delete()
-                                });
-                              },
-                              background: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Card(
-                                  color: Colors.red,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        widget.type == 'AddRecipe'
-                                            ? 'delete'.tr()
-                                            : 'hide'.tr(),
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17,
+    return Consumer(builder: (_, watch, child) {
+      final _user = watch(userProvider);
+
+      return FutureBuilder(
+        future: FirebaseFirestore.instance
+            .collection('Products')
+            .doc(_user.account.uid)
+            .get(),
+        builder: (_, AsyncSnapshot snapshot) {
+          if (snapshot.hasError) {
+            return const Text('error');
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            debugPrint('loading future');
+            return Container(
+              alignment: Alignment.center,
+              child: Text('${'loading'.tr()}...'),
+            );
+          }
+          if (snapshot.data != null) {
+            final Map _data = type == 'AddToCart'
+                ? snapshot as Map
+                : snapshot.data.data() as Map;
+            return Consumer(
+              builder: (_, watch, child) {
+                final _recipe = watch(recipeProvider);
+                final _keys = _data != null ? _data?.keys?.toList() : [];
+                return SizedBox(
+                  height: _size.height / 1.2,
+                  child: _keys.isNotEmpty
+                      ? ListView.builder(
+                          itemCount: _keys.length,
+                          itemBuilder: (context, index) {
+                            final _key = _keys[index];
+                            return Dismissible(
+                                key: UniqueKey(),
+                                onDismissed: (direction) {
+                                  _data.remove(_data[index]);
+                                  _recipe.hide(
+                                      component: _keys[index] as String);
+                                  FirebaseFirestore.instance
+                                      .collection('Favorites')
+                                      .doc(_user.account.uid)
+                                      .update({
+                                    '${_keys[index]}': FieldValue.delete()
+                                  });
+                                },
+                                background: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Card(
+                                    color: Colors.red,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          type == 'AddRecipe'
+                                              ? 'delete'.tr()
+                                              : 'hide'.tr(),
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17,
+                                          ),
                                         ),
-                                      ),
-                                      const SizedBox(
-                                        width: 40,
-                                      ),
-                                      Icon(widget.type == 'AddRecipe'
-                                          ? Icons.delete
-                                          : Icons.visibility_off),
-                                    ],
+                                        const SizedBox(
+                                          width: 40,
+                                        ),
+                                        Icon(type == 'AddRecipe'
+                                            ? Icons.delete
+                                            : Icons.visibility_off),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                              child: widget.type == 'AddRecipe'
-                                  ? Fields(
-                                      data: _data[_key] as Map,
-                                      recipe: _recipe,
-                                    )
-                                  : EditProducts(
-                                      indexKey: _key as String,
-                                      data: _data[_key] as Map));
-                        },
-                      )
-                    : Center(
-                        child: Text(
-                          'productsEmpty'.tr(),
+                                child: type == 'AddRecipe'
+                                    ? Fields(
+                                        data: _data[_key] as Map,
+                                        recipe: _recipe,
+                                      )
+                                    : EditProducts(
+                                        indexKey: _key as String,
+                                        data: _data[_key] as Map));
+                          },
+                        )
+                      : Center(
+                          child: Text(
+                            'productsEmpty'.tr(),
+                          ),
                         ),
-                      ),
-              );
-            },
+                );
+              },
+            );
+          }
+          return Center(
+            child: Text(
+              'productsEmpty'.tr(),
+            ),
           );
-        }
-        return Center(
-          child: Text(
-            'productsEmpty'.tr(),
-          ),
-        );
-      },
-    );
+        },
+      );
+    });
   }
 }

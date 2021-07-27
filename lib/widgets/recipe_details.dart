@@ -13,11 +13,12 @@ import 'rating_stars.dart';
 import 'steps_listview.dart';
 
 class RecipeDetails extends StatelessWidget {
-  final InstructionsModel _instructions = InstructionsModel();
+  final InstructionsModel instructions;
+  const RecipeDetails({Key key, this.instructions}) : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     debugPrint('Recipe details building');
-
     final Size _size = MediaQuery.of(context).size;
     return Consumer(builder: (context, watch, child) {
       final _user = watch(userProvider);
@@ -32,9 +33,9 @@ class RecipeDetails extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (_instructions.ingredients != null)
+              if (instructions.ingredients != null)
                 IngredientsListView(
-                  ingredients: _instructions.ingredients,
+                  ingredients: instructions.ingredients,
                 )
               else
                 const NoInstructions('noIngredients'),
@@ -43,9 +44,9 @@ class RecipeDetails extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (_instructions.steps != null)
+              if (instructions.steps != null)
                 StepsListView(
-                  steps: _instructions.steps,
+                  steps: instructions.steps,
                 )
               else
                 const NoInstructions('noSteps')
@@ -54,7 +55,7 @@ class RecipeDetails extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (_instructions.reviews == null)
+              if (instructions.reviews == null)
                 SizedBox(
                   height: _size.height / 2,
                   child: Stack(

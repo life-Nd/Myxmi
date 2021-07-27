@@ -1,8 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/screens/add_recipe.dart';
 
 import 'add_favorite.dart';
+import 'add_reviews.dart';
+import 'rating_stars.dart';
 
 class RecipeImage extends StatelessWidget {
   final double height;
@@ -13,26 +16,46 @@ class RecipeImage extends StatelessWidget {
     debugPrint('Recipe image building');
 
     final Size _size = MediaQuery.of(context).size;
-    return Expanded(
-      child: Consumer(builder: (context, watch, child) {
-        final _recipe = watch(recipeProvider);
-        return Stack(
-          alignment: Alignment.topRight,
-          children: [
-            SizedBox(
-              width: _size.width / 1,
-              height: height / 1.4,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: InteractiveViewer(child: _recipe.image),
+    return Consumer(builder: (context, watch, child) {
+      final _recipe = watch(recipeProvider);
+      return Stack(
+        children: [
+          SizedBox(
+            width: _size.width,
+            height: kIsWeb ? height : height / 1.7,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: InteractiveViewer(child: _recipe.image),
+            ),
+          ),
+          Column(
+            children: [
+              AddFavoriteButton(
+                recipe: _recipe.recipeModel,
               ),
-            ),
-            AddFavoriteButton(
-              recipe: _recipe.recipeModel,
-            ),
-          ],
-        );
-      }),
-    );
+              SizedBox(height: height / 2.2),
+              Container(
+                alignment: Alignment.bottomRight,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => AddReviews(),
+                      ),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: RatingStars(
+                      stars: _recipe.recipeModel.stars ?? '0.0',
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ],
+      );
+    });
   }
 }

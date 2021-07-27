@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -110,11 +109,8 @@ class _EditProducts extends StatefulWidget {
 }
 
 class _EditProductsState extends State<_EditProducts> {
-  Future _future;
   @override
   void initState() {
-    _future =
-        FirebaseFirestore.instance.collection('Products').doc(widget.uid).get();
     super.initState();
   }
 
@@ -123,15 +119,14 @@ class _EditProductsState extends State<_EditProducts> {
     return Stack(
       children: [
         Column(
-          children: [
-            const _AllCart(
+          children: const [
+            _AllCart(
               viewIndex: 0,
             ),
             Expanded(
               child: ProductsList(
-                  uid: widget.uid,
-                  type: 'EditProducts',
-                  componentsFuture: _future),
+                type: 'EditProducts',
+              ),
             ),
           ],
         ),

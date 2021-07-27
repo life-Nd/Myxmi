@@ -77,8 +77,9 @@ class Home extends HookWidget {
         uid: _user.account?.uid,
         index: _viewIndex,
       ),
-      bottomNavigationBar: !kIsWeb
-          ? BottomNavigationBar(
+      bottomNavigationBar: kIsWeb
+          ? null
+          : BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               selectedItemColor:
@@ -120,8 +121,7 @@ class Home extends HookWidget {
                 _view.doSearch(value: false);
                 _favorites.showFilter(value: false);
               },
-            )
-          : null,
+            ),
     );
   }
 }

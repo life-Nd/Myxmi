@@ -27,13 +27,8 @@ class RecipeProvider extends ChangeNotifier {
     return image = newImage;
   }
 
-  // void changeView(int index) {
-  //   pageIndex = index;
-  //   notifyListeners();
-  // }
-
-  void changeTitle({@required String newName}) {
-    recipeModel.title = newName;
+  void changeTitle({@required String newTitle}) {
+    recipeModel.title = newTitle;
     notifyListeners();
   }
 

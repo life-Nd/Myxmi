@@ -271,5 +271,12 @@
    "hide":"Cacher",
    "noFavorites":"Pas de favoris encore",
    "signingIn":"Connexion en cours",
-    "signingOut":"Déconnexion en cours"
+    "signingOut":"Déconnexion en cours",
+    "next":"Suivant",
+    "recipeTitle":"Titre de la recette",
+    "recipeDetails?":"Parler des détails de la recette",
+    "productsIn":"Produits dans",
+    "instructionsFor":"Instructions pour"
+
+
 }

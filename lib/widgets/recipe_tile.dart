@@ -48,7 +48,7 @@ class RecipeTile extends HookWidget {
                     size: 15,
                   ),
                   Text(
-                    recipe.reviewsCount,
+                    recipe.reviewsCount ?? '0',
                     style: const TextStyle(fontSize: 17),
                   )
                 ],

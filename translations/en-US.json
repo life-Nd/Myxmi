@@ -220,7 +220,12 @@
     "hide":"Hide",
     "noFavorites":"No favorites yet",
     "signingIn":"Signing in",
-    "signingOut":"Signing out"
+    "signingOut":"Signing out",
+    "next":"Next",
+    "recipeTitle":"Recipe title",
+    "recipeDetails?":"Talk about the recipe details",
+    "productsIn":"Products in",
+    "instructionsFor":"Instructions pour"
 
 
 }
