@@ -225,7 +225,9 @@
     "recipeTitle":"Recipe title",
     "recipeDetails?":"Talk about the recipe details",
     "productsIn":"Products in",
-    "instructionsFor":"Instructions pour"
+    "instructionsFor":"Instructions pour",
+    "titleCantBeEmpty":"Title can't be empty",
+    "required":"Required"
 
 
 }

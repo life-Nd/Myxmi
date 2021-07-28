@@ -88,8 +88,7 @@ class ImageProvider extends ChangeNotifier {
   }
 
   Future pickImage(ImageSource source) async {
-    final pickedFile = await picker.pickImage(
-        source: source, imageQuality: 50, maxWidth: 320, maxHeight: 320);
+    final pickedFile = await picker.pickImage(source: source, imageQuality: 77);
     changeImageSample(pickedFile.path);
     debugPrint("GetImage: $added");
     notifyListeners();
@@ -111,23 +110,26 @@ class ImageProvider extends ChangeNotifier {
     final rng = Random();
     final _random = rng.nextInt(90000) + 10000;
     imageId = '$timeStamp-$_random}';
-    final firebaseStorageRef = firebase_storage.FirebaseStorage.instance
-        .ref()
-        .child("$timeStamp-$_random.jpg");
-    task = firebaseStorageRef.putFile(imageSample);
-    await task.whenComplete(() {
-      added = addedImage;
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      debugPrint("AddImageToDb: $added");
-      notifyListeners();
-    }).then((value) async {
-      final downUrl = await value.ref.getDownloadURL();
-      debugPrint('DOWNURL: $downUrl');
-      imageLink = downUrl;
-      urlString = downUrl.toString();
-      pr.close();
-    });
-    debugPrint("Url for Download: $urlString");
+    if (imageSample != null) {
+      final firebaseStorageRef = firebase_storage.FirebaseStorage.instance
+          .ref()
+          .child("$timeStamp-$_random.jpg");
+      task = firebaseStorageRef.putFile(imageSample);
+      await task.whenComplete(() {
+        added = addedImage;
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        debugPrint("AddImageToDb: $added");
+        notifyListeners();
+      }).then((value) async {
+        final downUrl = await value.ref.getDownloadURL();
+        debugPrint('DOWNURL: $downUrl');
+        imageLink = downUrl;
+        urlString = downUrl.toString();
+        pr.close();
+      });
+      debugPrint("Url for Download: $urlString");
+    }
+    debugPrint('No image selected');
   }
 
   void delete() {

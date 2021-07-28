@@ -201,7 +201,6 @@
   "category":"Categorie",
   "subCategory":"Sous-Categorie",
    "drinks":"Boissons",
-   
    "vape":"Vape",
    "appetizer":"Apperitif",
    "salad":"Salade",
@@ -276,7 +275,9 @@
     "recipeTitle":"Titre de la recette",
     "recipeDetails?":"Parler des détails de la recette",
     "productsIn":"Produits dans",
-    "instructionsFor":"Instructions pour"
+    "instructionsFor":"Instructions pour",
+    "titleCantBeEmpty":"Title can't be empty",
+    "required":"Required"
 
 
 }

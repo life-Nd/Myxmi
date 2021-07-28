@@ -21,7 +21,6 @@ class SaveButton extends HookWidget {
       onPressed: _recipe.recipeModel.title != null
           ? () async {
               String _key;
-
               final rng = Random();
               final _random = rng.nextInt(9000) + 1000;
               _recipe.recipeModel.reference = '$_random';
@@ -35,7 +34,8 @@ class SaveButton extends HookWidget {
                   '${DateTime.now().millisecondsSinceEpoch}';
               _image.addImageToDb(context: context).whenComplete(() async {
                 pr.show(max: 100, msg: '${'loading'.tr()} ${'recipe'.tr()}...');
-                _recipe.recipeModel.imageUrl = _image.imageLink;
+                _recipe.recipeModel.imageUrl =
+                    _image.imageLink.isNotEmpty ? _image.imageLink : null;
                 final DocumentReference _db = await FirebaseFirestore.instance
                     .collection('Recipes')
                     .add(_recipe.recipeModel.toMap());

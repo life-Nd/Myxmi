@@ -16,7 +16,29 @@ class SubCategorySelector extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text('subCategory'.tr()),
-            FoodSubCategories(),
+            Row(
+              children: [
+                FoodSubCategories(),
+                Padding(
+                  padding: const EdgeInsets.only(top: 40.0),
+                  child: Row(
+                    children: [
+                      const Text(
+                        '*',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 30,
+                        ),
+                      ),
+                      Text(
+                        ' ${'required'.tr()}',
+                        style: const TextStyle(color: Colors.red),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
           ],
         );
         return _subCategory;
@@ -25,7 +47,29 @@ class SubCategorySelector extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text('subCategory'.tr()),
-            DrinksSubCategories(),
+            Row(
+              children: [
+                DrinksSubCategories(),
+                Padding(
+                  padding: const EdgeInsets.only(top: 40.0),
+                  child: Row(
+                    children: [
+                      const Text(
+                        '*',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 30,
+                        ),
+                      ),
+                      Text(
+                        ' ${'required'.tr()}',
+                        style: const TextStyle(color: Colors.red),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
           ],
         );
         return _subCategory;
@@ -34,7 +78,29 @@ class SubCategorySelector extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text('subCategory'.tr()),
-            VapeSubCategories(),
+            Row(
+              children: [
+                VapeSubCategories(),
+                Padding(
+                  padding: const EdgeInsets.only(top: 40.0),
+                  child: Row(
+                    children: [
+                      const Text(
+                        '*',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 30,
+                        ),
+                      ),
+                      Text(
+                        ' ${'required'.tr()}',
+                        style: const TextStyle(color: Colors.red),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
           ],
         );
         return _subCategory;
@@ -52,7 +118,14 @@ class SubCategorySelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer(builder: (_, watch, child) {
       final _recipe = watch(recipeProvider);
-      return subCategory(category: _recipe.recipeModel.category);
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          subCategory(
+            category: _recipe.recipeModel.category,
+          ),
+        ],
+      );
     });
   }
 }

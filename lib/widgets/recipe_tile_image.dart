@@ -14,11 +14,14 @@ class RecipeTileImage extends HookWidget {
   Widget build(BuildContext context) {
     final _recipeProvider = useProvider(recipeProvider);
     final Size _size = MediaQuery.of(context).size;
+    debugPrint('RECIPETILEIMAGE building');
     return InkWell(
       onTap: () {
         _recipeProvider.image = recipe.imageUrl != null
             ? Image.network(
                 recipe.imageUrl,
+                width: _size.width,
+                height: _size.height,
                 fit: BoxFit.fitWidth,
                 cacheWidth: 1000,
               )

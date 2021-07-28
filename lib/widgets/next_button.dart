@@ -4,9 +4,8 @@ import 'package:myxmi/screens/add_recipe.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class NextButton extends StatelessWidget {
-  final Route route;
-
-  const NextButton({Key key, this.route}) : super(key: key);
+  final Function tapNext;
+  const NextButton({Key key, this.tapNext}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +20,15 @@ class NextButton extends StatelessWidget {
           elevation: 20,
           fillColor: _detailsProvided ? Colors.blue : Colors.grey,
           onPressed: _detailsProvided
-              ? () {
-                  Navigator.of(context).push(route);
-                }
-              : null,
+              ? () => tapNext()
+              : () {
+                  debugPrint('TITLE: ${_recipe.recipeModel.title}');
+                  debugPrint('DIFFICULTY: ${_recipe.recipeModel.difficulty}');
+                  debugPrint('DURATION: ${_recipe.recipeModel.duration}');
+                  debugPrint('PORTIONS: ${_recipe.recipeModel.portions}');
+                  debugPrint('CATEGORY: ${_recipe.recipeModel.category}');
+                  debugPrint('SUBCATEGORY: ${_recipe.recipeModel.subCategory}');
+                },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

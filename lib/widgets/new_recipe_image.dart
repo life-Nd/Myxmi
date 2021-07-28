@@ -3,7 +3,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/providers/image.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'recipe_instructions.dart';
 import 'save_recipe.dart';
 
 class NewRecipeImage extends HookWidget {
@@ -52,7 +51,7 @@ class NewRecipeImage extends HookWidget {
               onPressed: () => _image.chooseImageSource(
                 context: context,
                 route: MaterialPageRoute(
-                  builder: (_) => RecipeInstructions(),
+                  builder: (_) => NewRecipeImage(),
                 ),
               ),
               child: Icon(

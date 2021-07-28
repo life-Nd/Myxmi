@@ -15,6 +15,7 @@ class _MenuItemState extends State<MenuItem> {
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
+
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(
@@ -33,7 +34,9 @@ class _MenuItemState extends State<MenuItem> {
           children: [
             SizedBox(
               height: _kIsWeb ? _size.height / 3 : _size.height / 3.7,
-              width: _kIsWeb ? _size.width / 4 : _size.width / 1.8,
+              width: _kIsWeb || _size.width > 700
+                  ? _size.width / 3.2
+                  : _size.width / 1.8,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: Image.asset(

@@ -32,6 +32,7 @@ class AddRecipe extends StatelessWidget {
                 final _recipe = watch(recipeProvider);
 
                 return Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     IconButton(
@@ -70,11 +71,12 @@ class AddRecipe extends StatelessWidget {
             Text('category'.tr()),
             const CategorySelector(),
             const SubCategorySelector(),
-            NextButton(
-              route: MaterialPageRoute(builder: (_) => AddRecipeProducts()),
-            ),
           ],
         ),
+      ),
+      bottomNavigationBar: NextButton(
+        tapNext: () => Navigator.of(context)
+            .push(MaterialPageRoute(builder: (_) => AddRecipeProducts())),
       ),
     );
   }

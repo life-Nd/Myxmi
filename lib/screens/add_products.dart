@@ -55,7 +55,9 @@ class AddRecipeProducts extends StatelessWidget {
             ),
           ),
           NextButton(
-            route: MaterialPageRoute(builder: (_) => RecipeInstructions()),
+            tapNext: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => RecipeInstructions()),
+            ),
           ),
         ],
       ),

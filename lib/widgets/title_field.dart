@@ -32,7 +32,13 @@ class _TitleFieldState extends State<TitleField> {
             isDense: true,
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
             hintText: 'recipeTitle'.tr(),
+            errorText: _recipe.recipeModel.title == null
+                ? 'titleCantBeEmpty'.tr()
+                : null, 
           ),
+          onEditingComplete: () {
+            _recipe.changeTitle(newTitle: _titleCtrl.text);
+          },
           onSubmitted: (submitted) {
             _recipe.changeTitle(newTitle: _titleCtrl.text);
             FocusScope.of(context).requestFocus(FocusNode());
