@@ -61,39 +61,10 @@ class ViewProvider extends ChangeNotifier {
     }
   }
 
-// TODO fix this search
-  // searchRecipe(
-  //     {@required String filter,
-  //     @required String text,
-  //     @required String uid,
-  //     FavoritesProvider fav}) {
-  //   switch (view) {
-  //     case 0:
-  //       return;
-  //     case 1:
-  //       return;
-  //     case 2:
-  //       fav.filter(filter: filter, text: text);
-  //       return;
-  //     default:
-  //       changeSearch(
-  //           newSearch: FirebaseFirestore.instance
-  //               .collection('Recipes')
-  //               .where('$filter', isEqualTo: '${text.trim()}')
-  //               .get());
-  //       return;
-  //   }
-  // }
-
   void doSearch({bool value}) {
     searching = value;
     notifyListeners();
   }
-
-//  void changeFuture({@required Future newFuture}) {
-//     future = newFuture;
-
-//   }
 
   void changeSearch({@required Stream<QuerySnapshot> newSearch}) {
     search = newSearch;

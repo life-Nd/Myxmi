@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/recipe.dart';
 import 'package:flutter/foundation.dart';
 import 'add_favorite.dart';
+import 'rating_stars.dart';
 import 'recipe_tile.dart';
 import 'recipe_tile_image.dart';
 
@@ -67,13 +68,29 @@ class _RecipesGridState extends State<RecipesGrid> {
                               recipe: _recipe,
                             ),
                           ),
-                          AddFavoriteButton(
-                            recipe: _recipe,
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              AddFavoriteButton(
+                                recipe: _recipe,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: RatingStars(
+                                  stars: _recipe.stars ?? '0.0',
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
                     ),
                   ),
+                  // TODO recipesScreen:
+                  // Rating stars:
+                  // 1.not showing
+                  // 2. not visible when background black
                   Padding(
                     padding: const EdgeInsets.only(
                       left: 7.0,

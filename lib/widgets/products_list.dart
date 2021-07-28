@@ -57,12 +57,14 @@ class ProductsList extends StatelessWidget {
                                   _data.remove(_data[index]);
                                   _recipe.hide(
                                       component: _keys[index] as String);
-                                  FirebaseFirestore.instance
-                                      .collection('Favorites')
-                                      .doc(_user.account.uid)
-                                      .update({
-                                    '${_keys[index]}': FieldValue.delete()
-                                  });
+                                  if (type == 'EditProducts') {
+                                    FirebaseFirestore.instance
+                                        .collection('Products')
+                                        .doc(_user.account.uid)
+                                        .update({
+                                      '${_keys[index]}': FieldValue.delete()
+                                    });
+                                  }
                                 },
                                 background: Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -75,7 +77,7 @@ class ProductsList extends StatelessWidget {
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         Text(
-                                          type == 'AddRecipe'
+                                          type == 'EditProducts'
                                               ? 'delete'.tr()
                                               : 'hide'.tr(),
                                           style: const TextStyle(
@@ -86,7 +88,7 @@ class ProductsList extends StatelessWidget {
                                         const SizedBox(
                                           width: 40,
                                         ),
-                                        Icon(type == 'AddRecipe'
+                                        Icon(type == 'EditProducts'
                                             ? Icons.delete
                                             : Icons.visibility_off),
                                       ],

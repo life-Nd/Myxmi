@@ -25,46 +25,44 @@ class NewProduct extends HookWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('newProduct'.tr()),
-        actions: [
-          RawMaterialButton(
-            visualDensity: VisualDensity.compact,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            fillColor: Colors.green,
-            onPressed: _nameCtrl.text.isNotEmpty && _mesureType != null
-                ? () async {
-                    await FirebaseFirestore.instance
-                        .collection('Products')
-                        .doc(_user.account.uid)
-                        .set(
-                      {
-                        '${DateTime.now().millisecondsSinceEpoch}': {
-                          'Name': _nameCtrl.text,
-                          'MesureType': _mesureType,
-                          'IngredientType': _ingredientType,
-                          'Expiration': '$_expiration',
-                          'Total': _quantityCtrl.text
-                        },
-                      },
-                      SetOptions(merge: true),
-                    ).whenComplete(() {
-                      _nameCtrl.clear();
-                      _mesureType = '';
-                      Navigator.of(context).pop();
-                    });
-                  }
-                : () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        backgroundColor: Colors.red,
-                        content: Text('fieldsEmpty'.tr()),
-                      ),
-                    );
+      ),
+      bottomNavigationBar: RawMaterialButton(
+        visualDensity: VisualDensity.compact,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        fillColor: Colors.green,
+        onPressed: _nameCtrl.text.isNotEmpty && _mesureType != null
+            ? () async {
+                await FirebaseFirestore.instance
+                    .collection('Products')
+                    .doc(_user.account.uid)
+                    .set(
+                  {
+                    '${DateTime.now().millisecondsSinceEpoch}': {
+                      'Name': _nameCtrl.text,
+                      'MesureType': _mesureType,
+                      'IngredientType': _ingredientType,
+                      'Expiration': '$_expiration',
+                      'Total': _quantityCtrl.text
+                    },
                   },
-            child: Text('save'.tr()),
-          )
-        ],
+                  SetOptions(merge: true),
+                ).whenComplete(() {
+                  _nameCtrl.clear();
+                  _mesureType = '';
+                  Navigator.of(context).pop();
+                });
+              }
+            : () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    backgroundColor: Colors.red,
+                    content: Text('fieldsEmpty'.tr()),
+                  ),
+                );
+              },
+        child: Text('save'.tr()),
       ),
       body: SizedBox(
         height: _size.height,
@@ -134,13 +132,15 @@ class NewProduct extends HookWidget {
                   ),
                 ),
               ),
-              Expanded(
-                // height: _size.height < 700 ? 240 : 300,
-                // padding: const EdgeInsets.only(left: 20, right: 20),
+              // TODO change the structure the code and the view of the product types
+
+              Container(
+                height: _size.height < 700 ? 240 : 300,
+                padding: const EdgeInsets.only(left: 20, right: 20),
                 child: GridView(
                   padding: const EdgeInsets.symmetric(),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
+                    crossAxisCount: 5,
                     crossAxisSpacing: 1,
                     mainAxisSpacing: 4,
                   ),

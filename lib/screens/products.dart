@@ -17,7 +17,10 @@ class Products extends HookWidget {
     final _user = useProvider(userProvider);
     final _prefs = useProvider(prefProvider);
     final _change = useState<bool>(false);
-
+// TODO change the page view for two pages similar to how a shopping site
+// shows :
+// products on one page
+// and icon with the count of products in the cart on another page
     return RefreshIndicator(
       onRefresh: () async {
         _fav.showFilter(value: false);
@@ -34,7 +37,7 @@ class Products extends HookWidget {
                   _pageIndex = index;
                 },
                 children: [
-                  _EditProducts(uid: _user.account.uid),
+                  _ProductsView(uid: _user.account.uid),
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -97,18 +100,18 @@ class Products extends HookWidget {
   }
 }
 
-class _EditProducts extends StatefulWidget {
-  const _EditProducts({
+class _ProductsView extends StatefulWidget {
+  const _ProductsView({
     Key key,
     @required this.uid,
   }) : super(key: key);
 
   final String uid;
   @override
-  State<StatefulWidget> createState() => _EditProductsState();
+  State<StatefulWidget> createState() => _ProductsViewState();
 }
 
-class _EditProductsState extends State<_EditProducts> {
+class _ProductsViewState extends State<_ProductsView> {
   @override
   void initState() {
     super.initState();
