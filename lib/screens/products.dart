@@ -69,7 +69,7 @@ class Products extends HookWidget {
                                         color: Colors.green),
                                     alignment: Alignment.center,
                                     child: Text(
-                                      _prefs?.cart?.length != null
+                                       _prefs?.cart?.length != null
                                           ? '${_prefs.cart.length}'
                                           : '0',
                                       style:
