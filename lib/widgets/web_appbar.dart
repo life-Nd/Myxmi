@@ -14,25 +14,28 @@ class WebAppBar extends HookWidget {
     final _view = useProvider(viewProvider);
     final _change = useState<bool>(false);
     final Size _size = MediaQuery.of(context).size;
-    return ListTile(
-      title: Row(
+    return Row(
         children: [
           const Text(
             'Myxmi',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           SizedBox(width: _size.width / 11),
-          RawMaterialButton(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            onPressed: () {
-              _view.changeViewIndex(index: 0);
-              _change.value = !_change.value;
-            },
-            child: SelectableContainer(
-              selected: _view.view == 0,
-              text: 'home'.tr(),
-            ),
+          Row(
+          children: [
+              RawMaterialButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              onPressed: () {
+                _view.changeViewIndex(index: 0);
+                _change.value = !_change.value;
+              },
+              child: SelectableContainer(
+                selected: _view.view == 0,
+                text: 'home'.tr(),
+              ),
+              ),
+          ],
           ),
           RawMaterialButton(
             shape:
@@ -135,7 +138,7 @@ class WebAppBar extends HookWidget {
               ),
             ),
         ],
-      ),
+
     );
   }
 }
