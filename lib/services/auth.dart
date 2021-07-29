@@ -9,6 +9,7 @@ import 'package:myxmi/providers/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sn_progress_dialog/progress_dialog.dart';
 import 'package:flutter/foundation.dart' as foundation;
+import 'package:apple_sign_in/apple_sign_in.dart' as apple_sign_in;
 import '../main.dart';
 import 'platform_dialog.dart';
 import 'platform_exception_dialog.dart';
@@ -45,8 +46,7 @@ class AuthServices {
     final currentUser = await firebaseAuth
         .createUserWithEmailAndPassword(email: _email, password: _password)
         .whenComplete(() async {
-      signInWithEmailPassword(
-          email: _email, password: _password, context: context);
+      signInWithEmailPassword(email: _email, password: _password);
       await sendEmail();
     });
     final User user = currentUser.user;
@@ -54,21 +54,16 @@ class AuthServices {
   }
 
   Future<dynamic> signInWithEmailPassword(
-      {@required BuildContext context, String email, String password}) async {
+      {String email, String password}) async {
     final String _email = email.trim();
     final String _password = password.trim();
     final SharedPreferences prefs = await _prefs;
-    // openLoadingDialog(context, '${'signingIn'.tr()}...');
     try {
       await firebaseAuth.signInWithEmailAndPassword(
           email: _email, password: _password);
       if (!foundation.kDebugMode && !foundation.kIsWeb) return;
       await prefs.setBool('is_logged_in', true);
-      status = 'success';
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => Root()), (route) => false);
-
-      return status;
+      return status = 'success';
     } on FirebaseAuthException catch (_error) {
       debugPrint('errorCode:$_error');
       error = _error;
@@ -86,7 +81,7 @@ class AuthServices {
     return firebaseAuth.currentUser.reload();
   }
 
-  static Future<User> signInWithGoogle({@required BuildContext context}) async {
+  Future<User> signInWithGoogle({@required BuildContext context}) async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     User user;
     final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -137,7 +132,18 @@ class AuthServices {
     return user;
   }
 
-  Future<User> signInWithApple(
+  Future<void> signInWithApple(BuildContext context) async {
+    try {
+      final user = await _signInWithApple(
+          scopes: [apple_sign_in.Scope.email, apple_sign_in.Scope.fullName],
+          context: context);
+      debugPrint('uid: ${user.uid}');
+    } catch (e) {
+      debugPrint('$e');
+    }
+  }
+
+  Future<User> _signInWithApple(
       {List<Scope> scopes = const [], BuildContext context}) async {
     User user;
     final result = await AppleSignIn.performRequests(

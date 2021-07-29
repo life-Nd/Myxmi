@@ -14,29 +14,26 @@ class RecipeImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     debugPrint('Recipe image building');
-
     final Size _size = MediaQuery.of(context).size;
     return Consumer(builder: (context, watch, child) {
       final _recipe = watch(recipeProvider);
-      return Stack(
-        children: [
-          SizedBox(
-            width: _size.width,
-            height: kIsWeb ? height : height / 1.7,
-            child: ClipRRect(
+      return SizedBox(
+        width: _size.width,
+        height: kIsWeb ? height : height / 1.7,
+        child: Stack(
+          children: [
+            ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: InteractiveViewer(child: _recipe.image),
             ),
-          ),
-          Column(
-            children: [
-              AddFavoriteButton(
-                recipe: _recipe.recipeModel,
-              ),
-              SizedBox(height: height / 2.2),
-              Container(
-                alignment: Alignment.bottomRight,
-                child: GestureDetector(
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                AddFavoriteButton(
+                  recipe: _recipe.recipeModel,
+                ),
+                InkWell(
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -51,10 +48,10 @@ class RecipeImage extends StatelessWidget {
                     ),
                   ),
                 ),
-              )
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       );
     });
   }

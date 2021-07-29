@@ -87,10 +87,7 @@ class _RecipesGridState extends State<RecipesGrid> {
                       ),
                     ),
                   ),
-                  // TODO recipesScreen:
-                  // Rating stars:
-                  // 1.not showing
-                  // 2. not visible when background black
+
                   Padding(
                     padding: const EdgeInsets.only(
                       left: 7.0,

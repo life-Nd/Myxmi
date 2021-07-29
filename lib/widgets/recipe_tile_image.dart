@@ -14,7 +14,7 @@ class RecipeTileImage extends HookWidget {
   Widget build(BuildContext context) {
     final _recipeProvider = useProvider(recipeProvider);
     final Size _size = MediaQuery.of(context).size;
-    debugPrint('RECIPETILEIMAGE building');
+
     return InkWell(
       onTap: () {
         _recipeProvider.image = recipe.imageUrl != null
@@ -80,8 +80,7 @@ class RecipeTileImage extends HookWidget {
                     child: recipe.subCategory != null
                         ? Image.asset(
                             'assets/${recipe.subCategory}.jpg',
-                            fit: BoxFit.fitWidth,
-                            height: _size.height,
+                            fit: BoxFit.fitHeight,
                             width: _size.width,
                             cacheWidth: 1000,
                             colorBlendMode: BlendMode.color,

@@ -9,7 +9,6 @@ import 'package:myxmi/widgets/recipe_instructions.dart';
 class AddRecipeProducts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    debugPrint('AddProductScreen building');
     return Scaffold(
       appBar: AppBar(
         title: Consumer(builder: (_, watch, child) {
@@ -17,6 +16,7 @@ class AddRecipeProducts extends StatelessWidget {
           return Text('${'productsIn'.tr()}: ${_recipe?.recipeModel?.title}');
         }),
       ),
+      // TODO add search to filter the products
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

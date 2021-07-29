@@ -16,8 +16,8 @@ final _fieldsProvider =
 
 TextEditingController _emailCtrl;
 TextEditingController _passwordCtrl;
-final AuthServices _authServices = AuthServices();
 FocusNode _passwordNode;
+final AuthServices _authServices = AuthServices();
 
 class SignIn extends StatefulWidget {
   @override
@@ -25,8 +25,6 @@ class SignIn extends StatefulWidget {
 }
 
 class SignInState extends State<SignIn> {
-  static final GlobalKey _containerKey = GlobalKey();
-
   bool showPassword = false;
   bool showButton = false;
 
@@ -43,7 +41,6 @@ class SignInState extends State<SignIn> {
     final _size = MediaQuery.of(context).size;
     debugPrint('Building widget');
     return Container(
-      key: _containerKey,
       height: _size.height,
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor,
@@ -106,13 +103,13 @@ class SignInState extends State<SignIn> {
                               Radius.circular(30),
                             ),
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             _view.loadingAuth(loading: true);
-                            _authServices
+                            await _authServices
                                 .signInWithEmailPassword(
-                                    email: _emailCtrl.text,
-                                    password: _passwordCtrl.text,
-                                    context: context)
+                              email: _emailCtrl.text,
+                              password: _passwordCtrl.text,
+                            )
                                 .then(
                               (value) {
                                 debugPrint('Value:$value');
@@ -165,7 +162,7 @@ class SignInState extends State<SignIn> {
                   ),
                   fillColor: Colors.white,
                   onPressed: () {
-                    AuthServices.signInWithGoogle(context: context);
+                    _authServices.signInWithGoogle(context: context);
                   },
                   child: Row(
                     children: [
@@ -199,7 +196,7 @@ class SignInState extends State<SignIn> {
                   cornerRadius: 20,
                   type: apple_sign_in.ButtonType.continueButton,
                   onPressed: () {
-                    _signInWithApple(context);
+                    _authServices.signInWithApple(context);
                   },
                 ),
               )
@@ -211,16 +208,13 @@ class SignInState extends State<SignIn> {
     );
   }
 
-  Future<void> _signInWithApple(BuildContext context) async {
-    try {
-      final AuthServices _authServices = AuthServices();
-      final user = await _authServices.signInWithApple(
-          scopes: [apple_sign_in.Scope.email, apple_sign_in.Scope.fullName],
-          context: context);
-      debugPrint('uid: ${user.uid}');
-    } catch (e) {
-      debugPrint('$e');
-    }
+  @override
+  void dispose() {
+    _emailCtrl.dispose();
+    _passwordCtrl.dispose();
+    _passwordNode.dispose();
+
+    super.dispose();
   }
 }
 

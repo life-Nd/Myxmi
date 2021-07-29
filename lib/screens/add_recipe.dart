@@ -9,7 +9,7 @@ import 'package:myxmi/widgets/subcategory_selector.dart';
 import 'package:myxmi/widgets/title_field.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../providers/recipe.dart';
-import 'add_products.dart';
+import 'add_recipe_products.dart';
 
 final recipeProvider =
     ChangeNotifierProvider<RecipeProvider>((ref) => RecipeProvider());

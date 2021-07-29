@@ -8,6 +8,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:myxmi/widgets/search.dart';
 import 'package:myxmi/widgets/web_appbar.dart';
 import '../main.dart';
+import 'add_product.dart';
 import 'add_recipe.dart';
 
 final viewProvider = ChangeNotifierProvider<ViewProvider>(
@@ -45,16 +46,22 @@ class Home extends HookWidget {
         ),
       ),
       floatingActionButton:
-          _viewIndex == 0 || _viewIndex == 1 && _user.account?.uid != null
+          _viewIndex == 0 || _viewIndex == 1 || _viewIndex == 3
               ? _user.account?.uid != null
                   ? FloatingActionButton(
                       backgroundColor: Colors.green.shade400,
                       onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => AddRecipe(),
-                          ),
-                        );
+                        _viewIndex != 3
+                            ? Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => AddRecipe(),
+                                ),
+                              )
+                            : Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => AddProduct(),
+                                ),
+                              );
                       },
                       child: const Icon(
                         Icons.add,
@@ -77,6 +84,7 @@ class Home extends HookWidget {
         uid: _user.account?.uid,
         index: _viewIndex,
       ),
+      // ignore: avoid_redundant_argument_values
       bottomNavigationBar: kIsWeb
           ? null
           : BottomNavigationBar(

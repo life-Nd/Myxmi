@@ -1,10 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
 import '../main.dart';
+
+final _productEntryProvider = ChangeNotifierProvider<_ProductEntryProvider>(
+    (ref) => _ProductEntryProvider());
 
 TextEditingController _nameCtrl = TextEditingController();
 TextEditingController _quantityCtrl = TextEditingController();
@@ -16,7 +19,7 @@ bool _explainAccess = false;
 bool _explainQuantity = false;
 bool _explainExpiration = false;
 
-class NewProduct extends HookWidget {
+class AddProduct extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final _change = useState<bool>(false);
@@ -135,158 +138,39 @@ class NewProduct extends HookWidget {
               // TODO change the structure the code and the view of the product types
 
               Container(
-                height: _size.height < 700 ? 240 : 300,
+                height: kIsWeb ? 300 : 170,
                 padding: const EdgeInsets.only(left: 20, right: 20),
                 child: GridView(
                   padding: const EdgeInsets.symmetric(),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 5,
+                    crossAxisCount: 4,
                     crossAxisSpacing: 1,
                     mainAxisSpacing: 4,
                   ),
                   children: [
-                    _FoodTypeSelector(change: _change),
-                    RawMaterialButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      fillColor: _ingredientType == 'Vegetable'
-                          ? Colors.green.shade500
-                          : Theme.of(context).scaffoldBackgroundColor,
-                      onPressed: () {
-                        _ingredientType = 'Vegetable';
-                        _change.value = !_change.value;
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 4, right: 4),
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: Image.asset('assets/vegetables.png'),
-                            ),
-                            Text(
-                              'vegetable'.tr(),
-                            ),
-                          ],
-                        ),
-                      ),
+                    _ProductEntryType(
+                      type: 'fruit',
+                      color: Colors.orange.shade400,
                     ),
-                    RawMaterialButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      fillColor: _ingredientType == 'Meat'
-                          ? Colors.red.shade500
-                          : Theme.of(context).scaffoldBackgroundColor,
-                      onPressed: () {
-                        _ingredientType = 'Meat';
-                        _change.value = !_change.value;
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 4, right: 4),
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: Image.asset('assets/meat.png'),
-                            ),
-                            Text(
-                              'meat'.tr(),
-                            ),
-                          ],
-                        ),
-                      ),
+                    _ProductEntryType(
+                      type: 'vegetable',
+                      color: Colors.green.shade400,
                     ),
-                    RawMaterialButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      fillColor: _ingredientType == 'SeaFood'
-                          ? Colors.blue.shade100
-                          : Theme.of(context).scaffoldBackgroundColor,
-                      onPressed: () {
-                        _ingredientType = 'SeaFood';
-                        _change.value = !_change.value;
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 4, right: 4),
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: Image.asset('assets/seafood.png'),
-                            ),
-                            Text(
-                              'seaFood'.tr(),
-                            ),
-                          ],
-                        ),
-                      ),
+                    _ProductEntryType(
+                      type: 'seaFood',
+                      color: Colors.blue.shade100,
                     ),
-                    RawMaterialButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      fillColor: _ingredientType == 'Dairy&Eggs'
-                          ? Colors.grey.shade300
-                          : Theme.of(context).scaffoldBackgroundColor,
-                      onPressed: () {
-                        _ingredientType = 'Dairy&Eggs';
-                        _change.value = !_change.value;
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 4),
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: Image.asset('assets/dairy.png'),
-                            ),
-                            Text(
-                              'dairyEggs'.tr(),
-                            ),
-                          ],
-                        ),
-                      ),
+                    _ProductEntryType(
+                      type: 'dairy',
+                      color: Colors.blue.shade100,
                     ),
-                    RawMaterialButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      fillColor: _ingredientType == 'Oils'
-                          ? Colors.grey.shade300
-                          : Theme.of(context).scaffoldBackgroundColor,
-                      onPressed: () {
-                        _ingredientType = 'Oils';
-                        _change.value = !_change.value;
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 4),
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: Image.asset('assets/eliquid.png'),
-                            ),
-                            Text(
-                              'oils'.tr(),
-                            ),
-                          ],
-                        ),
-                      ),
+                    _ProductEntryType(
+                      type: 'oils',
+                      color: Colors.grey.shade100,
                     ),
-                    RawMaterialButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      fillColor: _ingredientType == 'Other'
-                          ? Colors.brown.shade200
-                          : Theme.of(context).scaffoldBackgroundColor,
-                      onPressed: () {
-                        _ingredientType = 'Other';
-                        _change.value = !_change.value;
-                      },
-                      child: Center(
-                        child: Text(
-                          'other'.tr(),
-                        ),
-                      ),
+                    _ProductEntryType(
+                      type: 'other',
+                      color: Colors.brown.shade100,
                     ),
                   ],
                 ),
@@ -303,78 +187,81 @@ class NewProduct extends HookWidget {
                   ),
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  DropdownButton<int>(
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
+              Card(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    DropdownButton<int>(
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      value: _mesureValue,
+                      onChanged: (val) {
+                        _mesureValue = val;
+                        _change.value = !_change.value;
+                      },
+                      items: [
+                        DropdownMenuItem(
+                          
+                          value: 0,
+                          onTap: () {
+                            _mesureType = 'g';
+                          },
+                          child: const Text(
+                            'g',
+                          ),
+                        ),
+                        DropdownMenuItem(
+                          value: 1,
+                          onTap: () {
+                            _mesureType = 'ml';
+                          },
+                          child: const Text(
+                            'ml',
+                          ),
+                        ),
+                        DropdownMenuItem(
+                          value: 2,
+                          onTap: () {
+                            _mesureType = 'drops';
+                          },
+                          child: Text(
+                            'drops'.tr(),
+                          ),
+                        ),
+                        DropdownMenuItem(
+                          value: 3,
+                          onTap: () {
+                            _mesureType = 'teaspoons';
+                          },
+                          child: Text(
+                            'teaspoons'.tr(),
+                          ),
+                        ),
+                        DropdownMenuItem(
+                          value: 4,
+                          onTap: () {
+                            _mesureType = 'tablespoons';
+                          },
+                          child: Text(
+                            'tablespoons'.tr(),
+                          ),
+                        ),
+                        DropdownMenuItem(
+                          value: 5,
+                          onTap: () {
+                            _mesureType = 'pieces';
+                          },
+                          child: Text(
+                            'pieces'.tr(),
+                          ),
+                        ),
+                      ],
                     ),
-                    value: _mesureValue,
-                    onChanged: (val) {
-                      _mesureValue = val;
-                      _change.value = !_change.value;
-                    },
-                    items: [
-                      DropdownMenuItem(
-                        value: 0,
-                        onTap: () {
-                          _mesureType = 'g';
-                        },
-                        child: const Text(
-                          'g',
-                        ),
-                      ),
-                      DropdownMenuItem(
-                        value: 1,
-                        onTap: () {
-                          _mesureType = 'ml';
-                        },
-                        child: const Text(
-                          'ml',
-                        ),
-                      ),
-                      DropdownMenuItem(
-                        value: 2,
-                        onTap: () {
-                          _mesureType = 'drops';
-                        },
-                        child: Text(
-                          'drops'.tr(),
-                        ),
-                      ),
-                      DropdownMenuItem(
-                        value: 3,
-                        onTap: () {
-                          _mesureType = 'teaspoons';
-                        },
-                        child: Text(
-                          'teaspoons'.tr(),
-                        ),
-                      ),
-                      DropdownMenuItem(
-                        value: 4,
-                        onTap: () {
-                          _mesureType = 'tablespoons';
-                        },
-                        child: Text(
-                          'tablespoons'.tr(),
-                        ),
-                      ),
-                      DropdownMenuItem(
-                        value: 5,
-                        onTap: () {
-                          _mesureType = 'pieces';
-                        },
-                        child: Text(
-                          'pieces'.tr(),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                  ],
+                ),
               ),
               ListTile(
                 dense: true,
@@ -515,41 +402,50 @@ class NewProduct extends HookWidget {
   }
 }
 
-class _FoodTypeSelector extends StatelessWidget {
-  const _FoodTypeSelector({
-    Key key,
-    @required ValueNotifier<bool> change,
-  })  : _change = change,
-        super(key: key);
-
-  final ValueNotifier<bool> _change;
+class _ProductEntryType extends StatelessWidget {
+  final String type;
+  final String image;
+  final Color color;
+  const _ProductEntryType(
+      {Key key, @required this.type, this.color, this.image})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return RawMaterialButton(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      fillColor: _ingredientType == 'Fruit'
-          ? Colors.orange.shade500
-          : Theme.of(context).scaffoldBackgroundColor,
-      onPressed: () {
-        _ingredientType = 'Fruit';
-        _change.value = !_change.value;
-      },
-      child: Padding(
-        padding: const EdgeInsets.only(right: 4),
-        child: Column(
-          children: [
-            Expanded(
-              child: Image.asset('assets/fruits.png'),
-            ),
-            Text(
-              'fruit'.tr(),
-            ),
-          ],
+    return Consumer(builder: (context, watch, child) {
+      final _product = watch(_productEntryProvider);
+      return RawMaterialButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
         ),
-      ),
-    );
+        fillColor: _product.type == type
+            ? color
+            : Theme.of(context).scaffoldBackgroundColor,
+        onPressed: () {
+          _product.changeType(type);
+        },
+        child: Padding(
+          padding: const EdgeInsets.only(right: 4),
+          child: Column(
+            children: [
+              Expanded(
+                child: Image.asset('assets/$type.png'),
+              ),
+              Text(
+                type.tr(),
+              ),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+}
+
+class _ProductEntryProvider extends ChangeNotifier {
+  String type;
+  void changeType(String newType) {
+    type = newType;
+    notifyListeners();
   }
 }
