@@ -59,6 +59,7 @@ class RecipeProvider extends ChangeNotifier {
 
   void changeCategory({String newCategory}) {
     recipeModel.category = newCategory;
+    recipeModel.subCategory = null;
     notifyListeners();
   }
 

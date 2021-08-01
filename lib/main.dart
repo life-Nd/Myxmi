@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter/foundation.dart' as foundation;
+import 'package:sizer/sizer.dart';
 import 'package:myxmi/app.dart';
 import 'providers/prefs.dart';
 import 'providers/user.dart';
@@ -29,7 +30,7 @@ Future<void> main() async {
   kIsWeb
       ? FirebaseAuth.instance.setPersistence(Persistence.LOCAL)
       : debugPrint('Persistence not set');
-      
+
   final ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     visualDensity: const VisualDensity(vertical: 0.5, horizontal: 0.5),
@@ -97,44 +98,49 @@ Future<void> main() async {
   );
 
   runApp(
-    EasyLocalization(
-      path: 'translations',
-      supportedLocales: const [Locale('en', 'US'), Locale('fr', 'FR')],
-      child: ProviderScope(
-        child: Consumer(builder: (context, watch, child) {
-          final _pref = watch(prefProvider);
-          return FutureBuilder(
-              future: _pref.readPrefs(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData && snapshot.data[0] != null) {
-                  final ThemeMode _storedTheme = snapshot.data[0] == 'Light'
-                      ? ThemeMode.light
-                      : ThemeMode.dark;
-                  return MaterialApp(
-                    localizationsDelegates: context.localizationDelegates,
-                    supportedLocales: context.supportedLocales,
-                    locale: context.locale,
-                    theme: lightTheme,
-                    darkTheme: darkTheme,
-                    themeMode: _storedTheme,
-                    debugShowCheckedModeBanner: false,
-                    home: Root(),
-                  );
-                } else {
-                  return MaterialApp(
-                    localizationsDelegates: context.localizationDelegates,
-                    supportedLocales: context.supportedLocales,
-                    locale: context.locale,
-                    theme: lightTheme,
-                    darkTheme: darkTheme,
-                    themeMode: ThemeMode.light,
-                    debugShowCheckedModeBanner: false,
-                    home: Root(),
-                  );
-                }
-              });
-        }),
-      ),
+    Sizer(builder: (context, orientation, deviceType) {
+      return EasyLocalization(
+        path: 'translations',
+        supportedLocales: const [Locale('en', 'US'), Locale('fr', 'FR')],
+        child: ProviderScope(
+          child: Consumer(builder: (context, watch, child) {
+            final _pref = watch(prefProvider);
+            return FutureBuilder(
+                future: _pref.readPrefs(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && snapshot.data[0] != null) {
+                        final ThemeMode _storedTheme = snapshot.data[0] == 'Light'
+                        ? ThemeMode.light
+                        : ThemeMode.dark;
+                      return Sizer(builder: (context, orientation, deviceType) {
+                        return MaterialApp(
+                            localizationsDelegates: context.localizationDelegates,
+                        supportedLocales: context.supportedLocales,
+                        locale: context.locale,
+                        theme: lightTheme,
+                        darkTheme: darkTheme,
+                        themeMode: _storedTheme,
+                        debugShowCheckedModeBanner: false,
+                        home: Root(),
+                      );
+                      });
+                    } else {
+                    return MaterialApp(
+                      localizationsDelegates: context.localizationDelegates,
+                      supportedLocales: context.supportedLocales,
+                      locale: context.locale,
+                      theme: lightTheme,
+                      darkTheme: darkTheme,
+                      themeMode: ThemeMode.light,
+                      debugShowCheckedModeBanner: false,
+                      home: Root(),
+                    );
+                  }
+                });
+          }),
+        ),
+        );
+    }
     ),
   );
 }

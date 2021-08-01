@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/screens/add_recipe.dart';
+import 'package:myxmi/screens/create_recipe.dart';
 import 'package:myxmi/widgets/next_button.dart';
 import 'package:myxmi/widgets/products_list.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -16,7 +16,6 @@ class AddRecipeProducts extends StatelessWidget {
           return Text('${'productsIn'.tr()}: ${_recipe?.recipeModel?.title}');
         }),
       ),
-      // TODO add search to filter the products
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

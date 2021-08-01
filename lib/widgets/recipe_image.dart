@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/screens/add_recipe.dart';
+import 'package:myxmi/screens/create_recipe.dart';
 
 import 'add_favorite.dart';
 import 'add_reviews.dart';
@@ -13,7 +13,6 @@ class RecipeImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('Recipe image building');
     final Size _size = MediaQuery.of(context).size;
     return Consumer(builder: (context, watch, child) {
       final _recipe = watch(recipeProvider);

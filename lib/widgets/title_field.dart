@@ -1,25 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/screens/add_recipe.dart';
+import 'package:myxmi/screens/create_recipe.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-class TitleField extends StatefulWidget {
-  const TitleField({
-    Key key,
-  }) : super(key: key);
+final TextEditingController _titleCtrl = TextEditingController();
 
-  @override
-  _TitleFieldState createState() => _TitleFieldState();
-}
-
-class _TitleFieldState extends State<TitleField> {
-  TextEditingController _titleCtrl = TextEditingController();
-  @override
-  void initState() {
-    _titleCtrl = TextEditingController();
-    super.initState();
-  }
-
+class TitleField extends StatelessWidget {
+  final FocusNode _titleNode = FocusNode();
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -27,6 +14,7 @@ class _TitleFieldState extends State<TitleField> {
       child: Consumer(builder: (_, watch, child) {
         final _recipe = watch(recipeProvider);
         return TextField(
+          focusNode: _titleNode,
           controller: _titleCtrl,
           decoration: InputDecoration(
             isDense: true,
@@ -34,13 +22,12 @@ class _TitleFieldState extends State<TitleField> {
             hintText: 'recipeTitle'.tr(),
             errorText: _recipe.recipeModel.title == null
                 ? 'titleCantBeEmpty'.tr()
-                : null, 
+                : null,
           ),
           onEditingComplete: () {
             _recipe.changeTitle(newTitle: _titleCtrl.text);
           },
           onSubmitted: (submitted) {
-            _recipe.changeTitle(newTitle: _titleCtrl.text);
             FocusScope.of(context).requestFocus(FocusNode());
           },
         );

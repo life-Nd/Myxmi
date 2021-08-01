@@ -18,7 +18,7 @@ class Favorites extends HookWidget {
     // final _user = useProvider(userProvider);
     final _change = useState<bool>(false);
     final Map _data = _fav.showFiltered ? _fav.filtered : _fav.allRecipes;
-    // final Size _size = MediaQuery.of(context).size;
+    // final Size _size =  .size;
 
     final List<RecipeModel> _recipes = _data.entries.map((MapEntry data) {
       return RecipeModel.fromSnapshot(

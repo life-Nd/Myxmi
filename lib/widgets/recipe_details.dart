@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/instructions.dart';
-import 'package:myxmi/screens/add_recipe.dart';
+import 'package:myxmi/screens/create_recipe.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:myxmi/screens/home.dart';
 import 'package:myxmi/widgets/add_reviews.dart';
@@ -18,7 +18,7 @@ class RecipeDetails extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    debugPrint('Recipe details building');
+
     final Size _size = MediaQuery.of(context).size;
     return Consumer(builder: (context, watch, child) {
       final _user = watch(userProvider);

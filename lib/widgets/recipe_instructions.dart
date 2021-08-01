@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/screens/add_recipe.dart';
+import 'package:myxmi/screens/create_recipe.dart';
 import 'new_recipe_image.dart';
 import 'save_recipe.dart';
 
@@ -13,55 +13,58 @@ class RecipeInstructions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       drawerDragStartBehavior: DragStartBehavior.down,
-      drawer: Consumer(builder: (_, watch, child) {
-        final _recipe = watch(recipeProvider);
-        return Drawer(
-          child: Column(
-            children: [
-              ListTile(
-                contentPadding: const EdgeInsets.only(top: 7),
-                title: Center(
-                  child: Text(
-                    'ingredients'.tr(),
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+      drawer: SafeArea(
+        child: Consumer(builder: (_, watch, child) {
+          final _recipe = watch(recipeProvider);
+          return Drawer(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  contentPadding: const EdgeInsets.only(top: 7),
+                  title: Center(
+                    child: Text(
+                      'ingredients'.tr(),
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: int.parse(_recipe.recipeModel.ingredientsCount),
-                  itemBuilder: (_, int index) {
-                    final List _keys = _recipe.composition.keys.toList();
-                    final String _keyIndex = '${_keys[index]}';
-                    return Card(
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                      child: ListTile(
-                        title: Row(
-                          children: [
-                            Text(
-                              '$_keyIndex:',
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: int.parse(_recipe.recipeModel.ingredientsCount),
+                    itemBuilder: (_, int index) {
+                      final List _keys = _recipe.composition.keys.toList();
+                      final String _keyIndex = '${_keys[index]}';
+                      return Card(
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                        child: ListTile(
+                          title: Row(
+                            children: [
+                              Text(
+                                '$_keyIndex:',
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            Text(
-                              ' ${_recipe.composition[_keyIndex]}',
-                            )
-                          ],
+                              Text(
+                                ' ${_recipe.composition[_keyIndex]}',
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
-          ),
-        );
-      }),
+              ],
+            ),
+          );
+        }),
+      ),
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
@@ -121,7 +124,6 @@ class RecipeInstructions extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  
                   padding: const EdgeInsets.all(2),
                   icon: const Icon(Icons.send, color: Colors.green),
                   onPressed: () {

@@ -14,6 +14,7 @@ class ViewProvider extends ChangeNotifier {
   bool authenticating = false;
   Stream<QuerySnapshot> search;
 
+
   void loadingAuth({bool loading}) {
     authenticating = loading;
     notifyListeners();

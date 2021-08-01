@@ -12,11 +12,6 @@ class Products extends HookWidget {
   Widget build(BuildContext context) {
     final _fav = useProvider(favProvider);
     final _change = useState<bool>(false);
-    debugPrint('Productspage building');
-    // TODO change the page view for two pages similar to how a shopping site
-    // shows :
-    // products on one page
-    // and icon with the count of products in the cart on another page
     return RefreshIndicator(
       onRefresh: () async {
         _fav.showFilter(value: false);

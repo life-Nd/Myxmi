@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/instructions.dart';
-import 'package:myxmi/screens/add_recipe.dart';
+import 'package:myxmi/screens/create_recipe.dart';
 import 'package:myxmi/widgets/recipe_details.dart';
 import 'package:myxmi/widgets/recipe_image.dart';
 import 'package:myxmi/widgets/view_selector_text.dart';
@@ -47,7 +47,6 @@ class SelectedRecipeState extends State<SelectedRecipe> {
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
-    debugPrint('SelectedRecipe building');
     return Scaffold(
       appBar: AppBar(
         title: Consumer(builder: (context, watch, child) {
@@ -127,7 +126,6 @@ class _ViewsSelector extends StatelessWidget {
   const _ViewsSelector({Key key, this.instructions}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    debugPrint('View selector building');
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [

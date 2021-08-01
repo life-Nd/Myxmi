@@ -8,7 +8,7 @@ import 'package:myxmi/providers/image.dart';
 import 'package:myxmi/screens/home.dart';
 import 'package:sn_progress_dialog/progress_dialog.dart';
 import '../main.dart';
-import '../screens/add_recipe.dart';
+import '../screens/create_recipe.dart';
 
 class SaveButton extends HookWidget {
   @override

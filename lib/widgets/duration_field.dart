@@ -1,24 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/screens/add_recipe.dart';
+import 'package:myxmi/screens/create_recipe.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-class DurationField extends StatefulWidget {
-  const DurationField({
-    Key key,
-  }) : super(key: key);
-  @override
-  State createState() => _DurationFieldState();
-}
+final TextEditingController _durationCtrl = TextEditingController();
 
-class _DurationFieldState extends State<DurationField> {
-  TextEditingController _durationCtrl = TextEditingController();
-  @override
-  void initState() {
-    _durationCtrl = TextEditingController();
-    super.initState();
-  }
-
+class DurationField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(

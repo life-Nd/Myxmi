@@ -51,15 +51,6 @@ class More extends HookWidget {
         ),
         const Divider(),
         ListTile(
-          leading: const Icon(Icons.rate_review),
-          title: Text('rateMyxmi'.tr()),
-          trailing: const Icon(Icons.arrow_forward_ios),
-          onTap: () {
-            rateMyApp.showRateDialog(context);
-          },
-        ),
-        const Divider(),
-        ListTile(
           leading: const Icon(Icons.support),
           title: Text('support'.tr()),
           trailing: const Icon(Icons.arrow_forward_ios),
@@ -67,6 +58,15 @@ class More extends HookWidget {
             Navigator.of(context).push(MaterialPageRoute(
               builder: (_) => SupportScreen(),
             ));
+          },
+        ),
+        const Divider(),
+        ListTile(
+          leading: const Icon(Icons.rate_review),
+          title: Text('rateMyxmi'.tr()),
+          trailing: const Icon(Icons.arrow_forward_ios),
+          onTap: () {
+            rateMyApp.showRateDialog(context);
           },
         ),
         const Divider(),
@@ -89,7 +89,6 @@ class More extends HookWidget {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           fillColor: Colors.red,
           onPressed: () {
-            
             _view.view = 0;
             AuthServices().confirmSignOut(context);
           },

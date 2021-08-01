@@ -14,34 +14,15 @@ import '../widgets/dialog_wrong_password.dart';
 final _fieldsProvider =
     ChangeNotifierProvider<_FieldsNotifier>((ref) => _FieldsNotifier());
 
-TextEditingController _emailCtrl;
-TextEditingController _passwordCtrl;
+TextEditingController _emailCtrl = TextEditingController();
+TextEditingController _passwordCtrl = TextEditingController();
 FocusNode _passwordNode;
 final AuthServices _authServices = AuthServices();
 
-class SignIn extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => SignInState();
-}
-
-class SignInState extends State<SignIn> {
-  bool showPassword = false;
-  bool showButton = false;
-
-  @override
-  void initState() {
-    _emailCtrl = TextEditingController();
-    _passwordCtrl = TextEditingController();
-    _passwordNode = FocusNode();
-    super.initState();
-  }
-
+class SignIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final _size = MediaQuery.of(context).size;
-    debugPrint('Building widget');
     return Container(
-      height: _size.height,
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor,
         borderRadius: const BorderRadius.only(
@@ -90,7 +71,6 @@ class SignInState extends State<SignIn> {
               children: <Widget>[
                 Consumer(builder: (context, watch, child) {
                   final _view = watch(viewProvider);
-                  debugPrint('Building row');
                   return _view.authenticating
                       ? const Center(
                           child: CircularProgressIndicator(),
@@ -149,8 +129,8 @@ class SignInState extends State<SignIn> {
                 }),
               ],
             ),
-            SizedBox(
-              height: _size.height / 10,
+            const SizedBox(
+              height: 50,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -181,15 +161,15 @@ class SignInState extends State<SignIn> {
                 ),
               ],
             ),
-            SizedBox(
-              height: _size.height / 20,
+            const SizedBox(
+              height: 50,
             ),
             if (!Platform.isAndroid && Platform.isIOS)
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                 ),
-                width: _size.width / 3,
+                width: 200,
                 alignment: Alignment.center,
                 child: apple_sign_in.AppleSignInButton(
                   style: apple_sign_in.ButtonStyle.black,
@@ -206,15 +186,6 @@ class SignInState extends State<SignIn> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _emailCtrl.dispose();
-    _passwordCtrl.dispose();
-    _passwordNode.dispose();
-
-    super.dispose();
   }
 }
 
@@ -247,7 +218,11 @@ class _EmailWithValidator extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class _PasswordField extends StatelessWidget {
+  bool showPassword = false;
+  bool showButton = false;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -276,6 +251,12 @@ class _PasswordField extends StatelessWidget {
       }),
     );
   }
+
+  // @override
+  // void dispose() {
+  //   _passwordCtrl.dispose();
+  //   super.dispose();
+  // }
 }
 
 class _FieldsNotifier with ChangeNotifier {
