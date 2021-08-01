@@ -28,8 +28,7 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
   ]);
   kIsWeb
-      ? FirebaseAuth.instance.setPersistence(Persistence.LOCAL)
-      : debugPrint('Persistence not set');
+      ?? FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
 
   final ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -34,7 +35,11 @@ class _ImageCropperScreenState extends State<ImageCropperScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Consumer(
+          builder: (_, watch, __) {
+            return Text(widget.title);
+          },
+        ),
         actions: state == AppState.cropped
             ? [
                 IconButton(

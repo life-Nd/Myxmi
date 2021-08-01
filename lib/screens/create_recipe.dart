@@ -67,7 +67,7 @@ class CreateRecipe extends StatelessWidget {
                   onKey: (event) {
                     if (event is RawKeyUpEvent &&
                         event.data is RawKeyEventDataAndroid) {
-                      var data = event.data as RawKeyEventDataAndroid;
+                      final data = event.data as RawKeyEventDataAndroid;
                       if (data.keyCode == 13) {
                         debugPrint('onSubmitted');
                       }

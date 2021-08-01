@@ -18,7 +18,6 @@ final viewProvider = ChangeNotifierProvider<ViewProvider>(
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-  
     return Consumer(builder: (_, watch, __) {
       final _view = watch(viewProvider);
       final _user = watch(userProvider);
@@ -28,21 +27,25 @@ class Home extends StatelessWidget {
           _viewIndex == 1 && _user.account?.uid != null ||
           _viewIndex == 2 && _user.account?.uid != null ||
           _viewIndex == 3 && _user.account?.uid != null;
-
       return Scaffold(
         appBar: PreferredSize(
+          // STATUS bar sometimes is not visible due to wrong colors
           preferredSize: kIsWeb ? Size(100.h, 200) : Size(100.h, 100),
           child: SafeArea(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (kIsWeb) SizedBox(width: 100.h, child: WebAppBar()),
-                if (_searchable)
-                  SearchRecipes(
-                      showFilter: _viewIndex == 2 && _user.account?.uid != null)
-                else
-                  kIsWeb ? Container() : const ListTile(title: Text('Myxmi')),
-              ],
+            child: Container(
+              color: Theme.of(context).appBarTheme.color,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (kIsWeb) SizedBox(width: 100.h, child: WebAppBar()),
+                  if (_searchable)
+                    SearchRecipes(
+                        showFilter:
+                            _viewIndex == 2 && _user.account?.uid != null)
+                  else
+                    kIsWeb ? Container() : const ListTile(title: Text('Myxmi')),
+                ],
+              ),
             ),
           ),
         ),

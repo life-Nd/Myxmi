@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/screens/create_recipe.dart';
-import 'new_recipe_image.dart';
+import 'package:myxmi/screens/image_cropper_screen.dart';
 import 'save_recipe.dart';
 
 TextEditingController _stepCtrl = TextEditingController();
@@ -137,7 +137,14 @@ class RecipeInstructions extends StatelessWidget {
                   icon: const Icon(Icons.add_a_photo),
                   onPressed: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => NewRecipeImage()),
+                      MaterialPageRoute(
+                        builder: (_) => ImageCropperScreen(
+                          route: MaterialPageRoute(
+                            builder: (_) => RecipeInstructions(),
+                          ),
+                          title: _recipe.recipeModel.title,
+                        ),
+                      ),
                     );
                   },
                 ),
