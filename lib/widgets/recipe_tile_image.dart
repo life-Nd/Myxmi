@@ -69,8 +69,11 @@ class RecipeTileImage extends HookWidget {
         child: recipe.imageUrl != null
             ? Image.network(
                 recipe.imageUrl,
-                fit: BoxFit.fitWidth,
+                fit: BoxFit.fitHeight,
                 cacheWidth: 1000,
+                cacheHeight: 1000,
+                height: _size.height,
+                
               )
             : Stack(
                 alignment: Alignment.center,
@@ -81,7 +84,7 @@ class RecipeTileImage extends HookWidget {
                         ? Image.asset(
                             'assets/${recipe.subCategory}.jpg',
                             fit: BoxFit.fitHeight,
-                            width: _size.width,
+                            height: _size.height,
                             cacheWidth: 1000,
                             colorBlendMode: BlendMode.color,
                           )

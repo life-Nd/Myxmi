@@ -65,6 +65,13 @@ class Home extends StatelessWidget {
                                     builder: (_) => AddProduct(),
                                   ),
                                 );
+                          // _image.chooseImageSource(
+                          //     context: context,
+                          //     route: MaterialPageRoute(
+                          //       builder: (_) => ImageCropperScreen(
+                          //         title: _recipe.recipeModel.title,
+                          //       ),
+                          //     ));
                         },
                         child: const Icon(
                           Icons.add,

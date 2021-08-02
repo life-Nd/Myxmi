@@ -148,20 +148,36 @@ class AddRecipeInstructions extends StatelessWidget {
                     !kIsWeb ?? FocusScope.of(context).requestFocus(FocusNode());
                   },
                 ),
-                IconButton(
-                  padding: const EdgeInsets.all(2),
-                  icon: const Icon(Icons.add_a_photo),
-                  onPressed: () {
-                    // TODO Instead of navigating to a new page just
-                    // show the sourcepicker dialog
-                    _image.chooseImageSource(
-                        context: context,
-                        route: MaterialPageRoute(
-                          builder: (_) => ImageCropperScreen(
-                            title: _recipe.recipeModel.title,
-                          ),
-                        ));
-                  },
+                Stack(
+                  alignment: Alignment.topRight,
+                  children: [
+                    if (_image.state != AppState.empty)
+                      const Padding(
+                        padding: EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          '1',
+                          style: TextStyle(
+                              color: Colors.green,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    IconButton(
+                      padding: const EdgeInsets.all(2),
+                      icon: const Icon(Icons.add_a_photo),
+                      onPressed: () {
+                        // TODO Instead of navigating to a new page just
+                        // show the sourcepicker dialog
+                        _image.chooseImageSource(
+                            context: context,
+                            route: MaterialPageRoute(
+                              builder: (_) => ImageCropperScreen(
+                                title: _recipe.recipeModel.title,
+                              ),
+                            ));
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),

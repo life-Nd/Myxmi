@@ -16,10 +16,10 @@ class ImageCropperScreen extends StatelessWidget {
         appBar: AppBar(
           title: Consumer(
             builder: (_, watch, __) {
-              return Text(title);
+              return const Text('title');
             },
           ),
-          actions: _image.state == AppState.cropped
+          actions: _image.state != AppState.empty
               ? [
                   IconButton(
                     icon: const Icon(Icons.clear),
@@ -29,44 +29,56 @@ class ImageCropperScreen extends StatelessWidget {
               : null,
         ),
         body: Center(
-          child: _image.imageFile != null || _image.webFile != null
+          child: _image.imageFile != null || _image.dataUint8 != null
               ? kIsWeb
-                  ? Image.network(_image.webFile.name)
-                  : Image.file(_image.imageFile)
+                  ? Image.memory(_image.dataUint8)
+                  : Image.memory(_image.imageFile.readAsBytesSync())
               : Container(),
         ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.deepOrange,
-          onPressed: () {
-            debugPrint('_image.state: ${_image.state}');
-            debugPrint('_image.imageFile: ${_image.imageFile}');
-            if (_image.state == AppState.empty) {
-              _image.chooseImageSource(
-                context: context,
-                route: MaterialPageRoute(
-                  builder: (_) => const ImageCropperScreen(
-                    title: 'TESTING',
-                  ),
-                ),
-              );
-            } else if (_image.state == AppState.picked) {
-              kIsWeb
-                  ? Navigator.of(context).push(
+        floatingActionButton: kIsWeb && _image.state == AppState.picked
+            ? FloatingActionButton(
+                backgroundColor: Colors.green,
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => AddRecipeInstructions(),
+                    ),
+                  );
+                },
+                child: const Icon(Icons.save),
+              )
+            : FloatingActionButton(
+                backgroundColor: Colors.deepOrange,
+                onPressed: () {
+                  debugPrint('_image.state: ${_image.state}');
+                  debugPrint('_image.imageFile: ${_image.imageFile}');
+                  if (_image.state == AppState.empty) {
+                    _image.chooseImageSource(
+                      context: context,
+                      route: MaterialPageRoute(
+                        builder: (_) => const ImageCropperScreen(
+                          title: 'TESTING',
+                        ),
+                      ),
+                    );
+                  } else if (_image.state == AppState.picked) {
+                    kIsWeb
+                        ? Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => AddRecipeInstructions(),
+                            ),
+                          )
+                        : _image.cropImage();
+                  } else if (_image.state == AppState.cropped) {
+                    Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => AddRecipeInstructions(),
                       ),
-                    )
-                  : _image.cropImage();
-            } else if (_image.state == AppState.cropped) {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => AddRecipeInstructions(),
-                ),
-              );
-            }
-          },
-          child: _image.buildButtonIcon(),
-        ),
+                    );
+                  }
+                },
+                child: _image.buildButtonIcon(),
+              ),
       );
     });
   }

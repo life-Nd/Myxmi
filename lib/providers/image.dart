@@ -1,7 +1,6 @@
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as web;
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,7 +22,8 @@ enum AppState {
 class ImageProvider extends ChangeNotifier {
   AppState state = AppState.empty;
   File imageFile;
-  web.File webFile;
+  Uint8List dataUint8;
+  Widget imageWidget;
   String urlString;
   String imageLink = '';
   String imageId = '';
@@ -113,17 +113,14 @@ class ImageProvider extends ChangeNotifier {
 
   void changeImageFile(XFile file) {
     imageFile = File(file.path);
+    imageWidget = Image.memory(imageFile.readAsBytesSync());
     state = AppState.picked;
     notifyListeners();
   }
 
   Future changeImageWeb(XFile file) async {
-    webFile = web.File(await file.readAsBytes(), file.path);
-    debugPrint('PATH: ${file.path}');
-    debugPrint('WEBFILE: ${webFile.size}');
-    debugPrint('WEBFILE: ${webFile.name}');
-    debugPrint('WEBFILE: ${webFile.relativePath}');
-    debugPrint('WEBFILE: ${webFile.lastModifiedDate}');
+    dataUint8 = await file.readAsBytes();
+    imageWidget = Image.memory(dataUint8);
     state = AppState.picked;
     notifyListeners();
   }
@@ -143,6 +140,7 @@ class ImageProvider extends ChangeNotifier {
   Future addImageToDb(
       {String addedImage,
       BuildContext context,
+      Uint8List data,
       GlobalKey<ScaffoldState> scaffoldKey}) async {
     final ProgressDialog pr = ProgressDialog(context: context);
     pr.show(max: 1000, msg: '${'loading'.tr()} ${'image'.tr()}...');
@@ -151,12 +149,12 @@ class ImageProvider extends ChangeNotifier {
     final rng = Random();
     final _random = rng.nextInt(90000) + 10000;
     imageId = '$timeStamp-$_random}';
-    if (imageFile != null || webFile != null) {
+    if (imageFile != null || dataUint8 != null) {
       final firebaseStorageRef = firebase_storage.FirebaseStorage.instance
           .ref()
           .child("$timeStamp-$_random.jpg");
       task = kIsWeb
-          ? firebaseStorageRef.putBlob(webFile)
+          ? firebaseStorageRef.putData(dataUint8)
           : firebaseStorageRef.putFile(imageFile);
       await task.whenComplete(() {
         added = addedImage;

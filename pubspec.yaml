@@ -53,7 +53,8 @@ dependencies:
   timeago: ^3.0.2
   timetable: 
   transparent_image: ^2.0.0
-  universal_io: ^2.0.4
+
+
   
   
 
