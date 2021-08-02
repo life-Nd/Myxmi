@@ -1,24 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/screens/create_recipe.dart';
+import 'package:myxmi/screens/add_recipe_infos.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-class PortionsField extends StatefulWidget {
-  const PortionsField({
-    Key key,
-  }) : super(key: key);
-  @override
-  _PortionsFieldState createState() => _PortionsFieldState();
-}
+class PortionsField extends StatelessWidget {
 
-class _PortionsFieldState extends State<PortionsField> {
-  TextEditingController _portionsCtrl = TextEditingController();
-
-  @override
-  void initState() {
-    _portionsCtrl = TextEditingController();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +17,10 @@ class _PortionsFieldState extends State<PortionsField> {
             child: Consumer(builder: (_, watch, child) {
               final _recipe = watch(recipeProvider);
               return TextField(
-                controller: _portionsCtrl,
+                controller: _recipe.portionsCtrl,
                 keyboardType: TextInputType.number,
                 onSubmitted: (submitted) {
-                  _recipe.changePortions(newPortions: _portionsCtrl.text);
+                  _recipe.changePortions();
                   FocusScope.of(context).requestFocus(FocusNode());
                 },
                 decoration: InputDecoration(
@@ -51,4 +37,5 @@ class _PortionsFieldState extends State<PortionsField> {
       ],
     );
   }
+  
 }

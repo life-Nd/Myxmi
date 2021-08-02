@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/screens/create_recipe.dart';
+import 'package:myxmi/screens/add_recipe_infos.dart';
 import 'package:myxmi/widgets/next_button.dart';
 import 'package:myxmi/widgets/products_list.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:myxmi/widgets/recipe_instructions.dart';
+
+import 'add_recipe_instructions.dart';
 
 class AddRecipeProducts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => AddRecipeInfos(),
+              ),
+            );
+          },
+        ),
         title: Consumer(builder: (_, watch, child) {
           final _recipe = watch(recipeProvider);
           return Text('${'productsIn'.tr()}: ${_recipe?.recipeModel?.title}');
@@ -55,7 +66,9 @@ class AddRecipeProducts extends StatelessWidget {
           ),
           NextButton(
             tapNext: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => RecipeInstructions()),
+              MaterialPageRoute(
+                builder: (_) => AddRecipeInstructions(),
+              ),
             ),
           ),
         ],

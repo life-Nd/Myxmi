@@ -16,6 +16,9 @@ class RecipeProvider extends ChangeNotifier {
   int pageIndex = 0;
   Widget image;
   PageController pageController = PageController();
+  final TextEditingController titleCtrl = TextEditingController();
+  final TextEditingController durationCtrl = TextEditingController();
+  final TextEditingController portionsCtrl = TextEditingController();
 
   void changePageController(int index) {
     pageController.jumpToPage(index);
@@ -27,22 +30,19 @@ class RecipeProvider extends ChangeNotifier {
     return image = newImage;
   }
 
-  void changeTitle({@required String newTitle}) {
-    recipeModel.title = newTitle;
-    notifyListeners();
+  void changeTitle() {
+    recipeModel.title = titleCtrl.text;
   }
 
-  void changeDuration({@required String newDuration}) {
-    recipeModel.duration = newDuration;
-    notifyListeners();
+  void changeDuration() {
+    recipeModel.duration = durationCtrl.text;
   }
 
-  void changePortions({@required String newPortions}) {
-    recipeModel.portions = newPortions;
-    notifyListeners();
+  void changePortions() {
+    recipeModel.portions = portionsCtrl.text;
   }
 
-  void changeDifficulty({double newDifficultyValue}) {
+  void changeDifficulty(double newDifficultyValue) {
     difficultyValue = newDifficultyValue;
     notifyListeners();
   }
@@ -117,9 +117,11 @@ class RecipeProvider extends ChangeNotifier {
   }
 
   void changeEstimatedWeight() {
-    estimatedWeight = quantity.values.reduce(
-      (sum, element) => sum + element,
-    );
+    estimatedWeight = quantity.isNotEmpty
+        ? quantity.values.reduce(
+            (sum, element) => sum + element,
+          )
+        : 0.0;
     notifyListeners();
   }
 
@@ -135,12 +137,15 @@ class RecipeProvider extends ChangeNotifier {
   void reset() {
     recipeModel = RecipeModel();
     instructions = InstructionsModel();
+    estimatedWeight = 0.0;
+    difficultyValue = 0.0;
+    actualWeight = '';
+    pageIndex = 0;
+    titleCtrl.clear();
+    durationCtrl.clear();
+    portionsCtrl.clear();
     quantity.clear();
     composition.clear();
-    estimatedWeight = 0.0;
-    actualWeight = '';
-    difficultyValue = 0.0;
-    pageIndex = 0;
     hidden.clear();
   }
 }

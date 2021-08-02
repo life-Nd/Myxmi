@@ -2,16 +2,21 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/screens/create_recipe.dart';
+import 'package:myxmi/providers/image.dart';
+import 'package:myxmi/screens/add_recipe_infos.dart';
 import 'package:myxmi/screens/image_cropper_screen.dart';
-import 'save_recipe.dart';
+import 'package:myxmi/widgets/save_recipe.dart';
+
+import 'add_recipe_products.dart';
 
 TextEditingController _stepCtrl = TextEditingController();
 
-class RecipeInstructions extends StatelessWidget {
+class AddRecipeInstructions extends StatelessWidget {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       drawerDragStartBehavior: DragStartBehavior.down,
       drawer: SafeArea(
         child: Consumer(builder: (_, watch, child) {
@@ -21,6 +26,16 @@ class RecipeInstructions extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 ListTile(
+                  leading: IconButton(
+                    icon: const Icon(Icons.arrow_back_ios),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => AddRecipeProducts(),
+                        ),
+                      );
+                    },
+                  ),
                   contentPadding: const EdgeInsets.only(top: 7),
                   title: Center(
                     child: Text(
@@ -67,9 +82,9 @@ class RecipeInstructions extends StatelessWidget {
       ),
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.dehaze),
           onPressed: () {
-            Navigator.of(context).pop();
+            _scaffoldKey.currentState.openDrawer();
           },
         ),
         title: Consumer(builder: (_, watch, child) {
@@ -83,6 +98,7 @@ class RecipeInstructions extends StatelessWidget {
       ),
       body: Consumer(builder: (_, watch, child) {
         final _recipe = watch(recipeProvider);
+        final _image = watch(imageProvider);
         final List _steps = _recipe?.instructions?.steps;
         final int _keys = _steps?.length != null ? _steps.length : 0;
         final int _newKey = _keys + 1;
@@ -119,7 +135,7 @@ class RecipeInstructions extends StatelessWidget {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          labelText: '${'step'.tr()} $_newKey: '),
+                          labelText: '${'step'.tr()} $_newKey:'),
                     ),
                   ),
                 ),
@@ -136,16 +152,15 @@ class RecipeInstructions extends StatelessWidget {
                   padding: const EdgeInsets.all(2),
                   icon: const Icon(Icons.add_a_photo),
                   onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => ImageCropperScreen(
-                          route: MaterialPageRoute(
-                            builder: (_) => RecipeInstructions(),
+                    // TODO Instead of navigating to a new page just
+                    // show the sourcepicker dialog
+                    _image.chooseImageSource(
+                        context: context,
+                        route: MaterialPageRoute(
+                          builder: (_) => ImageCropperScreen(
+                            title: _recipe.recipeModel.title,
                           ),
-                          title: _recipe.recipeModel.title,
-                        ),
-                      ),
-                    );
+                        ));
                   },
                 ),
               ],

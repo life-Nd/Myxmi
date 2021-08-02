@@ -9,7 +9,7 @@ import 'package:myxmi/widgets/web_appbar.dart';
 import 'package:sizer/sizer.dart';
 import '../main.dart';
 import 'add_product.dart';
-import 'create_recipe.dart';
+import 'add_recipe_infos.dart';
 
 final viewProvider = ChangeNotifierProvider<ViewProvider>(
   (ref) => ViewProvider(),
@@ -29,7 +29,6 @@ class Home extends StatelessWidget {
           _viewIndex == 3 && _user.account?.uid != null;
       return Scaffold(
         appBar: PreferredSize(
-          // STATUS bar sometimes is not visible due to wrong colors
           preferredSize: kIsWeb ? Size(100.h, 200) : Size(100.h, 100),
           child: SafeArea(
             child: Container(
@@ -58,7 +57,7 @@ class Home extends StatelessWidget {
                           _viewIndex != 3
                               ? Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (_) => CreateRecipe(),
+                                    builder: (_) => AddRecipeInfos(),
                                   ),
                                 )
                               : Navigator.of(context).push(

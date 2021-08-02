@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/screens/create_recipe.dart';
+import 'package:myxmi/screens/add_recipe_infos.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-final TextEditingController _durationCtrl = TextEditingController();
+
 
 class DurationField extends StatelessWidget {
   @override
@@ -17,10 +17,10 @@ class DurationField extends StatelessWidget {
             child: Consumer(builder: (_, watch, child) {
               final _recipe = watch(recipeProvider);
               return TextField(
-                controller: _durationCtrl,
+                controller: _recipe.durationCtrl,
                 keyboardType: TextInputType.number,
                 onSubmitted: (submitted) {
-                  _recipe.changeDuration(newDuration: _durationCtrl.text);
+                  _recipe.changeDuration();
                   FocusScope.of(context).requestFocus(FocusNode());
                 },
                 decoration: InputDecoration(

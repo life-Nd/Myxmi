@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/screens/create_recipe.dart';
+import 'package:myxmi/screens/add_recipe_infos.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:sizer/sizer.dart';
 import 'drinks_subcategories.dart';
@@ -20,7 +20,7 @@ class SubCategorySelector extends StatelessWidget {
           Text('subCategory'.tr()),
           SizedBox(
             width: 100.w,
-            height: 5.h,
+            height: 10.h,
             child: Center(
               child: subCategory(
                 category: _recipe.recipeModel.category,

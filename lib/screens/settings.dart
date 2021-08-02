@@ -110,7 +110,7 @@ class _Theme extends HookWidget {
                           debugPrint('THEME:${_prefs.theme}');
                         }
                       : () {
-                          debugPrint('THEME:${_prefs.theme}');
+                          debugPrint('THEME is ?DARK?:${_prefs.theme}');
                         },
                   child: Text(
                     'dark'.tr(),

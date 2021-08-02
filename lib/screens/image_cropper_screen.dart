@@ -1,141 +1,65 @@
-import 'dart:async';
-import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:myxmi/providers/image.dart';
+import 'package:myxmi/screens/add_recipe_instructions.dart';
 
-class ImageCropperScreen extends StatefulWidget {
+class ImageCropperScreen extends StatelessWidget {
   final String title;
-  final Route route;
-
-  const ImageCropperScreen({@required this.title, @required this.route});
-
-  @override
-  _ImageCropperScreenState createState() => _ImageCropperScreenState();
-}
-
-enum AppState {
-  free,
-  picked,
-  cropped,
-}
-
-class _ImageCropperScreenState extends State<ImageCropperScreen> {
-  AppState state;
-  File imageFile;
-
-  @override
-  void initState() {
-    super.initState();
-    state = AppState.free;
-  }
+  const ImageCropperScreen({@required this.title});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Consumer(
-          builder: (_, watch, __) {
-            return Text(widget.title);
-          },
+    return Consumer(builder: (_, watch, __) {
+      final _image = watch(imageProvider);
+      return Scaffold(
+        appBar: AppBar(
+          title: Consumer(
+            builder: (_, watch, __) {
+              return Text(title);
+            },
+          ),
+          actions: _image.state == AppState.cropped
+              ? [
+                  IconButton(
+                    icon: const Icon(Icons.clear),
+                    onPressed: () => _image.delete(),
+                  )
+                ]
+              : null,
         ),
-        actions: state == AppState.cropped
-            ? [
-                IconButton(
-                  icon: const Icon(Icons.clear),
-                  onPressed: () => _clearImage(),
-                )
-              ]
-            : null,
-      ),
-      body: Center(
-        child: imageFile != null ? Image.file(imageFile) : Container(),
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.deepOrange,
-        onPressed: () {
-          if (state == AppState.free) {
-            _pickImage();
-          } else if (state == AppState.picked) {
-            _cropImage();
-          } else if (state == AppState.cropped) useImageOnPreviousScreen();
-        },
-        child: _buildButtonIcon(),
-      ),
-    );
-  }
-
-  Widget _buildButtonIcon() {
-    if (state == AppState.free) {
-      return const Icon(Icons.add);
-    } else if (state == AppState.picked) {
-      return const Icon(Icons.crop);
-    } else if (state == AppState.cropped) {
-      return const Icon(Icons.save);
-    } else {
-      return Container();
-    }
-  }
-
-  Future _pickImage() async {
-    final pickedImage =
-        await ImagePicker().pickImage(source: ImageSource.camera);
-    imageFile = pickedImage != null ? File(pickedImage.path) : null;
-    if (imageFile != null) {
-      setState(() {
-        state = AppState.picked;
-      });
-    }
-  }
-
-  Future _cropImage() async {
-    final File croppedFile = await ImageCropper.cropImage(
-        sourcePath: imageFile.path,
-        aspectRatioPresets: Platform.isAndroid
-            ? [
-                CropAspectRatioPreset.square,
-                CropAspectRatioPreset.ratio3x2,
-                CropAspectRatioPreset.original,
-                CropAspectRatioPreset.ratio4x3,
-                CropAspectRatioPreset.ratio16x9
-              ]
-            : [
-                CropAspectRatioPreset.original,
-                CropAspectRatioPreset.square,
-                CropAspectRatioPreset.ratio3x2,
-                CropAspectRatioPreset.ratio4x3,
-                CropAspectRatioPreset.ratio5x3,
-                CropAspectRatioPreset.ratio5x4,
-                CropAspectRatioPreset.ratio7x5,
-                CropAspectRatioPreset.ratio16x9
-              ],
-        androidUiSettings: const AndroidUiSettings(
-            toolbarTitle: 'Cropper',
-            toolbarColor: Colors.deepOrange,
-            toolbarWidgetColor: Colors.white,
-            initAspectRatio: CropAspectRatioPreset.original,
-            lockAspectRatio: false),
-        iosUiSettings: const IOSUiSettings(
-          title: 'Cropper',
-        ));
-    if (croppedFile != null) {
-      imageFile = croppedFile;
-      setState(() {
-        state = AppState.cropped;
-      });
-    }
-  }
-
-  void _clearImage() {
-    imageFile = null;
-    setState(() {
-      state = AppState.free;
+        body: Center(
+          child: _image.imageFile != null
+              ? Image.file(_image.imageFile)
+              : Container(),
+        ),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.deepOrange,
+          onPressed: () {
+            debugPrint('_image.state: ${_image.state}');
+            debugPrint('_image.imageFile: ${_image.imageFile}');
+            if (_image.state == AppState.empty) {
+              _image.chooseImageSource(
+                context: context,
+                route: MaterialPageRoute(
+                  builder: (_) => const ImageCropperScreen(
+                    title: 'TESTING',
+                  ),
+                ),
+              );
+            } else if (_image.state == AppState.picked) {
+              kIsWeb ? debugPrint('No cropping for Web') : _image.cropImage();
+            } else if (_image.state == AppState.cropped) {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => AddRecipeInstructions(),
+                ),
+              );
+            }
+          },
+          child: _image.buildButtonIcon(),
+        ),
+      );
     });
-  }
-
-  void useImageOnPreviousScreen() {
-    // Sends to previous screen
-    Navigator.of(context).pushAndRemoveUntil(widget.route, (route) => false);
   }
 }

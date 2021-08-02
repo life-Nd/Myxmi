@@ -13,7 +13,7 @@ class SelectableRow extends StatelessWidget {
       shrinkWrap: true,
       children: textList
           .map((String item) => Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(4.0),
                 child: Align(
                   child: SelectorButton(
                     value: item,

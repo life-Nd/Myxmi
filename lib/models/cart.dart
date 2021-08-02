@@ -8,7 +8,7 @@ class CartModel {
 
   CartModel({this.name, this.category});
 
-  void fromSnapshot({Map<String, String> snapshot, String keyIndex}) {
+  void fromSnapshot({Map<String, String> snapshot}) {
     name = snapshot[constName];
     category = snapshot[constCategory];
   }

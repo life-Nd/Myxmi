@@ -25,8 +25,10 @@ class FieldsState extends State<Fields> {
         controller: textCtrl,
         keyboardType: TextInputType.number,
         onSubmitted: (submitted) {
-          FocusScope.of(context).requestFocus(FocusNode());
+          widget.recipe.changeEstimatedWeight();
         },
+        
+
         onChanged: (value) {
           widget.recipe.changeComposition(
               key: widget.data['Name'] as String,
@@ -38,10 +40,7 @@ class FieldsState extends State<Fields> {
             type: widget.data['MesureType'] as String,
           );
         },
-        onEditingComplete: () {
-          widget.recipe.changeEstimatedWeight();
-          FocusScope.of(context).requestFocus(FocusNode());
-        },
+        onEditingComplete: () {},
         decoration: InputDecoration(
           labelText: '${widget.data['Name']}',
           suffixText: '${widget.data['MesureType']}',

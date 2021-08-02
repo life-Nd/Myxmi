@@ -21,9 +21,9 @@ class UploadUserPhoto extends HookWidget {
       body: Container(
         decoration: const BoxDecoration(shape: BoxShape.circle),
         child: InteractiveViewer(
-          child: _image.imageSample != null
+          child: _image.imageFile != null
               ? Image.file(
-                  _image.imageSample,
+                  _image.imageFile,
                   height: _size.height,
                   width: _size.width,
                 )

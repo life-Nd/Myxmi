@@ -60,6 +60,7 @@ class RecipesScreenState extends State<RecipesScreen> {
     return Consumer(
       builder: (_, watch, child) {
         final _view = watch(viewProvider);
+
         return StreamBuilder<QuerySnapshot>(
           stream: _view.searching ? getStream() : _stream,
           builder: (_, AsyncSnapshot<QuerySnapshot> snapshot) {

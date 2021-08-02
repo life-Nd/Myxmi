@@ -27,8 +27,7 @@ Future<void> main() async {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
-  kIsWeb
-      ?? FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
+  kIsWeb ?? FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
 
   final ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
@@ -107,40 +106,28 @@ Future<void> main() async {
             return FutureBuilder(
                 future: _pref.readPrefs(),
                 builder: (context, snapshot) {
+                  ThemeMode _storedTheme;
                   if (snapshot.hasData && snapshot.data[0] != null) {
-                        final ThemeMode _storedTheme = snapshot.data[0] == 'Light'
-                        ? ThemeMode.light
-                        : ThemeMode.dark;
-                      return Sizer(builder: (context, orientation, deviceType) {
-                        return MaterialApp(
-                            localizationsDelegates: context.localizationDelegates,
-                        supportedLocales: context.supportedLocales,
-                        locale: context.locale,
-                        theme: lightTheme,
-                        darkTheme: darkTheme,
-                        themeMode: _storedTheme,
-                        debugShowCheckedModeBanner: false,
-                        home: Root(),
-                      );
-                      });
-                    } else {
-                    return MaterialApp(
-                      localizationsDelegates: context.localizationDelegates,
-                      supportedLocales: context.supportedLocales,
-                      locale: context.locale,
-                      theme: lightTheme,
-                      darkTheme: darkTheme,
-                      themeMode: ThemeMode.light,
-                      debugShowCheckedModeBanner: false,
-                      home: Root(),
-                    );
+                    _storedTheme =
+                        snapshot.data[0] == null || snapshot.data[0] == 'Light'
+                            ? ThemeMode.light
+                            : ThemeMode.dark;
                   }
+                  return MaterialApp(
+                    localizationsDelegates: context.localizationDelegates,
+                    supportedLocales: context.supportedLocales,
+                    locale: context.locale,
+                    theme: lightTheme,
+                    darkTheme: darkTheme,
+                    themeMode: _storedTheme,
+                    debugShowCheckedModeBanner: false,
+                    home: Root(),
+                  );
                 });
           }),
         ),
-        );
-    }
-    ),
+      );
+    }),
   );
 }
 

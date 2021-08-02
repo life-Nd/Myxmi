@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/screens/create_recipe.dart';
+import 'package:myxmi/screens/add_recipe_infos.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class DifficultySlider extends StatelessWidget {
@@ -28,7 +28,7 @@ class DifficultySlider extends StatelessWidget {
           Slider(
             value: _recipe.difficultyValue,
             onChanged: (value) {
-              _recipe.changeDifficulty(newDifficultyValue: value);
+              _recipe.changeDifficulty(value);
               debugPrint("VALUE: $value");
             },
             activeColor: _recipe.difficultyValue == 0.0

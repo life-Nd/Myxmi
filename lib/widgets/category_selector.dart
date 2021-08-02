@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/screens/create_recipe.dart';
+import 'package:myxmi/screens/add_recipe_infos.dart';
 import 'package:sizer/sizer.dart';
 import 'selectable_row.dart';
 
@@ -15,7 +15,7 @@ class CategorySelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 100.w,
-      height: 5.h,
+      height: 10.h,
       child: const Center(
         child: SelectableRow(
           textList: [
@@ -55,6 +55,7 @@ class SelectorButton extends StatelessWidget {
               : _recipe.changeSubCategory(newSubCategory: value);
         },
         child: Text(value.tr()),
+
       );
     });
   }

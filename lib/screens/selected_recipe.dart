@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/instructions.dart';
-import 'package:myxmi/screens/create_recipe.dart';
+import 'package:myxmi/screens/add_recipe_infos.dart';
 import 'package:myxmi/widgets/recipe_details.dart';
 import 'package:myxmi/widgets/recipe_image.dart';
 import 'package:myxmi/widgets/view_selector_text.dart';

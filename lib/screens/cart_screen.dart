@@ -13,7 +13,7 @@ class CartScreen extends StatelessWidget {
       body: Consumer(
         builder: (_, watch, child) {
           final _prefs = watch(prefProvider);
-          if (_prefs.cart.isNotEmpty) {
+          if (_prefs.cart != null && _prefs.cart.isNotEmpty) {
             return ListView.builder(
               itemCount: _prefs.cart.length,
               itemBuilder: (_, int index) {

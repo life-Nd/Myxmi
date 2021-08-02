@@ -1,3 +1,4 @@
+import 'package:myxmi/models/favorites.dart';
 import 'package:universal_io/io.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ class AddFavoriteButton extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FavoritesModel _favModel = FavoritesModel();
     final _user = useProvider(userProvider);
     final _fav = useProvider(favProvider);
     final _view = useProvider(viewProvider);
@@ -56,13 +58,14 @@ class AddFavoriteButton extends HookWidget {
                   ),
                   onPressed: () {
                     final Map<String, dynamic> _data = {};
-                    _data[recipe.recipeId] = {
-                      'title': recipe.title,
-                      'image_url': recipe.imageUrl,
-                      'joined': 'false',
-                      'steps_count': recipe.stepsCount,
-                      'ingredients_count': recipe.ingredientsCount
-                    };
+                    _favModel.title = recipe.title;
+                    _favModel.imageUrl = recipe.imageUrl;
+                    _favModel.tried = 'false';
+                    _favModel.added =
+                        '${DateTime.now().millisecondsSinceEpoch}';
+                    _favModel.stepsCount = recipe.stepsCount;
+                    _favModel.ingredientsCount = recipe.ingredientsCount;
+                    _data[recipe.recipeId] = _favModel.toMap();
                     FirebaseFirestore.instance
                         .collection('Favorites')
                         .doc(_user.account.uid)

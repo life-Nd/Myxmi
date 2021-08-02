@@ -16,7 +16,7 @@ final recipeProvider =
     ChangeNotifierProvider<RecipeProvider>((ref) => RecipeProvider());
 List steps = [];
 
-class CreateRecipe extends StatelessWidget {
+class AddRecipeInfos extends StatelessWidget {
   final FocusNode _titleNode = FocusNode();
   @override
   Widget build(BuildContext context) {
@@ -85,19 +85,29 @@ class CreateRecipe extends StatelessWidget {
                 const SizedBox(
                   height: 5,
                 ),
-                const PortionsField(),
+                PortionsField(),
                 Center(child: Text('category'.tr())),
                 const Center(child: CategorySelector()),
-                const Center(child: SubCategorySelector()),
+                Consumer(builder: (_, watch, __) {
+                  final _recipe = watch(recipeProvider);
+                  return _recipe.recipeModel.category != null
+                      ? const Center(
+                          child: SubCategorySelector(),
+                        )
+                      : Container();
+                }),
               ],
             ),
           ),
         ],
       ),
-      bottomNavigationBar: NextButton(
-        tapNext: () => Navigator.of(context)
-            .push(MaterialPageRoute(builder: (_) => AddRecipeProducts())),
-      ),
+      bottomNavigationBar: NextButton(tapNext: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => AddRecipeProducts(),
+          ),
+        );
+      }),
     );
   }
 }

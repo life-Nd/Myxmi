@@ -8,7 +8,7 @@ import 'package:myxmi/providers/image.dart';
 import 'package:myxmi/screens/home.dart';
 import 'package:sn_progress_dialog/progress_dialog.dart';
 import '../main.dart';
-import '../screens/create_recipe.dart';
+import '../screens/add_recipe_infos.dart';
 
 class SaveButton extends HookWidget {
   @override
@@ -30,6 +30,7 @@ class SaveButton extends HookWidget {
               _recipe.recipeModel.stepsCount =
                   '${_recipe.instructions.steps.length}';
               _recipe.instructions.ingredients = _recipe.composition;
+              _recipe.instructions.uid = _user.account.uid;
               _recipe.recipeModel.made =
                   '${DateTime.now().millisecondsSinceEpoch}';
               _image.addImageToDb(context: context).whenComplete(() async {
