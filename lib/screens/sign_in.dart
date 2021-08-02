@@ -23,13 +23,18 @@ class SignIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor,
-        borderRadius: const BorderRadius.only(
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
           topRight: Radius.circular(
             20,
           ),
           topLeft: Radius.circular(
+            20,
+          ),
+          bottomRight: Radius.circular(
+            20,
+          ),
+          bottomLeft: Radius.circular(
             20,
           ),
         ),
@@ -94,6 +99,7 @@ class SignIn extends StatelessWidget {
                               (value) {
                                 debugPrint('Value:$value');
                                 _view.loadingAuth(loading: false);
+                                _passwordCtrl.clear();
                                 debugPrint(
                                     'Status value:${_authServices.status}');
                                 switch (_authServices.status) {
@@ -205,7 +211,7 @@ class _EmailWithValidator extends StatelessWidget {
             _fields.validateEmail(value);
           },
           onSubmitted: (submitted) {
-            FocusScope.of(context).requestFocus(_passwordNode);
+            !kIsWeb ?? FocusScope.of(context).requestFocus(_passwordNode);
           },
           decoration: InputDecoration(
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),

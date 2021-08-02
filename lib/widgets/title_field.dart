@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/screens/add_recipe_infos.dart';
@@ -13,18 +14,19 @@ class TitleField extends StatelessWidget {
         return TextField(
           controller: _recipe.titleCtrl,
           decoration: InputDecoration(
-            isDense: true,
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
             hintText: 'recipeTitle'.tr(),
             errorText: _recipe.recipeModel.title == null
                 ? 'titleCantBeEmpty'.tr()
                 : null,
           ),
-          onEditingComplete: () {
+          onChanged: (value) {
             _recipe.changeTitle();
           },
           onSubmitted: (submitted) {
-            FocusScope.of(context).requestFocus(FocusNode());
+            !kIsWeb ??
+                !kIsWeb ??
+                FocusScope.of(context).requestFocus(FocusNode());
           },
         );
       }),

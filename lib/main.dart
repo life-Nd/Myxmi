@@ -32,7 +32,7 @@ Future<void> main() async {
   final ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     visualDensity: const VisualDensity(vertical: 0.5, horizontal: 0.5),
-    primaryColor: Colors.white,
+    primaryColor: Colors.grey.shade100,
     primaryColorBrightness: Brightness.light,
     primaryColorLight: Colors.grey.shade100,
     primaryColorDark: Colors.grey.shade800,
@@ -57,7 +57,7 @@ Future<void> main() async {
     dividerColor: const Color(0x1f6D42CE),
     highlightColor: Colors.white,
     iconTheme: const IconThemeData(color: Colors.black),
-    focusColor: const Color(0xDD000000),
+    focusColor: Colors.grey.shade800,
     cardTheme: const CardTheme(
       margin: EdgeInsets.all(2),
     ),
@@ -88,7 +88,7 @@ Future<void> main() async {
     cardColor: const Color(0xFF303030),
     dividerColor: const Color(0x1f6D42CE),
     buttonColor: const Color(0xFF303030),
-    focusColor: const Color(0xFFFFFFFF),
+    focusColor: Colors.grey.shade800,
     highlightColor: Colors.black,
     cardTheme: const CardTheme(
       margin: EdgeInsets.all(2),

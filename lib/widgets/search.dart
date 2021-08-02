@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:myxmi/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:easy_localization/easy_localization.dart';
+
 import '../app.dart';
 
 TextEditingController _searchCtrl = TextEditingController();
@@ -34,14 +36,14 @@ class SearchRecipes extends HookWidget {
                       _fav.filter(
                           filter: _searchFilter, text: _searchCtrl.text);
                   _view.doSearch(value: true);
-                  FocusScope.of(context).requestFocus(FocusNode());
+                  !kIsWeb ?? FocusScope.of(context).requestFocus(FocusNode());
                   Future.delayed(const Duration(seconds: 4), () {
                     _searchCtrl.clear();
                   });
                   _change.value = !_change.value;
                 }
               : () {
-                  FocusScope.of(context).requestFocus(FocusNode());
+                  !kIsWeb ?? FocusScope.of(context).requestFocus(FocusNode());
                 },
           onSubmitted: _searchCtrl.text.isNotEmpty
               ? (submitted) {
@@ -49,14 +51,14 @@ class SearchRecipes extends HookWidget {
                       _fav.filter(
                           filter: _searchFilter, text: _searchCtrl.text);
                   _view.doSearch(value: true);
-                  FocusScope.of(context).requestFocus(FocusNode());
+                  !kIsWeb ?? FocusScope.of(context).requestFocus(FocusNode());
                   Future.delayed(const Duration(seconds: 2), () {
                     _searchCtrl.clear();
                   });
                   _change.value = !_change.value;
                 }
               : (submitted) {
-                  FocusScope.of(context).requestFocus(FocusNode());
+                  !kIsWeb ?? FocusScope.of(context).requestFocus(FocusNode());
                 },
           decoration: InputDecoration(
             isDense: true,
@@ -78,14 +80,14 @@ class SearchRecipes extends HookWidget {
                           filter: _searchFilter, text: _searchCtrl.text)
                       : debugPrint('not favorite screen');
                   _view.doSearch(value: true);
-                  FocusScope.of(context).requestFocus(FocusNode());
+                  !kIsWeb ?? FocusScope.of(context).requestFocus(FocusNode());
                   Future.delayed(const Duration(seconds: 2), () {
                     _searchCtrl.clear();
                   });
                   _change.value = !_change.value;
                 }
               : () {
-                  FocusScope.of(context).requestFocus(FocusNode());
+                  !kIsWeb ?? FocusScope.of(context).requestFocus(FocusNode());
                 },
         ),
       ),

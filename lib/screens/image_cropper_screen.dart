@@ -29,8 +29,10 @@ class ImageCropperScreen extends StatelessWidget {
               : null,
         ),
         body: Center(
-          child: _image.imageFile != null
-              ? Image.file(_image.imageFile)
+          child: _image.imageFile != null || _image.webFile != null
+              ? kIsWeb
+                  ? Image.network(_image.webFile.name)
+                  : Image.file(_image.imageFile)
               : Container(),
         ),
         floatingActionButton: FloatingActionButton(
@@ -48,7 +50,13 @@ class ImageCropperScreen extends StatelessWidget {
                 ),
               );
             } else if (_image.state == AppState.picked) {
-              kIsWeb ? debugPrint('No cropping for Web') : _image.cropImage();
+              kIsWeb
+                  ? Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => AddRecipeInstructions(),
+                      ),
+                    )
+                  : _image.cropImage();
             } else if (_image.state == AppState.cropped) {
               Navigator.of(context).push(
                 MaterialPageRoute(

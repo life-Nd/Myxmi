@@ -1,5 +1,8 @@
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html' as web;
 import 'dart:io';
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -20,6 +23,7 @@ enum AppState {
 class ImageProvider extends ChangeNotifier {
   AppState state = AppState.empty;
   File imageFile;
+  web.File webFile;
   String urlString;
   String imageLink = '';
   String imageId = '';
@@ -97,15 +101,29 @@ class ImageProvider extends ChangeNotifier {
 
   Future pickImage(ImageSource source) async {
     final pickedFile = await picker.pickImage(source: source, imageQuality: 77);
+    pickedFile.readAsBytes();
     pickedFile != null
-        ? changeimageFile(pickedFile.path)
+        ? kIsWeb
+            ? changeImageWeb(pickedFile)
+            : changeImageFile(pickedFile)
         : debugPrint('No image selected');
     debugPrint("GetImage: $added");
     notifyListeners();
   }
 
-  void changeimageFile(String path) {
-    imageFile = File(path);
+  void changeImageFile(XFile file) {
+    imageFile = File(file.path);
+    state = AppState.picked;
+    notifyListeners();
+  }
+
+  Future changeImageWeb(XFile file) async {
+    webFile = web.File(await file.readAsBytes(), file.path);
+    debugPrint('PATH: ${file.path}');
+    debugPrint('WEBFILE: ${webFile.size}');
+    debugPrint('WEBFILE: ${webFile.name}');
+    debugPrint('WEBFILE: ${webFile.relativePath}');
+    debugPrint('WEBFILE: ${webFile.lastModifiedDate}');
     state = AppState.picked;
     notifyListeners();
   }
@@ -133,11 +151,13 @@ class ImageProvider extends ChangeNotifier {
     final rng = Random();
     final _random = rng.nextInt(90000) + 10000;
     imageId = '$timeStamp-$_random}';
-    if (imageFile != null) {
+    if (imageFile != null || webFile != null) {
       final firebaseStorageRef = firebase_storage.FirebaseStorage.instance
           .ref()
           .child("$timeStamp-$_random.jpg");
-      task = firebaseStorageRef.putFile(imageFile);
+      task = kIsWeb
+          ? firebaseStorageRef.putBlob(webFile)
+          : firebaseStorageRef.putFile(imageFile);
       await task.whenComplete(() {
         added = addedImage;
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -154,6 +174,8 @@ class ImageProvider extends ChangeNotifier {
     }
     debugPrint('No image selected');
   }
+
+// TODO Add image to db from web is not working
 
   Future cropImage() async {
     final File croppedFile = await ImageCropper.cropImage(
@@ -194,6 +216,7 @@ class ImageProvider extends ChangeNotifier {
 
   void delete() {
     imageFile.delete();
+
     imageLink = '';
     urlString = '';
     imageId = '';

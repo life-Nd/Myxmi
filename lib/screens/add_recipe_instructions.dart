@@ -6,7 +6,7 @@ import 'package:myxmi/providers/image.dart';
 import 'package:myxmi/screens/add_recipe_infos.dart';
 import 'package:myxmi/screens/image_cropper_screen.dart';
 import 'package:myxmi/widgets/save_recipe.dart';
-
+import 'package:flutter/foundation.dart';
 import 'add_recipe_products.dart';
 
 TextEditingController _stepCtrl = TextEditingController();
@@ -145,7 +145,7 @@ class AddRecipeInstructions extends StatelessWidget {
                   onPressed: () {
                     _recipe.addStep(step: _stepCtrl.text);
                     _stepCtrl.clear();
-                    FocusScope.of(context).requestFocus(FocusNode());
+                    !kIsWeb ?? FocusScope.of(context).requestFocus(FocusNode());
                   },
                 ),
                 IconButton(

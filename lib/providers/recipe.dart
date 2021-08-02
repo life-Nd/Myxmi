@@ -32,6 +32,7 @@ class RecipeProvider extends ChangeNotifier {
 
   void changeTitle() {
     recipeModel.title = titleCtrl.text;
+    notifyListeners();
   }
 
   void changeDuration() {
