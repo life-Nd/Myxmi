@@ -225,7 +225,18 @@
     "productsIn":"Products in",
     "instructionsFor":"Instructions pour",
     "titleCantBeEmpty":"Title can't be empty",
-    "required":"Required"
+    "required":"Required",
+    "urQuestion?":"What's your question",
+    "enterShortTitle":"Enter a short title",
+    "enterMessage":"Enter the message",
+    "ask":"Ask",
+    "messageSent":"Your message was successfully sent",
+    "answerWithin":"You will be answered within",
+    "hours":"Hours",
+    "mine":"Mine",
+    "ticketsVisible":"Tickets visible",
+    "noTicketsFound":"No support tickets found"
+
 
 
 }

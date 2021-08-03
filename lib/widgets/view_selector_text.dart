@@ -38,12 +38,13 @@ class ViewSelectorText extends StatelessWidget {
           child: RichText(
             text: TextSpan(
               style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold),
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
               children: [
                 TextSpan(
                   text: text.tr().toUpperCase(),
+                  style: TextStyle(color: Theme.of(context).iconTheme.color),
                 ),
                 WidgetSpan(
                   child: Transform.translate(

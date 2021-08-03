@@ -4,7 +4,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/providers/image.dart';
 import 'package:myxmi/screens/add_recipe_infos.dart';
-import 'package:myxmi/screens/image_cropper_screen.dart';
 import 'package:myxmi/widgets/save_recipe.dart';
 import 'package:flutter/foundation.dart';
 import 'add_recipe_products.dart';
@@ -128,6 +127,10 @@ class AddRecipeInstructions extends StatelessWidget {
                     child: TextField(
                       controller: _stepCtrl,
                       keyboardType: TextInputType.multiline,
+                      onSubmitted: (submitted) {
+                        !kIsWeb ??
+                            FocusScope.of(context).requestFocus(FocusNode());
+                      },
                       maxLines: null,
                       decoration: InputDecoration(
                           fillColor: Colors.grey,
@@ -145,7 +148,9 @@ class AddRecipeInstructions extends StatelessWidget {
                   onPressed: () {
                     _recipe.addStep(step: _stepCtrl.text);
                     _stepCtrl.clear();
-                    !kIsWeb ?? FocusScope.of(context).requestFocus(FocusNode());
+                    kIsWeb
+                        ? debugPrint('no keyboard')
+                        : FocusScope.of(context).requestFocus(FocusNode());
                   },
                 ),
                 Stack(
@@ -166,15 +171,8 @@ class AddRecipeInstructions extends StatelessWidget {
                       padding: const EdgeInsets.all(2),
                       icon: const Icon(Icons.add_a_photo),
                       onPressed: () {
-                        // TODO Instead of navigating to a new page just
-                        // show the sourcepicker dialog
-                        _image.chooseImageSource(
-                            context: context,
-                            route: MaterialPageRoute(
-                              builder: (_) => ImageCropperScreen(
-                                title: _recipe.recipeModel.title,
-                              ),
-                            ));
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(_image.chooseImageSource(context));
                       },
                     ),
                   ],

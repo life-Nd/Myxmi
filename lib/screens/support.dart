@@ -7,41 +7,54 @@ class SupportScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text('support'.tr()),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => SupportChat(),
-            ),
-          );
-        },
-        child: const Icon(Icons.add),
-      ),
-      body: ListView.builder(
-        itemCount: 20,
-        itemBuilder: (_, int index) {
-          return Padding(
-            padding: const EdgeInsets.all(2.0),
-            child: Card(
-              child: ListTile(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => SupportChat(),
-                    ),
-                  );
-                },
-                title: Text('idex: $index'),
-                subtitle: const Text('index sdaodko'),
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text('support'.tr()),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => SupportChat(),
+              ),
+            );
+          },
+          child: const Icon(Icons.question_answer),
+        ),
+        body: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.only(left: 4),
+              alignment: Alignment.bottomLeft,
+              child: Text(
+                'ticketsVisible'.tr(),
+                style: const TextStyle(fontSize: 20),
               ),
             ),
-          );
-        },
-      ),
-    );
+            ListTile(
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  InkWell(
+                    onTap: () {},
+                    child: Row(
+                      children: [const Icon(Icons.check_box), Text('all'.tr())],
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {},
+                    child: Row(
+                      children: [
+                        const Icon(Icons.check_box_outline_blank),
+                        Text('mine'.tr())
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(child: SupportStream())
+          ],
+        ));
   }
 }

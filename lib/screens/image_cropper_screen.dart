@@ -12,11 +12,12 @@ class ImageCropperScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer(builder: (_, watch, __) {
       final _image = watch(imageProvider);
+
       return Scaffold(
         appBar: AppBar(
           title: Consumer(
             builder: (_, watch, __) {
-              return const Text('title');
+              return Text('$title ');
             },
           ),
           actions: _image.state != AppState.empty
@@ -35,9 +36,34 @@ class ImageCropperScreen extends StatelessWidget {
                   : Image.memory(_image.imageFile.readAsBytesSync())
               : Container(),
         ),
-        floatingActionButton: kIsWeb && _image.state == AppState.picked
-            ? FloatingActionButton(
+        bottomNavigationBar: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            if (!kIsWeb && _image.state != AppState.empty)
+              FloatingActionButton(
+                onPressed: () {
+                  debugPrint('_image.state: ${_image.state}');
+                  debugPrint('_image.imageFile: ${_image.imageFile}');
+                  _image.cropImage();
+                },
+                backgroundColor: Colors.deepOrange,
+                child: const Icon(
+                  Icons.crop,
+                ),
+              ),
+            const SizedBox(height: 10),
+            if (_image.state == AppState.empty)
+              FloatingActionButton(
+                onPressed: () {
+                  _image.chooseImageSource(context);
+                },
                 backgroundColor: Colors.green,
+                child: const Icon(Icons.add),
+              )
+            else
+              FloatingActionButton(
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -45,40 +71,55 @@ class ImageCropperScreen extends StatelessWidget {
                     ),
                   );
                 },
+                backgroundColor: Colors.green,
                 child: const Icon(Icons.save),
-              )
-            : FloatingActionButton(
-                backgroundColor: Colors.deepOrange,
-                onPressed: () {
-                  debugPrint('_image.state: ${_image.state}');
-                  debugPrint('_image.imageFile: ${_image.imageFile}');
-                  if (_image.state == AppState.empty) {
-                    _image.chooseImageSource(
-                      context: context,
-                      route: MaterialPageRoute(
-                        builder: (_) => const ImageCropperScreen(
-                          title: 'TESTING',
-                        ),
-                      ),
-                    );
-                  } else if (_image.state == AppState.picked) {
-                    kIsWeb
-                        ? Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => AddRecipeInstructions(),
-                            ),
-                          )
-                        : _image.cropImage();
-                  } else if (_image.state == AppState.cropped) {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => AddRecipeInstructions(),
-                      ),
-                    );
-                  }
-                },
-                child: _image.buildButtonIcon(),
               ),
+          ],
+        ),
+        // kIsWeb && _image.state == AppState.picked
+        //     ? FloatingActionButton(
+        //         backgroundColor: Colors.green,
+        //         onPressed: () {
+        //           Navigator.of(context).push(
+        //             MaterialPageRoute(
+        //               builder: (_) => AddRecipeInstructions(),
+        //             ),
+        //           );
+        //         },
+        //         child: const Icon(Icons.save),
+        //       )
+        //     : FloatingActionButton(
+        //         backgroundColor: Colors.deepOrange,
+        //         onPressed: () {
+        //           debugPrint('_image.state: ${_image.state}');
+        //           debugPrint('_image.imageFile: ${_image.imageFile}');
+        //           if (_image.state == AppState.empty) {
+        //             _image.chooseImageSource(
+        //               context: context,
+        //               route: MaterialPageRoute(
+        //                 builder: (_) => const ImageCropperScreen(
+        //                   title: 'TESTING',
+        //                 ),
+        //               ),
+        //             );
+        //           } else if (_image.state == AppState.picked) {
+        //             kIsWeb
+        //                 ? Navigator.of(context).push(
+        //                     MaterialPageRoute(
+        //                       builder: (_) => AddRecipeInstructions(),
+        //                     ),
+        //                   )
+        //                 : _image.cropImage();
+        //           } else if (_image.state == AppState.cropped) {
+        //             Navigator.of(context).push(
+        //               MaterialPageRoute(
+        //                 builder: (_) => AddRecipeInstructions(),
+        //               ),
+        //             );
+        //           }
+        //         },
+        //         child: _image.buildButtonIcon(),
+        //       ),
       );
     });
   }

@@ -76,7 +76,7 @@ class SignIn extends StatelessWidget {
               children: <Widget>[
                 Consumer(builder: (context, watch, child) {
                   final _view = watch(viewProvider);
-                  return _view.authenticating
+                  return _view.loading
                       ? const Center(
                           child: CircularProgressIndicator(),
                         )
@@ -89,7 +89,7 @@ class SignIn extends StatelessWidget {
                             ),
                           ),
                           onPressed: () async {
-                            _view.loadingAuth(loading: true);
+                            _view.loadingEntry(isLoading: true);
                             await _authServices
                                 .signInWithEmailPassword(
                               email: _emailCtrl.text,
@@ -98,7 +98,7 @@ class SignIn extends StatelessWidget {
                                 .then(
                               (value) {
                                 debugPrint('Value:$value');
-                                _view.loadingAuth(loading: false);
+                                _view.loadingEntry(isLoading: false);
                                 _passwordCtrl.clear();
                                 debugPrint(
                                     'Status value:${_authServices.status}');

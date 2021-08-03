@@ -15,7 +15,7 @@ class RecipeTile extends HookWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          recipe.title,
+          recipe?.title,
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
         ),
         Divider(
@@ -26,7 +26,7 @@ class RecipeTile extends HookWidget {
           children: [
             Text('${'ingredients'.tr()}: '),
             Text(
-              recipe.ingredientsCount,
+              recipe.ingredientsCount ?? '0',
               style: const TextStyle(fontWeight: FontWeight.w700),
             ),
           ],
@@ -35,7 +35,7 @@ class RecipeTile extends HookWidget {
           children: [
             Text('${'steps'.tr()}: '),
             Text(
-              recipe.stepsCount,
+              recipe?.stepsCount ?? '0',
               style: const TextStyle(fontWeight: FontWeight.w700),
             ),
             const Spacer(),

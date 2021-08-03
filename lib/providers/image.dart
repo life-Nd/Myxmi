@@ -30,78 +30,132 @@ class ImageProvider extends ChangeNotifier {
   String added;
   final picker = ImagePicker();
 
-  void chooseImageSource(
-      {@required BuildContext context, @required MaterialPageRoute route}) {
-    showDialog(
-      context: context,
-      builder: (_) {
-        return AlertDialog(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(25),
-            ),
-          ),
-          title: Center(child: Text('chooseSource'.tr())),
-          content: SizedBox(
-            height: 100,
-            width: 150,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Text('gallery'.tr()),
-                    const SizedBox(
-                      height: 7,
+  SnackBar chooseImageSource(BuildContext context) {
+    return SnackBar(
+      elevation: 20,
+      duration: const Duration(seconds: 777),
+      content: SizedBox(
+        height: 100,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Center(
+                child: Text(
+              'chooseSource'.tr(),
+              style: const TextStyle(fontSize: 17),
+            )),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      gradient: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Colors.red,
+                          Colors.purple,
+                          Colors.blue,
+                          Colors.white
+                        ],
+                      ),
                     ),
-                    FloatingActionButton(
+                    child: RawMaterialButton(
+                      padding: const EdgeInsets.only(left: 13, right: 13),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      elevation: 20,
                       onPressed: () {
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
                         pickImage(ImageSource.gallery).then(
                           (a) {
-                            Navigator.of(context).push(route);
+                            cropImage();
                           },
                         );
                       },
-                      child: const Icon(
-                        Icons.image,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            'gallery'.tr(),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 7,
+                          ),
+                          const Icon(
+                            Icons.image_search_sharp,
+                            color: Colors.white,
+                            size: 30,
+                          ),
+                        ],
                       ),
-                    )
-                  ],
-                ),
-                Column(
-                  children: <Widget>[
-                    Text('camera'.tr()),
-                    const SizedBox(
-                      height: 7,
                     ),
-                    FloatingActionButton(
-                      backgroundColor: Colors.red,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        gradient: const LinearGradient(
+                            end: Alignment.topLeft,
+                            begin: Alignment.bottomRight,
+                            colors: [
+                              Colors.red,
+                              Colors.purple,
+                              Colors.blue,
+                              Colors.white
+                            ])),
+                    child: RawMaterialButton(
+                      padding: const EdgeInsets.only(left: 13, right: 13),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      elevation: 20,
                       onPressed: () {
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
                         pickImage(ImageSource.camera).then(
                           (a) {
-                            Navigator.of(context).push(route);
+                            cropImage();
                           },
                         );
                       },
-                      child: const Center(
-                        child: Icon(
-                          Icons.image,
-                        ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            'camera'.tr(),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 7,
+                          ),
+                          const Icon(
+                            Icons.camera_alt,
+                            color: Colors.white,
+                            size: 30,
+                          ),
+                        ],
                       ),
-                    )
-                  ],
-                ),
-              ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        );
-      },
+          ],
+        ),
+      ),
     );
   }
 
   Future pickImage(ImageSource source) async {
     final pickedFile = await picker.pickImage(source: source, imageQuality: 77);
-    pickedFile.readAsBytes();
+    pickedFile != null ? pickedFile.readAsBytes() : debugPrint('Source Empty');
     pickedFile != null
         ? kIsWeb
             ? changeImageWeb(pickedFile)
@@ -123,18 +177,6 @@ class ImageProvider extends ChangeNotifier {
     imageWidget = Image.memory(dataUint8);
     state = AppState.picked;
     notifyListeners();
-  }
-
-  Widget buildButtonIcon() {
-    if (state == AppState.empty) {
-      return const Icon(Icons.add);
-    } else if (state == AppState.picked) {
-      return const Icon(Icons.crop);
-    } else if (state == AppState.cropped) {
-      return const Icon(Icons.save);
-    } else {
-      return Container();
-    }
   }
 
   Future addImageToDb(
@@ -176,45 +218,46 @@ class ImageProvider extends ChangeNotifier {
 // TODO Add image to db from web is not working
 
   Future cropImage() async {
-    final File croppedFile = await ImageCropper.cropImage(
-        sourcePath: imageFile.path,
-        aspectRatioPresets: Platform.isAndroid
-            ? [
-                CropAspectRatioPreset.square,
-                CropAspectRatioPreset.ratio3x2,
-                CropAspectRatioPreset.original,
-                CropAspectRatioPreset.ratio4x3,
-                CropAspectRatioPreset.ratio16x9
-              ]
-            : [
-                CropAspectRatioPreset.original,
-                CropAspectRatioPreset.square,
-                CropAspectRatioPreset.ratio3x2,
-                CropAspectRatioPreset.ratio4x3,
-                CropAspectRatioPreset.ratio5x3,
-                CropAspectRatioPreset.ratio5x4,
-                CropAspectRatioPreset.ratio7x5,
-                CropAspectRatioPreset.ratio16x9
-              ],
-        androidUiSettings: const AndroidUiSettings(
-            toolbarTitle: 'Cropper',
-            toolbarColor: Colors.deepOrange,
-            toolbarWidgetColor: Colors.white,
-            initAspectRatio: CropAspectRatioPreset.original,
-            lockAspectRatio: false),
-        iosUiSettings: const IOSUiSettings(
-          title: 'Cropper',
-        ));
-    if (croppedFile != null) {
-      imageFile = croppedFile;
-      state = AppState.cropped;
-      notifyListeners();
+    if (!kIsWeb && imageFile.path != null) {
+      final File croppedFile = await ImageCropper.cropImage(
+          sourcePath: imageFile.path,
+          aspectRatioPresets: Platform.isAndroid
+              ? [
+                  CropAspectRatioPreset.square,
+                  CropAspectRatioPreset.ratio3x2,
+                  CropAspectRatioPreset.original,
+                  CropAspectRatioPreset.ratio4x3,
+                  CropAspectRatioPreset.ratio16x9
+                ]
+              : [
+                  CropAspectRatioPreset.original,
+                  CropAspectRatioPreset.square,
+                  CropAspectRatioPreset.ratio3x2,
+                  CropAspectRatioPreset.ratio4x3,
+                  CropAspectRatioPreset.ratio5x3,
+                  CropAspectRatioPreset.ratio5x4,
+                  CropAspectRatioPreset.ratio7x5,
+                  CropAspectRatioPreset.ratio16x9
+                ],
+          androidUiSettings: const AndroidUiSettings(
+              toolbarTitle: 'Cropper',
+              toolbarColor: Colors.deepOrange,
+              toolbarWidgetColor: Colors.white,
+              initAspectRatio: CropAspectRatioPreset.original,
+              lockAspectRatio: false),
+          iosUiSettings: const IOSUiSettings(
+            title: 'Cropper',
+          ));
+      if (croppedFile != null) {
+        imageFile = croppedFile;
+        state = AppState.cropped;
+        notifyListeners();
+      }
     }
   }
 
   void delete() {
     imageFile.delete();
-
     imageLink = '';
     urlString = '';
     imageId = '';

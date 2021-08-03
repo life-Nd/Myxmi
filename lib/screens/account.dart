@@ -9,8 +9,6 @@ import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 import 'package:myxmi/providers/image.dart';
 import '../main.dart';
 
-import 'upload_user_photo.dart';
-
 final TextEditingController _nameCtrl = TextEditingController();
 final _nameNode = FocusNode();
 
@@ -75,12 +73,7 @@ class AccountScreen extends HookWidget {
                       // mini: false,
                       backgroundColor: Colors.deepOrange.shade300,
                       onPressed: () {
-                        _image.chooseImageSource(
-                          context: context,
-                          route: MaterialPageRoute(
-                            builder: (_) => UploadUserPhoto(),
-                          ),
-                        );
+                        _image.chooseImageSource(context);
                       },
                       child: const Icon(
                         Icons.camera_alt,
