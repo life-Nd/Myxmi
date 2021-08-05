@@ -285,8 +285,9 @@
     "messageSent":"Votre message a été envoyé avec succès",
     "answerWithin":"Vous recevrez une réponse d'ici",
     "hours":"Heures",
-    "me":"À moi",
     "visibleTickets":"Tickets visible",
-    "noTicketsFound":"Pas de tickets de support trouvé"
+    "noTicketsFound":"Pas de tickets de support trouvé",
+    "mine":"Pour moi",
+    "ticketsVisible":"Tickets visible"
 
 }

@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class DurationField extends StatelessWidget {
+  const DurationField({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Row(

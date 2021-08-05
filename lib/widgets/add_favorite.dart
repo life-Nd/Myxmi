@@ -4,13 +4,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/models/recipe.dart';
+import 'package:myxmi/models/recipes.dart';
 import 'package:myxmi/screens/home.dart';
 import '../app.dart';
 import '../main.dart';
 
 class AddFavoriteButton extends HookWidget {
-  final RecipeModel recipe;
+  final RecipesModel recipe;
   const AddFavoriteButton({@required this.recipe});
 
   @override

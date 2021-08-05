@@ -1,4 +1,4 @@
-class RecipeModel {
+class RecipesModel {
   static const constRecipeId = 'recipe_id';
   static const constTitle = 'title';
   static const constIngredientsCount = 'ingredients_count';
@@ -36,9 +36,8 @@ class RecipeModel {
   String made;
   String reviewsCount;
   String portions;
-  
 
-  RecipeModel(
+  RecipesModel(
       {this.recipeId,
       this.title,
       this.ingredientsCount,
@@ -57,9 +56,9 @@ class RecipeModel {
       this.made,
       this.reviewsCount,
       this.portions});
-  factory RecipeModel.fromSnapshot(
+  factory RecipesModel.fromSnapshot(
       {Map<String, dynamic> snapshot, String keyIndex}) {
-    return RecipeModel(
+    return RecipesModel(
       recipeId: keyIndex,
       title: snapshot[constTitle] as String,
       ingredientsCount: snapshot[constIngredientsCount] as String,

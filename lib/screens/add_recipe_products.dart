@@ -24,7 +24,7 @@ class AddRecipeProducts extends StatelessWidget {
         ),
         title: Consumer(builder: (_, watch, child) {
           final _recipe = watch(recipeProvider);
-          return Text('${'productsIn'.tr()}: ${_recipe?.recipeModel?.title}');
+          return Text('${'productsIn'.tr()}: ${_recipe?.recipesModel?.title}');
         }),
       ),
       body: Column(

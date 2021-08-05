@@ -1,60 +1,85 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'support_chat.dart';
+import 'package:myxmi/screens/ask_support.dart';
+import 'package:myxmi/widgets/search.dart';
+import 'support_tickets.dart';
 
-class SupportScreen extends HookWidget {
+bool viewAll = true;
+
+class SupportScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text('support'.tr()),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => SupportChat(),
-              ),
-            );
-          },
-          child: const Icon(Icons.question_answer),
-        ),
-        body: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.only(left: 4),
-              alignment: Alignment.bottomLeft,
-              child: Text(
-                'ticketsVisible'.tr(),
-                style: const TextStyle(fontSize: 20),
-              ),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text('support'.tr()),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => AskSupport(),
             ),
-            ListTile(
+          );
+        },
+        child: const Icon(Icons.question_answer),
+      ),
+      body: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SearchRecipes(),
+          ListTile(
+            dense: true,
+            title: Text(
+              'ticketsVisible'.tr(),
+            ),
+          ),
+          StatefulBuilder(builder: (context, StateSetter stateSetter) {
+            return ListTile(
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      stateSetter(() {
+                        viewAll = true;
+                      });
+                    },
                     child: Row(
-                      children: [const Icon(Icons.check_box), Text('all'.tr())],
+                      children: [
+                        if (viewAll)
+                          const Icon(Icons.check_box)
+                        else
+                          const Icon(Icons.check_box_outline_blank),
+                        Text('all'.tr())
+                      ],
                     ),
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      stateSetter(() {
+                        viewAll = false;
+                      });
+                    },
                     child: Row(
                       children: [
-                        const Icon(Icons.check_box_outline_blank),
+                        if (viewAll)
+                          const Icon(Icons.check_box_outline_blank)
+                        else
+                          const Icon(Icons.check_box),
                         Text('mine'.tr())
                       ],
                     ),
                   ),
                 ],
               ),
-            ),
-            Expanded(child: SupportStream())
-          ],
-        ));
+            );
+          }),
+          Expanded(
+            child: SupportTickets(),
+          )
+        ],
+      ),
+    );
   }
 }

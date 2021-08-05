@@ -17,7 +17,7 @@ class AddReviews extends HookWidget {
     final _user = useProvider(userProvider);
     return Scaffold(
       appBar: AppBar(
-        title: Text('${'reviewOf'.tr()} ${_recipe.recipeModel.title}'),
+        title: Text('${'reviewOf'.tr()} ${_recipe.recipesModel.title}'),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -60,14 +60,14 @@ class AddReviews extends HookWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
               onPressed: () {
-                final String _dbStars = _recipe.recipeModel.stars ?? '0.0';
+                final String _dbStars = _recipe.recipesModel.stars ?? '0.0';
                 final _averageStars = (_stars + double.parse(_dbStars)) / 2;
                 final int _reviewsCount =
-                    int.parse(_recipe?.recipeModel?.reviewsCount) + 1;
+                    int.parse(_recipe?.recipesModel?.reviewsCount) + 1;
                 debugPrint('$_stars + $_dbStars = $_averageStars');
                 final _db = FirebaseFirestore.instance
                     .collection('Reviews')
-                    .doc(_recipe.recipeModel.recipeId);
+                    .doc(_recipe.recipesModel.recipeId);
                 _db.set(
                   {
                     '${DateTime.now().millisecondsSinceEpoch}': {
@@ -82,7 +82,7 @@ class AddReviews extends HookWidget {
                 ).whenComplete(() {
                   FirebaseFirestore.instance
                       .collection('Recipes')
-                      .doc(_recipe.recipeModel.recipeId)
+                      .doc(_recipe.recipesModel.recipeId)
                       .update({
                     'stars': '$_averageStars',
                     'reviews_count': '$_reviewsCount',

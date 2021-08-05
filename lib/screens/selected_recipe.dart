@@ -22,27 +22,9 @@ class SelectedRecipeState extends State<SelectedRecipe> {
   @override
   void initState() {
     debugPrint('RECIPE ID: ${widget.recipeId}');
-    // getInstructions();
     super.initState();
   }
 
-  // Future<InstructionsModel> getInstructions() async {
-  //   final _db = FirebaseFirestore.instance
-  //       .collection('Instructions')
-  //       .doc(widget.recipeId);
-  //   _db.snapshots().listen((event) {
-  //     debugPrint('VALUE: ${event.data()}');
-  //     _snapshot = event.data();
-  //     _instructions.fromSnapshot(snapshot: _snapshot);
-  //   });
-  //   return _instructions;
-  //   // get().then((value) {
-  //   //   debugPrint('VALUE: ${value.data()}');
-  //   //   _snapshot = value.data();
-  //   //   _instructions.fromSnapshot(snapshot: _snapshot);
-  //   // });
-  //   // return _instructions;
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +33,7 @@ class SelectedRecipeState extends State<SelectedRecipe> {
       appBar: AppBar(
         title: Consumer(builder: (context, watch, child) {
           final _recipe = watch(recipeProvider);
-          return Text(_recipe.recipeModel.title);
+          return Text(_recipe.recipesModel.title);
         }),
       ),
       body: Container(

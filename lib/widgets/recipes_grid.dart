@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myxmi/models/recipe.dart';
+import 'package:myxmi/models/recipes.dart';
 import 'package:flutter/foundation.dart';
 import 'add_favorite.dart';
 import 'rating_stars.dart';
@@ -7,7 +7,7 @@ import 'recipe_tile.dart';
 import 'recipe_tile_image.dart';
 
 class RecipesGrid extends StatefulWidget {
-  final List<RecipeModel> recipes;
+  final List<RecipesModel> recipes;
   final String type;
 
   const RecipesGrid({@required this.recipes, @required this.type});
@@ -22,7 +22,7 @@ class _RecipesGridState extends State<RecipesGrid> {
     super.initState();
   }
 
-  List<RecipeModel> _recipes() {
+  List<RecipesModel> _recipes() {
     return widget.recipes;
   }
 
@@ -40,7 +40,8 @@ class _RecipesGridState extends State<RecipesGrid> {
         padding: const EdgeInsets.all(1),
         itemCount: _recipes().length,
         itemBuilder: (_, int index) {
-          final RecipeModel _recipe = _recipes()[index];
+          final RecipesModel _recipe = _recipes()[index];
+          
           return Container(
             margin: const EdgeInsets.all(5),
             decoration: BoxDecoration(

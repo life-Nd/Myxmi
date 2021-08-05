@@ -4,7 +4,7 @@ import 'package:myxmi/widgets/drink_options.dart';
 import 'package:myxmi/widgets/food_options.dart';
 import 'package:myxmi/widgets/vapes_options.dart';
 
-class MenuScreen extends StatelessWidget {
+class Menu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;

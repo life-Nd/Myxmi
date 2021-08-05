@@ -29,7 +29,7 @@ class RecipeImage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 AddFavoriteButton(
-                  recipe: _recipe.recipeModel,
+                  recipe: _recipe.recipesModel,
                 ),
                 InkWell(
                   onTap: () {
@@ -42,7 +42,7 @@ class RecipeImage extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: RatingStars(
-                      stars: _recipe.recipeModel.stars ?? '0.0',
+                      stars: _recipe.recipesModel.stars ?? '0.0',
                     ),
                   ),
                 ),

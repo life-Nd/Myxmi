@@ -38,9 +38,7 @@ class Home extends StatelessWidget {
                 children: [
                   if (kIsWeb) SizedBox(width: 100.h, child: WebAppBar()),
                   if (_searchable)
-                    SearchRecipes(
-                        showFilter:
-                            _viewIndex == 2 && _user.account?.uid != null)
+                    SearchRecipes()
                   else
                     kIsWeb ? Container() : const ListTile(title: Text('Myxmi')),
                 ],
@@ -65,13 +63,6 @@ class Home extends StatelessWidget {
                                     builder: (_) => AddProduct(),
                                   ),
                                 );
-                          // _image.chooseImageSource(
-                          //     context: context,
-                          //     route: MaterialPageRoute(
-                          //       builder: (_) => ImageCropperScreen(
-                          //         title: _recipe.recipeModel.title,
-                          //       ),
-                          //     ));
                         },
                         child: const Icon(
                           Icons.add,
@@ -82,7 +73,6 @@ class Home extends StatelessWidget {
                         backgroundColor: Colors.red,
                         onPressed: () {
                           _view.changeViewIndex(index: 4);
-                          // _change.value = !_change.value;
                         },
                         child: const Icon(
                           Icons.add,
@@ -90,10 +80,7 @@ class Home extends StatelessWidget {
                         ),
                       )
                 : null,
-        body: _view.viewBuilder(
-          uid: _user.account?.uid,
-          index: _viewIndex,
-        ),
+        body: _view.viewBuilder(),
         // ignore: avoid_redundant_argument_values
         bottomNavigationBar: kIsWeb
             ? null

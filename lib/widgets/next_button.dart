@@ -13,21 +13,22 @@ class NextButton extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Consumer(builder: (_, watch, child) {
         final _recipe = watch(recipeProvider);
-        final bool _detailsProvided = _recipe.recipeModel.title != null &&
-            _recipe.recipeModel.category != null &&
-            _recipe.recipeModel.subCategory != null;
+        final bool _detailsProvided = _recipe.recipesModel.title != null &&
+            _recipe.recipesModel.category != null &&
+            _recipe.recipesModel.subCategory != null;
         return RawMaterialButton(
           elevation: 20,
           fillColor: _detailsProvided ? Colors.blue : Colors.grey,
           onPressed: _detailsProvided
               ? () => tapNext()
               : () {
-                  debugPrint('TITLE: ${_recipe.recipeModel.title}');
-                  debugPrint('DIFFICULTY: ${_recipe.recipeModel.difficulty}');
-                  debugPrint('DURATION: ${_recipe.recipeModel.duration}');
-                  debugPrint('PORTIONS: ${_recipe.recipeModel.portions}');
-                  debugPrint('CATEGORY: ${_recipe.recipeModel.category}');
-                  debugPrint('SUBCATEGORY: ${_recipe.recipeModel.subCategory}');
+                  debugPrint('TITLE: ${_recipe.recipesModel.title}');
+                  debugPrint('DIFFICULTY: ${_recipe.recipesModel.difficulty}');
+                  debugPrint('DURATION: ${_recipe.recipesModel.duration}');
+                  debugPrint('PORTIONS: ${_recipe.recipesModel.portions}');
+                  debugPrint('CATEGORY: ${_recipe.recipesModel.category}');
+                  debugPrint(
+                      'SUBCATEGORY: ${_recipe.recipesModel.subCategory}');
                 },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

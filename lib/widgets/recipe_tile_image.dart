@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/models/recipe.dart';
+import 'package:myxmi/models/recipes.dart';
 import 'package:myxmi/screens/add_recipe_infos.dart';
 import 'package:myxmi/screens/selected_recipe.dart';
 
 class RecipeTileImage extends HookWidget {
-  final RecipeModel recipe;
+  final RecipesModel recipe;
 
   const RecipeTileImage({@required this.recipe});
 
@@ -24,6 +24,7 @@ class RecipeTileImage extends HookWidget {
                 height: _size.height,
                 fit: BoxFit.fitWidth,
                 cacheWidth: 1000,
+                cacheHeight: 1000,
               )
             : Stack(
                 alignment: Alignment.center,
@@ -52,7 +53,7 @@ class RecipeTileImage extends HookWidget {
                   ),
                 ],
               );
-        _recipeProvider.recipeModel = recipe;
+        _recipeProvider.recipesModel = recipe;
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (_) => SelectedRecipe(
@@ -73,7 +74,6 @@ class RecipeTileImage extends HookWidget {
                 cacheWidth: 1000,
                 cacheHeight: 1000,
                 height: _size.height,
-                
               )
             : Stack(
                 alignment: Alignment.center,

@@ -5,6 +5,7 @@ import 'package:myxmi/screens/add_recipe_infos.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class PortionsField extends StatelessWidget {
+  const PortionsField({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Row(

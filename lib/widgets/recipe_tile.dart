@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:myxmi/models/recipe.dart';
+import 'package:myxmi/models/recipes.dart';
 
 class RecipeTile extends HookWidget {
-  final RecipeModel recipe;
+  final RecipesModel recipe;
   final String type;
   const RecipeTile({@required this.recipe, @required this.type});
 
@@ -39,7 +39,7 @@ class RecipeTile extends HookWidget {
               style: const TextStyle(fontWeight: FontWeight.w700),
             ),
             const Spacer(),
-            if (type == 'All')
+            if (type == 'Category')
               Row(
                 children: [
                   const Icon(

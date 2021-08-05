@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/widgets/category_selector.dart';
 import 'package:myxmi/widgets/difficulty_slider.dart';
@@ -17,7 +16,6 @@ final recipeProvider =
 List steps = [];
 
 class AddRecipeInfos extends StatelessWidget {
-  final FocusNode _titleNode = FocusNode();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,35 +60,23 @@ class AddRecipeInfos extends StatelessWidget {
           SliverList(
             delegate: SliverChildListDelegate.fixed(
               [
-                RawKeyboardListener(
-                  focusNode: _titleNode,
-                  onKey: (event) {
-                    if (event is RawKeyUpEvent &&
-                        event.data is RawKeyEventDataAndroid) {
-                      final data = event.data as RawKeyEventDataAndroid;
-                      if (data.keyCode == 13) {
-                        debugPrint('onSubmitted');
-                      }
-                    }
-                  },
-                  child: TitleField(),
-                ),
+                const TitleField(),
                 const DifficultySlider(),
                 Center(child: Text('duration'.tr())),
                 const SizedBox(
                   height: 5,
                 ),
-                DurationField(),
+                const DurationField(),
                 Center(child: Text('portions'.tr())),
                 const SizedBox(
                   height: 5,
                 ),
-                PortionsField(),
+                const PortionsField(),
                 Center(child: Text('category'.tr())),
                 const Center(child: CategorySelector()),
                 Consumer(builder: (_, watch, __) {
                   final _recipe = watch(recipeProvider);
-                  return _recipe.recipeModel.category != null
+                  return _recipe.recipesModel.category != null
                       ? const Center(
                           child: SubCategorySelector(),
                         )

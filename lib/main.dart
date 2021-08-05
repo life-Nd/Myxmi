@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter/foundation.dart' as foundation;
+import 'package:myxmi/screens/home.dart';
 import 'package:sizer/sizer.dart';
 import 'package:myxmi/app.dart';
 import 'providers/prefs.dart';
@@ -148,12 +149,15 @@ class _StreamAuthBuilder extends HookWidget {
   final AuthServices _authServices = AuthServices();
   @override
   Widget build(BuildContext context) {
-    return Consumer(builder: (context, watch, child) {
-      final _userProvider = watch(userProvider);
+    return Consumer(builder: (_, watch, __) {
+      final _user = watch(userProvider);
+      final _view = watch(viewProvider);
+
       return StreamBuilder<User>(
         stream: _authServices.userStream(),
         builder: (context, AsyncSnapshot<User> snapUser) {
-          _userProvider.changeUser(newUser: snapUser.data);
+          _user.changeUser(newUser: snapUser.data);
+          _view.isSignedIn = snapUser.data != null ?? snapUser.data.uid != null;
           return App();
         },
       );

@@ -5,6 +5,7 @@ import 'package:myxmi/screens/add_recipe_infos.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class TitleField extends StatelessWidget {
+  const TitleField({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -16,7 +17,7 @@ class TitleField extends StatelessWidget {
           decoration: InputDecoration(
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
             hintText: 'recipeTitle'.tr(),
-            errorText: _recipe.recipeModel.title == null
+            errorText: _recipe.recipesModel.title == null
                 ? 'titleCantBeEmpty'.tr()
                 : null,
           ),
