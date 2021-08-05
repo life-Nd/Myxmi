@@ -28,6 +28,12 @@ class ViewProvider extends ChangeNotifier {
   void changeViewIndex({int index}) {
     view = index;
     searchCtrl.clear();
+    if (index == 1) {
+      stream = FirebaseFirestore.instance
+          .collection('Recipes')
+          .where(key, isEqualTo: uid)
+          .snapshots();
+    }
     notifyListeners();
   }
 
@@ -41,7 +47,8 @@ class ViewProvider extends ChangeNotifier {
   void getRecipesBySearch() {
     stream = FirebaseFirestore.instance
         .collection('Recipes')
-        .where('title', isEqualTo: searchCtrl.text)
+        .where('title',
+            isEqualTo: searchCtrl.text.toString().trim().toLowerCase())
         .snapshots();
   }
 
@@ -62,9 +69,12 @@ class ViewProvider extends ChangeNotifier {
   }
 
   void search({@required FavoritesProvider fav}) {
+    debugPrint('searchCtrl.text: ${searchCtrl.text}');
     if (searchCtrl.text.isNotEmpty) {
       searching = true;
-      view == 2 ? fav.filter(text: searchCtrl.text) : getRecipesBySearch();
+      view == 2
+          ? fav.filter(text: searchCtrl.text.toLowerCase())
+          : getRecipesBySearch();
     }
     notifyListeners();
   }
@@ -77,10 +87,8 @@ class ViewProvider extends ChangeNotifier {
   Widget viewBuilder() {
     switch (view) {
       case 0:
-        getRecipesBySearch();
         return searching ? Recipes() : Menu();
       case 1:
-        getRecipesByUid();
         return isSignedIn ? Recipes() : SignIn();
       case 2:
         return isSignedIn ? Favorites() : SignIn();
@@ -92,72 +100,4 @@ class ViewProvider extends ChangeNotifier {
         return Menu();
     }
   }
-
-  // Stream<QuerySnapshot> getDefaultStream(
-  //     {@required String legend, @required String uid}) {
-  //   switch (view) {
-  //     case 1:
-  //       _stream = FirebaseFirestore.instance
-  //           .collection('Recipes')
-  //           .where('uid', isEqualTo: uid)
-  //           .snapshots();
-  //       return _stream;
-
-  //     default:
-  //       _stream = FirebaseFirestore.instance
-  //           .collection('Recipes')
-  //           .where('category', isEqualTo: legend)
-  //           .snapshots();
-  //       return _stream;
-  //   }
-  // }
-
-  // Stream<QuerySnapshot> getSearchStream() {
-  //   switch (view) {
-  //     case 1:
-  //       _stream = FirebaseFirestore.instance
-  //           .collection('Recipes')
-  //           .where('title', isEqualTo: searchCtrl.text)
-  //           .snapshots();
-  //       return _stream;
-
-  //     default:
-  //       _stream = FirebaseFirestore.instance
-  //           .collection('Recipes')
-  //           .where('category', isEqualTo: searchCtrl.text)
-  //           .snapshots();
-  //       return _stream;
-  //   }
-  // }
-
-  // Stream<QuerySnapshot> getStream(
-  //     {@required String legend, @required String uid}) {
-  //   switch (legend) {
-  //     case 'Category':
-  //       _stream = FirebaseFirestore.instance
-  //           .collection('Recipes')
-  //           .where('category', isEqualTo: legend)
-  //           .snapshots();
-  //       return _stream;
-  //     case 'MyRecipes':
-  //       _stream = FirebaseFirestore.instance
-  //           .collection('Recipes')
-  //           .where('uid', isEqualTo: uid)
-  //           .snapshots();
-  //       return _stream;
-  //     case 'Searching':
-  //       _stream = FirebaseFirestore.instance
-  //           .collection('Recipes')
-  //           .where('title', isEqualTo: searchCtrl.text)
-  //           .snapshots();
-  //       return _stream;
-  //     default:
-  //       _stream = FirebaseFirestore.instance
-  //           .collection('Recipes')
-  //           .where('sub_category', isEqualTo: legend)
-  //           .snapshots();
-  //       return _stream;
-  //   }
-  // }
-
 }

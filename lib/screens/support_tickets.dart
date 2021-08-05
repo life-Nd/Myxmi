@@ -17,6 +17,7 @@ class SupportTickets extends StatelessWidget {
     return Consumer(
       builder: (_, watch, child) {
         final _user = watch(userProvider);
+        final _support = watch(support);
         return StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('Support')
@@ -25,22 +26,24 @@ class SupportTickets extends StatelessWidget {
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.connectionState != ConnectionState.waiting &&
                 snapshot.hasData) {
-              for (final QueryDocumentSnapshot element in snapshot.data.docs) {
-                _data[element.id] = element.data();
-              }
+              _support.getTickets(querySnapshot: snapshot.data);
+
               final List _keys = _data.keys.toList();
               _keys.sort();
               return ListView.builder(
-                itemCount: _keys.length,
+                itemCount: _support.tickets.length,
                 itemBuilder: (_, int index) {
-                  final _keyIndex = '${_keys[index]}';
-                  final _dataIndex = _data[_keyIndex];
-                  final String _title = '${_dataIndex['title']}';
-                  final String _message = '${_dataIndex['message']}';
-                  final String _by = '${_dataIndex['by']}';
-                  final String _time = '${_dataIndex['time']}';
+                  final _ticket = _support.tickets[index];
+                  // final _keyIndex = '${_keys[index]}';
+                  // final _dataIndex = _data[_keyIndex];
+                  // debugPrint('ticket: ${_ticket.message}');
+                  // final String _title = '${_ticket.title['title']}';
+                  // final String _message = '${_dataIndex['message']}';
+                  // final String _by = '${_dataIndex['by']}';/
+                  // final String _time = '${_dataIndex['time']}';
                   final String _timeAgo = timeago.format(
-                    DateTime.fromMillisecondsSinceEpoch(int.parse(_time)),
+                    DateTime.fromMillisecondsSinceEpoch(
+                        int.parse(_ticket.time)),
                   );
                   return Padding(
                     padding: const EdgeInsets.only(
@@ -48,16 +51,16 @@ class SupportTickets extends StatelessWidget {
                     child: Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.only(
-                          topRight: _by == _user.account.uid
+                          topRight: _ticket.by == _user.account.uid
                               ? const Radius.circular(0.0)
                               : const Radius.circular(10.0),
-                          topLeft: _by == _user.account.uid
+                          topLeft: _ticket.by == _user.account.uid
                               ? const Radius.circular(10.0)
                               : const Radius.circular(0.0),
-                          bottomRight: _by == _user.account.uid
+                          bottomRight: _ticket.by == _user.account.uid
                               ? const Radius.circular(20.0)
                               : const Radius.circular(10.0),
-                          bottomLeft: _by == _user.account.uid
+                          bottomLeft: _ticket.by == _user.account.uid
                               ? const Radius.circular(0.0)
                               : const Radius.circular(40.0),
                         ),
@@ -69,19 +72,21 @@ class SupportTickets extends StatelessWidget {
                           onTap: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (_) => SupportChat(),
+                                builder: (_) => SupportChat(
+                                  ticket: _ticket,
+                                ),
                               ),
                             );
                           },
                           contentPadding: const EdgeInsets.all(1),
                           title: Text(
-                            _title,
+                            _ticket.title,
                             style: const TextStyle(fontSize: 17),
                           ),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(_message),
+                              Text(_ticket.message),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [

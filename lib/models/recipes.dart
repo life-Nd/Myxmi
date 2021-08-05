@@ -82,7 +82,7 @@ class RecipesModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      constTitle: title.toLowerCase(),
+      constTitle: title.trim().toLowerCase(),
       constIngredientsCount: ingredientsCount,
       constStepsCount: stepsCount,
       constStars: stars,
