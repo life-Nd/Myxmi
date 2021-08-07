@@ -4,11 +4,8 @@ import 'package:flutter/material.dart';
 class UserProvider extends ChangeNotifier {
   User account;
   String timeEmailSent;
+  Map<String, dynamic> favorites = {};
 
-Future loadUser({User user}) async {
-    account = user;
-
-  }
   Future changeUsername({String newName}) async {
     await account.updateDisplayName(newName);
     account.reload();

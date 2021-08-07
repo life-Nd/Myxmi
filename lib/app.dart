@@ -1,56 +1,54 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter/foundation.dart' as foundation;
 import 'main.dart';
-import 'providers/favorites.dart';
 import 'screens/home.dart';
+import 'utils/hot_restart_bypass.dart';
 
-final firebaseAuth = Provider<FirebaseAuth>((ref) {
-  return FirebaseAuth.instance;
-});
-final favProvider = Provider<FavoritesProvider>(
-  (ref) => FavoritesProvider(),
-);
-
-class App extends StatefulWidget {
+class Root extends StatefulWidget {
+  const Root({Key key}) : super(key: key);
   @override
-  State<StatefulWidget> createState() => _AppState();
+  State<StatefulWidget> createState() => _RootState();
 }
 
-class _AppState extends State<App> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  // }
-
+class _RootState extends State<Root> {
   @override
   Widget build(BuildContext context) {
-    debugPrint('building app');
+    debugPrint('building root');
+    if (foundation.kDebugMode && foundation.kIsWeb) {
+      return HotRestartByPassBuilder(
+        destinationFragment: Home(),
+        loginFragment: _StreamAuthBuilder(),
+      );
+    }
+    return _StreamAuthBuilder();
+  }
+}
 
-    return Consumer(
-      builder: (_, watch, child) {
-        final _favProvider = watch(favProvider);
-        final _userProvider = watch(userProvider);
-        final streamBuilder = StreamBuilder<DocumentSnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection('Favorites')
-              .doc(_userProvider?.account?.uid)
-              .snapshots(),
-          builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              debugPrint('--loading--firebase: favorites');
-            }
-            if (snapshot.hasData && snapshot.data.data() != null) {
-              final Map _data = snapshot.data.data() as Map<String, dynamic>;
-              debugPrint('fav: ${snapshot.data.data()}');
-              _favProvider.allRecipes = _data as Map<String, dynamic>;
-            }
-            return const Home();
-          },
-        );
-        return _userProvider.account != null ? streamBuilder : const Home();
+class _StreamAuthBuilder extends HookWidget {
+  final consumer = Consumer(builder: (_, watch, __) {
+    final _user = watch(userProvider);
+    final _auth = watch(firebaseAuth);
+    return StreamBuilder<User>(
+      stream: _auth.userChanges(),
+      builder: (context, AsyncSnapshot<User> snapUser) {
+        if (snapUser.connectionState == ConnectionState.waiting) {
+          debugPrint('----snapUser loading');
+          debugPrint('--loading user');
+        }
+        if (snapUser.data != null) {
+          _user.account = snapUser.data;
+        }
+        return Home();
       },
     );
+  });
+  @override
+  Widget build(BuildContext context) {
+    debugPrint('building streambuilder');
+
+    return consumer;
   }
 }

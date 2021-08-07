@@ -10,7 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sn_progress_dialog/progress_dialog.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:apple_sign_in/apple_sign_in.dart' as apple_sign_in;
-import '../main.dart';
+import '../app.dart';
 import 'platform_dialog.dart';
 import 'platform_exception_dialog.dart';
 
@@ -97,13 +97,7 @@ class AuthServices {
         final UserCredential userCredential =
             await auth.signInWithCredential(credential);
         user = userCredential.user;
-
         debugPrint("USER: ${user.email}");
-        // Navigator.of(context).pushAndRemoveUntil(
-        //     MaterialPageRoute(
-        //       builder: (_) => Root(),
-        //     ),
-        //     (route) => false);
       } on FirebaseAuthException catch (e) {
         if (e.code == 'account-exists-with-different-credential') {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -127,7 +121,6 @@ class AuthServices {
         );
       }
     }
-
     debugPrint('User: ${user.email} ${user.displayName}');
     return user;
   }
@@ -175,14 +168,7 @@ class AuthServices {
           user = userCredential.user;
           debugPrint(
               "New user: ${userCredential.additionalUserInfo.isNewUser}");
-
           debugPrint("USER: ${user.email}");
-          // _showLoading = false;
-          // Navigator.of(context).pushAndRemoveUntil(
-          //     MaterialPageRoute(
-          //       builder: (_) => Root(),
-          //     ),
-          //     (route) => false);
         } on FirebaseAuthException catch (e) {
           if (e.code == 'account-exists-with-different-credential') {
             ScaffoldMessenger.of(context).showSnackBar(

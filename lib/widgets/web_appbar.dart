@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/app.dart';
 import 'package:myxmi/main.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:myxmi/screens/favorites.dart';
 import 'package:myxmi/screens/home.dart';
 import 'package:myxmi/widgets/selected_container.dart';
 import 'package:myxmi/widgets/user_avatar.dart';

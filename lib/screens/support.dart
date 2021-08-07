@@ -26,57 +26,53 @@ class SupportScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          ListTile(
-            title: Center(
-              child: Text(
-                'ticketsVisible'.tr(),
-              ),
-            ),
-            subtitle: StatefulBuilder(
-              builder: (context, StateSetter stateSetter) {
-                return ListTile(
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          stateSetter(() {
-                            viewAll = true;
-                          });
-                        },
-                        child: Row(
-                          children: [
-                            if (viewAll)
-                              const Icon(Icons.check_box)
-                            else
-                              const Icon(Icons.check_box_outline_blank),
-                            Text('all'.tr())
-                          ],
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          stateSetter(() {
-                            viewAll = false;
-                          });
-                        },
-                        child: Row(
-                          children: [
-                            if (viewAll)
-                              const Icon(Icons.check_box_outline_blank)
-                            else
-                              const Icon(Icons.check_box),
-                            Text('mine'.tr())
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
           SearchRecipes(),
+          StatefulBuilder(
+            builder: (context, StateSetter stateSetter) {
+              return ListTile(
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      'ticketsVisible'.tr(),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        stateSetter(() {
+                          viewAll = true;
+                        });
+                      },
+                      child: Row(
+                        children: [
+                          if (viewAll)
+                            const Icon(Icons.check_box)
+                          else
+                            const Icon(Icons.check_box_outline_blank),
+                          Text('all'.tr())
+                        ],
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        stateSetter(() {
+                          viewAll = false;
+                        });
+                      },
+                      child: Row(
+                        children: [
+                          if (viewAll)
+                            const Icon(Icons.check_box_outline_blank)
+                          else
+                            const Icon(Icons.check_box),
+                          Text('mine'.tr())
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
           Expanded(
             child: SupportTickets(),
           )

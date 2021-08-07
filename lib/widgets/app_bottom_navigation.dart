@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/app.dart';
 import 'package:myxmi/main.dart';
+import 'package:myxmi/screens/favorites.dart';
 import 'package:myxmi/screens/home.dart';
 // import '../app.dart';
 
@@ -10,7 +10,7 @@ class AppBottomNavigation extends StatelessWidget {
   const AppBottomNavigation({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    debugPrint('building: AppBottomNavigation ');
+    debugPrint('---------------------');
     return Consumer(builder: (_, watch, __) {
       final _view = watch(viewProvider);
       final _user = watch(userProvider);

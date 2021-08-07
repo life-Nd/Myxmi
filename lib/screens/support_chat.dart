@@ -15,6 +15,14 @@ class SupportChat extends StatelessWidget {
           child: Card(
             elevation: 20,
             child: ListTile(
+              leading: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back_ios,
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
               title: Text(ticket.title),
               subtitle: Text(ticket.message),
             ),
@@ -22,22 +30,25 @@ class SupportChat extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(child: Column()),
-      bottomNavigationBar: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: 'typeMessage'.tr(),
-                border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            Expanded(
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: 'typeMessage'.tr(),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                ),
               ),
             ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.send, color: Colors.green),
-            onPressed: () {},
-          ),
-        ],
+            IconButton(
+              icon: const Icon(Icons.send, color: Colors.green),
+              onPressed: () {},
+            ),
+          ],
+        ),
       ),
     );
   }

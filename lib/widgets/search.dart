@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
+import 'package:myxmi/screens/favorites.dart';
 import 'package:myxmi/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-import '../app.dart';
 
 class SearchRecipes extends StatelessWidget {
   @override

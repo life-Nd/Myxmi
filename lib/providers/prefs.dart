@@ -13,6 +13,8 @@ class PreferencesProvider extends ChangeNotifier {
   List<String> cart = [];
   List<String> checkedItem = [];
   bool opaque = false;
+  List<String> products = [];
+  // TODO change
 
   Future changeOpaque({bool newOpaque}) async {
     final SharedPreferences prefs = await _prefs;
@@ -33,6 +35,7 @@ class PreferencesProvider extends ChangeNotifier {
 
     notifyListeners();
   }
+
 
   Future editCart({@required String name}) async {
     final SharedPreferences prefs = await _prefs;

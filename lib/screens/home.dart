@@ -16,7 +16,6 @@ final viewProvider = ChangeNotifierProvider<ViewProvider>(
 );
 
 class Home extends StatefulWidget {
-  const Home({Key key}) : super(key: key);
   @override
   State<StatefulWidget> createState() => _HomeState();
 }
@@ -25,7 +24,6 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     debugPrint('building home');
-
     final consumer = Consumer(builder: (_, watch, __) {
       final _view = watch(viewProvider);
       final _user = watch(userProvider);
@@ -42,6 +40,7 @@ class _HomeState extends State<Home> {
             preferredSize: kIsWeb ? Size(100.h, 200) : Size(100.h, 100),
             child: SafeArea(
               child: Container(
+                padding: const EdgeInsets.only(top: 7, left: 4),
                 color: Theme.of(context).appBarTheme.color,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
