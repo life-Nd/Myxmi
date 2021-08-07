@@ -41,7 +41,6 @@ class _RecipesGridState extends State<RecipesGrid> {
         itemCount: _recipes().length,
         itemBuilder: (_, int index) {
           final RecipesModel _recipe = _recipes()[index];
-          
           return Container(
             margin: const EdgeInsets.all(5),
             decoration: BoxDecoration(

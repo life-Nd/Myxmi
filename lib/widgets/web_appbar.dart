@@ -82,7 +82,7 @@ class _PageViewButton extends StatelessWidget {
       return RawMaterialButton(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         onPressed: () {
-          _view.changeViewIndex(index: index);
+          // _view.changeHomeView(index: index);
           _view.doSearch(value: false);
           _fav.showFilter(value: false);
         },

@@ -14,7 +14,6 @@ class RecipeTileImage extends HookWidget {
   Widget build(BuildContext context) {
     final _recipeProvider = useProvider(recipeProvider);
     final Size _size = MediaQuery.of(context).size;
-
     return InkWell(
       onTap: () {
         _recipeProvider.image = recipe.imageUrl != null

@@ -11,85 +11,85 @@ import 'favorites.dart';
 
 class ViewProvider extends ChangeNotifier {
   int view = 0;
-  bool isSignedIn = false;
   TextEditingController searchCtrl = TextEditingController();
-  String key = 'uid';
   String value;
-  Stream<QuerySnapshot> stream;
-  bool searching = false;
+  bool isSearchingInDb = false;
   bool loading = false;
-  String uid;
 
   void loadingEntry({@required bool isLoading}) {
     loading = isLoading;
     notifyListeners();
   }
 
-  void changeViewIndex({int index}) {
+  void changeViewIndex({@required int index, @required String uid}) {
     view = index;
     searchCtrl.clear();
-    if (index == 1) {
-      stream = FirebaseFirestore.instance
-          .collection('Recipes')
-          .where(key, isEqualTo: uid)
-          .snapshots();
+    switch (index) {
+      case 1:
+        streamRecipesWith(key: 'uid', value: uid);
     }
+
     notifyListeners();
   }
 
-  void getRecipesByUid() {
-    stream = FirebaseFirestore.instance
+  Stream<QuerySnapshot> streamRecipesWith(
+      {@required String key, @required String value}) {
+    final _stream = FirebaseFirestore.instance
         .collection('Recipes')
-        .where(key, isEqualTo: uid)
+        .where(key, isEqualTo: value)
         .snapshots();
+    return _stream;
   }
 
-  void getRecipesBySearch() {
-    stream = FirebaseFirestore.instance
-        .collection('Recipes')
-        .where('title',
-            isEqualTo: searchCtrl.text.toString().trim().toLowerCase())
-        .snapshots();
+  String searchText() {
+    final String _text = searchCtrl.text.toString().trim().toLowerCase();
+    return _text;
   }
 
-  void getRecipesByCategory() {
-    stream = FirebaseFirestore.instance
-        .collection('Recipes')
-        .where('category', isEqualTo: value)
-        .snapshots();
-  }
-
-  void getStream() {
-    searching
-        ? getRecipesBySearch()
-        : key == 'uid'
-            ? getRecipesByUid()
-            : getRecipesByCategory();
-    notifyListeners();
+  Stream<QuerySnapshot> searchRecipesWith({@required String searchKey}) {
+    return streamRecipesWith(key: searchKey, value: searchText());
   }
 
   void search({@required FavoritesProvider fav}) {
-    debugPrint('searchCtrl.text: ${searchCtrl.text}');
+    debugPrint('searchCtrl.text: ${searchText()}');
     if (searchCtrl.text.isNotEmpty) {
-      searching = true;
+      isSearchingInDb = true;
+      switch (view) {
+        case 1:
+          searchRecipesWith(searchKey: 'title');
+          break;
+        case 2:
+          fav.filterRecipes(text: searchText());
+          break;
+        case 3:
+      }
       view == 2
-          ? fav.filter(text: searchCtrl.text.toLowerCase())
-          : getRecipesBySearch();
+          ? fav.filterRecipes(text: searchText())
+          : searchRecipesWith(searchKey: 'title');
     }
     notifyListeners();
   }
 
   void doSearch({bool value}) {
-    searching = value;
+    isSearchingInDb = value;
     notifyListeners();
   }
 
-  Widget viewBuilder() {
+  Widget viewBuilder({@required String uid}) {
+    final bool isSignedIn = uid != null;
     switch (view) {
       case 0:
-        return searching ? Recipes() : Menu();
+        return isSearchingInDb
+            ? RecipesStream(
+                path: searchRecipesWith(searchKey: 'title'),
+              )
+            : Menu();
       case 1:
-        return isSignedIn ? Recipes() : SignIn();
+        return isSignedIn
+            ? RecipesStream(
+                path: streamRecipesWith(key: 'uid', value: uid),
+              )
+            : SignIn();
       case 2:
         return isSignedIn ? Favorites() : SignIn();
       case 3:

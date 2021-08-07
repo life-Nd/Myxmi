@@ -1,11 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../main.dart';
 
-class HotRestartByPassBuilder extends HookWidget {
+class HotRestartByPassBuilder extends StatelessWidget {
   final Widget destinationFragment;
   final Widget loginFragment;
   const HotRestartByPassBuilder({
@@ -25,14 +24,14 @@ class HotRestartByPassBuilder extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('building hotRestart');
     final _userProvider = useProvider(userProvider);
     return FutureBuilder<bool>(
       future: getLoginStatus(),
       builder: (context, AsyncSnapshot<bool> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data) {
-            _userProvider.changeUser(
-                newUser: FirebaseAuth?.instance?.currentUser);
+            _userProvider.account = FirebaseAuth?.instance?.currentUser;
             return destinationFragment;
           } else {
             return loginFragment;

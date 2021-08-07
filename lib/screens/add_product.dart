@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sizer/sizer.dart';
 import '../main.dart';
 
 final _productEntryProvider = ChangeNotifierProvider<_ProductEntryProvider>(
@@ -30,6 +31,7 @@ class AddProduct extends HookWidget {
         title: Text('newProduct'.tr()),
       ),
       bottomNavigationBar: RawMaterialButton(
+        padding: const EdgeInsets.all(8),
         visualDensity: VisualDensity.compact,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
@@ -138,39 +140,39 @@ class AddProduct extends HookWidget {
               // TODO change the structure the code and the view of the product types
 
               Container(
-                height: kIsWeb ? 300 : 170,
+                height: kIsWeb ? 10.h : 35.h,
                 padding: const EdgeInsets.only(left: 20, right: 20),
                 child: GridView(
                   padding: const EdgeInsets.symmetric(),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4,
+                    crossAxisCount: 3,
                     crossAxisSpacing: 1,
                     mainAxisSpacing: 4,
                   ),
                   children: [
                     _ProductEntryType(
                       type: 'fruit',
-                      color: Colors.orange.shade400,
+                      color: Colors.orange.shade300,
                     ),
                     _ProductEntryType(
                       type: 'vegetable',
-                      color: Colors.green.shade400,
+                      color: Colors.green.shade300,
                     ),
                     _ProductEntryType(
-                      type: 'seaFood',
+                      type: 'seafood',
                       color: Colors.blue.shade100,
                     ),
                     _ProductEntryType(
                       type: 'dairy',
-                      color: Colors.blue.shade100,
+                      color: Colors.yellow.shade400,
                     ),
                     _ProductEntryType(
-                      type: 'oils',
-                      color: Colors.grey.shade100,
+                      type: 'eliquid',
+                      color: Colors.grey.shade400,
                     ),
                     _ProductEntryType(
                       type: 'other',
-                      color: Colors.brown.shade100,
+                      color: Colors.brown.shade200,
                     ),
                   ],
                 ),
@@ -204,7 +206,6 @@ class AddProduct extends HookWidget {
                       },
                       items: [
                         DropdownMenuItem(
-                          
                           value: 0,
                           onTap: () {
                             _mesureType = 'g';
@@ -427,10 +428,14 @@ class _ProductEntryType extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.only(right: 4),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Expanded(
-                child: Image.asset('assets/$type.png'),
-              ),
+              if (type != 'other')
+                Expanded(
+                  child: Image.asset(
+                    'assets/$type.png',
+                  ),
+                ),
               Text(
                 type.tr(),
               ),

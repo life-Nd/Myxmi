@@ -17,6 +17,7 @@ class ProductsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('building productsList');
     final Size _size = MediaQuery.of(context).size;
     return Consumer(builder: (_, watch, child) {
       final _user = watch(userProvider);

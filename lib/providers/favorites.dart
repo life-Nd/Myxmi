@@ -20,14 +20,12 @@ class FavoritesProvider extends ChangeNotifier {
     return showFiltered = value;
   }
 
-  void filter({@required String text}) {
+  void filterRecipes({@required String text}) {
     showFiltered = true;
     final Iterable _filter = allRecipes.entries.where((entry) {
       return Map.from(entry.value as Map).containsValue(text);
     });
-    debugPrint('FILTERING: $_filter');
     filtered = Map?.fromEntries(_filter as Iterable<MapEntry>);
-    debugPrint('FILTERED: $filtered');
     notifyListeners();
   }
 }

@@ -38,9 +38,10 @@ class SearchRecipes extends StatelessWidget {
             ),
             onPressed: () {
               !kIsWeb ?? FocusScope.of(context).requestFocus(FocusNode());
+              FocusScope.of(context).unfocus();
               _view.searchCtrl.clear();
-              _view.searching = false;
-              _view.getStream();
+              _fav.showFilter(value: false);
+              _view.doSearch(value: false);
             },
           ),
           IconButton(
@@ -50,6 +51,7 @@ class SearchRecipes extends StatelessWidget {
               onPressed: () {
                 _view.search(fav: _fav);
                 !kIsWeb ?? FocusScope.of(context).requestFocus(FocusNode());
+                FocusScope.of(context).unfocus();
               }),
         ],
       );

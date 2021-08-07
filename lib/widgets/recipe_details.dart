@@ -146,10 +146,10 @@ class RecipeDetails extends StatelessWidget {
                                   );
                                 }
                               : () {
-                                  _view.view = 2;
+                                  _view.view = 4;
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
-                                      builder: (_) => Home(),
+                                      builder: (_) => const Home(),
                                     ),
                                   );
                                 },

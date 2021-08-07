@@ -25,56 +25,58 @@ class SupportScreen extends StatelessWidget {
         child: const Icon(Icons.question_answer),
       ),
       body: Column(
-        mainAxisSize: MainAxisSize.min,
         children: [
-          SearchRecipes(),
           ListTile(
-            dense: true,
-            title: Text(
-              'ticketsVisible'.tr(),
+            title: Center(
+              child: Text(
+                'ticketsVisible'.tr(),
+              ),
+            ),
+            subtitle: StatefulBuilder(
+              builder: (context, StateSetter stateSetter) {
+                return ListTile(
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          stateSetter(() {
+                            viewAll = true;
+                          });
+                        },
+                        child: Row(
+                          children: [
+                            if (viewAll)
+                              const Icon(Icons.check_box)
+                            else
+                              const Icon(Icons.check_box_outline_blank),
+                            Text('all'.tr())
+                          ],
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          stateSetter(() {
+                            viewAll = false;
+                          });
+                        },
+                        child: Row(
+                          children: [
+                            if (viewAll)
+                              const Icon(Icons.check_box_outline_blank)
+                            else
+                              const Icon(Icons.check_box),
+                            Text('mine'.tr())
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
           ),
-          StatefulBuilder(builder: (context, StateSetter stateSetter) {
-            return ListTile(
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      stateSetter(() {
-                        viewAll = true;
-                      });
-                    },
-                    child: Row(
-                      children: [
-                        if (viewAll)
-                          const Icon(Icons.check_box)
-                        else
-                          const Icon(Icons.check_box_outline_blank),
-                        Text('all'.tr())
-                      ],
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      stateSetter(() {
-                        viewAll = false;
-                      });
-                    },
-                    child: Row(
-                      children: [
-                        if (viewAll)
-                          const Icon(Icons.check_box_outline_blank)
-                        else
-                          const Icon(Icons.check_box),
-                        Text('mine'.tr())
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }),
+          SearchRecipes(),
           Expanded(
             child: SupportTickets(),
           )
@@ -83,4 +85,3 @@ class SupportScreen extends StatelessWidget {
     );
   }
 }
-

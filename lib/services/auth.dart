@@ -31,7 +31,7 @@ class AuthServices {
     final User user = firebaseAuth.currentUser;
     if (authSignedIn == true) {
       if (user != null) {
-        userProvider.changeUser(newUser: user);
+        userProvider.account = user;
       }
     }
   }
@@ -251,7 +251,7 @@ class AuthServices {
         prefs.setBool('is_logged_in', false);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-              builder: (_) => Root(),
+              builder: (_) => const Root(),
             ),
             (route) => false);
       });

@@ -42,7 +42,7 @@ class UploadUserPhoto extends HookWidget {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         //Changed this from path to App()
-                        builder: (_) => Home(),
+                        builder: (_) => const Home(),
                       ),
                     );
                   });

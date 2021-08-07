@@ -34,10 +34,11 @@ class AddFavoriteButton extends HookWidget {
               child: const Icon(Icons.favorite_border, color: Colors.black),
             ),
             onPressed: () {
-              _view.view = 2;
+              // if the user not signed-in send him to sign-in page
+              _view.view = 4;
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => Home(),
+                  builder: (_) => const Home(),
                 ),
               );
             },

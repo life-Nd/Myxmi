@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter/foundation.dart' as foundation;
-import 'package:myxmi/screens/home.dart';
 import 'package:sizer/sizer.dart';
 import 'package:myxmi/app.dart';
 import 'providers/prefs.dart';
@@ -98,6 +97,7 @@ Future<void> main() async {
 
   runApp(
     Sizer(builder: (context, orientation, deviceType) {
+      debugPrint('building runApp');
       return EasyLocalization(
         path: 'translations',
         supportedLocales: const [Locale('en', 'US'), Locale('fr', 'FR')],
@@ -122,7 +122,7 @@ Future<void> main() async {
                     darkTheme: darkTheme,
                     themeMode: _storedTheme,
                     debugShowCheckedModeBanner: false,
-                    home: Root(),
+                    home: const Root(),
                   );
                 });
           }),
@@ -133,31 +133,37 @@ Future<void> main() async {
 }
 
 class Root extends HookWidget {
+  const Root({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    debugPrint('building root');
     if (foundation.kDebugMode && foundation.kIsWeb) {
       return HotRestartByPassBuilder(
         destinationFragment: App(),
-        loginFragment: _StreamAuthBuilder(),
+        loginFragment: const _StreamAuthBuilder(),
       );
     }
-    return _StreamAuthBuilder();
+    return const _StreamAuthBuilder();
   }
 }
 
-class _StreamAuthBuilder extends HookWidget {
-  final AuthServices _authServices = AuthServices();
+class _StreamAuthBuilder extends StatelessWidget {
+  const _StreamAuthBuilder({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    debugPrint('building streambuilder ');
     return Consumer(builder: (_, watch, __) {
       final _user = watch(userProvider);
-      final _view = watch(viewProvider);
-
+      final AuthServices _authServices = AuthServices();
       return StreamBuilder<User>(
         stream: _authServices.userStream(),
         builder: (context, AsyncSnapshot<User> snapUser) {
-          _user.changeUser(newUser: snapUser.data);
-          _view.isSignedIn = snapUser.data != null ?? snapUser.data.uid != null;
+          if (snapUser.connectionState == ConnectionState.waiting) {
+            debugPrint('----snapUser loading');
+          }
+
+          if (snapUser != null) _user.loadUser(user: snapUser.data);
           return App();
         },
       );

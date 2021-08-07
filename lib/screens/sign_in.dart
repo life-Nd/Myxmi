@@ -211,7 +211,9 @@ class _EmailWithValidator extends StatelessWidget {
             _fields.validateEmail(value);
           },
           onSubmitted: (submitted) {
-            !kIsWeb ?? FocusScope.of(context).requestFocus(_passwordNode);
+            !kIsWeb
+                ? FocusScope.of(context).requestFocus(_passwordNode)
+                : debugPrint('web');
           },
           decoration: InputDecoration(
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
@@ -225,9 +227,19 @@ class _EmailWithValidator extends StatelessWidget {
 }
 
 // ignore: must_be_immutable
-class _PasswordField extends StatelessWidget {
+class _PasswordField extends StatefulWidget {
   bool showPassword = false;
   bool showButton = false;
+  @override
+  State<_PasswordField> createState() => _PasswordFieldState();
+}
+
+class _PasswordFieldState extends State<_PasswordField> {
+  @override
+  void initState() {
+    _passwordNode = FocusNode();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -256,6 +268,14 @@ class _PasswordField extends StatelessWidget {
         );
       }),
     );
+  }
+
+  @override
+  void dispose() {
+    // Clean up the focus node when the Form is disposed.
+    _passwordNode.dispose();
+
+    super.dispose();
   }
 
   // @override

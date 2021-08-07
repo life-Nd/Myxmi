@@ -5,10 +5,10 @@ class UserProvider extends ChangeNotifier {
   User account;
   String timeEmailSent;
 
-  User changeUser({User newUser}) {
-    return account = newUser;
-  }
+Future loadUser({User user}) async {
+    account = user;
 
+  }
   Future changeUsername({String newName}) async {
     await account.updateDisplayName(newName);
     account.reload();
