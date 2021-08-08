@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/main.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:myxmi/screens/favorites.dart';
 import 'package:myxmi/screens/home.dart';
 import 'package:myxmi/widgets/selected_container.dart';
 import 'package:myxmi/widgets/user_avatar.dart';
@@ -78,13 +77,10 @@ class _PageViewButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer(builder: (_, watch, child) {
       final _view = watch(viewProvider);
-      final _fav = watch(favProvider);
       return RawMaterialButton(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         onPressed: () {
-          // _view.changeHomeView(index: index);
           _view.doSearch(value: false);
-          _fav.showFilter(value: false);
         },
         child: SelectableContainer(
           selected: _view.view == index,

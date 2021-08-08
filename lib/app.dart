@@ -7,13 +7,13 @@ import 'main.dart';
 import 'screens/home.dart';
 import 'utils/hot_restart_bypass.dart';
 
-class Root extends StatefulWidget {
-  const Root({Key key}) : super(key: key);
+class App extends StatefulWidget {
+  const App({Key key}) : super(key: key);
   @override
-  State<StatefulWidget> createState() => _RootState();
+  State<StatefulWidget> createState() => _AppState();
 }
 
-class _RootState extends State<Root> {
+class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     debugPrint('building root');
@@ -48,7 +48,6 @@ class _StreamAuthBuilder extends HookWidget {
   @override
   Widget build(BuildContext context) {
     debugPrint('building streambuilder');
-
     return consumer;
   }
 }

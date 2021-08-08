@@ -5,6 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 
 class RecipeProvider extends ChangeNotifier {
   RecipesModel recipesModel = RecipesModel();
+  List<RecipesModel> recipesList = [];
   InstructionsModel instructions =
       InstructionsModel(ingredients: {}, steps: []);
   Map<String, double> quantity = {};

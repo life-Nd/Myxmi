@@ -1,5 +1,3 @@
-import 'package:myxmi/models/favorites.dart';
-import 'package:myxmi/screens/favorites.dart';
 import 'package:universal_io/io.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -15,11 +13,8 @@ class AddFavoriteButton extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FavoritesModel _favModel = FavoritesModel();
     final _user = useProvider(userProvider);
-    final _fav = useProvider(favProvider);
     final _view = useProvider(viewProvider);
-    final _change = useState<bool>(false);
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -31,7 +26,10 @@ class AddFavoriteButton extends HookWidget {
                 color: Colors.white,
               ),
               padding: const EdgeInsets.all(4),
-              child: const Icon(Icons.favorite_border, color: Colors.black),
+              child: const Icon(
+                Icons.favorite_border,
+                color: Colors.black,
+              ),
             ),
             onPressed: () {
               // if the user not signed-in send him to sign-in page
@@ -44,7 +42,7 @@ class AddFavoriteButton extends HookWidget {
             },
           )
         else
-          !_fav.allRecipes.keys.contains(recipe.recipeId)
+          (!recipe.liked)
               ? IconButton(
                   icon: Container(
                     decoration: BoxDecoration(
@@ -58,21 +56,20 @@ class AddFavoriteButton extends HookWidget {
                     ),
                   ),
                   onPressed: () {
-                    final Map<String, dynamic> _data = {};
-                    _favModel.title = recipe.title;
-                    _favModel.imageUrl = recipe.imageUrl;
-                    _favModel.tried = 'false';
-                    _favModel.added =
-                        '${DateTime.now().millisecondsSinceEpoch}';
-                    _favModel.stepsCount = recipe.stepsCount;
-                    _favModel.ingredientsCount = recipe.ingredientsCount;
-                    _data[recipe.recipeId] = _favModel.toMap();
+                    // Like recipe and save it to DB
                     FirebaseFirestore.instance
-                        .collection('Favorites')
-                        .doc(_user.account.uid)
-                        .set(_data, SetOptions(merge: true));
-                    _fav.addFavorite(newFavorite: _data);
-                    _change.value = !_change.value;
+                        .collection('Recipes')
+                        .doc(recipe.recipeId)
+                        .set(
+                      {
+                        'likedBy': {
+                          _user.account.uid: true,
+                        }
+                      },
+                      SetOptions(
+                        merge: true,
+                      ),
+                    );
                   },
                 )
               : IconButton(
@@ -88,12 +85,20 @@ class AddFavoriteButton extends HookWidget {
                     ),
                   ),
                   onPressed: () {
+                    // Unlike this recipe and delete it from DB
                     FirebaseFirestore.instance
-                        .collection('Favorites')
-                        .doc(_user.account.uid)
-                        .update({recipe.recipeId: FieldValue.delete()});
-                    _fav.removeFavorite(newFavorite: recipe.recipeId);
-                    _change.value = !_change.value;
+                        .collection('Recipes')
+                        .doc(recipe.recipeId)
+                        .set(
+                      {
+                        'likedBy': {
+                          _user.account.uid: false,
+                        },
+                      },
+                      SetOptions(
+                        merge: true,
+                      ),
+                    );
                   },
                 ),
         IconButton(

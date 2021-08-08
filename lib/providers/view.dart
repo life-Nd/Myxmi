@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:myxmi/screens/favorites.dart';
 import 'package:myxmi/screens/menu.dart';
 import 'package:myxmi/screens/more.dart';
 import 'package:myxmi/screens/products.dart';
@@ -7,13 +6,11 @@ import 'package:myxmi/screens/recipes.dart';
 import 'package:myxmi/screens/sign_in.dart';
 import 'package:flutter/material.dart';
 
-import 'favorites.dart';
-
 class ViewProvider extends ChangeNotifier {
   int view = 0;
   TextEditingController searchCtrl = TextEditingController();
-  String value;
-  bool isSearchingInDb = false;
+  bool searchRecipesInDb = false;
+  bool searchRecipesLocally = false;
   bool loading = false;
 
   void loadingEntry({@required bool isLoading}) {
@@ -24,7 +21,7 @@ class ViewProvider extends ChangeNotifier {
   void changeViewIndex({@required int index, @required String uid}) {
     view = index;
     searchCtrl.clear();
-    switch (index) {
+    switch (view) {
       case 1:
         streamRecipesWith(key: 'uid', value: uid);
     }
@@ -41,6 +38,15 @@ class ViewProvider extends ChangeNotifier {
     return _stream;
   }
 
+  Stream<QuerySnapshot> streamProductsWith(
+      {@required String key, @required String value}) {
+    final _stream = FirebaseFirestore.instance
+        .collection('Products')
+        .where(key, isEqualTo: value)
+        .snapshots();
+    return _stream;
+  }
+
   String searchText() {
     final String _text = searchCtrl.text.toString().trim().toLowerCase();
     return _text;
@@ -50,28 +56,38 @@ class ViewProvider extends ChangeNotifier {
     return streamRecipesWith(key: searchKey, value: searchText());
   }
 
-  void search({@required FavoritesProvider fav}) {
+  Stream<QuerySnapshot> searchProductssWith({@required String searchKey}) {
+    return streamProductsWith(key: searchKey, value: searchText());
+  }
+
+  void search() {
     debugPrint('searchCtrl.text: ${searchText()}');
     if (searchCtrl.text.isNotEmpty) {
-      isSearchingInDb = true;
       switch (view) {
+        case 0:
+          searchRecipesInDb = true;
+          break;
         case 1:
+          searchRecipesLocally = true;
+          debugPrint('searchRecipesLocally: $searchRecipesLocally');
           searchRecipesWith(searchKey: 'title');
           break;
         case 2:
-          fav.filterRecipes(text: searchText());
+          searchRecipesWith(searchKey: 'title');
+          searchRecipesLocally = true;
           break;
         case 3:
       }
       view == 2
-          ? fav.filterRecipes(text: searchText())
+          ? debugPrint('fav.filterRecipes(text: searchText())')
           : searchRecipesWith(searchKey: 'title');
     }
     notifyListeners();
   }
 
   void doSearch({bool value}) {
-    isSearchingInDb = value;
+    searchRecipesInDb = value;
+    searchRecipesLocally = value;
     notifyListeners();
   }
 
@@ -79,7 +95,7 @@ class ViewProvider extends ChangeNotifier {
     final bool isSignedIn = uid != null;
     switch (view) {
       case 0:
-        return isSearchingInDb
+        return searchRecipesInDb
             ? RecipesStream(
                 path: searchRecipesWith(searchKey: 'title'),
               )
@@ -91,7 +107,14 @@ class ViewProvider extends ChangeNotifier {
               )
             : SignIn();
       case 2:
-        return isSignedIn ? Favorites() : SignIn();
+        return isSignedIn
+            ? RecipesStream(
+                path: FirebaseFirestore.instance
+                    .collection('Recipes')
+                    .where('likedBy.$uid', isEqualTo: true)
+                    .snapshots(),
+              )
+            : SignIn();
       case 3:
         return isSignedIn ? Products() : SignIn();
       case 4:

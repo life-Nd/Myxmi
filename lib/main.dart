@@ -19,8 +19,20 @@ final firebaseAuth = Provider<FirebaseAuth>((ref) {
   return FirebaseAuth.instance;
 });
 
-// TODO save favorites + products info locally == less reads and writes to db
-// easily implementing the substraction of the quantity used each time
+// TODO use a field 'likedBy' under each recipe to know the likedby count
+//   and get all recipes liked by a user.
+//  'likedBy':{
+//  '$uid':true
+// }
+
+// TODO search through recipes
+
+// TODO search through MY recipes
+//      Differenciate my recipes and others recipes
+
+// TODO Search through favorites
+
+// TODO filter when searching to avoid unnecessary reads
 
 // TODO search through productslist
 
@@ -29,6 +41,16 @@ final firebaseAuth = Provider<FirebaseAuth>((ref) {
 // TODO comment on a support ticket
 
 // TODO Filter support ticket All/Mine
+
+/*
+'favorites':{
+  'count': _count,
+  'users':{
+    '$uid': '${time.milliseconds},
+  }
+
+}
+ */
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -132,7 +154,7 @@ Future<void> main() async {
                     darkTheme: darkTheme,
                     themeMode: _storedTheme,
                     debugShowCheckedModeBanner: false,
-                    home: const Root(),
+                    home: const App(),
                   );
                 });
           }),

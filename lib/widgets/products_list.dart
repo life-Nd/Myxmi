@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/screens/add_recipe_infos.dart';
+import 'package:myxmi/screens/home.dart';
 
 import '../main.dart';
 import 'edit_products.dart';
@@ -44,7 +45,15 @@ class ProductsList extends StatelessWidget {
             return Consumer(
               builder: (_, watch, child) {
                 final _recipe = watch(recipeProvider);
-                final _keys = _data != null ? _data?.keys?.toList() : [];
+                final _view = watch(viewProvider);
+                final List _dbKeys = _data != null ? _data?.keys?.toList() : [];
+                final Iterable _filter = _data.entries.where((entry) {
+                  return entry.value.containsValue(_view.searchText()) as bool;
+                });
+                final _filtered =
+                    Map?.fromEntries(_filter as Iterable<MapEntry>);
+                final List _keys =
+                    _view.searchRecipesInDb ? _filtered.keys.toList() : _dbKeys;
                 return SizedBox(
                   height: _size.height / 1.2,
                   child: _keys.isNotEmpty

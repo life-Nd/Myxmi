@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/recipes.dart';
+import 'package:myxmi/screens/add_recipe_infos.dart';
 import 'package:myxmi/screens/home.dart';
 import 'package:myxmi/widgets/recipes_grid.dart';
 
@@ -14,23 +15,29 @@ class RecipesStream extends StatefulWidget {
 }
 
 class _RecipesState extends State<RecipesStream> {
+
+
   @override
   void initState() {
-    // _path = widget.path;
     super.initState();
+  }
+
+  Stream<QuerySnapshot> streamSnap() {
+    return FirebaseFirestore.instance
+        .collection('Recipes')
+        .where('title', isEqualTo: context.read(viewProvider).searchText())
+        .snapshots();
   }
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('building recipe');
     return Consumer(
       builder: (_, watch, __) {
         final _view = watch(viewProvider);
-        final Stream<QuerySnapshot> _stream = FirebaseFirestore.instance
-            .collection('Recipes')
-            .where('title', isEqualTo: _view.searchText())
-            .snapshots();
+        final _recipe = watch(recipeProvider);
         return StreamBuilder<QuerySnapshot>(
-          stream: _view.isSearchingInDb ? _stream : widget.path,
+          stream: _view.searchRecipesInDb ? streamSnap() : widget.path,
           builder: (_, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
               return Text(
@@ -39,34 +46,34 @@ class _RecipesState extends State<RecipesStream> {
               );
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
-              debugPrint('Loading from db....');
+              debugPrint('<<<<<Loading ${_view.view} from db....>>>>>');
               return Center(
                 child: Text(
                   "${'loading'.tr()}...",
                 ),
               );
             }
-            return snapshot.data != null
-                ? RecipesGrid(
-                    recipes: _recipes(querySnapshot: snapshot.data),
-                    type: 'Category',
-                  )
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(
-                            bottom: 20.0, left: 40, right: 40.0),
-                        child: LinearProgressIndicator(
-                          color: Colors.white,
-                          backgroundColor: Colors.black,
-                        ),
-                      ),
-                      Text(
-                        'noRecipes'.tr(),
-                      ),
-                    ],
-                  );
+            if (snapshot.data != null) {
+              _recipe.recipesList = _recipes(querySnapshot: snapshot.data);
+              return const RecipesGrid();
+            } else {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Padding(
+                    padding:
+                        EdgeInsets.only(bottom: 20.0, left: 40, right: 40.0),
+                    child: LinearProgressIndicator(
+                      color: Colors.white,
+                      backgroundColor: Colors.black,
+                    ),
+                  ),
+                  Text(
+                    'noRecipes'.tr(),
+                  ),
+                ],
+              );
+            }
           },
         );
       },

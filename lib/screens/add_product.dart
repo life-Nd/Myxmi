@@ -137,7 +137,6 @@ class AddProduct extends HookWidget {
                   ),
                 ),
               ),
-              // TODO change the structure the code and the view of the product types
 
               Container(
                 height: kIsWeb ? 10.h : 35.h,

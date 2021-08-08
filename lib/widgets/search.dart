@@ -1,17 +1,14 @@
 import 'package:flutter/foundation.dart';
-import 'package:myxmi/screens/favorites.dart';
 import 'package:myxmi/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:easy_localization/easy_localization.dart';
-
 
 class SearchRecipes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (_, watch, __) {
       final _view = watch(viewProvider);
-      final _fav = watch(favProvider);
       return Row(
         children: [
           Expanded(
@@ -19,7 +16,7 @@ class SearchRecipes extends StatelessWidget {
               controller: _view.searchCtrl,
               onSubmitted: (submitted) {
                 debugPrint('SUBMITTED: $submitted');
-                _view.search(fav: _fav);
+                _view.search();
                 !kIsWeb ?? FocusScope.of(context).requestFocus(FocusNode());
               },
               decoration: InputDecoration(
@@ -40,7 +37,6 @@ class SearchRecipes extends StatelessWidget {
               !kIsWeb ?? FocusScope.of(context).requestFocus(FocusNode());
               FocusScope.of(context).unfocus();
               _view.searchCtrl.clear();
-              _fav.showFilter(value: false);
               _view.doSearch(value: false);
             },
           ),
@@ -49,7 +45,7 @@ class SearchRecipes extends StatelessWidget {
                 Icons.search,
               ),
               onPressed: () {
-                _view.search(fav: _fav);
+                _view.search();
                 !kIsWeb ?? FocusScope.of(context).requestFocus(FocusNode());
                 FocusScope.of(context).unfocus();
               }),

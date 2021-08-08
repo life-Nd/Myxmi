@@ -237,7 +237,7 @@ class AuthServices {
         prefs.setBool('is_logged_in', false);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-              builder: (_) => const Root(),
+              builder: (_) => const App(),
             ),
             (route) => false);
       });

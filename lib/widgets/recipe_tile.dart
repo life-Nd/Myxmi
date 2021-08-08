@@ -5,8 +5,7 @@ import 'package:myxmi/models/recipes.dart';
 
 class RecipeTile extends HookWidget {
   final RecipesModel recipe;
-  final String type;
-  const RecipeTile({@required this.recipe, @required this.type});
+  const RecipeTile({@required this.recipe});
 
   @override
   Widget build(BuildContext context) {
@@ -39,22 +38,19 @@ class RecipeTile extends HookWidget {
               style: const TextStyle(fontWeight: FontWeight.w700),
             ),
             const Spacer(),
-            if (type == 'Category')
-              Row(
-                children: [
-                  const Icon(
-                    Icons.comment,
-                    color: Colors.blue,
-                    size: 15,
-                  ),
-                  Text(
-                    recipe.reviewsCount ?? '0',
-                    style: const TextStyle(fontSize: 17),
-                  )
-                ],
-              )
-            else
-              Container()
+            Row(
+              children: [
+                const Icon(
+                  Icons.comment,
+                  color: Colors.blue,
+                  size: 15,
+                ),
+                Text(
+                  recipe.reviewsCount ?? '0',
+                  style: const TextStyle(fontSize: 17),
+                )
+              ],
+            )
           ],
         ),
       ],

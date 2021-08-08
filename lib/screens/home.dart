@@ -32,9 +32,6 @@ class _HomeState extends State<Home> {
           _viewIndex == 1 && _user.account?.uid != null ||
           _viewIndex == 2 && _user.account?.uid != null ||
           _viewIndex == 3 && _user.account?.uid != null;
-      debugPrint('_viewIndex; $_viewIndex');
-      debugPrint(
-          'View ${_viewIndex == 0 || _viewIndex == 1 || _viewIndex == 3}');
       final scaffold = Scaffold(
           appBar: PreferredSize(
             preferredSize: kIsWeb ? Size(100.h, 200) : Size(100.h, 100),
@@ -95,7 +92,7 @@ class _HomeState extends State<Home> {
               : null,
           body: _view.viewBuilder(uid: _user?.account?.uid),
           // ignore: avoid_redundant_argument_values
-          bottomNavigationBar: kIsWeb ? null : const AppBottomNavigation());
+          bottomNavigationBar: kIsWeb ? null : AppBottomNavigation());
       return scaffold;
     });
     return consumer;

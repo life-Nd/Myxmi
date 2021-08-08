@@ -6,18 +6,11 @@ import 'package:myxmi/screens/cart_screen.dart';
 import 'package:myxmi/widgets/products_list.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-import 'favorites.dart';
-
 class Products extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final _fav = useProvider(favProvider);
-    final _change = useState<bool>(false);
     return RefreshIndicator(
-      onRefresh: () async {
-        _fav.showFilter(value: false);
-        _change.value = !_change.value;
-      },
+      onRefresh: () async {},
       child: SingleChildScrollView(
           child: Column(
         children: [
@@ -65,7 +58,7 @@ class Products extends HookWidget {
                                         color: Colors.green),
                                     alignment: Alignment.center,
                                     child: Text(
-                                       _prefs?.cart?.length != null
+                                      _prefs?.cart?.length != null
                                           ? '${_prefs.cart.length}'
                                           : '0',
                                       style:
@@ -80,9 +73,7 @@ class Products extends HookWidget {
               }),
             ],
           ),
-          const ProductsList(
-            type: 'EditProducts',
-          ),
+          const ProductsList(type: 'EditProducts'),
         ],
       )),
     );

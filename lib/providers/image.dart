@@ -215,7 +215,6 @@ class ImageProvider extends ChangeNotifier {
     debugPrint('No image selected');
   }
 
-// TODO Add image to db from web is not working
 
   Future cropImage() async {
     if (!kIsWeb && imageFile.path != null) {
