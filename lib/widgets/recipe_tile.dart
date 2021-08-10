@@ -9,12 +9,14 @@ class RecipeTile extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String _title =
+        '${recipe?.title[0]?.toUpperCase()}${recipe?.title?.substring(1, recipe?.title?.length)}';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          recipe?.title,
+          _title,
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
         ),
         Divider(

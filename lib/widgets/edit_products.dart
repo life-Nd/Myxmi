@@ -12,12 +12,15 @@ class EditProducts extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final _prefs = useProvider(prefProvider);
+    final String _title =
+        '${data['Name'][0]?.toUpperCase()}${data['Name']?.substring(1, data['Name']?.length)}';
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
       child: ListTile(
-        title: Center(child: Text('${data['Name']}')),
+        // TODO change the first letter of the title to a capital letter
+        title: Center(child: Text(_title)),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

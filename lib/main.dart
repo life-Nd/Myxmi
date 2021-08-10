@@ -42,16 +42,6 @@ final firebaseAuth = Provider<FirebaseAuth>((ref) {
 
 // TODO Filter support ticket All/Mine
 
-/*
-'favorites':{
-  'count': _count,
-  'users':{
-    '$uid': '${time.milliseconds},
-  }
-
-}
- */
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -60,7 +50,6 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
   ]);
   kIsWeb ?? FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
-
   final ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     visualDensity: const VisualDensity(vertical: 0.5, horizontal: 0.5),

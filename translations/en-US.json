@@ -132,7 +132,7 @@
    "estQuantity":"Est. Quantity",
    "connected":"Connected",
    "noRecipes":"No recipes found",
-   "recipes":"Recipes",
+   "myRecipes":"My Recipes",
    "entryKey":"Entry key",
    "teaspoons":"Teaspoons",
    "tablespoons":"Tablespoons",
@@ -236,7 +236,8 @@
     "hours":"Hours",
     "mine":"Mine",
     "ticketsVisible":"Tickets visible",
-    "noTicketsFound":"No support tickets found"
+    "noTicketsFound":"No support tickets found",
+    "searchInMyRecipes":"Search in my recipes"
 
 
 

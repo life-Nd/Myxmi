@@ -5,6 +5,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class SearchRecipes extends StatelessWidget {
+  final Function onSubmit;
+  final Function clear;
+
+  const SearchRecipes({Key key, this.onSubmit, this.clear}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (_, watch, __) {

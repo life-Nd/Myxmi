@@ -11,94 +11,91 @@ import 'package:easy_localization/easy_localization.dart';
 final InstructionsModel _instructions = InstructionsModel();
 
 class SelectedRecipe extends StatefulWidget {
-  final String recipeId;
-  const SelectedRecipe({Key key, @required this.recipeId}) : super(key: key);
   @override
-  State createState() => SelectedRecipeState();
+  State<StatefulWidget> createState() => _SelectionRecipeState();
 }
 
-class SelectedRecipeState extends State<SelectedRecipe> {
+class _SelectionRecipeState extends State<SelectedRecipe> {
   Map<String, dynamic> _data = {};
-  @override
-  void initState() {
-    debugPrint('RECIPE ID: ${widget.recipeId}');
-    super.initState();
-  }
-
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('building _selectionRecipe');
     final Size _size = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
-        title: Consumer(builder: (context, watch, child) {
-          final _recipe = watch(recipeProvider);
-          return Text(_recipe.recipesModel.title);
-        }),
-      ),
-      body: Container(
-        height: _size.height,
-        width: _size.width,
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-          gradient: LinearGradient(
-            begin: Alignment.center,
-            end: Alignment.bottomCenter,
-            colors: [
-              Theme.of(context).cardColor,
-              Theme.of(context).scaffoldBackgroundColor,
-            ],
-          ),
+    return Consumer(builder: (_, watch, __) {
+      final _recipeProvider = watch(recipeProvider);
+      return Scaffold(
+        appBar: AppBar(
+          title: Consumer(builder: (context, watch, child) {
+            return Text(_recipeProvider.recipesModel.title);
+          }),
         ),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              RecipeImage(_size.height / 1.2),
-              StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-                  stream: FirebaseFirestore.instance
-                      .collection('Instructions')
-                      .doc(widget.recipeId)
-                      .snapshots(),
-                  builder: (context,
-                      AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>>
-                          snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      debugPrint('Loading');
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('loading'.tr()),
-                          const CircularProgressIndicator(),
-                        ],
-                      );
-                    }
-                    if (snapshot.hasData && snapshot.data.data() != null) {
-                      final DocumentSnapshot<Map<String, dynamic>> _snapshot =
-                          snapshot.data;
-                      _data = _snapshot.data();
-                      _instructions.fromSnapshot(snapshot: _data);
-                    }
+        body: Container(
+          height: _size.height,
+          width: _size.width,
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+            gradient: LinearGradient(
+              begin: Alignment.center,
+              end: Alignment.bottomCenter,
+              colors: [
+                Theme.of(context).cardColor,
+                Theme.of(context).scaffoldBackgroundColor,
+              ],
+            ),
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                RecipeImage(
+                    height: _size.height / 1.2,
+                    recipeProvider: _recipeProvider),
+                StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                    stream: FirebaseFirestore.instance
+                        .collection('Instructions')
+                        .doc(_recipeProvider.recipesModel.recipeId)
+                        .snapshots(),
+                    builder: (context,
+                        AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>>
+                            snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        debugPrint('Loading');
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('loading'.tr()),
+                            const CircularProgressIndicator(),
+                          ],
+                        );
+                      }
+                      if (snapshot.hasData && snapshot.data.data() != null) {
+                        final DocumentSnapshot<Map<String, dynamic>> _snapshot =
+                            snapshot.data;
+                        _data = _snapshot.data();
+                        _instructions.fromSnapshot(snapshot: _data);
+                      }
 
-                    return Column(
-                      children: [
-                        _ViewsSelector(
-                          instructions: _instructions,
-                        ),
-                        SizedBox(
-                          height: _size.height / 2,
-                          child: RecipeDetails(
+                      return Column(
+                        children: [
+                          _ViewsSelector(
                             instructions: _instructions,
                           ),
-                        ),
-                      ],
-                    );
-                  }),
-            ],
+                          SizedBox(
+                            height: _size.height / 2,
+                            child: RecipeDetails(
+                              instructions: _instructions,
+                            ),
+                          ),
+                        ],
+                      );
+                    }),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 

@@ -55,9 +55,7 @@ class RecipeTileImage extends HookWidget {
         _recipeProvider.recipesModel = recipe;
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (_) => SelectedRecipe(
-              recipeId: recipe.recipeId,
-            ),
+            builder: (_) => SelectedRecipe(),
           ),
         );
       },

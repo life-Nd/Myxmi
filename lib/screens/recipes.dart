@@ -15,8 +15,6 @@ class RecipesStream extends StatefulWidget {
 }
 
 class _RecipesState extends State<RecipesStream> {
-
-
   @override
   void initState() {
     super.initState();
@@ -46,7 +44,7 @@ class _RecipesState extends State<RecipesStream> {
               );
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
-              debugPrint('<<<<<Loading ${_view.view} from db....>>>>>');
+              debugPrint('----<<<<<Loading ${_view.view} from db....>>>>>----');
               return Center(
                 child: Text(
                   "${'loading'.tr()}...",
@@ -55,7 +53,7 @@ class _RecipesState extends State<RecipesStream> {
             }
             if (snapshot.data != null) {
               _recipe.recipesList = _recipes(querySnapshot: snapshot.data);
-              return const RecipesGrid();
+              return RecipesGrid(recipes: _recipe.recipesList);
             } else {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,

@@ -180,7 +180,7 @@
   "noReviews":"Pas d'avis",
   "favorites":"Favoris",
   "recipe":"Recette",
-  "recipes":"Recettes",
+  "myRecipes":"Mes recettes",
   "recipeName":"Nom de la recette",
   "use":"Usage",
   "actQuantity":"Act. Quantity",
@@ -289,6 +289,7 @@
     "visibleTickets":"Tickets visible",
     "noTicketsFound":"Pas de tickets de support trouvé",
     "mine":"Pour moi",
-    "ticketsVisible":"Tickets visible"
+    "ticketsVisible":"Tickets visible",
+    "searchInMyRecipes":"Chercher dans mes recettes"
 
 }

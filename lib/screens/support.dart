@@ -26,7 +26,7 @@ class SupportScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          SearchRecipes(),
+          const SearchRecipes(),
           StatefulBuilder(
             builder: (context, StateSetter stateSetter) {
               return ListTile(

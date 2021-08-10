@@ -31,6 +31,11 @@ class RecipeProvider extends ChangeNotifier {
     return image = newImage;
   }
 
+  void like({bool value}) {
+    recipesModel.liked = value;
+    notifyListeners();
+  }
+
   void changeTitle() {
     recipesModel.title = titleCtrl.text;
     notifyListeners();

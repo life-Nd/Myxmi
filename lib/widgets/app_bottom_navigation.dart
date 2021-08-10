@@ -24,7 +24,7 @@ class AppBottomNavigation extends StatelessWidget {
             icon: const Icon(Icons.home_outlined),
           ),
           BottomNavigationBarItem(
-            label: 'recipes'.tr(),
+            label: 'myRecipes'.tr(),
             icon: const Icon(Icons.menu_book_outlined),
           ),
           BottomNavigationBarItem(
@@ -51,6 +51,7 @@ class AppBottomNavigation extends StatelessWidget {
         onTap: (index) {
           _view.searchRecipesInDb = false;
           _view.changeViewIndex(index: index, uid: _user?.account?.uid);
+          
         },
       );
     });

@@ -19,6 +19,7 @@ class FieldsState extends State<Fields> {
     textCtrl = _ingredientName[0] != 'null'
         ? TextEditingController(text: _ingredientName[0] as String)
         : TextEditingController();
+// TODO change the first letter of the title to a capital letter
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextField(
@@ -27,8 +28,6 @@ class FieldsState extends State<Fields> {
         onSubmitted: (submitted) {
           widget.recipe.changeEstimatedWeight();
         },
-        
-
         onChanged: (value) {
           widget.recipe.changeComposition(
               key: widget.data['Name'] as String,

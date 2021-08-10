@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:myxmi/screens/menu.dart';
 import 'package:myxmi/screens/more.dart';
+import 'package:myxmi/screens/my_recipes.dart';
 import 'package:myxmi/screens/products.dart';
 import 'package:myxmi/screens/recipes.dart';
 import 'package:myxmi/screens/sign_in.dart';
@@ -10,7 +12,6 @@ class ViewProvider extends ChangeNotifier {
   int view = 0;
   TextEditingController searchCtrl = TextEditingController();
   bool searchRecipesInDb = false;
-  bool searchRecipesLocally = false;
   bool loading = false;
 
   void loadingEntry({@required bool isLoading}) {
@@ -21,6 +22,7 @@ class ViewProvider extends ChangeNotifier {
   void changeViewIndex({@required int index, @required String uid}) {
     view = index;
     searchCtrl.clear();
+    searchRecipesInDb = false;
     switch (view) {
       case 1:
         streamRecipesWith(key: 'uid', value: uid);
@@ -68,26 +70,21 @@ class ViewProvider extends ChangeNotifier {
           searchRecipesInDb = true;
           break;
         case 1:
-          searchRecipesLocally = true;
-          debugPrint('searchRecipesLocally: $searchRecipesLocally');
+
           searchRecipesWith(searchKey: 'title');
           break;
         case 2:
-          searchRecipesWith(searchKey: 'title');
-          searchRecipesLocally = true;
           break;
         case 3:
+          searchRecipesInDb = true;
       }
-      view == 2
-          ? debugPrint('fav.filterRecipes(text: searchText())')
-          : searchRecipesWith(searchKey: 'title');
+
+      notifyListeners();
     }
-    notifyListeners();
   }
 
   void doSearch({bool value}) {
     searchRecipesInDb = value;
-    searchRecipesLocally = value;
     notifyListeners();
   }
 
@@ -102,13 +99,13 @@ class ViewProvider extends ChangeNotifier {
             : Menu();
       case 1:
         return isSignedIn
-            ? RecipesStream(
+            ? MyRecipes(
                 path: streamRecipesWith(key: 'uid', value: uid),
               )
             : SignIn();
       case 2:
         return isSignedIn
-            ? RecipesStream(
+            ? MyRecipes(
                 path: FirebaseFirestore.instance
                     .collection('Recipes')
                     .where('likedBy.$uid', isEqualTo: true)
@@ -122,5 +119,27 @@ class ViewProvider extends ChangeNotifier {
       default:
         return Menu();
     }
+  }
+}
+
+class SearchInRecipes extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        TextField(
+          decoration: InputDecoration(
+            hintText: 'searchInRecipes'.tr(),
+          ),
+        ),
+        Expanded(
+            child: RecipesStream(
+          path: FirebaseFirestore.instance
+              .collection('Products')
+              .where('title', isEqualTo: 'ctrl')
+              .snapshots(),
+        )),
+      ],
+    );
   }
 }

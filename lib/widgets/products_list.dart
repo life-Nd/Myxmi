@@ -11,7 +11,6 @@ import 'fields.dart';
 
 class ProductsList extends StatelessWidget {
   final String type;
-
   const ProductsList({
     @required this.type,
   });
@@ -32,7 +31,7 @@ class ProductsList extends StatelessWidget {
             return const Text('error');
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            debugPrint('loading future');
+            debugPrint('-------loading future-------');
             return Container(
               alignment: Alignment.center,
               child: Text('${'loading'.tr()}...'),
@@ -48,10 +47,17 @@ class ProductsList extends StatelessWidget {
                 final _view = watch(viewProvider);
                 final List _dbKeys = _data != null ? _data?.keys?.toList() : [];
                 final Iterable _filter = _data.entries.where((entry) {
+                  debugPrint('entry: $entry');
+                  debugPrint('_view.searchText(): ${_view.searchText()}');
+                  debugPrint('entry.value: ${entry.value}');
                   return entry.value.containsValue(_view.searchText()) as bool;
                 });
+                debugPrint('_filter: $_filter');
                 final _filtered =
                     Map?.fromEntries(_filter as Iterable<MapEntry>);
+                debugPrint('_filtered: $_filtered');
+                debugPrint(
+                    '_view.searchRecipesInDb: ${_view.searchRecipesInDb}');
                 final List _keys =
                     _view.searchRecipesInDb ? _filtered.keys.toList() : _dbKeys;
                 return SizedBox(

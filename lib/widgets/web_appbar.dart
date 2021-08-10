@@ -27,7 +27,7 @@ class WebAppBar extends StatelessWidget {
             ),
             SizedBox(width: _size.width / 11),
             const _PageViewButton(index: 0, text: 'home'),
-            const _PageViewButton(index: 1, text: 'recipes'),
+            const _PageViewButton(index: 1, text: 'myRecipes'),
             const _PageViewButton(index: 2, text: 'favorites'),
             const _PageViewButton(index: 3, text: 'products'),
             SizedBox(width: _size.width / 3),

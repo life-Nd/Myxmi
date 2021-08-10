@@ -25,21 +25,25 @@ class HotRestartByPassBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     debugPrint('building hotRestart');
-    final _userProvider = useProvider(userProvider);
-    return FutureBuilder<bool>(
-      future: getLoginStatus(),
-      builder: (context, AsyncSnapshot<bool> snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.data) {
-            _userProvider.account = FirebaseAuth?.instance?.currentUser;
-            return destinationFragment;
+    
+    return Consumer(builder: (_, watch, __) {
+      final _userProvider = watch(userProvider);
+      return FutureBuilder<bool>(
+        future: getLoginStatus(),
+        builder: (context, AsyncSnapshot<bool> snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.data) {
+              _userProvider.account = FirebaseAuth?.instance?.currentUser;
+              return destinationFragment;
+            } else {
+              return loginFragment;
+            }
           } else {
             return loginFragment;
           }
-        } else {
-          return loginFragment;
-        }
-      },
+        },
+        );
+    }
     );
   }
 }

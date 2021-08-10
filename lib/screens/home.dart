@@ -28,10 +28,10 @@ class _HomeState extends State<Home> {
       final _view = watch(viewProvider);
       final _user = watch(userProvider);
       final int _viewIndex = _view.view;
-      final bool _showSearchBarFab = _viewIndex == 0 ||
-          _viewIndex == 1 && _user.account?.uid != null ||
-          _viewIndex == 2 && _user.account?.uid != null ||
-          _viewIndex == 3 && _user.account?.uid != null;
+      // final bool _showSearchBarFab = _viewIndex == 0 ||
+      //     _viewIndex == 1 && _user.account?.uid != null ||
+      //     _viewIndex == 2 && _user.account?.uid != null ||
+      //     _viewIndex == 3 && _user.account?.uid != null;
       final scaffold = Scaffold(
           appBar: PreferredSize(
             preferredSize: kIsWeb ? Size(100.h, 200) : Size(100.h, 100),
@@ -43,9 +43,8 @@ class _HomeState extends State<Home> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     if (kIsWeb) SizedBox(width: 100.h, child: WebAppBar()),
-                    if (_showSearchBarFab)
-                      SearchRecipes()
-                    else
+                    if (_view.view == 0) const SearchRecipes(),
+                    if (_view.view == 4)
                       kIsWeb
                           ? Container()
                           : const ListTile(title: Text('Myxmi')),
