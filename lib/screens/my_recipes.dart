@@ -118,29 +118,31 @@ class _MyRecipesViewState extends State<MyRecipesView> {
 
   @override
   Widget build(BuildContext context) {
-    return StatefulBuilder(builder: (context, StateSetter stateSetter) {
-      return SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: AutoCompleteRecipes(
-                suggestions: widget.myRecipes,
-                controller: _searchMyRecipesCtrl,
-                onSubmit: () {
-                  _filteredRecipes.clear();
-                  stateSetter(() {});
-                },
+    return StatefulBuilder(
+      builder: (context, StateSetter stateSetter) {
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: AutoCompleteRecipes(
+                  suggestions: widget.myRecipes,
+                  controller: _searchMyRecipesCtrl,
+                  onSubmit: () {
+                    _filteredRecipes.clear();
+                    stateSetter(() {});
+                  },
+                ),
               ),
-            ),
-            RecipesGrid(
-              recipes: _searchMyRecipesCtrl.text.isEmpty
-                  ? widget.myRecipes
-                  : _filterRecipes(),
-            ),
-          ],
-        ),
-      );
-    });
+              RecipesGrid(
+                recipes: _searchMyRecipesCtrl.text.isEmpty
+                    ? widget.myRecipes
+                    : _filterRecipes(),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
