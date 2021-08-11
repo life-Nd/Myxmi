@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class SupportChatsModel extends ChangeNotifier {
-  static const constMessage = 'message';
-  static const constEmail = 'email';
-  static const constName = 'name';
-  static const constUid = 'uid';
-  static const constTicketId = 'ticketId';
-  static const constTime = 'time';
+  static const _message = 'message';
+  static const _email = 'email';
+  static const _name = 'name';
+  static const _uid = 'uid';
+  static const _ticketId = 'ticketId';
+  static const _time = 'time';
   String message;
   String email;
   String name;
@@ -23,22 +23,22 @@ class SupportChatsModel extends ChangeNotifier {
   });
   factory SupportChatsModel.fromSnapshot({Map snapshot}) {
     return SupportChatsModel(
-      message: snapshot[constMessage] as String,
-      email: snapshot[constEmail] as String,
-      name: snapshot[constName] as String,
-      uid: snapshot[constUid] as String,
-      ticketId: snapshot[constTicketId] as String,
-      time: snapshot[constTime] as String,
+      message: snapshot[_message] as String,
+      email: snapshot[_email] as String,
+      name: snapshot[_name] as String,
+      uid: snapshot[_uid] as String,
+      ticketId: snapshot[_ticketId] as String,
+      time: snapshot[_time] as String,
     );
   }
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      constMessage: message,
-      constEmail: email,
-      constName: name,
-      constUid: uid,
-      constTicketId: ticketId,
-      constTime: time
+      _message: message,
+      _email: email,
+      _name: name,
+      _uid: uid,
+      _ticketId: ticketId,
+      _time: time
     };
   }
 }

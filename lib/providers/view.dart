@@ -70,7 +70,6 @@ class ViewProvider extends ChangeNotifier {
           searchRecipesInDb = true;
           break;
         case 1:
-
           searchRecipesWith(searchKey: 'title');
           break;
         case 2:
@@ -78,7 +77,6 @@ class ViewProvider extends ChangeNotifier {
         case 3:
           searchRecipesInDb = true;
       }
-
       notifyListeners();
     }
   }
@@ -133,12 +131,13 @@ class SearchInRecipes extends StatelessWidget {
           ),
         ),
         Expanded(
-            child: RecipesStream(
-          path: FirebaseFirestore.instance
-              .collection('Products')
-              .where('title', isEqualTo: 'ctrl')
-              .snapshots(),
-        )),
+          child: RecipesStream(
+            path: FirebaseFirestore.instance
+                .collection('Products')
+                .where('title', isEqualTo: 'ctrl')
+                .snapshots(),
+          ),
+        ),
       ],
     );
   }

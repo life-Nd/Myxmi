@@ -1,10 +1,10 @@
 class ReviewsModel {
-  static const constMessage = 'message';
-  static const constSent = 'sent';
-  static const constUid = 'uid';
-  static const constMessageId = 'messageId';
-  static const constAvatar = 'avatar';
-  static const constTried = 'tried';
+  static const _message = 'message';
+  static const _sent = 'sent';
+  static const _uid = 'uid';
+  static const _messageId = 'messageId';
+  static const _avatar = 'avatar';
+  static const _tried = 'tried';
   String message;
   String messageId;
   String sent;
@@ -21,22 +21,22 @@ class ReviewsModel {
   ReviewsModel.fromSnapshot({
     Map<String, String> snapshot,
   }) {
-    message = snapshot[constMessage];
-    messageId = snapshot[constMessageId];
-    sent = snapshot[constSent];
-    uid = snapshot[constUid];
-    avatar = snapshot[constAvatar];
-    tried = snapshot[constTried];
+    message = snapshot[_message];
+    messageId = snapshot[_messageId];
+    sent = snapshot[_sent];
+    uid = snapshot[_uid];
+    avatar = snapshot[_avatar];
+    tried = snapshot[_tried];
   }
 
   Map<dynamic, dynamic> toMap() {
     return <dynamic, dynamic>{
-      constMessage: message,
-      constMessageId: messageId,
-      constSent: sent,
-      constUid: uid,
-      constAvatar: avatar,
-      constTried: tried,
+      _message: message,
+      _messageId: messageId,
+      _sent: sent,
+      _uid: uid,
+      _avatar: avatar,
+      _tried: tried,
     };
   }
 }

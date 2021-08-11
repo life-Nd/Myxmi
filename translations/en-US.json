@@ -237,7 +237,9 @@
     "mine":"Mine",
     "ticketsVisible":"Tickets visible",
     "noTicketsFound":"No support tickets found",
-    "searchInMyRecipes":"Search in my recipes"
+    "searchInMyRecipes":"Search in my recipes",
+    "searchInMyProducts":"Search in my products"
+    
 
 
 

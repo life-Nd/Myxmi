@@ -1,23 +1,22 @@
-class RecipesModel {
-  static const constRecipeId = 'recipe_id';
-  static const constTitle = 'title';
-  static const constIngredientsCount = 'ingredients_count';
-  static const constStepsCount = 'steps_count';
-  static const constStars = 'stars';
-  static const constUsedCount = 'used_count';
-  static const constImageUrl = 'image_url';
-  static const constUid = 'uid';
-  static const constDuration = 'duration';
-  static const constCategory = 'category';
-  static const constSubCategory = 'sub_category';
-  static const constAccess = 'access';
-  static const constDifficulty = 'difficulty';
-  static const constVegan = 'vegan';
-  static const constReference = 'reference';
-  static const constMade = 'made';
-  static const constReviewsCount = 'reviews_count';
-  static const constPortions = 'portions';
-  static const constLikedBy = 'likedBy';
+class RecipeModel {
+  static const _title = 'title';
+  static const _ingredientsCount = 'ingredients_count';
+  static const _stepsCount = 'steps_count';
+  static const _stars = 'stars';
+  static const _usedCount = 'used_count';
+  static const _imageUrl = 'image_url';
+  static const _uid = 'uid';
+  static const _duration = 'duration';
+  static const _category = 'category';
+  static const _subCategory = 'sub_category';
+  static const _access = 'access';
+  static const _difficulty = 'difficulty';
+  static const _vegan = 'vegan';
+  static const _reference = 'reference';
+  static const _made = 'made';
+  static const _reviewsCount = 'reviews_count';
+  static const _portions = 'portions';
+  static const _likedBy = 'likedBy';
 
   String recipeId;
   String title = '';
@@ -40,7 +39,7 @@ class RecipesModel {
   Map likedBy = {};
   bool liked;
 
-  RecipesModel({
+  RecipeModel({
     this.recipeId,
     this.title,
     this.ingredientsCount,
@@ -62,50 +61,50 @@ class RecipesModel {
     this.likedBy,
     this.liked,
   });
-  factory RecipesModel.fromSnapshot(
+  factory RecipeModel.fromSnapshot(
       {Map<String, dynamic> snapshot, String keyIndex}) {
-    return RecipesModel(
+    return RecipeModel(
       recipeId: keyIndex,
-      title: snapshot[constTitle] as String,
-      ingredientsCount: snapshot[constIngredientsCount] as String,
-      stepsCount: snapshot[constStepsCount] as String,
-      stars: snapshot[constStars] as String,
-      usedCount: snapshot[constUsedCount] as String,
-      imageUrl: snapshot[constImageUrl] as String,
-      uid: snapshot[constUid] as String,
-      duration: snapshot[constDuration] as String,
-      category: snapshot[constCategory] as String,
-      subCategory: snapshot[constSubCategory] as String,
-      access: snapshot[constAccess] as String,
-      difficulty: snapshot[constDifficulty] as String,
-      vegan: snapshot[constVegan] as String,
-      reference: snapshot[constReference] as String,
-      reviewsCount: snapshot[constReviewsCount] as String,
-      made: snapshot[constMade] as String,
-      portions: snapshot[constPortions] as String,
-      likedBy: snapshot[constLikedBy] as Map,
+      title: snapshot[_title] as String,
+      ingredientsCount: snapshot[_ingredientsCount] as String,
+      stepsCount: snapshot[_stepsCount] as String,
+      stars: snapshot[_stars] as String,
+      usedCount: snapshot[_usedCount] as String,
+      imageUrl: snapshot[_imageUrl] as String,
+      uid: snapshot[_uid] as String,
+      duration: snapshot[_duration] as String,
+      category: snapshot[_category] as String,
+      subCategory: snapshot[_subCategory] as String,
+      access: snapshot[_access] as String,
+      difficulty: snapshot[_difficulty] as String,
+      vegan: snapshot[_vegan] as String,
+      reference: snapshot[_reference] as String,
+      reviewsCount: snapshot[_reviewsCount] as String,
+      made: snapshot[_made] as String,
+      portions: snapshot[_portions] as String,
+      likedBy: snapshot[_likedBy] as Map,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      constTitle: title.trim().toLowerCase(),
-      constIngredientsCount: ingredientsCount,
-      constStepsCount: stepsCount,
-      constStars: stars,
-      constUsedCount: usedCount,
-      constImageUrl: imageUrl,
-      constUid: uid,
-      constDuration: duration,
-      constCategory: category.toLowerCase(),
-      constSubCategory: subCategory.toLowerCase(),
-      constAccess: access.toLowerCase(),
-      constDifficulty: difficulty,
-      constVegan: vegan,
-      constReference: reference,
-      constMade: made,
-      constReviewsCount: reviewsCount,
-      constPortions: portions,
+      _title: title.trim().toLowerCase(),
+      _ingredientsCount: ingredientsCount,
+      _stepsCount: stepsCount,
+      _stars: stars,
+      _usedCount: usedCount,
+      _imageUrl: imageUrl,
+      _uid: uid,
+      _duration: duration,
+      _category: category.toLowerCase(),
+      _subCategory: subCategory.toLowerCase(),
+      _access: access.toLowerCase(),
+      _difficulty: difficulty,
+      _vegan: vegan,
+      _reference: reference,
+      _made: made,
+      _reviewsCount: reviewsCount,
+      _portions: portions,
     };
   }
 }

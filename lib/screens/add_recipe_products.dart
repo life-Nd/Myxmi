@@ -24,7 +24,7 @@ class AddRecipeProducts extends StatelessWidget {
         ),
         title: Consumer(builder: (_, watch, child) {
           final _recipe = watch(recipeProvider);
-          return Text('${'productsIn'.tr()}: ${_recipe?.recipesModel?.title}');
+          return Text('${'productsIn'.tr()}: ${_recipe?.recipeModel?.title}');
         }),
       ),
       body: Column(
@@ -55,7 +55,7 @@ class AddRecipeProducts extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Padding(
+                 const Padding(
                   padding: EdgeInsets.all(8),
                   child: ProductsList(
                     type: 'AddRecipe',

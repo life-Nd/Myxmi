@@ -290,6 +290,7 @@
     "noTicketsFound":"Pas de tickets de support trouvé",
     "mine":"Pour moi",
     "ticketsVisible":"Tickets visible",
-    "searchInMyRecipes":"Chercher dans mes recettes"
+    "searchInMyRecipes":"Chercher dans mes recettes",
+    "searchInMyProducts":"Chercher dans mes produits"
 
 }

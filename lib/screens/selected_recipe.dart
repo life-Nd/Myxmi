@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/instructions.dart';
-import 'package:myxmi/screens/add_recipe_infos.dart';
+import 'package:myxmi/models/recipes.dart';
 import 'package:myxmi/widgets/recipe_details.dart';
 import 'package:myxmi/widgets/recipe_image.dart';
 import 'package:myxmi/widgets/view_selector_text.dart';
@@ -11,6 +11,9 @@ import 'package:easy_localization/easy_localization.dart';
 final InstructionsModel _instructions = InstructionsModel();
 
 class SelectedRecipe extends StatefulWidget {
+  final RecipeModel recipeModel;
+
+  const SelectedRecipe({Key key, @required this.recipeModel}) : super(key: key);
   @override
   State<StatefulWidget> createState() => _SelectionRecipeState();
 }
@@ -23,11 +26,10 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
     debugPrint('building _selectionRecipe');
     final Size _size = MediaQuery.of(context).size;
     return Consumer(builder: (_, watch, __) {
-      final _recipeProvider = watch(recipeProvider);
       return Scaffold(
         appBar: AppBar(
           title: Consumer(builder: (context, watch, child) {
-            return Text(_recipeProvider.recipesModel.title);
+            return Text(widget.recipeModel.title);
           }),
         ),
         body: Container(
@@ -48,13 +50,11 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                RecipeImage(
-                    height: _size.height / 1.2,
-                    recipeProvider: _recipeProvider),
+                RecipeImage(_size.height / 1.2),
                 StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
                     stream: FirebaseFirestore.instance
                         .collection('Instructions')
-                        .doc(_recipeProvider.recipesModel.recipeId)
+                        .doc(widget.recipeModel.recipeId)
                         .snapshots(),
                     builder: (context,
                         AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>>

@@ -6,7 +6,7 @@ import 'package:myxmi/screens/add_recipe_infos.dart';
 import 'package:myxmi/screens/selected_recipe.dart';
 
 class RecipeTileImage extends HookWidget {
-  final RecipesModel recipe;
+  final RecipeModel recipe;
 
   const RecipeTileImage({@required this.recipe});
 
@@ -52,10 +52,10 @@ class RecipeTileImage extends HookWidget {
                   ),
                 ],
               );
-        _recipeProvider.recipesModel = recipe;
+        _recipeProvider.recipeModel = recipe;
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (_) => SelectedRecipe(),
+            builder: (_) => SelectedRecipe(recipeModel: recipe),
           ),
         );
       },

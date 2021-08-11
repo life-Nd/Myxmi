@@ -76,7 +76,7 @@ class AddRecipeInfos extends StatelessWidget {
                 const Center(child: CategorySelector()),
                 Consumer(builder: (_, watch, __) {
                   final _recipe = watch(recipeProvider);
-                  return _recipe.recipesModel.category != null
+                  return _recipe.recipeModel.category != null
                       ? const Center(
                           child: SubCategorySelector(),
                         )

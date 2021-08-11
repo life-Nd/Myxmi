@@ -79,9 +79,9 @@ class _RecipesState extends State<RecipesStream> {
   }
 }
 
-List<RecipesModel> _recipes({QuerySnapshot querySnapshot}) {
+List<RecipeModel> _recipes({QuerySnapshot querySnapshot}) {
   return querySnapshot.docs.map((QueryDocumentSnapshot data) {
-    return RecipesModel.fromSnapshot(
+    return RecipeModel.fromSnapshot(
       snapshot: data.data() as Map<String, dynamic>,
       keyIndex: data.id,
     );

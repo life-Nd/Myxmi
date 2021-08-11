@@ -4,12 +4,12 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:myxmi/models/recipes.dart';
 
 class RecipeTile extends HookWidget {
-  final RecipesModel recipe;
+  final RecipeModel recipe;
   const RecipeTile({@required this.recipe});
 
   @override
   Widget build(BuildContext context) {
-    final String _title =
+    final String _title = 
         '${recipe?.title[0]?.toUpperCase()}${recipe?.title?.substring(1, recipe?.title?.length)}';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

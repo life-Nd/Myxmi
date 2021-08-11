@@ -39,7 +39,7 @@ class DifficultySlider extends StatelessWidget {
                         ? Colors.red
                         : Colors.grey,
             divisions: 2,
-            label: _recipe.recipesModel.difficulty,
+            label: _recipe.recipeModel.difficulty,
             inactiveColor: Colors.grey,
           ),
         ],

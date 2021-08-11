@@ -18,28 +18,28 @@ class SaveButton extends HookWidget {
     final _image = useProvider(imageProvider);
     final _user = useProvider(userProvider);
     return RawMaterialButton(
-      onPressed: _recipe.recipesModel.title != null
+      onPressed: _recipe.recipeModel.title != null
           ? () async {
               String _key;
               final rng = Random();
               final _random = rng.nextInt(9000) + 1000;
-              _recipe.recipesModel.reference = '$_random';
-              _recipe.recipesModel.uid = _user.account.uid;
-              _recipe.recipesModel.access = 'Public';
-              _recipe.recipesModel.usedCount = '1';
-              _recipe.recipesModel.stepsCount =
+              _recipe.recipeModel.reference = '$_random';
+              _recipe.recipeModel.uid = _user.account.uid;
+              _recipe.recipeModel.access = 'Public';
+              _recipe.recipeModel.usedCount = '1';
+              _recipe.recipeModel.stepsCount =
                   '${_recipe.instructions.steps.length}';
               _recipe.instructions.ingredients = _recipe.composition;
               _recipe.instructions.uid = _user.account.uid;
-              _recipe.recipesModel.made =
+              _recipe.recipeModel.made =
                   '${DateTime.now().millisecondsSinceEpoch}';
               _image.addImageToDb(context: context).whenComplete(() async {
                 pr.show(max: 100, msg: '${'loading'.tr()} ${'recipe'.tr()}...');
-                _recipe.recipesModel.imageUrl =
+                _recipe.recipeModel.imageUrl =
                     _image.imageLink.isNotEmpty ? _image.imageLink : null;
                 final DocumentReference _db = await FirebaseFirestore.instance
                     .collection('Recipes')
-                    .add(_recipe.recipesModel.toMap());
+                    .add(_recipe.recipeModel.toMap());
 
                 _key = _db.id;
                 debugPrint('----KeyID: $_key');

@@ -10,8 +10,10 @@
 //   Widget build(BuildContext context) {
 //     final _change = useState<bool>(false);
 //     final Map _data = _fav.showFiltered ? _fav.filtered : _fav.allRecipes;
-//     final List<RecipesModel> _recipes = _data.entries.map((MapEntry data) {
-//       return RecipesModel.fromSnapshot(
+//     final List<RecipeModel
+// > _recipes = _data.entries.map((MapEntry data) {
+//       return RecipeModel
+// .fromSnapshot(
 //         snapshot: data.value as Map<String, dynamic>,
 //         keyIndex: data.key as String,
 //       );

@@ -1,7 +1,7 @@
 
 class CartModel {
-  static const constName = 'name';
-  static const constCategory = 'category';
+  static const _name = 'name';
+  static const _category = 'category';
 
   String name;
   String category;
@@ -9,14 +9,14 @@ class CartModel {
   CartModel({this.name, this.category});
 
   void fromSnapshot({Map<String, String> snapshot}) {
-    name = snapshot[constName];
-    category = snapshot[constCategory];
+    name = snapshot[_name];
+    category = snapshot[_category];
   }
 
   Map<dynamic, dynamic> toMap() {
     return <dynamic, dynamic>{
-      constName: name,
-      constCategory: category,
+      _name: name,
+      _category: category,
     };
   }
 }

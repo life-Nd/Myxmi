@@ -63,7 +63,7 @@ class RecipeDetails extends StatelessWidget {
                       StreamBuilder<DocumentSnapshot>(
                         stream: FirebaseFirestore.instance
                             .collection('Reviews')
-                            .doc(_recipe.recipesModel.recipeId)
+                            .doc(_recipe.recipeModel.recipeId)
                             .snapshots(),
                         builder: (context,
                             AsyncSnapshot<DocumentSnapshot> snapshot) {

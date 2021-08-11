@@ -45,11 +45,11 @@ class AddProduct extends HookWidget {
                     .set(
                   {
                     '${DateTime.now().millisecondsSinceEpoch}': {
-                      'Name': _nameCtrl.text,
-                      'MesureType': _mesureType,
-                      'IngredientType': _ingredientType,
-                      'Expiration': '$_expiration',
-                      'Total': _quantityCtrl.text
+                      'name': _nameCtrl.text,
+                      'mesureType': _mesureType,
+                      'ingredientType': _ingredientType,
+                      'expiration': '$_expiration',
+                      'total': _quantityCtrl.text
                     },
                   },
                   SetOptions(merge: true),

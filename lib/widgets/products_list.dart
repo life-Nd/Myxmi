@@ -2,12 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:myxmi/models/product.dart';
 import 'package:myxmi/screens/add_recipe_infos.dart';
-import 'package:myxmi/screens/home.dart';
-
+import 'package:sizer/sizer.dart';
 import '../main.dart';
+import 'auto_complete_products.dart';
 import 'edit_products.dart';
 import 'fields.dart';
+
+TextEditingController _searchProductsCtrl = TextEditingController();
 
 class ProductsList extends StatelessWidget {
   final String type;
@@ -15,18 +18,31 @@ class ProductsList extends StatelessWidget {
     @required this.type,
   });
 
+  // final List<ProductModel> _products = [];
   @override
   Widget build(BuildContext context) {
+    List<ProductModel> _products(
+        {DocumentSnapshot<Map<String, dynamic>> snapshot}) {
+      debugPrint('snapshot: ${snapshot.data()}');
+      return snapshot.data().keys.map((key) {
+        debugPrint('key: $key');
+        debugPrint('snapshot.data(): ${snapshot.data()}');
+        return ProductModel.fromSnapshot(
+          keyIndex: key,
+          snapshot: snapshot.data()[key] as Map<String, dynamic>,
+        );
+      }).toList();
+    }
+
     debugPrint('building productsList');
-    final Size _size = MediaQuery.of(context).size;
     return Consumer(builder: (_, watch, child) {
       final _user = watch(userProvider);
-      return FutureBuilder(
-        future: FirebaseFirestore.instance
+      return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+        stream: FirebaseFirestore.instance
             .collection('Products')
             .doc(_user.account.uid)
-            .get(),
-        builder: (_, AsyncSnapshot snapshot) {
+            .snapshots(),
+        builder: (_, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (snapshot.hasError) {
             return const Text('error');
           }
@@ -38,47 +54,112 @@ class ProductsList extends StatelessWidget {
             );
           }
           if (snapshot.data != null) {
-            final Map _data = type == 'AddToCart'
-                ? snapshot as Map
-                : snapshot.data.data() as Map;
-            return Consumer(
-              builder: (_, watch, child) {
-                final _recipe = watch(recipeProvider);
-                final _view = watch(viewProvider);
-                final List _dbKeys = _data != null ? _data?.keys?.toList() : [];
-                final Iterable _filter = _data.entries.where((entry) {
-                  debugPrint('entry: $entry');
-                  debugPrint('_view.searchText(): ${_view.searchText()}');
-                  debugPrint('entry.value: ${entry.value}');
-                  return entry.value.containsValue(_view.searchText()) as bool;
-                });
-                debugPrint('_filter: $_filter');
-                final _filtered =
-                    Map?.fromEntries(_filter as Iterable<MapEntry>);
-                debugPrint('_filtered: $_filtered');
-                debugPrint(
-                    '_view.searchRecipesInDb: ${_view.searchRecipesInDb}');
-                final List _keys =
-                    _view.searchRecipesInDb ? _filtered.keys.toList() : _dbKeys;
-                return SizedBox(
-                  height: _size.height / 1.2,
-                  child: _keys.isNotEmpty
+            // final Map<String, dynamic> _data = type == 'AddToCart'
+            //     ? snapshot as Map<String, dynamic>
+            //     : snapshot.data.data() as Map<String, dynamic>;
+            debugPrint('snapshot.data: ${snapshot.data.data()}');
+            return ProductsView(
+              type: type,
+              products: _products(
+                  snapshot:
+                      snapshot.data as DocumentSnapshot<Map<String, dynamic>>),
+            );
+          }
+          return Center(
+            child: Text(
+              'productsEmpty'.tr(),
+            ),
+          );
+        },
+      );
+    });
+  }
+}
+
+class ProductsView extends StatefulWidget {
+  final List<ProductModel> products;
+  final String type;
+  const ProductsView({
+    Key key,
+    @required this.products,
+    @required this.type,
+  }) : super(key: key);
+  @override
+  State<StatefulWidget> createState() => _ProductsViewState();
+}
+
+class _ProductsViewState extends State<ProductsView> {
+  final List<ProductModel> _filteredProducts = [];
+
+  List<ProductModel> _filterProducts() {
+    final Iterable _filter = widget.products.asMap().entries.where((entry) {
+      debugPrint('entry.value: ${entry.value}');
+      return entry.value
+          .toMap()
+          .containsValue(_searchProductsCtrl.text.trim().toLowerCase());
+    });
+    final _filtered = Map.fromEntries(_filter as Iterable<MapEntry>);
+    _filtered.forEach((key, value) {
+      _filteredProducts.add(value as ProductModel);
+    });
+    debugPrint('filteredProducts: $_filteredProducts');
+    return _filteredProducts;
+  }
+
+  @override
+  void initState() {
+    _searchProductsCtrl = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final List<ProductModel> _products =
+        _searchProductsCtrl.text.isEmpty ? widget.products : _filterProducts();
+    return StatefulBuilder(
+      builder: (context, StateSetter stateSetter) {
+        return Consumer(builder: (_, watch, child) {
+          final _user = watch(userProvider);
+          final _recipe = watch(recipeProvider);
+          debugPrint('_filterProducts: ${_filterProducts()}');
+
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.only(bottom: 8.0, right: 20, left: 20),
+                  child: AutoCompleteProducts(
+                    suggestions: widget.products,
+                    controller: _searchProductsCtrl,
+                    onSubmit: () {
+                      _filteredProducts.clear();
+                      stateSetter(() {});
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 90.h,
+                  child: _products.isNotEmpty
                       ? ListView.builder(
-                          itemCount: _keys.length,
+                          itemCount: _products.length,
                           itemBuilder: (context, index) {
-                            final _key = _keys[index];
+                            final _key = _products[index];
+                            debugPrint('product: ${_products[index].name}');
+                            debugPrint('key:$_key');
                             return Dismissible(
                                 key: UniqueKey(),
                                 onDismissed: (direction) {
-                                  _data.remove(_data[index]);
+                                  _products.remove(_products[index]);
                                   _recipe.hide(
-                                      component: _keys[index] as String);
-                                  if (type == 'EditProducts') {
+                                      component: _products[index] as String);
+                                  if (widget.type == 'EditProducts') {
                                     FirebaseFirestore.instance
                                         .collection('Products')
                                         .doc(_user.account.uid)
                                         .update({
-                                      '${_keys[index]}': FieldValue.delete()
+                                      _products[index].productId:
+                                          FieldValue.delete()
                                     });
                                   }
                                 },
@@ -93,7 +174,7 @@ class ProductsList extends StatelessWidget {
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         Text(
-                                          type == 'EditProducts'
+                                          widget.type == 'EditProducts'
                                               ? 'delete'.tr()
                                               : 'hide'.tr(),
                                           style: const TextStyle(
@@ -104,21 +185,20 @@ class ProductsList extends StatelessWidget {
                                         const SizedBox(
                                           width: 40,
                                         ),
-                                        Icon(type == 'EditProducts'
+                                        Icon(widget.type == 'EditProducts'
                                             ? Icons.delete
                                             : Icons.visibility_off),
                                       ],
                                     ),
                                   ),
                                 ),
-                                child: type == 'AddRecipe'
+                                // TODO fix what shows when you filter the products
+                                child: widget.type == 'AddRecipe'
                                     ? Fields(
-                                        data: _data[_key] as Map,
+                                        product: _products[index],
                                         recipe: _recipe,
                                       )
-                                    : EditProducts(
-                                        indexKey: _key as String,
-                                        data: _data[_key] as Map));
+                                    : EditProducts(product: _products[index]));
                           },
                         )
                       : Center(
@@ -126,17 +206,12 @@ class ProductsList extends StatelessWidget {
                             'productsEmpty'.tr(),
                           ),
                         ),
-                );
-              },
-            );
-          }
-          return Center(
-            child: Text(
-              'productsEmpty'.tr(),
+                ),
+              ],
             ),
           );
-        },
-      );
-    });
+        });
+      },
+    );
   }
 }

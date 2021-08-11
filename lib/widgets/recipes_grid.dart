@@ -10,7 +10,7 @@ import 'recipe_tile.dart';
 import 'recipe_tile_image.dart';
 
 class RecipesGrid extends StatelessWidget {
-  final List<RecipesModel> recipes;
+  final List<RecipeModel> recipes;
   const RecipesGrid({Key key, this.recipes}) : super(key: key);
 
   @override
@@ -18,7 +18,7 @@ class RecipesGrid extends StatelessWidget {
     final Size _size = MediaQuery.of(context).size;
     debugPrint('building recipes grid');
     return SizedBox(
-      height: _size.height / 1.3,
+      height: _size.height / 1.2,
       width: _size.width / 1,
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -32,7 +32,7 @@ class RecipesGrid extends StatelessWidget {
             final _user = watch(userProvider);
             final _recipeProvider = watch(recipeProvider);
 
-            final _recipe = _recipeProvider.recipesModel = recipes[index];
+            final _recipe = _recipeProvider.recipeModel = recipes[index];
             _recipe.liked = false;
             if (_user?.account?.uid != null && _recipe.likedBy != null) {
               final _uid = _user?.account?.uid;
