@@ -12,14 +12,21 @@ import '../widgets/auto_complete_recipes.dart';
 
 TextEditingController _searchMyRecipesCtrl = TextEditingController();
 
-class MyRecipes extends StatefulWidget {
+class RecipesStream extends StatefulWidget {
   final Stream<QuerySnapshot> path;
-  const MyRecipes({Key key, this.path}) : super(key: key);
+  final double height;
+  final bool autoCompleteField;
+  const RecipesStream(
+      {Key key,
+      @required this.path,
+      @required this.height,
+      @required this.autoCompleteField})
+      : super(key: key);
   @override
   State<StatefulWidget> createState() => _RecipesState();
 }
 
-class _RecipesState extends State<MyRecipes> {
+class _RecipesState extends State<RecipesStream> {
   @override
   void initState() {
     super.initState();
@@ -61,7 +68,9 @@ class _RecipesState extends State<MyRecipes> {
             if (snapshot.data != null) {
               _recipe.recipesList = _recipes(querySnapshot: snapshot.data);
               return MyRecipesView(
+                showAutoCompleteField: widget.autoCompleteField,
                 myRecipes: _recipes(querySnapshot: snapshot.data),
+                height: widget.height,
               );
             } else {
               return Column(
@@ -90,7 +99,15 @@ class _RecipesState extends State<MyRecipes> {
 
 class MyRecipesView extends StatefulWidget {
   final List<RecipeModel> myRecipes;
-  const MyRecipesView({Key key, this.myRecipes}) : super(key: key);
+  final bool showAutoCompleteField;
+  final double height;
+
+  const MyRecipesView(
+      {Key key,
+      @required this.myRecipes,
+      @required this.height,
+      @required this.showAutoCompleteField})
+      : super(key: key);
   @override
   State<StatefulWidget> createState() => _MyRecipesViewState();
 }
@@ -118,26 +135,46 @@ class _MyRecipesViewState extends State<MyRecipesView> {
 
   @override
   Widget build(BuildContext context) {
+    final Size _size = MediaQuery.of(context).size;
     return StatefulBuilder(
       builder: (context, StateSetter stateSetter) {
         return SingleChildScrollView(
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: AutoCompleteRecipes(
-                  suggestions: widget.myRecipes,
-                  controller: _searchMyRecipesCtrl,
-                  onSubmit: () {
-                    _filteredRecipes.clear();
-                    stateSetter(() {});
-                  },
+              if (widget.showAutoCompleteField)
+                Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: AutoCompleteRecipes(
+                          suggestions: widget.myRecipes,
+                          controller: _searchMyRecipesCtrl,
+                          onSubmit: () {
+                            _filteredRecipes.clear();
+                            stateSetter(() {});
+                          },
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(
+                          Icons.clear,
+                          color: Colors.red,
+                        ),
+                        onPressed: () {
+                          _filteredRecipes.clear();
+                          _searchMyRecipesCtrl.clear();
+                          stateSetter(() {});
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
               RecipesGrid(
                 recipes: _searchMyRecipesCtrl.text.isEmpty
                     ? widget.myRecipes
                     : _filterRecipes(),
+                height: _size.height / 1.2,
               ),
             ],
           ),

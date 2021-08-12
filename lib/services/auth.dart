@@ -228,7 +228,7 @@ class AuthServices {
 
   Future<void> _signOut(BuildContext context) async {
     final ProgressDialog pr = ProgressDialog(context: context);
-    Navigator.of(context).pop();
+
     pr.show(max: 1000, msg: '${'loading'.tr()}...', barrierDismissible: true);
     try {
       signOut(context).whenComplete(() async {
@@ -237,7 +237,7 @@ class AuthServices {
         prefs.setBool('is_logged_in', false);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-              builder: (_) => const App(),
+              builder: (_) => App(),
             ),
             (route) => false);
       });

@@ -12,15 +12,17 @@ import 'recipe_tile_image.dart';
 
 class RecipesGrid extends StatelessWidget {
   final List<RecipeModel> recipes;
-  const RecipesGrid({Key key, this.recipes}) : super(key: key);
+  final double height;
+  const RecipesGrid({Key key, @required this.recipes, @required this.height})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
     debugPrint('building recipes grid');
     return SizedBox(
-      height: _size.height / 1.2,
-      width: _size.width / 1,
+      height: height,
+      width: _size.width,
       child: recipes.isNotEmpty
           ? GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'recipes.dart';
+import 'package:sizer/sizer.dart';
+import 'recipes_stream.dart';
 
 class Filtered extends StatefulWidget {
   final String legend;
@@ -17,12 +18,13 @@ class _FilteredState extends State<Filtered> {
       appBar: AppBar(
         title: Text('${widget.legend.tr()}s'),
       ),
-
       body: RecipesStream(
         path: FirebaseFirestore.instance
             .collection('Recipes')
             .where('sub_category', isEqualTo: widget.legend)
             .snapshots(),
+        height: 100.h,
+        autoCompleteField: true,
       ),
     );
   }

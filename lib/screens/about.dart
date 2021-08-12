@@ -8,7 +8,7 @@ class AboutView extends HookWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('about'.tr()),
+        title: Text('aboutMyxmi'.tr()),
         centerTitle: true,
       ),
       body: Column(

@@ -65,7 +65,7 @@ class _AutoCompleteState extends State<AutoCompleteRecipes> {
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
         contentPadding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
         filled: true,
-        hintText: 'searchInMyRecipes'.tr(),
+        hintText: 'searchRecipe'.tr(),
       ),
     );
     return _searchTextField;

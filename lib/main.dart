@@ -30,8 +30,6 @@ final firebaseAuth = Provider<FirebaseAuth>((ref) {
 // TODO search through MY recipes
 //      Differenciate my recipes and others recipes
 
-// TODO Search through favorites
-
 // TODO filter when searching to avoid unnecessary reads
 
 // TODO search through productslist
@@ -143,7 +141,7 @@ Future<void> main() async {
                     darkTheme: darkTheme,
                     themeMode: _storedTheme,
                     debugShowCheckedModeBanner: false,
-                    home: const App(),
+                    home: App(),
                   );
                 });
           }),

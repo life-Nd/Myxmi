@@ -1,11 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:myxmi/screens/menu.dart';
 import 'package:myxmi/screens/more.dart';
-import 'package:myxmi/screens/my_recipes.dart';
+import 'package:myxmi/screens/recipes_stream.dart';
 import 'package:myxmi/screens/products.dart';
-import 'package:myxmi/screens/recipes.dart';
 import 'package:myxmi/screens/sign_in.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 
 class ViewProvider extends ChangeNotifier {
@@ -92,22 +91,28 @@ class ViewProvider extends ChangeNotifier {
       case 0:
         return searchRecipesInDb
             ? RecipesStream(
+                autoCompleteField: false,
                 path: searchRecipesWith(searchKey: 'title'),
+                height: 90.h,
               )
             : Menu();
       case 1:
         return isSignedIn
-            ? MyRecipes(
+            ? RecipesStream(
+                autoCompleteField: true,
                 path: streamRecipesWith(key: 'uid', value: uid),
+                height: 90.h,
               )
             : SignIn();
       case 2:
         return isSignedIn
-            ? MyRecipes(
+            ? RecipesStream(
+                autoCompleteField: true,
                 path: FirebaseFirestore.instance
                     .collection('Recipes')
                     .where('likedBy.$uid', isEqualTo: true)
                     .snapshots(),
+                height: 90.h,
               )
             : SignIn();
       case 3:
@@ -117,28 +122,5 @@ class ViewProvider extends ChangeNotifier {
       default:
         return Menu();
     }
-  }
-}
-
-class SearchInRecipes extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TextField(
-          decoration: InputDecoration(
-            hintText: 'searchInRecipes'.tr(),
-          ),
-        ),
-        Expanded(
-          child: RecipesStream(
-            path: FirebaseFirestore.instance
-                .collection('Products')
-                .where('title', isEqualTo: 'ctrl')
-                .snapshots(),
-          ),
-        ),
-      ],
-    );
   }
 }

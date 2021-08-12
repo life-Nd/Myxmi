@@ -237,8 +237,9 @@
     "mine":"Mine",
     "ticketsVisible":"Tickets visible",
     "noTicketsFound":"No support tickets found",
-    "searchInMyRecipes":"Search in my recipes",
-    "searchInMyProducts":"Search in my products"
+    "searchRecipe":"Search a recipe",
+    "searchInMyProducts":"Search in my products",
+    "aboutMyxmi":"About Myxmi"
     
 
 

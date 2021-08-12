@@ -50,7 +50,7 @@ class _AddFavoriteButtonState extends State<AddFavoriteButton> {
                   _view.view = 4;
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => Home(),
+                      builder: (_) => Home(uid: _user?.account?.uid),
                     ),
                   );
                 },

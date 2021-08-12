@@ -146,7 +146,6 @@
   "messages":"Messages",
   "search":"Chercher",
   "leave":"Quitter",
-  "aboutUs":"À propos de nous",
   "copiedToClipboard":"Copié dans le presse-papier",
   "displayName":"Nom d'utilisateur",
   "noDetailsFound":"Pas de détails sur le compte trouvé",
@@ -290,7 +289,8 @@
     "noTicketsFound":"Pas de tickets de support trouvé",
     "mine":"Pour moi",
     "ticketsVisible":"Tickets visible",
-    "searchInMyRecipes":"Chercher dans mes recettes",
-    "searchInMyProducts":"Chercher dans mes produits"
+    "searchRecipe":"Chercher une recette",
+    "searchInMyProducts":"Chercher dans mes produits",
+    "aboutMyxmi":"À propos de Myxmi"
 
 }

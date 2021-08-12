@@ -45,15 +45,15 @@ class SearchRecipes extends StatelessWidget {
               _view.doSearch(value: false);
             },
           ),
-          IconButton(
-              icon: const Icon(
-                Icons.search,
-              ),
-              onPressed: () {
-                _view.search();
-                !kIsWeb ?? FocusScope.of(context).requestFocus(FocusNode());
-                FocusScope.of(context).unfocus();
-              }),
+          // IconButton(
+          //     icon: const Icon(
+          //       Icons.search,
+          //     ),
+          //     onPressed: () {
+          //       _view.search();
+          //       !kIsWeb ?? FocusScope.of(context).requestFocus(FocusNode());
+          //       FocusScope.of(context).unfocus();
+          //     }),
         ],
       );
     });

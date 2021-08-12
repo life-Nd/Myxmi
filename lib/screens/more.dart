@@ -9,7 +9,6 @@ import 'about.dart';
 import 'account.dart';
 import 'home.dart';
 import 'settings.dart';
-import 'support.dart';
 
 class More extends HookWidget {
   @override
@@ -49,17 +48,17 @@ class More extends HookWidget {
             );
           },
         ),
-        const Divider(),
-        ListTile(
-          leading: const Icon(Icons.support),
-          title: Text('support'.tr()),
-          trailing: const Icon(Icons.arrow_forward_ios),
-          onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (_) => SupportScreen(),
-            ));
-          },
-        ),
+        // const Divider(),
+        // ListTile(
+        //   leading: const Icon(Icons.support),
+        //   title: Text('support'.tr()),
+        //   trailing: const Icon(Icons.arrow_forward_ios),
+        //   onTap: () {
+        //     Navigator.of(context).push(MaterialPageRoute(
+        //       builder: (_) => SupportScreen(),
+        //     ));
+        //   },
+        // ),
         const Divider(),
         ListTile(
           leading: const Icon(Icons.rate_review),
