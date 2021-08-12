@@ -42,7 +42,6 @@ class SaveButton extends HookWidget {
                     .add(_recipe.recipeModel.toMap());
 
                 _key = _db.id;
-                debugPrint('----KeyID: $_key');
               }).whenComplete(() async {
                 debugPrint(
                     'Instructions: ${_recipe.instructions.ingredients} \n ${_recipe.instructions.steps} ');

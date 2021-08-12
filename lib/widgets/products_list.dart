@@ -23,10 +23,7 @@ class ProductsList extends StatelessWidget {
   Widget build(BuildContext context) {
     List<ProductModel> _products(
         {DocumentSnapshot<Map<String, dynamic>> snapshot}) {
-      debugPrint('snapshot: ${snapshot.data()}');
       return snapshot.data().keys.map((key) {
-        debugPrint('key: $key');
-        debugPrint('snapshot.data(): ${snapshot.data()}');
         return ProductModel.fromSnapshot(
           keyIndex: key,
           snapshot: snapshot.data()[key] as Map<String, dynamic>,
@@ -54,7 +51,6 @@ class ProductsList extends StatelessWidget {
             );
           }
           if (snapshot.data != null) {
-            debugPrint('snapshot.data: ${snapshot.data.data()}');
             return ProductsView(
               type: type,
               products: _products(
@@ -95,7 +91,6 @@ class _ProductsViewState extends State<ProductsView> {
     });
     final _filtered = Map.fromEntries(_filter as Iterable<MapEntry>);
     _filtered.forEach((key, value) {
-      debugPrint('value: ${value.name}');
       _filteredProducts.add(value as ProductModel);
     });
     return _filteredProducts;
@@ -154,9 +149,6 @@ class _ProductsList extends StatelessWidget {
         ? ListView.builder(
             itemCount: products.length,
             itemBuilder: (_, index) {
-              final ProductModel _product = products[index];
-              debugPrint('product: ${products[index].name}');
-              debugPrint('key:${_product.expiration}');
               return Consumer(
                 builder: (_, watch, __) {
                   final _recipe = watch(recipeProvider);

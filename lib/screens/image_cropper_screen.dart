@@ -44,8 +44,6 @@ class ImageCropperScreen extends StatelessWidget {
             if (!kIsWeb && _image.state != AppState.empty)
               FloatingActionButton(
                 onPressed: () {
-                  debugPrint('_image.state: ${_image.state}');
-                  debugPrint('_image.imageFile: ${_image.imageFile}');
                   _image.cropImage();
                 },
                 backgroundColor: Colors.deepOrange,
@@ -76,50 +74,7 @@ class ImageCropperScreen extends StatelessWidget {
               ),
           ],
         ),
-        // kIsWeb && _image.state == AppState.picked
-        //     ? FloatingActionButton(
-        //         backgroundColor: Colors.green,
-        //         onPressed: () {
-        //           Navigator.of(context).push(
-        //             MaterialPageRoute(
-        //               builder: (_) => AddRecipeInstructions(),
-        //             ),
-        //           );
-        //         },
-        //         child: const Icon(Icons.save),
-        //       )
-        //     : FloatingActionButton(
-        //         backgroundColor: Colors.deepOrange,
-        //         onPressed: () {
-        //           debugPrint('_image.state: ${_image.state}');
-        //           debugPrint('_image.imageFile: ${_image.imageFile}');
-        //           if (_image.state == AppState.empty) {
-        //             _image.chooseImageSource(
-        //               context: context,
-        //               route: MaterialPageRoute(
-        //                 builder: (_) => const ImageCropperScreen(
-        //                   title: 'TESTING',
-        //                 ),
-        //               ),
-        //             );
-        //           } else if (_image.state == AppState.picked) {
-        //             kIsWeb
-        //                 ? Navigator.of(context).push(
-        //                     MaterialPageRoute(
-        //                       builder: (_) => AddRecipeInstructions(),
-        //                     ),
-        //                   )
-        //                 : _image.cropImage();
-        //           } else if (_image.state == AppState.cropped) {
-        //             Navigator.of(context).push(
-        //               MaterialPageRoute(
-        //                 builder: (_) => AddRecipeInstructions(),
-        //               ),
-        //             );
-        //           }
-        //         },
-        //         child: _image.buildButtonIcon(),
-        //       ),
+     
       );
     });
   }

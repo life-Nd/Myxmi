@@ -27,7 +27,6 @@ class CartScreen extends StatelessWidget {
                         : const Icon(Icons.radio_button_unchecked),
                     onPressed: () async {
                       await _prefs.editItems(item: _prefs.cart[index]);
-                      debugPrint('ITEMS: ${_prefs.checkedItem}');
                     },
                   ),
                   title: Text(_prefs.cart[index]),

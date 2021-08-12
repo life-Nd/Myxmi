@@ -161,7 +161,6 @@ class ImageProvider extends ChangeNotifier {
             ? changeImageWeb(pickedFile)
             : changeImageFile(pickedFile)
         : debugPrint('No image selected');
-    debugPrint("GetImage: $added");
     notifyListeners();
   }
 

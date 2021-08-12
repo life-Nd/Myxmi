@@ -11,7 +11,6 @@ class FavoritesProvider extends ChangeNotifier {
     final _db =
         FirebaseFirestore.instance.collection('Favorites').doc(uid).snapshots();
     _db.listen((DocumentSnapshot event) async {
-      debugPrint('EVENT: ${event.data()}');
       if (event.exists) {
         allRecipes = event.data() as Map<String, dynamic>;
       }

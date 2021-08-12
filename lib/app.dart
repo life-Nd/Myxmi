@@ -41,7 +41,7 @@ class _StreamAuthBuilder extends StatelessWidget {
           debugPrint('----snapUser loading');
           debugPrint('--loading user');
         }
-        debugPrint('snapUser.data: ${snapUser.data}');
+
         if (snapUser.data != null) {
           final _user = context.read(userProvider);
           _user.account = snapUser.data;

@@ -2,10 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/screens/home.dart';
 import 'package:myxmi/services/auth.dart';
-import 'package:apple_sign_in/apple_sign_in.dart' as apple_sign_in;
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:universal_io/io.dart';
 import '../widgets/dialog_no_account_found.dart';
 import '../widgets/dialog_reset_password.dart';
 import '../widgets/dialog_unknown_error.dart';
@@ -170,24 +168,24 @@ class SignIn extends StatelessWidget {
             const SizedBox(
               height: 50,
             ),
-            if (!Platform.isAndroid && Platform.isIOS)
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                width: 200,
-                alignment: Alignment.center,
-                child: apple_sign_in.AppleSignInButton(
-                  style: apple_sign_in.ButtonStyle.black,
-                  cornerRadius: 20,
-                  type: apple_sign_in.ButtonType.continueButton,
-                  onPressed: () {
-                    _authServices.signInWithApple(context);
-                  },
-                ),
-              )
-            else
-              const Text(''),
+            // if (!Platform.isAndroid && Platform.isIOS)
+            //   Container(
+            //     decoration: BoxDecoration(
+            //       borderRadius: BorderRadius.circular(20),
+            //     ),
+            //     width: 200,
+            //     alignment: Alignment.center,
+            //     child: apple_sign_in.AppleSignInButton(
+            //       style: apple_sign_in.ButtonStyle.black,
+            //       cornerRadius: 20,
+            //       type: apple_sign_in.ButtonType.continueButton,
+            //       onPressed: () {
+            //         _authServices.signInWithApple(context);
+            //       },
+            //     ),
+            //   )
+            // else
+            //   const Text(''),
           ],
         ),
       ),

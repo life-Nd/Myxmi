@@ -77,9 +77,11 @@ class _PageViewButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer(builder: (_, watch, child) {
       final _view = watch(viewProvider);
+      final _user = watch(userProvider);
       return RawMaterialButton(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         onPressed: () {
+          _view.changeViewIndex(index: index, uid: _user?.account?.uid);
           _view.doSearch(value: false);
         },
         child: SelectableContainer(

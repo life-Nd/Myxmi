@@ -23,7 +23,6 @@ class Home extends HookWidget {
     debugPrint('building home');
     final _view = useProvider(viewProvider);
 
-    debugPrint('auth: $uid');
     final int _viewIndex = _view.view;
     return Scaffold(
         appBar: PreferredSize(

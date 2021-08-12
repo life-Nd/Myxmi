@@ -62,7 +62,6 @@ class ViewProvider extends ChangeNotifier {
   }
 
   void search() {
-    debugPrint('searchCtrl.text: ${searchText()}');
     if (searchCtrl.text.isNotEmpty) {
       switch (view) {
         case 0:

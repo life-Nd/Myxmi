@@ -44,7 +44,6 @@ class PreferencesProvider extends ChangeNotifier {
       cart.add(name);
     }
     prefs.setStringList('Cart', cart).then((bool success) {
-      debugPrint('cart: $cart');
       return cart;
     });
     notifyListeners();
@@ -57,7 +56,6 @@ class PreferencesProvider extends ChangeNotifier {
         ? checkedItem.remove(item)
         : checkedItem.add(item);
     prefs.setStringList('Items', checkedItem).then((bool success) {
-      debugPrint('Item: $checkedItem');
       return checkedItem;
     });
     notifyListeners();

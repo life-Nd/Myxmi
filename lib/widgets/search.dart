@@ -20,7 +20,6 @@ class SearchRecipes extends StatelessWidget {
             child: TextField(
               controller: _view.searchCtrl,
               onSubmitted: (submitted) {
-                debugPrint('SUBMITTED: $submitted');
                 _view.search();
                 !kIsWeb ?? FocusScope.of(context).requestFocus(FocusNode());
               },

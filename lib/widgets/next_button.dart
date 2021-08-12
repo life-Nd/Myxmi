@@ -16,31 +16,27 @@ class NextButton extends StatelessWidget {
         final bool _detailsProvided = _recipe.recipeModel.title != null &&
             _recipe.recipeModel.category != null &&
             _recipe.recipeModel.subCategory != null;
-        return RawMaterialButton(
-          elevation: 20,
-          fillColor: _detailsProvided ? Colors.blue : Colors.grey,
-          onPressed: _detailsProvided
-              ? () => tapNext()
-              : () {
-                  debugPrint('TITLE: ${_recipe.recipeModel.title}');
-                  debugPrint('DIFFICULTY: ${_recipe.recipeModel.difficulty}');
-                  debugPrint('DURATION: ${_recipe.recipeModel.duration}');
-                  debugPrint('PORTIONS: ${_recipe.recipeModel.portions}');
-                  debugPrint('CATEGORY: ${_recipe.recipeModel.category}');
-                  debugPrint(
-                      'SUBCATEGORY: ${_recipe.recipeModel.subCategory}');
-                },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'next'.tr(),
-                style: const TextStyle(
-                  fontSize: 20,
-                  color: Colors.white,
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: RawMaterialButton(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            elevation: 20,
+            fillColor: _detailsProvided ? Colors.blue : Colors.grey,
+            onPressed: _detailsProvided ? () => tapNext() : () {},
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'next'.tr(),
+                  style: const TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       }),

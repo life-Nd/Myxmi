@@ -29,6 +29,10 @@ class _AutoCompleteState extends State<AutoCompleteRecipes> {
       clearOnSubmit: false,
       controller: widget.controller,
       key: key,
+      textSubmitted: (submitted) {
+        _searchTextField.textField.controller.text = submitted;
+        widget.onSubmit();
+      },
       itemBuilder: (context, item) {
         return Padding(
           padding: const EdgeInsets.all(8.0),
