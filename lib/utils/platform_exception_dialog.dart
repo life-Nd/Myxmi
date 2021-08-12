@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
-import 'package:myxmi/services/platform_dialog.dart';
+import 'package:myxmi/utils/platform_dialog.dart';
 
 class PlatformExceptionAlertDialog extends PlatformAlertDialog {
   PlatformExceptionAlertDialog({String title, PlatformException exception})

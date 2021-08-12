@@ -7,7 +7,6 @@ import 'package:myxmi/screens/home.dart';
 class AppBottomNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    debugPrint('---------------------');
     return Consumer(builder: (_, watch, __) {
       final _view = watch(viewProvider);
       final _user = watch(userProvider);
@@ -51,7 +50,6 @@ class AppBottomNavigation extends StatelessWidget {
         onTap: (index) {
           _view.searchRecipesInDb = false;
           _view.changeViewIndex(index: index, uid: _user?.account?.uid);
-          
         },
       );
     });

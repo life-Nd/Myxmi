@@ -43,6 +43,7 @@ class _RecipesState extends State<RecipesStream> {
       }).toList();
     }
 
+    final double _bottomPadding = MediaQuery.of(context).padding.bottom;
     debugPrint('building recipe');
     return Consumer(
       builder: (_, watch, __) {
@@ -67,10 +68,13 @@ class _RecipesState extends State<RecipesStream> {
             }
             if (snapshot.data != null) {
               _recipe.recipesList = _recipes(querySnapshot: snapshot.data);
-              return MyRecipesView(
-                showAutoCompleteField: widget.autoCompleteField,
-                myRecipes: _recipes(querySnapshot: snapshot.data),
-                height: widget.height,
+              return Padding(
+                padding: EdgeInsets.only(bottom: _bottomPadding),
+                child: RecipesView(
+                  showAutoCompleteField: widget.autoCompleteField,
+                  myRecipes: _recipes(querySnapshot: snapshot.data),
+                  height: widget.height,
+                ),
               );
             } else {
               return Column(
@@ -97,22 +101,22 @@ class _RecipesState extends State<RecipesStream> {
   }
 }
 
-class MyRecipesView extends StatefulWidget {
+class RecipesView extends StatefulWidget {
   final List<RecipeModel> myRecipes;
   final bool showAutoCompleteField;
   final double height;
 
-  const MyRecipesView(
+  const RecipesView(
       {Key key,
       @required this.myRecipes,
       @required this.height,
       @required this.showAutoCompleteField})
       : super(key: key);
   @override
-  State<StatefulWidget> createState() => _MyRecipesViewState();
+  State<StatefulWidget> createState() => _RecipesViewState();
 }
 
-class _MyRecipesViewState extends State<MyRecipesView> {
+class _RecipesViewState extends State<RecipesView> {
   final List<RecipeModel> _filteredRecipes = [];
   List<RecipeModel> _filterRecipes() {
     final Iterable _filter = widget.myRecipes.asMap().entries.where((entry) {
@@ -135,11 +139,9 @@ class _MyRecipesViewState extends State<MyRecipesView> {
 
   @override
   Widget build(BuildContext context) {
-    final Size _size = MediaQuery.of(context).size;
     return StatefulBuilder(
       builder: (context, StateSetter stateSetter) {
-        return SingleChildScrollView(
-          child: Column(
+        return Column(
             children: [
               if (widget.showAutoCompleteField)
                 Padding(
@@ -170,14 +172,15 @@ class _MyRecipesViewState extends State<MyRecipesView> {
                     ],
                   ),
                 ),
-              RecipesGrid(
-                recipes: _searchMyRecipesCtrl.text.isEmpty
-                    ? widget.myRecipes
-                    : _filterRecipes(),
-                height: _size.height / 1.2,
+              Expanded(
+              child: RecipesGrid(
+                  recipes: _searchMyRecipesCtrl.text.isEmpty
+                      ? widget.myRecipes
+                      : _filterRecipes(),
+                    height: widget.height),
               ),
             ],
-          ),
+
         );
       },
     );

@@ -16,10 +16,12 @@ final viewProvider = ChangeNotifierProvider<ViewProvider>(
 
 class Home extends HookWidget {
   final String uid;
-
   const Home({Key key, @required this.uid}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    
+
     debugPrint('building home');
     final _view = useProvider(viewProvider);
 

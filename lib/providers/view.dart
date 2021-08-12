@@ -92,15 +92,17 @@ class ViewProvider extends ChangeNotifier {
             ? RecipesStream(
                 autoCompleteField: false,
                 path: searchRecipesWith(searchKey: 'title'),
-                height: 90.h,
+                height: 100.h,
               )
             : Menu();
       case 1:
         return isSignedIn
-            ? RecipesStream(
-                autoCompleteField: true,
-                path: streamRecipesWith(key: 'uid', value: uid),
-                height: 90.h,
+            ? SafeArea(
+                child: RecipesStream(
+                  autoCompleteField: true,
+                  path: streamRecipesWith(key: 'uid', value: uid),
+                  height: 100.h,
+                ),
               )
             : SignIn();
       case 2:
@@ -111,7 +113,7 @@ class ViewProvider extends ChangeNotifier {
                     .collection('Recipes')
                     .where('likedBy.$uid', isEqualTo: true)
                     .snapshots(),
-                height: 90.h,
+                height: 100.h,
               )
             : SignIn();
       case 3:

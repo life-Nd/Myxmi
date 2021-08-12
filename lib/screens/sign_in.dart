@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/screens/home.dart';
-import 'package:myxmi/services/auth.dart';
+import 'package:myxmi/utils/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../widgets/dialog_no_account_found.dart';

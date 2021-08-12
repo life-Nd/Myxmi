@@ -27,6 +27,8 @@
 		<key>UIMainStoryboardFile</key>
 		<string>Main</string>
 		<key>NSAppTransportSecurity</key>
+		<key>GADApplicationIdentifier</key>
+		<string>ca-app-pub-3940256099942544~1458002511</string>
 		<dict>
 			<key>NSAllowsLocalNetworking</key>
 			<true/>
