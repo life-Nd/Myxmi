@@ -18,7 +18,6 @@ class RecipeDetails extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-
     final Size _size = MediaQuery.of(context).size;
     return Consumer(builder: (context, watch, child) {
       final _user = watch(userProvider);

@@ -47,17 +47,16 @@ class _FilteredState extends State<Filtered> {
       appBar: AppBar(
         title: Text('${widget.legend.tr()}s'),
       ),
-      body: Column(
+      body: Stack(
+        fit: StackFit.passthrough,
         children: [
-          Expanded(
-            child: RecipesStream(
-              path: FirebaseFirestore.instance
-                  .collection('Recipes')
-                  .where('sub_category', isEqualTo: widget.legend)
-                  .snapshots(),
-              height: 100.h - _bannerAd.size.height,
-              autoCompleteField: true,
-            ),
+          RecipesStream(
+            path: FirebaseFirestore.instance
+                .collection('Recipes')
+                .where('sub_category', isEqualTo: widget.legend)
+                .snapshots(),
+                height: 70.h - _bannerAd.size.height,
+            autoCompleteField: true,
           ),
           if (_isBannerAdReady)
             Align(

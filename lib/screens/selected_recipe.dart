@@ -27,73 +27,82 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
     return Consumer(
       builder: (_, watch, __) {
         return Scaffold(
-          appBar: AppBar(
-            title: Consumer(builder: (context, watch, child) {
-              return Text(widget.recipeModel.title);
-            }),
-          ),
-          body: Container(
-            height: _size.height,
-            width: _size.width,
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-              gradient: LinearGradient(
-                begin: Alignment.center,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Theme.of(context).cardColor,
-                  Theme.of(context).scaffoldBackgroundColor,
-                ],
+          // appBar: AppBar(
+          //   title: Consumer(builder: (context, watch, child) {
+          //     return Text(widget.recipeModel.title);
+          //   }),
+          // ),
+          body: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                floating: true,
+                leading: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                title: Consumer(
+                  builder: (context, watch, child) {
+                    return Text(widget.recipeModel.title);
+                  },
+                ),
+                flexibleSpace: RecipeImage(
+                  _size.height / 1.4,
+                ),
+                expandedHeight: _size.height / 1.6,
               ),
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  RecipeImage(_size.height / 1.2),
-                  StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-                      stream: FirebaseFirestore.instance
-                          .collection('Instructions')
-                          .doc(widget.recipeModel.recipeId)
-                          .snapshots(),
-                      builder: (context,
-                          AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>>
-                              snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          debugPrint('Loading');
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text('loading'.tr()),
-                              const CircularProgressIndicator(),
-                            ],
-                          );
-                        }
-                        if (snapshot.hasData && snapshot.data.data() != null) {
-                          final DocumentSnapshot<Map<String, dynamic>>
-                              _snapshot = snapshot.data;
-                          _data = _snapshot.data();
-                          _instructions.fromSnapshot(snapshot: _data);
-                        }
+              SliverList(
+                delegate: SliverChildListDelegate.fixed(
+                  [
+                    StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                        stream: FirebaseFirestore.instance
+                            .collection('Instructions')
+                            .doc(widget.recipeModel.recipeId)
+                            .snapshots(),
+                        builder: (context,
+                            AsyncSnapshot<
+                                    DocumentSnapshot<Map<String, dynamic>>>
+                                snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            debugPrint('Loading');
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('loading'.tr()),
+                                const CircularProgressIndicator(),
+                              ],
+                            );
+                          }
+                          if (snapshot.hasData &&
+                              snapshot.data.data() != null) {
+                            final DocumentSnapshot<Map<String, dynamic>>
+                                _snapshot = snapshot.data;
+                            _data = _snapshot.data();
+                            _instructions.fromSnapshot(snapshot: _data);
+                          }
 
-                        return Column(
-                          children: [
-                            _ViewsSelector(
-                              instructions: _instructions,
-                            ),
-                            SizedBox(
-                              height: _size.height / 2,
-                              child: RecipeDetails(
+                          return Column(
+                            children: [
+                              _ViewsSelector(
                                 instructions: _instructions,
                               ),
-                            ),
-                          ],
-                        );
-                      }),
-                ],
+                              SizedBox(
+                                height: _size.height / 2,
+                                child: RecipeDetails(
+                                  instructions: _instructions,
+                                ),
+                              ),
+                            ],
+                          );
+                        }),
+                  ],
+                ),
               ),
-            ),
+            ],
           ),
         );
       },

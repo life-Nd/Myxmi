@@ -142,45 +142,44 @@ class _RecipesViewState extends State<RecipesView> {
     return StatefulBuilder(
       builder: (context, StateSetter stateSetter) {
         return Column(
-            children: [
-              if (widget.showAutoCompleteField)
-                Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: AutoCompleteRecipes(
-                          suggestions: widget.myRecipes,
-                          controller: _searchMyRecipesCtrl,
-                          onSubmit: () {
-                            _filteredRecipes.clear();
-                            stateSetter(() {});
-                          },
-                        ),
-                      ),
-                      IconButton(
-                        icon: const Icon(
-                          Icons.clear,
-                          color: Colors.red,
-                        ),
-                        onPressed: () {
+          children: [
+            if (widget.showAutoCompleteField)
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: AutoCompleteRecipes(
+                        suggestions: widget.myRecipes,
+                        controller: _searchMyRecipesCtrl,
+                        onSubmit: () {
                           _filteredRecipes.clear();
-                          _searchMyRecipesCtrl.clear();
                           stateSetter(() {});
                         },
                       ),
-                    ],
-                  ),
+                    ),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.clear,
+                        color: Colors.red,
+                      ),
+                      onPressed: () {
+                        _filteredRecipes.clear();
+                        _searchMyRecipesCtrl.clear();
+                        stateSetter(() {});
+                      },
+                    ),
+                  ],
                 ),
-              Expanded(
+              ),
+            Expanded(
               child: RecipesGrid(
                   recipes: _searchMyRecipesCtrl.text.isEmpty
                       ? widget.myRecipes
                       : _filterRecipes(),
-                    height: widget.height),
-              ),
-            ],
-
+                  height: widget.height),
+            ),
+          ],
         );
       },
     );
