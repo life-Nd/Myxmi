@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:myxmi/utils/ad_apis.dart';
+import 'package:myxmi/apis/ad_apis.dart';
 
 // "ca-app-pub-2388296417113372~7420390794"/>
 
@@ -8,7 +8,7 @@ class AdHelper {
   final AdApis _adApis = AdApis();
   String bannerAdUnitId() {
     if (Platform.isAndroid) {
-      return "ca-app-pub-3940256099942544/6300978111";
+      return _adApis.androidAppId;
       // _adsApis.androidRecipesPageUnitId;
     } else if (Platform.isIOS) {
       return _adApis.iosRecipesPageUnitId;
