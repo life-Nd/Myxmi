@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/screens/add_recipe_infos.dart';
@@ -6,10 +6,14 @@ import 'add_favorite.dart';
 import 'add_reviews.dart';
 import 'rating_stars.dart';
 
-class RecipeImage extends StatelessWidget {
+class RecipeImage extends StatefulWidget {
   final double height;
   const RecipeImage(this.height);
+  @override
+  State<StatefulWidget> createState() => _RecipeImageState();
+}
 
+class _RecipeImageState extends State<RecipeImage> {
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
@@ -18,7 +22,8 @@ class RecipeImage extends StatelessWidget {
       return SafeArea(
         child: SizedBox(
           width: _size.width,
-          height: kIsWeb ? height : height,
+          height: widget.height,
+          // height: kIsWeb ? widget.height : widget.height,
           child: Stack(
             children: [
               ClipRRect(

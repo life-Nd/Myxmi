@@ -20,7 +20,7 @@ class SubCategorySelector extends StatelessWidget {
           Text('subCategory'.tr()),
           SizedBox(
             width: 100.w,
-            height: 10.h,
+            height: 7.h,
             child: Center(
               child: subCategory(
                 category: _recipe.recipeModel.category,

@@ -15,7 +15,7 @@ class CategorySelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 100.w,
-      height: 10.h,
+      height: 7.h,
       child: const Center(
         child: SelectableRow(
           textList: [

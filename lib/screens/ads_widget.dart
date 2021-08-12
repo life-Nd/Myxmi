@@ -1,17 +1,17 @@
 import 'dart:io';
-
-import 'package:myxmi/apis/ad_apis.dart';
+// import 'package:myxmi/apis/ad_apis.dart';
 
 // "ca-app-pub-2388296417113372~7420390794"/>
 
 class AdHelper {
-  final AdApis _adApis = AdApis();
+  // final AdApis _adApis = AdApis();
   String bannerAdUnitId() {
     if (Platform.isAndroid) {
-      return _adApis.androidAppId;
+      return 'ca-app-pub-3940256099942544/6300978111';
       // _adsApis.androidRecipesPageUnitId;
     } else if (Platform.isIOS) {
-      return _adApis.iosRecipesPageUnitId;
+      return 'ca-app-pub-3940256099942544/2934735716';
+      // _adApis.iosRecipesPageUnitId;
     } else {
       throw UnsupportedError('Unsupported platform');
     }

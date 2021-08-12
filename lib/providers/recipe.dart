@@ -33,7 +33,6 @@ class RecipeProvider extends ChangeNotifier {
 
   void like({bool value, String uid}) {
     recipeModel.likedBy[uid] = value;
-
   }
 
   void changeTitle() {
@@ -154,5 +153,15 @@ class RecipeProvider extends ChangeNotifier {
     quantity.clear();
     composition.clear();
     hidden.clear();
+  }
+}
+
+class SelectedRecipeViewNotifier extends ChangeNotifier {
+  int pageIndex = 0;
+  PageController pageController = PageController();
+  void changePageController(int index) {
+    pageController.jumpToPage(index);
+    pageIndex = index;
+    notifyListeners();
   }
 }

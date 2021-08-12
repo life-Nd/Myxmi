@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 	<dict>
+		<key>GADApplicationIdentifier</key>
+		<string>ca-app-pub-2388296417113372~8593871661</string>
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleExecutable</key>
@@ -27,8 +29,6 @@
 		<key>UIMainStoryboardFile</key>
 		<string>Main</string>
 		<key>NSAppTransportSecurity</key>
-		<key>GADApplicationIdentifier</key>
-		<string>ca-app-pub-2388296417113372~8593871661</string>
 		<dict>
 			<key>NSAllowsLocalNetworking</key>
 			<true/>

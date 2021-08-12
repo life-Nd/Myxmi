@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/screens/add_recipe_infos.dart';
+import 'package:myxmi/screens/selected_recipe.dart';
 
 class ViewSelectorText extends StatelessWidget {
   final String text;
@@ -16,10 +16,10 @@ class ViewSelectorText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (_, watch, child) {
-      final _recipe = watch(recipeProvider);
+      final _selectedView = watch(selectedRecipeView);
       return InkWell(
         onTap: () {
-          _recipe.changePageController(viewIndex);
+          _selectedView.changePageController(viewIndex);
         },
         child: Container(
           padding:
@@ -28,9 +28,10 @@ class ViewSelectorText extends StatelessWidget {
             border: Border(
               bottom: BorderSide(
                   width: 4,
-                  color: (_recipe.pageController.hasClients &&
-                              _recipe.pageController.page == viewIndex) ||
-                          (!_recipe.pageController.hasClients && viewIndex == 0)
+                  color: (_selectedView.pageController.hasClients &&
+                              _selectedView.pageController.page == viewIndex) ||
+                          (!_selectedView.pageController.hasClients &&
+                              viewIndex == 0)
                       ? Theme.of(context).appBarTheme.titleTextStyle.color
                       : Colors.transparent),
             ),

@@ -5,6 +5,7 @@ import 'package:myxmi/models/instructions.dart';
 import 'package:myxmi/screens/add_recipe_infos.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:myxmi/screens/home.dart';
+import 'package:myxmi/screens/selected_recipe.dart';
 import 'package:myxmi/widgets/add_reviews.dart';
 import '../main.dart';
 import 'ingredients_listview.dart';
@@ -15,18 +16,19 @@ import 'steps_listview.dart';
 class RecipeDetails extends StatelessWidget {
   final InstructionsModel instructions;
   const RecipeDetails({Key key, this.instructions}) : super(key: key);
-  
+
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
     return Consumer(builder: (context, watch, child) {
       final _user = watch(userProvider);
+      final _selectedView = watch(selectedRecipeView);
       final _recipe = watch(recipeProvider);
       final _view = watch(viewProvider);
       return PageView(
-        controller: _recipe.pageController,
+        controller: _selectedView.pageController,
         onPageChanged: (index) {
-          _recipe.changePageController(index);
+          _selectedView.changePageController(index);
         },
         children: [
           Column(

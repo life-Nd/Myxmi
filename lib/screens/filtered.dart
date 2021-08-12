@@ -6,6 +6,8 @@ import 'package:sizer/sizer.dart';
 import 'ads_widget.dart';
 import 'recipes_stream.dart';
 
+String _equalTo = '';
+
 class Filtered extends StatefulWidget {
   final String legend;
   const Filtered(this.legend);
@@ -17,8 +19,10 @@ class _FilteredState extends State<Filtered> {
   BannerAd _bannerAd;
   bool _isBannerAdReady = false;
   final AdHelper _adHelper = AdHelper();
+
   @override
   void initState() {
+    _equalTo = widget.legend;
     _bannerAd = BannerAd(
       adUnitId: _adHelper.bannerAdUnitId(),
       request: const AdRequest(),
@@ -47,17 +51,9 @@ class _FilteredState extends State<Filtered> {
       appBar: AppBar(
         title: Text('${widget.legend.tr()}s'),
       ),
-      body: Stack(
-        fit: StackFit.passthrough,
+      body: Column(
         children: [
-          RecipesStream(
-            path: FirebaseFirestore.instance
-                .collection('Recipes')
-                .where('sub_category', isEqualTo: widget.legend)
-                .snapshots(),
-                height: 70.h - _bannerAd.size.height,
-            autoCompleteField: true,
-          ),
+          const _ExpandedRecipesStream(),
           if (_isBannerAdReady)
             Align(
               alignment: Alignment.bottomCenter,
@@ -68,6 +64,23 @@ class _FilteredState extends State<Filtered> {
               ),
             )
         ],
+      ),
+    );
+  }
+}
+
+class _ExpandedRecipesStream extends StatelessWidget {
+  const _ExpandedRecipesStream({Key key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: RecipesStream(
+        path: FirebaseFirestore.instance
+            .collection('Recipes')
+            .where('sub_category', isEqualTo: _equalTo)
+            .snapshots(),
+        height: 100.h,
+        autoCompleteField: true,
       ),
     );
   }
