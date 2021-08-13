@@ -116,6 +116,7 @@ Future<void> main() async {
                             : ThemeMode.dark;
                   }
                   return MaterialApp(
+                    title: 'Myxmi',
                     localizationsDelegates: context.localizationDelegates,
                     supportedLocales: context.supportedLocales,
                     locale: context.locale,
