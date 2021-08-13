@@ -35,6 +35,7 @@
 lib/generated_plugin_registrant.dart
 lib/apis/
 
+
 # Symbolication related
 app.*.symbols
 

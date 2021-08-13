@@ -20,15 +20,15 @@ class Home extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    
-
     debugPrint('building home');
     final _view = useProvider(viewProvider);
 
     final int _viewIndex = _view.view;
+    final Size _size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: PreferredSize(
-          preferredSize: kIsWeb ? Size(100.h, 200) : Size(100.h, 100),
+          preferredSize:
+              kIsWeb && _size.width > 500 ? Size(100.h, 200) : Size(100.h, 100),
           child: SafeArea(
             child: Container(
               padding: const EdgeInsets.only(top: 7, left: 4),
@@ -36,7 +36,8 @@ class Home extends HookWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (kIsWeb) SizedBox(width: 100.h, child: WebAppBar()),
+                  if (kIsWeb && _size.width > 500)
+                    SizedBox(width: 100.h, child: WebAppBar()),
                   if (_view.view == 0) const SearchRecipes(),
                   if (_view.view == 4)
                     kIsWeb ? Container() : const ListTile(title: Text('Myxmi')),
@@ -85,6 +86,7 @@ class Home extends HookWidget {
         ),
         extendBody: true,
         // ignore: avoid_redundant_argument_values
-        bottomNavigationBar: kIsWeb ? null : AppBottomNavigation());
+        bottomNavigationBar:
+            kIsWeb && _size.width > 500 ? null : AppBottomNavigation());
   }
 }

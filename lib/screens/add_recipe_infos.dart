@@ -39,8 +39,8 @@ class AddRecipeInfos extends StatelessWidget {
             title: Text('addRecipe'.tr()),
             flexibleSpace: Stack(
               children: [
-                SizedBox(
-                  width: 100.w,
+                Container(
+                  alignment: Alignment.topCenter,
                   child: ClipRRect(
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(20),

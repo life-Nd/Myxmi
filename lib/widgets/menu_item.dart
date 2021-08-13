@@ -4,7 +4,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/screens/filtered.dart';
 
-
 class MenuItem extends StatefulWidget {
   final String legend;
   const MenuItem({Key key, this.legend}) : super(key: key);
@@ -17,7 +16,6 @@ class _MenuItemState extends State<MenuItem> {
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
-
     return Consumer(builder: (_, watch, __) {
       return GestureDetector(
         onTap: () {
@@ -38,7 +36,7 @@ class _MenuItemState extends State<MenuItem> {
             children: [
               SizedBox(
                 height: _kIsWeb ? _size.height / 3 : _size.height / 3.7,
-                width: _kIsWeb || _size.width > 700
+                width: _kIsWeb && _size.width > 700
                     ? _size.width / 3.2
                     : _size.width / 1.8,
                 child: ClipRRect(

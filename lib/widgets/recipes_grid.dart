@@ -4,6 +4,7 @@ import 'package:myxmi/models/recipes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:myxmi/screens/add_recipe_infos.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:myxmi/screens/selected_recipe.dart';
 import '../main.dart';
 import 'add_favorite.dart';
 import 'rating_stars.dart';
@@ -25,9 +26,9 @@ class RecipesGrid extends StatelessWidget {
       width: _size.width,
       child: recipes.isNotEmpty
           ? GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 childAspectRatio: 0.6,
-                crossAxisCount: kIsWeb ? 4 : 2,
+                crossAxisCount: kIsWeb && _size.width > 500 ? 4 : 2,
               ),
               padding: const EdgeInsets.all(1),
               itemCount: recipes.length,
@@ -43,58 +44,104 @@ class RecipesGrid extends StatelessWidget {
                     _recipe.liked = _recipe.likedBy.containsKey(_uid) &&
                         _recipe.likedBy[_uid] == true;
                   }
-                  return Container(
-                    margin: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      gradient: LinearGradient(
-                        colors: [
-                          Theme.of(context).cardColor,
-                          Theme.of(context).scaffoldBackgroundColor,
-                        ],
-                      ),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Expanded(
-                          child: SizedBox(
-                            width: _size.width / 2,
-                            child: Stack(
+                  return InkWell(
+                    onTap: () {
+                      _recipeProvider.image = _recipe.imageUrl != null
+                          ? Image.network(
+                              _recipe.imageUrl,
+                              width: _size.width,
+                              height: _size.height,
+                              fit: BoxFit.fitWidth,
+                              cacheWidth: 1000,
+                              cacheHeight: 1000,
+                            )
+                          : Stack(
+                              alignment: Alignment.center,
                               children: [
-                                Hero(
-                                  tag: _recipe.recipeId,
-                                  child: RecipeTileImage(
-                                    recipe: _recipe,
-                                  ),
+                                Opacity(
+                                  opacity: 0.3,
+                                  child: _recipe.subCategory != null
+                                      ? Image.asset(
+                                          'assets/${_recipe.subCategory}.jpg',
+                                          fit: BoxFit.fitWidth,
+                                          height: _size.height,
+                                          width: _size.width,
+                                          cacheWidth: 1000,
+                                          cacheHeight: 1000,
+                                          colorBlendMode: BlendMode.color,
+                                        )
+                                      : const Icon(
+                                          Icons.no_photography,
+                                          color: Colors.red,
+                                        ),
                                 ),
-                                Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    // TODO when tapping to add to favorites it shows a white screen
-                                    AddFavoriteButton(recipe: _recipe),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: RatingStars(
-                                        stars: _recipe.stars ?? '0.0',
-                                      ),
-                                    ),
-                                  ],
+                                const Icon(
+                                  Icons.no_photography,
+                                  color: Colors.red,
+                                  size: 40,
                                 ),
                               ],
+                            );
+
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => SelectedRecipe(recipeModel: _recipe),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        gradient: LinearGradient(
+                          colors: [
+                            Theme.of(context).cardColor,
+                            Theme.of(context).scaffoldBackgroundColor,
+                          ],
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Expanded(
+                            child: SizedBox(
+                              width: _size.width / 2,
+                              child: Stack(
+                                children: [
+                                  Hero(
+                                    tag: _recipe.recipeId,
+                                    child: RecipeTileImage(
+                                      recipe: _recipe,
+                                    ),
+                                  ),
+                                  Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      // TODO when tapping to add to favorites it shows a white screen
+                                      AddFavoriteButton(recipe: _recipe),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: RatingStars(
+                                          stars: _recipe.stars ?? '0.0',
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            left: 7.0,
-                            right: 10.0,
-                          ),
-                          child: RecipeTile(recipe: _recipe),
-                        )
-                      ],
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              left: 7.0,
+                              right: 10.0,
+                            ),
+                            child: RecipeTile(recipe: _recipe),
+                          )
+                        ],
+                      ),
                     ),
                   );
                 });

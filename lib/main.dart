@@ -11,6 +11,7 @@ import 'package:myxmi/app.dart';
 import 'providers/prefs.dart';
 import 'providers/user.dart';
 
+// <div>Icon made from <a href="http://www.onlinewebfonts.com/icon">Icon Fonts</a> is licensed by CC BY 3.0</div>
 final userProvider =
     ChangeNotifierProvider<UserProvider>((ref) => UserProvider());
 
@@ -20,32 +21,11 @@ final firebaseAuth = Provider<FirebaseAuth>((ref) {
   return FirebaseAuth.instance;
 });
 
-// TODO use a field 'likedBy' under each recipe to know the likedby count
-//   and get all recipes liked by a user.
-//  'likedBy':{
-//  '$uid':true
-// }
-
-// TODO search through recipes
-
-// TODO search through MY recipes
-//      Differenciate my recipes and others recipes
-
-// TODO filter when searching to avoid unnecessary reads
-
-// TODO search through productslist
-
-// TODO search through support
-
-// TODO comment on a support ticket
-
-// TODO Filter support ticket All/Mine
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await EasyLocalization.ensureInitialized();
-  MobileAds.instance.initialize();
+  !kIsWeb ?? MobileAds.instance.initialize();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);

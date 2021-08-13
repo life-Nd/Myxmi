@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -23,25 +24,27 @@ class _FilteredState extends State<Filtered> {
   @override
   void initState() {
     _equalTo = widget.legend;
-    _bannerAd = BannerAd(
-      adUnitId: _adHelper.bannerAdUnitId(),
-      request: const AdRequest(),
-      size: AdSize.banner,
-      listener: BannerAdListener(
-        onAdLoaded: (_) {
-          setState(() {
-            _isBannerAdReady = true;
-          });
-        },
-        onAdFailedToLoad: (ad, err) {
-          debugPrint('Failed to load a banner ad: ${err.message}');
-          _isBannerAdReady = false;
-          ad.dispose();
-        },
-      ),
-    );
+    if (!kIsWeb) {
+      _bannerAd = BannerAd(
+        adUnitId: _adHelper.bannerAdUnitId(),
+        request: const AdRequest(),
+        size: AdSize.banner,
+        listener: BannerAdListener(
+          onAdLoaded: (_) {
+            setState(() {
+              _isBannerAdReady = true;
+            });
+          },
+          onAdFailedToLoad: (ad, err) {
+            debugPrint('Failed to load a banner ad: ${err.message}');
+            _isBannerAdReady = false;
+            ad.dispose();
+          },
+        ),
+      );
+      _bannerAd.load();
+    }
 
-    _bannerAd.load();
     super.initState();
   }
 
@@ -54,7 +57,7 @@ class _FilteredState extends State<Filtered> {
       body: Column(
         children: [
           const _ExpandedRecipesStream(),
-          if (_isBannerAdReady)
+          if (!kIsWeb && _isBannerAdReady)
             Align(
               alignment: Alignment.bottomCenter,
               child: SizedBox(

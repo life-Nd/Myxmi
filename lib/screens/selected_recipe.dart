@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -31,25 +32,28 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
   final AdHelper _adHelper = AdHelper();
   @override
   void initState() {
-    _bannerAd = BannerAd(
-      adUnitId: _adHelper.bannerAdUnitId(),
-      request: const AdRequest(),
-      size: AdSize.banner,
-      listener: BannerAdListener(
-        onAdLoaded: (_) {
-          setState(() {
-            _isBannerAdReady = true;
-          });
-        },
-        onAdFailedToLoad: (ad, err) {
-          debugPrint('Failed to load a banner ad: ${err.message}');
-          _isBannerAdReady = false;
-          ad.dispose();
-        },
-      ),
-    );
+    if (!kIsWeb) {
+      _bannerAd = BannerAd(
+        adUnitId: _adHelper.bannerAdUnitId(),
+        request: const AdRequest(),
+        size: AdSize.banner,
+        listener: BannerAdListener(
+          onAdLoaded: (_) {
+            setState(() {
+              _isBannerAdReady = true;
+            });
+          },
+          onAdFailedToLoad: (ad, err) {
+            debugPrint('Failed to load a banner ad: ${err.message}');
+            _isBannerAdReady = false;
+            ad.dispose();
+          },
+        ),
+      );
 
-    _bannerAd.load();
+      _bannerAd.load();
+    }
+
     super.initState();
   }
 
@@ -61,11 +65,6 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
     return Consumer(
       builder: (_, watch, __) {
         return Scaffold(
-          // appBar: AppBar(
-          //   title: Consumer(builder: (context, watch, child) {
-          //     return Text(widget.recipeModel.title);
-          //   }),
-          // ),
           body: CustomScrollView(
             slivers: [
               SliverAppBar(
@@ -127,7 +126,7 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
                                 instructions: _instructions,
                               ),
                             ),
-                            if (_isBannerAdReady)
+                            if (!kIsWeb && _isBannerAdReady)
                               Align(
                                 alignment: Alignment.bottomCenter,
                                 child: SizedBox(

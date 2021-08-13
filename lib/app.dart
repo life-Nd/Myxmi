@@ -17,10 +17,10 @@ class _AppState extends State<App> {
     debugPrint('building root');
     if (foundation.kDebugMode && foundation.kIsWeb) {
       return Consumer(builder: (_, watch, __) {
-        final _user = watch(userProvider);
+        final _user = FirebaseAuth.instance.currentUser;
         return HotRestartByPassBuilder(
           destinationFragment: Home(
-            uid: _user?.account?.uid,
+            uid: _user?.uid,
           ),
           loginFragment: _StreamAuthBuilder(),
         );
