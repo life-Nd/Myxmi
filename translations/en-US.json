@@ -140,6 +140,7 @@
    "comments":"Comments",
    "search":"Search",
    "typeComment":"Type a comment",
+   "recipesEmpty":"No recipes found in your account",
    "productsEmpty":"No products found in your pantry",
    "difficulty":"Difficulty",
    "easy":"Easy",
@@ -239,6 +240,7 @@
     "noTicketsFound":"No support tickets found",
     "searchRecipe":"Search a recipe",
     "searchInMyProducts":"Search in my products",
-    "aboutMyxmi":"About Myxmi"
+    "aboutMyxmi":"About Myxmi",
+    "by":"By"
    
 }

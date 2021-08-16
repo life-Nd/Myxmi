@@ -3,8 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:sizer/sizer.dart';
-import 'ads_widget.dart';
+import '../widgets/ads_widget.dart';
 import 'recipes_stream.dart';
 
 String _equalTo = '';
@@ -82,7 +81,7 @@ class _ExpandedRecipesStream extends StatelessWidget {
             .collection('Recipes')
             .where('sub_category', isEqualTo: _equalTo)
             .snapshots(),
-        height: 100.h,
+        // height: 100.h,
         autoCompleteField: true,
       ),
     );

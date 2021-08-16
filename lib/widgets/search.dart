@@ -13,7 +13,7 @@ class SearchRecipes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (_, watch, __) {
-      final _view = watch(viewProvider);
+      final _view = watch(homeViewProvider);
       return Row(
         children: [
           Expanded(

@@ -192,6 +192,7 @@
   "pieces":"Pieces",
   "comments":"Commentaires",
   "typeComment":"Entrer un commentaire",
+  "recipesEmpty":"Pas de recettes trouvé dans votre compte",
   "productsEmpty":"Pas de produits trouvé dans votre armoire",
   "difficulty":"Difficulté",
   "easy":"Facile",
@@ -291,6 +292,7 @@
     "ticketsVisible":"Tickets visible",
     "searchRecipe":"Chercher une recette",
     "searchInMyProducts":"Chercher dans mes produits",
-    "aboutMyxmi":"À propos de Myxmi"
+    "aboutMyxmi":"À propos de Myxmi",
+    "by":"Par"
 
 }

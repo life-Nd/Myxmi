@@ -11,7 +11,7 @@ import 'package:myxmi/widgets/recipe_image.dart';
 import 'package:myxmi/widgets/view_selector_text.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-import 'ads_widget.dart';
+import '../widgets/ads_widget.dart';
 
 final InstructionsModel _instructions = InstructionsModel();
 final selectedRecipeView = ChangeNotifierProvider(
@@ -20,7 +20,6 @@ final selectedRecipeView = ChangeNotifierProvider(
 
 class SelectedRecipe extends StatefulWidget {
   final RecipeModel recipeModel;
-
   const SelectedRecipe({Key key, @required this.recipeModel}) : super(key: key);
   @override
   State<StatefulWidget> createState() => _SelectionRecipeState();
@@ -32,27 +31,27 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
   final AdHelper _adHelper = AdHelper();
   @override
   void initState() {
-    if (!kIsWeb) {
-      _bannerAd = BannerAd(
-        adUnitId: _adHelper.bannerAdUnitId(),
-        request: const AdRequest(),
-        size: AdSize.banner,
-        listener: BannerAdListener(
-          onAdLoaded: (_) {
-            setState(() {
-              _isBannerAdReady = true;
-            });
-          },
-          onAdFailedToLoad: (ad, err) {
-            debugPrint('Failed to load a banner ad: ${err.message}');
-            _isBannerAdReady = false;
-            ad.dispose();
-          },
-        ),
-      );
+    // if (!kIsWeb) {
+    //   _bannerAd = BannerAd(
+    //     adUnitId: _adHelper.bannerAdUnitId(),
+    //     request: const AdRequest(),
+    //     size: AdSize.banner,
+    //     listener: BannerAdListener(
+    //       onAdLoaded: (_) {
+    //         setState(() {
+    //           _isBannerAdReady = true;
+    //         });
+    //       },
+    //       onAdFailedToLoad: (ad, err) {
+    //         debugPrint('Failed to load a banner ad: ${err.message}');
+    //         _isBannerAdReady = false;
+    //         ad.dispose();
+    //       },
+    //     ),
+    //   );
 
-      _bannerAd.load();
-    }
+    //   _bannerAd.load();
+    // }
 
     super.initState();
   }
@@ -117,6 +116,20 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
                         }
                         return Column(
                           children: [
+                            Card(
+                              elevation: 20,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: ListTile(
+                                title: Text('${'by'.tr()}:'),
+                                subtitle: const Text('Ralph N.'),
+                                leading: const CircleAvatar(
+                                  backgroundColor: Colors.amber,
+                                  child: Icon(Icons.person),
+                                ),
+                              ),
+                            ),
                             _ViewsSelector(
                               instructions: _instructions,
                             ),
@@ -126,15 +139,15 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
                                 instructions: _instructions,
                               ),
                             ),
-                            if (!kIsWeb && _isBannerAdReady)
-                              Align(
-                                alignment: Alignment.bottomCenter,
-                                child: SizedBox(
-                                  width: _bannerAd.size.width.toDouble(),
-                                  height: _bannerAd.size.height.toDouble(),
-                                  child: AdWidget(ad: _bannerAd),
-                                ),
-                              )
+                            // if (!kIsWeb && _isBannerAdReady)
+                            //   Align(
+                            //     alignment: Alignment.bottomCenter,
+                            //     child: SizedBox(
+                            //       width: _bannerAd.size.width.toDouble(),
+                            //       height: _bannerAd.size.height.toDouble(),
+                            //       child: AdWidget(ad: _bannerAd),
+                            //     ),
+                            //   )
                           ],
                         );
                       },

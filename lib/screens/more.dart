@@ -14,7 +14,7 @@ class More extends HookWidget {
   @override
   Widget build(BuildContext context) {
     // final ProgressDialog pr = ProgressDialog(context: context);
-    final _view = useProvider(viewProvider);
+    final _view = useProvider(homeViewProvider);
     final RateMyApp rateMyApp = RateMyApp(
       minDays: 0, // Show rate popup on first day of install.
       minLaunches:

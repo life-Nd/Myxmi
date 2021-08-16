@@ -8,7 +8,7 @@ class AppBottomNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (_, watch, __) {
-      final _view = watch(viewProvider);
+      final _view = watch(homeViewProvider);
       final _user = watch(userProvider);
       final int _viewIndex = _view.view;
       return BottomNavigationBar(
@@ -37,8 +37,8 @@ class AppBottomNavigation extends StatelessWidget {
               )),
           if (_user.account?.uid != null)
             BottomNavigationBarItem(
-              label: 'settings'.tr(),
-              icon: const Icon(Icons.settings),
+              label: 'more'.tr(),
+              icon: const Icon(Icons.dehaze),
             )
           else
             BottomNavigationBarItem(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myxmi/widgets/diet_options.dart';
 import 'package:myxmi/widgets/drink_options.dart';
 import 'package:myxmi/widgets/food_options.dart';
-import 'package:myxmi/widgets/vapes_options.dart';
+// import 'package:myxmi/widgets/vapes_options.dart';
 
 class Menu extends StatelessWidget {
   @override
@@ -16,7 +16,7 @@ class Menu extends StatelessWidget {
           DrinkItems(),
           FoodOptions(),
           DietOptions(),
-          VapeOptions(),
+          // VapeOptions(),
         ],
       ),
     );

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class IngredientsListView extends HookWidget {
+class IngredientsInRecipeListView extends HookWidget {
   final List _checkedIngredients = [];
   final Map ingredients;
-  IngredientsListView({this.ingredients});
+  IngredientsInRecipeListView({this.ingredients});
   @override
   Widget build(BuildContext context) {
     final List _keys = ingredients.keys.toList();

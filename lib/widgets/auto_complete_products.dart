@@ -14,14 +14,14 @@ class AutoCompleteProducts extends StatefulWidget {
       @required this.onSubmit})
       : super(key: key);
   @override
-  State<StatefulWidget> createState() => _AutoCompleteState();
+  State<StatefulWidget> createState() => _AutoCompleteProductsState();
 }
 
-class _AutoCompleteState extends State<AutoCompleteProducts> {
+class _AutoCompleteProductsState extends State<AutoCompleteProducts> {
   GlobalKey<AutoCompleteTextFieldState<ProductModel>> key = GlobalKey();
   AutoCompleteTextField _searchTextField;
 
-  _AutoCompleteState();
+  _AutoCompleteProductsState();
   @override
   Widget build(BuildContext context) {
     // ignore: join_return_with_assignment

@@ -35,26 +35,43 @@ Future<dynamic> dialogNoAccountFound(
         ),
         actions: [
           const RetryButton(),
-          RawMaterialButton(
-            padding: const EdgeInsets.all(4),
-            elevation: 20,
-            fillColor: Colors.green,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            onPressed: () {
-              AuthServices().newUserEmailPassword(
-                  email: email, password: password, context: context);
-            },
-            child: Text(
-              'signUp'.tr(),
-              style: const TextStyle(
-                color: Colors.white,
-              ),
-            ),
-          )
+          SignUpButton(
+            email: email,
+            password: password,
+          ),
         ],
       );
     },
   );
+}
+
+class SignUpButton extends StatelessWidget {
+  const SignUpButton({
+    Key key,
+    @required this.email,
+    @required this.password,
+  }) : super(key: key);
+  final String email;
+  final String password;
+  @override
+  Widget build(BuildContext context) {
+    return RawMaterialButton(
+      padding: const EdgeInsets.all(4),
+      elevation: 20,
+      fillColor: Colors.green,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      onPressed: () {
+        AuthServices().newUserEmailPassword(
+            email: email, password: password, context: context);
+      },
+      child: Text(
+        'signUp'.tr(),
+        style: const TextStyle(
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
 }

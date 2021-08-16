@@ -73,7 +73,7 @@ class SignIn extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Consumer(builder: (context, watch, child) {
-                  final _view = watch(viewProvider);
+                  final _view = watch(homeViewProvider);
                   return _view.loading
                       ? const Center(
                           child: CircularProgressIndicator(),
@@ -97,12 +97,13 @@ class SignIn extends StatelessWidget {
                               (value) {
                                 debugPrint('Value:$value');
                                 _view.loadingEntry(isLoading: false);
-                                _passwordCtrl.clear();
                                 debugPrint(
                                     'Status value:${_authServices.status}');
                                 switch (_authServices.status) {
                                   case 'success':
                                     _view.view = 0;
+                                    _emailCtrl.clear();
+                                    _passwordCtrl.clear();
                                     break;
                                   case 'user-not-found':
                                     dialogNoAccountFound(

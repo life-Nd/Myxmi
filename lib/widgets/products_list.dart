@@ -10,6 +10,8 @@ import 'auto_complete_products.dart';
 import 'edit_products.dart';
 import 'fields.dart';
 
+// <a href="https://storyset.com/data">Data illustrations by Storyset</a>
+
 TextEditingController _searchProductsCtrl = TextEditingController();
 
 class ProductsList extends StatelessWidget {
@@ -18,17 +20,21 @@ class ProductsList extends StatelessWidget {
     @required this.type,
   });
 
-  // final List<ProductModel> _products = [];
   @override
   Widget build(BuildContext context) {
+    debugPrint('building productsList');
     List<ProductModel> _products(
         {DocumentSnapshot<Map<String, dynamic>> snapshot}) {
-      return snapshot.data().keys.map((key) {
-        return ProductModel.fromSnapshot(
-          keyIndex: key,
-          snapshot: snapshot.data()[key] as Map<String, dynamic>,
-        );
-      }).toList();
+      if (snapshot.exists) {
+        return snapshot.data().keys.map((key) {
+          return ProductModel.fromSnapshot(
+            keyIndex: key,
+            snapshot: snapshot.data()[key] as Map<String, dynamic>,
+          );
+        }).toList();
+      } else {
+        return [];
+      }
     }
 
     debugPrint('building productsList');
@@ -112,22 +118,46 @@ class _ProductsViewState extends State<ProductsView> {
               Padding(
                 padding:
                     const EdgeInsets.only(bottom: 8.0, right: 20, left: 20),
-                child: AutoCompleteProducts(
-                  suggestions: widget.products,
-                  controller: _searchProductsCtrl,
-                  onSubmit: () {
-                    _filteredProducts.clear();
-                    stateSetter(() {});
-                  },
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: AutoCompleteProducts(
+                        suggestions: widget.products,
+                        controller: _searchProductsCtrl,
+                        onSubmit: () {
+                          _filteredProducts.clear();
+                          stateSetter(() {});
+                        },
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.clear,
+                        color: Colors.red,
+                      ),
+                      onPressed: () {
+                        _filteredProducts.clear();
+                        _searchProductsCtrl.clear();
+                        stateSetter(() {});
+                      },
+                    ),
+                  ],
                 ),
               ),
-              SizedBox(
-                height: 90.h,
-                child: _ProductsList(
-                  products: _searchProductsCtrl.text.isEmpty
-                      ? widget.products
-                      : _filterProducts(),
-                  type: widget.type,
+              RefreshIndicator(
+                onRefresh: () async {
+                  _filteredProducts.clear();
+                  _searchProductsCtrl.clear();
+                  stateSetter(() {});
+                },
+                child: SizedBox(
+                  height: 80.h,
+                  child: _ProductsList(
+                    products: _searchProductsCtrl.text.isEmpty
+                        ? widget.products
+                        : _filterProducts(),
+                    type: widget.type,
+                  ),
                 ),
               ),
             ],
@@ -207,10 +237,15 @@ class _ProductsList extends StatelessWidget {
               );
             },
           )
-        : Center(
-            child: Text(
-              'productsEmpty'.tr(),
-            ),
+        : Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset('assets/data_not_found.png'),
+              Text(
+                'productsEmpty'.tr(),
+              ),
+            ],
           );
   }
 }

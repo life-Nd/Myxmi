@@ -11,33 +11,39 @@ import 'rating_stars.dart';
 import 'recipe_tile.dart';
 import 'recipe_tile_image.dart';
 
-class RecipesGrid extends StatelessWidget {
+class RecipesGrid extends StatefulWidget {
   final List<RecipeModel> recipes;
   final double height;
   const RecipesGrid({Key key, @required this.recipes, @required this.height})
       : super(key: key);
+  @override
+  State<StatefulWidget> createState() => _RecipesGridState();
+}
 
+class _RecipesGridState extends State<RecipesGrid> {
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
     debugPrint('building recipes grid');
+
     return SizedBox(
-      height: height,
+      height: widget.height,
       width: _size.width,
-      child: recipes.isNotEmpty
+      child: widget.recipes.isNotEmpty
           ? GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 childAspectRatio: 0.6,
                 crossAxisCount: kIsWeb && _size.width > 500 ? 4 : 2,
               ),
               padding: const EdgeInsets.all(1),
-              itemCount: recipes.length,
+              itemCount: widget.recipes.length,
               itemBuilder: (_, int index) {
                 return Consumer(builder: (_, watch, __) {
                   final _user = watch(userProvider);
                   final _recipeProvider = watch(recipeProvider);
 
-                  final _recipe = _recipeProvider.recipeModel = recipes[index];
+                  final _recipe =
+                      _recipeProvider.recipeModel = widget.recipes[index];
                   _recipe.liked = false;
                   if (_user?.account?.uid != null && _recipe.likedBy != null) {
                     final _uid = _user?.account?.uid;
@@ -82,10 +88,11 @@ class RecipesGrid extends StatelessWidget {
                                 ),
                               ],
                             );
-
+                      _recipeProvider.recipeModel = widget.recipes[index];
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (_) => SelectedRecipe(recipeModel: _recipe),
+                          builder: (_) => SelectedRecipe(
+                              recipeModel: widget.recipes[index]),
                         ),
                       );
                     },
@@ -147,10 +154,14 @@ class RecipesGrid extends StatelessWidget {
                 });
               },
             )
-          : Center(
-              child: Text(
-                'recipesEmpty'.tr(),
-              ),
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset('assets/data_not_found.png'),
+                Text(
+                  'recipesEmpty'.tr(),
+                ),
+              ],
             ),
     );
   }

@@ -32,7 +32,7 @@ class WebAppBar extends StatelessWidget {
             const _PageViewButton(index: 3, text: 'products'),
             SizedBox(width: _size.width / 3),
             if (_user.account?.uid != null)
-              const _PageViewButton(index: 4, text: 'settings')
+              const _PageViewButton(index: 4, text: 'more')
             else
               const _PageViewButton(index: 3, text: 'signIn'),
             if (_user?.account?.uid == null)
@@ -76,7 +76,7 @@ class _PageViewButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (_, watch, child) {
-      final _view = watch(viewProvider);
+      final _view = watch(homeViewProvider);
       final _user = watch(userProvider);
       return RawMaterialButton(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),

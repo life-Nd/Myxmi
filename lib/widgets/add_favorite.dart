@@ -16,11 +16,9 @@ class AddFavoriteButton extends StatefulWidget {
 class _AddFavoriteButtonState extends State<AddFavoriteButton> {
   @override
   Widget build(BuildContext context) {
-    debugPrint('building addFavoriteButton');
     return Consumer(builder: (_, watch, __) {
       final _user = watch(userProvider);
-
-      final _view = watch(viewProvider);
+      final _view = watch(homeViewProvider);
       final RecipeModel _recipe = widget.recipe;
       _recipe.liked = false;
       if (_user?.account?.uid != null && _recipe.likedBy != null) {

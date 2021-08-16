@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:myxmi/models/recipes.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+// ignore: must_be_immutable
 class AutoCompleteRecipes extends StatefulWidget {
   final List<RecipeModel> suggestions;
   final TextEditingController controller;
@@ -13,17 +14,17 @@ class AutoCompleteRecipes extends StatefulWidget {
       @required this.controller,
       @required this.onSubmit})
       : super(key: key);
+
   @override
-  State<StatefulWidget> createState() => _AutoCompleteState();
+  State<StatefulWidget> createState() => _AutoCompleteRecipesState();
 }
 
-class _AutoCompleteState extends State<AutoCompleteRecipes> {
-  GlobalKey<AutoCompleteTextFieldState<RecipeModel>> key = GlobalKey();
+class _AutoCompleteRecipesState extends State<AutoCompleteRecipes> {
   AutoCompleteTextField _searchTextField;
-
-  _AutoCompleteState();
+  GlobalKey<AutoCompleteTextFieldState<RecipeModel>> key = GlobalKey();
   @override
   Widget build(BuildContext context) {
+    debugPrint('building AutocompleteRecipes');
     // ignore: join_return_with_assignment
     _searchTextField = AutoCompleteTextField<RecipeModel>(
       clearOnSubmit: false,

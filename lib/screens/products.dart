@@ -9,10 +9,10 @@ import 'package:easy_localization/easy_localization.dart';
 class Products extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async {},
-      child: SingleChildScrollView(
-          child: Column(
+    debugPrint('building products');
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -39,6 +39,7 @@ class Products extends HookWidget {
                             children: [
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
                                 children: const <Widget>[
                                   Icon(
                                     Icons.shopping_cart_outlined,
@@ -75,7 +76,7 @@ class Products extends HookWidget {
           ),
           const ProductsList(type: 'EditProducts'),
         ],
-      )),
+      ),
     );
   }
 }

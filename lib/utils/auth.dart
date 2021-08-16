@@ -43,10 +43,21 @@ class AuthServices {
   }) async {
     final String _email = email.trim();
     final String _password = password.trim();
+    debugPrint('email: $_email');
+    debugPrint('password: $_password');
     final currentUser = await firebaseAuth
         .createUserWithEmailAndPassword(email: _email, password: _password)
         .whenComplete(() async {
-      signInWithEmailPassword(email: _email, password: _password);
+      signInWithEmailPassword(email: _email, password: _password).whenComplete(
+        () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => App(),
+            ),
+          );
+          debugPrint('');
+        },
+      );
       await sendEmail();
     });
     final User user = currentUser.user;

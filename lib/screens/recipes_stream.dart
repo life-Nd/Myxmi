@@ -4,53 +4,43 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/recipes.dart';
 import 'package:myxmi/screens/add_recipe_infos.dart';
-import 'package:myxmi/screens/home.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:myxmi/widgets/recipes_grid.dart';
-
 import '../widgets/auto_complete_recipes.dart';
 
 TextEditingController _searchMyRecipesCtrl = TextEditingController();
 
-class RecipesStream extends StatefulWidget {
+class RecipesStream extends StatelessWidget {
   final Stream<QuerySnapshot> path;
-  final double height;
+
   final bool autoCompleteField;
   const RecipesStream(
-      {Key key,
-      @required this.path,
-      @required this.height,
-      @required this.autoCompleteField})
+      {Key key, @required this.path, @required this.autoCompleteField})
       : super(key: key);
-  @override
-  State<StatefulWidget> createState() => _RecipesState();
-}
-
-class _RecipesState extends State<RecipesStream> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     List<RecipeModel> _recipes({QuerySnapshot querySnapshot}) {
-      return querySnapshot.docs.map((QueryDocumentSnapshot data) {
-        return RecipeModel.fromSnapshot(
-          snapshot: data.data() as Map<String, dynamic>,
-          keyIndex: data.id,
-        );
-      }).toList();
+      if (querySnapshot.docs.isNotEmpty) {
+        return querySnapshot.docs.map((QueryDocumentSnapshot data) {
+          return RecipeModel.fromSnapshot(
+            snapshot: data.data() as Map<String, dynamic>,
+            keyIndex: data.id,
+          );
+        }).toList();
+      } else {
+        return [];
+      }
     }
 
     final double _bottomPadding = MediaQuery.of(context).padding.bottom;
     debugPrint('building recipe');
     return Consumer(
       builder: (_, watch, __) {
-        final _view = watch(viewProvider);
         final _recipe = watch(recipeProvider);
         return StreamBuilder<QuerySnapshot>(
-          stream: widget.path,
+          stream: path,
           builder: (_, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
               return Text(
@@ -59,7 +49,7 @@ class _RecipesState extends State<RecipesStream> {
               );
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
-              debugPrint('----<<<<<Loading ${_view.view} from db....>>>>>----');
+              debugPrint('----<<<<<Loading from db....>>>>>----');
               return Center(
                 child: Text(
                   "${'loading'.tr()}...",
@@ -71,9 +61,9 @@ class _RecipesState extends State<RecipesStream> {
               return Padding(
                 padding: EdgeInsets.only(bottom: _bottomPadding),
                 child: RecipesView(
-                  showAutoCompleteField: widget.autoCompleteField,
+                  showAutoCompleteField: autoCompleteField,
                   myRecipes: _recipes(querySnapshot: snapshot.data),
-                  height: widget.height,
+                  // height: widget.height,
                 ),
               );
             } else {
@@ -104,21 +94,23 @@ class _RecipesState extends State<RecipesStream> {
 class RecipesView extends StatefulWidget {
   final List<RecipeModel> myRecipes;
   final bool showAutoCompleteField;
-  final double height;
 
   const RecipesView(
-      {Key key,
-      @required this.myRecipes,
-      @required this.height,
-      @required this.showAutoCompleteField})
+      {Key key, @required this.myRecipes, @required this.showAutoCompleteField})
       : super(key: key);
   @override
   State<StatefulWidget> createState() => _RecipesViewState();
 }
 
 class _RecipesViewState extends State<RecipesView> {
-  final List<RecipeModel> _filteredRecipes = [];
+  @override
+  void initState() {
+    _searchMyRecipesCtrl = TextEditingController();
+    super.initState();
+  }
+
   List<RecipeModel> _filterRecipes() {
+    final List<RecipeModel> _filteredRecipes = [];
     final Iterable _filter = widget.myRecipes.asMap().entries.where((entry) {
       return entry.value.toMap().containsValue(
             _searchMyRecipesCtrl.text.trim().toLowerCase(),
@@ -132,54 +124,57 @@ class _RecipesViewState extends State<RecipesView> {
   }
 
   @override
-  void initState() {
-    _searchMyRecipesCtrl = TextEditingController();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    debugPrint('building RecipesView');
     return StatefulBuilder(
       builder: (context, StateSetter stateSetter) {
-        return Column(
-          children: [
-            if (widget.showAutoCompleteField)
-              Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: AutoCompleteRecipes(
-                        suggestions: widget.myRecipes,
-                        controller: _searchMyRecipesCtrl,
-                        onSubmit: () {
-                          _filteredRecipes.clear();
+        return RefreshIndicator(
+          onRefresh: () async {
+            _filterRecipes().clear();
+            _searchMyRecipesCtrl.clear();
+            stateSetter(() {});
+          },
+          child: Column(
+            children: [
+              if (widget.showAutoCompleteField)
+                Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: AutoCompleteRecipes(
+                          suggestions: widget.myRecipes,
+                          controller: _searchMyRecipesCtrl,
+                          onSubmit: () {
+                            _filterRecipes().clear();
+                            stateSetter(() {});
+                          },
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(
+                          Icons.clear,
+                          color: Colors.red,
+                        ),
+                        onPressed: () {
+                          _filterRecipes().clear();
+                          _searchMyRecipesCtrl.clear();
                           stateSetter(() {});
                         },
                       ),
-                    ),
-                    IconButton(
-                      icon: const Icon(
-                        Icons.clear,
-                        color: Colors.red,
-                      ),
-                      onPressed: () {
-                        _filteredRecipes.clear();
-                        _searchMyRecipesCtrl.clear();
-                        stateSetter(() {});
-                      },
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            Expanded(
-              child: RecipesGrid(
+              Expanded(
+                child: RecipesGrid(
                   recipes: _searchMyRecipesCtrl.text.isEmpty
                       ? widget.myRecipes
                       : _filterRecipes(),
-                  height: widget.height),
-            ),
-          ],
+                  height: 80.h,
+                ),
+              ),
+            ],
+          ),
         );
       },
     );

@@ -4,10 +4,10 @@ import 'package:myxmi/screens/more.dart';
 import 'package:myxmi/screens/recipes_stream.dart';
 import 'package:myxmi/screens/products.dart';
 import 'package:myxmi/screens/sign_in.dart';
-import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
+import 'package:myxmi/widgets/my_recipes.dart';
 
-class ViewProvider extends ChangeNotifier {
+class HomeViewProvider extends ChangeNotifier {
   int view = 0;
   TextEditingController searchCtrl = TextEditingController();
   bool searchRecipesInDb = false;
@@ -39,14 +39,14 @@ class ViewProvider extends ChangeNotifier {
     return _stream;
   }
 
-  Stream<QuerySnapshot> streamProductsWith(
-      {@required String key, @required String value}) {
-    final _stream = FirebaseFirestore.instance
-        .collection('Products')
-        .where(key, isEqualTo: value)
-        .snapshots();
-    return _stream;
-  }
+  // Stream<QuerySnapshot> streamProductsWith(
+  //     {@required String key, @required String value}) {
+  //   final _stream = FirebaseFirestore.instance
+  //       .collection('Products')
+  //       .where(key, isEqualTo: value)
+  //       .snapshots();
+  //   return _stream;
+  // }
 
   String searchText() {
     final String _text = searchCtrl.text.toString().trim().toLowerCase();
@@ -57,9 +57,9 @@ class ViewProvider extends ChangeNotifier {
     return streamRecipesWith(key: searchKey, value: searchText());
   }
 
-  Stream<QuerySnapshot> searchProductssWith({@required String searchKey}) {
-    return streamProductsWith(key: searchKey, value: searchText());
-  }
+  // Stream<QuerySnapshot> searchProductssWith({@required String searchKey}) {
+  //   return streamProductsWith(key: searchKey, value: searchText());
+  // }
 
   void search() {
     if (searchCtrl.text.isNotEmpty) {
@@ -92,30 +92,12 @@ class ViewProvider extends ChangeNotifier {
             ? RecipesStream(
                 autoCompleteField: false,
                 path: searchRecipesWith(searchKey: 'title'),
-                height: 100.h,
               )
             : Menu();
       case 1:
-        return isSignedIn
-            ? SafeArea(
-                child: RecipesStream(
-                  autoCompleteField: true,
-                  path: streamRecipesWith(key: 'uid', value: uid),
-                  height: 100.h,
-                ),
-              )
-            : SignIn();
+        return isSignedIn ? const MyRecipes(path: 'all') : SignIn();
       case 2:
-        return isSignedIn
-            ? RecipesStream(
-                autoCompleteField: true,
-                path: FirebaseFirestore.instance
-                    .collection('Recipes')
-                    .where('likedBy.$uid', isEqualTo: true)
-                    .snapshots(),
-                height: 100.h,
-              )
-            : SignIn();
+        return isSignedIn ? const MyRecipes(path: 'liked') : SignIn();
       case 3:
         return isSignedIn ? Products() : SignIn();
       case 4:

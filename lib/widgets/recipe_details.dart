@@ -24,7 +24,7 @@ class RecipeDetails extends StatelessWidget {
       final _user = watch(userProvider);
       final _selectedView = watch(selectedRecipeView);
       final _recipe = watch(recipeProvider);
-      final _view = watch(viewProvider);
+      final _view = watch(homeViewProvider);
       return PageView(
         controller: _selectedView.pageController,
         onPageChanged: (index) {
@@ -35,9 +35,8 @@ class RecipeDetails extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (instructions.ingredients != null)
-                IngredientsListView(
-                  ingredients: instructions.ingredients,
-                )
+                IngredientsInRecipeListView(
+                    ingredients: instructions.ingredients)
               else
                 const NoInstructions('noIngredients'),
             ],
