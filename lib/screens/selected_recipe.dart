@@ -31,27 +31,27 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
   final AdHelper _adHelper = AdHelper();
   @override
   void initState() {
-    // if (!kIsWeb) {
-    //   _bannerAd = BannerAd(
-    //     adUnitId: _adHelper.bannerAdUnitId(),
-    //     request: const AdRequest(),
-    //     size: AdSize.banner,
-    //     listener: BannerAdListener(
-    //       onAdLoaded: (_) {
-    //         setState(() {
-    //           _isBannerAdReady = true;
-    //         });
-    //       },
-    //       onAdFailedToLoad: (ad, err) {
-    //         debugPrint('Failed to load a banner ad: ${err.message}');
-    //         _isBannerAdReady = false;
-    //         ad.dispose();
-    //       },
-    //     ),
-    //   );
+    if (!kIsWeb) {
+      _bannerAd = BannerAd(
+        adUnitId: _adHelper.bannerAdUnitId(),
+        request: const AdRequest(),
+        size: AdSize.banner,
+        listener: BannerAdListener(
+          onAdLoaded: (_) {
+            setState(() {
+              _isBannerAdReady = true;
+            });
+          },
+          onAdFailedToLoad: (ad, err) {
+            debugPrint('Failed to load a banner ad: ${err.message}');
+            _isBannerAdReady = false;
+            ad.dispose();
+          },
+        ),
+      );
 
-    //   _bannerAd.load();
-    // }
+      _bannerAd.load();
+    }
 
     super.initState();
   }
@@ -139,15 +139,15 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
                                 instructions: _instructions,
                               ),
                             ),
-                            // if (!kIsWeb && _isBannerAdReady)
-                            //   Align(
-                            //     alignment: Alignment.bottomCenter,
-                            //     child: SizedBox(
-                            //       width: _bannerAd.size.width.toDouble(),
-                            //       height: _bannerAd.size.height.toDouble(),
-                            //       child: AdWidget(ad: _bannerAd),
-                            //     ),
-                            //   )
+                            if (!kIsWeb && _isBannerAdReady)
+                              Align(
+                                alignment: Alignment.bottomCenter,
+                                child: SizedBox(
+                                  width: _bannerAd.size.width.toDouble(),
+                                  height: _bannerAd.size.height.toDouble(),
+                                  child: AdWidget(ad: _bannerAd),
+                                ),
+                              )
                           ],
                         );
                       },
