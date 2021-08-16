@@ -15,6 +15,7 @@ class AddRecipeInstructions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       key: _scaffoldKey,
       drawerDragStartBehavior: DragStartBehavior.down,
       drawer: SafeArea(

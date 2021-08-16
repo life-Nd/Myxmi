@@ -31,7 +31,6 @@ class MyRecipes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('building recipe');
     return Consumer(
       builder: (_, watch, __) {
         final _user = watch(userProvider);

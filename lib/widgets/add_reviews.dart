@@ -16,6 +16,7 @@ class AddReviews extends HookWidget {
     final _recipe = useProvider(recipeProvider);
     final _user = useProvider(userProvider);
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text('${'reviewOf'.tr()} ${_recipe.recipeModel.title}'),
       ),

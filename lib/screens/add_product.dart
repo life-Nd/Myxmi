@@ -27,6 +27,7 @@ class AddProduct extends HookWidget {
     final _user = useProvider(userProvider);
     final Size _size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text('newProduct'.tr()),
       ),
@@ -137,9 +138,8 @@ class AddProduct extends HookWidget {
                   ),
                 ),
               ),
-
               Container(
-                height: kIsWeb ? 10.h : 35.h,
+                height: kIsWeb && _size.width > 700 ? 10.h : 35.h,
                 padding: const EdgeInsets.only(left: 20, right: 20),
                 child: GridView(
                   padding: const EdgeInsets.symmetric(),

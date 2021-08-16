@@ -9,7 +9,6 @@ import 'package:easy_localization/easy_localization.dart';
 class Products extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    debugPrint('building products');
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,

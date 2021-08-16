@@ -22,7 +22,6 @@ class ProductsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('building productsList');
     List<ProductModel> _products(
         {DocumentSnapshot<Map<String, dynamic>> snapshot}) {
       if (snapshot.exists) {
@@ -36,8 +35,6 @@ class ProductsList extends StatelessWidget {
         return [];
       }
     }
-
-    debugPrint('building productsList');
     return Consumer(builder: (_, watch, child) {
       final _user = watch(userProvider);
       return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(

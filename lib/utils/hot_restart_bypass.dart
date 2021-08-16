@@ -24,8 +24,6 @@ class HotRestartByPassBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('building hotRestart');
-    
     return Consumer(builder: (_, watch, __) {
       final _userProvider = watch(userProvider);
       return FutureBuilder<bool>(

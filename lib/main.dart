@@ -98,7 +98,6 @@ Future<void> main() async {
 
   runApp(
     Sizer(builder: (context, orientation, deviceType) {
-      debugPrint('building runApp');
       return EasyLocalization(
         path: 'translations',
         supportedLocales: const [Locale('en', 'US'), Locale('fr', 'FR')],

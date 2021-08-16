@@ -59,7 +59,6 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
   Map<String, dynamic> _data = {};
   @override
   Widget build(BuildContext context) {
-    debugPrint('building _selectionRecipe');
     final Size _size = MediaQuery.of(context).size;
     return Consumer(
       builder: (_, watch, __) {

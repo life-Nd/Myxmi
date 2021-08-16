@@ -14,7 +14,6 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
-    debugPrint('building root');
     if (foundation.kDebugMode && foundation.kIsWeb) {
       return Consumer(builder: (_, watch, __) {
         final _user = FirebaseAuth.instance.currentUser;
@@ -33,15 +32,9 @@ class _AppState extends State<App> {
 class _StreamAuthBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    debugPrint('building streambuilder');
     return StreamBuilder<User>(
       stream: FirebaseAuth.instance.userChanges(),
       builder: (context, AsyncSnapshot<User> snapUser) {
-        if (snapUser.connectionState == ConnectionState.waiting) {
-          debugPrint('----snapUser loading');
-          debugPrint('--loading user');
-        }
-
         if (snapUser.data != null) {
           final _user = context.read(userProvider);
           _user.account = snapUser.data;

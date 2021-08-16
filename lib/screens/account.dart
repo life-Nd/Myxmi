@@ -66,7 +66,9 @@ class AccountScreen extends HookWidget {
                       },
                       child: UserAvatar(
                         photoURL: _user?.account?.photoURL,
-                        radius: kIsWeb ? _size.width / 10 : _size.width / 5,
+                        radius: kIsWeb && _size.width > 700
+                            ? _size.width / 10
+                            : _size.width / 5,
                       ),
                     ),
                     FloatingActionButton(

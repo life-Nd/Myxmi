@@ -35,7 +35,6 @@ class RecipesStream extends StatelessWidget {
     }
 
     final double _bottomPadding = MediaQuery.of(context).padding.bottom;
-    debugPrint('building recipe');
     return Consumer(
       builder: (_, watch, __) {
         final _recipe = watch(recipeProvider);
@@ -49,7 +48,6 @@ class RecipesStream extends StatelessWidget {
               );
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
-              debugPrint('----<<<<<Loading from db....>>>>>----');
               return Center(
                 child: Text(
                   "${'loading'.tr()}...",
@@ -125,7 +123,6 @@ class _RecipesViewState extends State<RecipesView> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('building RecipesView');
     return StatefulBuilder(
       builder: (context, StateSetter stateSetter) {
         return RefreshIndicator(

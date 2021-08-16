@@ -24,7 +24,6 @@ class _AutoCompleteRecipesState extends State<AutoCompleteRecipes> {
   GlobalKey<AutoCompleteTextFieldState<RecipeModel>> key = GlobalKey();
   @override
   Widget build(BuildContext context) {
-    debugPrint('building AutocompleteRecipes');
     // ignore: join_return_with_assignment
     _searchTextField = AutoCompleteTextField<RecipeModel>(
       clearOnSubmit: false,

@@ -24,8 +24,6 @@ class _RecipesGridState extends State<RecipesGrid> {
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
-    debugPrint('building recipes grid');
-
     return SizedBox(
       height: widget.height,
       width: _size.width,

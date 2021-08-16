@@ -19,12 +19,12 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('building home');
     final Size _size = MediaQuery.of(context).size;
     return Consumer(builder: (_, watch, __) {
       final _view = watch(homeViewProvider);
       final int _viewIndex = _view.view;
       return Scaffold(
+          resizeToAvoidBottomInset: true,
           appBar: PreferredSize(
             preferredSize: kIsWeb && _size.width > 500
                 ? Size(100.h, 200)
