@@ -31,6 +31,8 @@ class SaveButton extends HookWidget {
                   '${_recipe.instructions.steps.length}';
               _recipe.instructions.ingredients = _recipe.composition;
               _recipe.instructions.uid = _user.account.uid;
+              _recipe.recipeModel.username = _user.account.displayName;
+              _recipe.recipeModel.imageUrl = _user.account.photoURL;
               _recipe.recipeModel.made =
                   '${DateTime.now().millisecondsSinceEpoch}';
               _image.addImageToDb(context: context).whenComplete(() async {
@@ -40,7 +42,6 @@ class SaveButton extends HookWidget {
                 final DocumentReference _db = await FirebaseFirestore.instance
                     .collection('Recipes')
                     .add(_recipe.recipeModel.toMap());
-
                 _key = _db.id;
               }).whenComplete(() async {
                 debugPrint(

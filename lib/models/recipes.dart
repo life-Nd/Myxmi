@@ -17,6 +17,8 @@ class RecipeModel {
   static const _reviewsCount = 'reviews_count';
   static const _portions = 'portions';
   static const _likedBy = 'likedBy';
+  static const _username = 'username';
+  static const _photoUrl = 'photoUrl';
 
   String recipeId;
   String title = '';
@@ -38,6 +40,8 @@ class RecipeModel {
   String portions;
   Map likedBy = {};
   bool liked;
+  String username;
+  String photoUrl;
 
   RecipeModel({
     this.recipeId,
@@ -60,6 +64,8 @@ class RecipeModel {
     this.portions,
     this.likedBy,
     this.liked,
+    this.photoUrl,
+    this.username,
   });
   factory RecipeModel.fromSnapshot(
       {Map<String, dynamic> snapshot, String keyIndex}) {
@@ -83,6 +89,8 @@ class RecipeModel {
       made: snapshot[_made] as String,
       portions: snapshot[_portions] as String,
       likedBy: snapshot[_likedBy] as Map,
+      username: snapshot[_username] as String,
+      photoUrl: snapshot[_photoUrl] as String,
     );
   }
 
@@ -105,6 +113,8 @@ class RecipeModel {
       _made: made,
       _reviewsCount: reviewsCount,
       _portions: portions,
+      _username: username,
+      _photoUrl: photoUrl
     };
   }
 }

@@ -68,14 +68,16 @@ class AccountScreen extends HookWidget {
                         photoURL: _user?.account?.photoURL,
                         radius: kIsWeb && _size.width > 700
                             ? _size.width / 10
-                            : _size.width / 5,
+                            : _size.width / 3,
                       ),
                     ),
                     FloatingActionButton(
                       // mini: false,
                       backgroundColor: Colors.deepOrange.shade300,
                       onPressed: () {
-                        _image.chooseImageSource(context);
+                        debugPrint('tapped icon');
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(_image.chooseImageSource(context));
                       },
                       child: const Icon(
                         Icons.camera_alt,

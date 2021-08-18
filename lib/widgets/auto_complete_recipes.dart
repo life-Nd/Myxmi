@@ -34,24 +34,21 @@ class _AutoCompleteRecipesState extends State<AutoCompleteRecipes> {
         widget.onSubmit();
       },
       itemBuilder: (context, item) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                '${item.title[0].toUpperCase()}${item.title.substring(1, item.title.length)}',
-                style: const TextStyle(fontSize: 20.0),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(15.0),
-              ),
-              Text(
-                '${item.category[0].toUpperCase()}${item.category.substring(1, item.category.length)}',
-                style: const TextStyle(fontSize: 17.0),
-              )
-            ],
-          ),
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(
+              '${item.title[0].toUpperCase()}${item.title.substring(1, item.title.length)}',
+              style: const TextStyle(fontSize: 20.0),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(15.0),
+            ),
+            Text(
+              '${item.category[0].toUpperCase()}${item.category.substring(1, item.category.length)}',
+              style: const TextStyle(fontSize: 17.0),
+            )
+          ],
         );
       },
       itemFilter: (item, query) {
@@ -67,7 +64,6 @@ class _AutoCompleteRecipesState extends State<AutoCompleteRecipes> {
       suggestions: widget.suggestions,
       decoration: InputDecoration(
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-        contentPadding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
         filled: true,
         hintText: 'searchRecipe'.tr(),
       ),

@@ -15,12 +15,8 @@ class Fields extends StatefulWidget {
 class FieldsState extends State<Fields> {
   @override
   Widget build(BuildContext context) {
-    final List _ingredientName =
-        widget.recipe.composition[widget.product.name].toString().split(' ');
-    textCtrl = _ingredientName[0] != 'null'
-        ? TextEditingController(text: _ingredientName[0] as String)
-        : TextEditingController();
-// TODO change the first letter of the title to a capital letter
+    final String _name =
+        '${widget.product.name[0]?.toUpperCase()}${widget.product.name?.substring(1, widget.product.name?.length)}';
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextField(
@@ -42,7 +38,7 @@ class FieldsState extends State<Fields> {
         },
         onEditingComplete: () {},
         decoration: InputDecoration(
-          labelText: widget.product.name,
+          labelText: _name,
           suffixText: widget.product.mesureType,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),

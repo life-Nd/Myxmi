@@ -17,18 +17,21 @@ class SearchRecipes extends StatelessWidget {
       return Row(
         children: [
           Expanded(
-            child: TextField(
-              controller: _view.searchCtrl,
-              onSubmitted: (submitted) {
-                _view.search();
-                !kIsWeb ?? FocusScope.of(context).requestFocus(FocusNode());
-              },
-              decoration: InputDecoration(
-                isDense: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 4.0),
+              child: TextField(
+                controller: _view.searchCtrl,
+                onSubmitted: (submitted) {
+                  _view.search();
+                  !kIsWeb ?? FocusScope.of(context).requestFocus(FocusNode());
+                },
+                decoration: InputDecoration(
+                  isDense: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  hintText: 'searchRecipe'.tr(),
                 ),
-                hintText: 'search'.tr(),
               ),
             ),
           ),
@@ -44,15 +47,6 @@ class SearchRecipes extends StatelessWidget {
               _view.doSearch(value: false);
             },
           ),
-          // IconButton(
-          //     icon: const Icon(
-          //       Icons.search,
-          //     ),
-          //     onPressed: () {
-          //       _view.search();
-          //       !kIsWeb ?? FocusScope.of(context).requestFocus(FocusNode());
-          //       FocusScope.of(context).unfocus();
-          //     }),
         ],
       );
     });

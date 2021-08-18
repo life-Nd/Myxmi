@@ -10,14 +10,16 @@ import 'auto_complete_products.dart';
 import 'edit_products.dart';
 import 'fields.dart';
 
-// <a href="https://storyset.com/data">Data illustrations by Storyset</a>
+
 
 TextEditingController _searchProductsCtrl = TextEditingController();
 
 class ProductsList extends StatelessWidget {
   final String type;
+  final EdgeInsetsGeometry padding;
   const ProductsList({
     @required this.type,
+    @required this.padding,
   });
 
   @override
@@ -35,6 +37,7 @@ class ProductsList extends StatelessWidget {
         return [];
       }
     }
+
     return Consumer(builder: (_, watch, child) {
       final _user = watch(userProvider);
       return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
@@ -56,6 +59,7 @@ class ProductsList extends StatelessWidget {
           if (snapshot.data != null) {
             return ProductsView(
               type: type,
+              padding: padding,
               products: _products(
                   snapshot:
                       snapshot.data as DocumentSnapshot<Map<String, dynamic>>),
@@ -75,10 +79,12 @@ class ProductsList extends StatelessWidget {
 class ProductsView extends StatefulWidget {
   final List<ProductModel> products;
   final String type;
+  final EdgeInsetsGeometry padding;
   const ProductsView({
     Key key,
     @required this.products,
     @required this.type,
+    @required this.padding,
   }) : super(key: key);
   @override
   State<StatefulWidget> createState() => _ProductsViewState();
@@ -113,8 +119,7 @@ class _ProductsViewState extends State<ProductsView> {
           child: Column(
             children: [
               Padding(
-                padding:
-                    const EdgeInsets.only(bottom: 8.0, right: 20, left: 20),
+                padding: widget.padding,
                 child: Row(
                   children: [
                     Expanded(

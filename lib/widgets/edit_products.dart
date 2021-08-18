@@ -11,7 +11,7 @@ class EditProducts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     debugPrint('product?.name: ${product?.name}');
-    final String _title =
+    final String _name =
         '${product.name[0]?.toUpperCase()}${product.name?.substring(1, product.name?.length)}';
     return Card(
       shape: RoundedRectangleBorder(
@@ -19,7 +19,7 @@ class EditProducts extends StatelessWidget {
       ),
       child: ListTile(
         // TODO change the first letter of the title to a capital letter
-        title: Center(child: Text(_title)),
+        title: Center(child: Text(_name)),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

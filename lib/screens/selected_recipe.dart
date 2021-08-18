@@ -115,19 +115,10 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
                         }
                         return Column(
                           children: [
-                            Card(
-                              elevation: 20,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: ListTile(
-                                title: Text('${'by'.tr()}:'),
-                                subtitle: const Text('Ralph N.'),
-                                leading: const CircleAvatar(
-                                  backgroundColor: Colors.amber,
-                                  child: Icon(Icons.person),
-                                ),
-                              ),
+                            FutureBuilder(
+                                builder: (context, AsyncSnapshot snapshot) {
+                              return CreatorCard();
+                            }
                             ),
                             _ViewsSelector(
                               instructions: _instructions,
@@ -158,6 +149,37 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
           ),
         );
       },
+    );
+  }
+}
+
+// ignore: must_be_immutable
+class CreatorCard extends StatelessWidget {
+  final String uid;
+  CreatorCard({Key key, this.uid}) : super(key: key);
+  String _name;
+  String _avatar;
+  String _total;
+  String _followed;
+  @override
+  Widget build(BuildContext context) {
+    // TODO Get current: Avatar + Name + Total recipes posted from a future
+    // after 1-4 seconds if it's visible on the screen.
+    // This throttle would limit reads on the db for ignored recipes.
+
+    return Card(
+      elevation: 20,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: ListTile(
+        title: Text(_name),
+        subtitle: Text(_total),
+        leading: const CircleAvatar(
+          backgroundColor: Colors.amber,
+          child: Icon(Icons.person),
+        ),
+      ),
     );
   }
 }

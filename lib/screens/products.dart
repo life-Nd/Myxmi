@@ -73,7 +73,10 @@ class Products extends HookWidget {
               }),
             ],
           ),
-          const ProductsList(type: 'EditProducts'),
+          const ProductsList(
+            type: 'EditProducts',
+            padding: EdgeInsets.only(bottom: 8.0, right: 20, left: 20),
+          ),
         ],
       ),
     );

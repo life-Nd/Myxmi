@@ -64,7 +64,9 @@ class AddProduct extends HookWidget {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     backgroundColor: Colors.red,
-                    content: Text('fieldsEmpty'.tr()),
+                    content: Text(
+                      'fieldsEmpty'.tr(),
+                    ),
                   ),
                 );
               },

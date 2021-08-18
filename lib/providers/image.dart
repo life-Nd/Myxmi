@@ -33,6 +33,7 @@ class ImageProvider extends ChangeNotifier {
   SnackBar chooseImageSource(BuildContext context) {
     return SnackBar(
       elevation: 20,
+      backgroundColor: Theme.of(context).cardColor,
       duration: const Duration(seconds: 777),
       content: SizedBox(
         height: 100,
@@ -48,26 +49,12 @@ class ImageProvider extends ChangeNotifier {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      gradient: const LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Colors.red,
-                          Colors.purple,
-                          Colors.blue,
-                          Colors.white
-                        ],
-                      ),
-                    ),
-                    child: RawMaterialButton(
-                      padding: const EdgeInsets.only(left: 13, right: 13),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      elevation: 20,
-                      onPressed: () {
+                  Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    elevation: 20,
+                    child: InkWell(
+                      onTap: () {
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
                         pickImage(ImageSource.gallery).then(
                           (a) {
@@ -75,25 +62,28 @@ class ImageProvider extends ChangeNotifier {
                           },
                         );
                       },
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text(
-                            'gallery'.tr(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 13, right: 13),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text(
+                              'gallery'.tr(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 7,
-                          ),
-                          const Icon(
-                            Icons.image_search_sharp,
-                            color: Colors.white,
-                            size: 30,
-                          ),
-                        ],
+                            const SizedBox(
+                              height: 7,
+                            ),
+                            const Icon(
+                              Icons.image_search_sharp,
+                              color: Colors.white,
+                              size: 30,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -213,7 +203,6 @@ class ImageProvider extends ChangeNotifier {
     }
     debugPrint('No image selected');
   }
-
 
   Future cropImage() async {
     if (!kIsWeb && imageFile.path != null) {

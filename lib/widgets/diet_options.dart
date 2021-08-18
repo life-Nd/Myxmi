@@ -22,16 +22,18 @@ class DietOptions extends HookWidget {
             children: const [
               MenuItem(
                 legend: 'vegan',
+                url:
+                    'https://unsplash.com/photos/zOlQ7lF-3vs?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink',
               ),
               MenuItem(
-                legend: 'vegetarian',
-              ),
+                  legend: 'vegetarian',
+                  url:
+                      'https://unsplash.com/photos/IGfIGP5ONV0?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink'),
               MenuItem(
-                legend: 'keto',
-              ),
-              MenuItem(
-                legend: 'diets',
-              ),
+                  legend: 'keto',
+                  url:
+                      'https://unsplash.com/photos/auIbTAcSH6E?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink'),
+              MenuItem(legend: 'diets', url: ''),
             ],
           ),
         ),

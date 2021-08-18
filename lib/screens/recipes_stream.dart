@@ -4,7 +4,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/recipes.dart';
 import 'package:myxmi/screens/add_recipe_infos.dart';
-import 'package:sizer/sizer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:myxmi/widgets/recipes_grid.dart';
 import '../widgets/auto_complete_recipes.dart';
@@ -132,42 +131,39 @@ class _RecipesViewState extends State<RecipesView> {
             stateSetter(() {});
           },
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               if (widget.showAutoCompleteField)
-                Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: AutoCompleteRecipes(
-                          suggestions: widget.myRecipes,
-                          controller: _searchMyRecipesCtrl,
-                          onSubmit: () {
-                            _filterRecipes().clear();
-                            stateSetter(() {});
-                          },
-                        ),
-                      ),
-                      IconButton(
-                        icon: const Icon(
-                          Icons.clear,
-                          color: Colors.red,
-                        ),
-                        onPressed: () {
+                Row(
+                  children: [
+                    Expanded(
+                      child: AutoCompleteRecipes(
+                        suggestions: widget.myRecipes,
+                        controller: _searchMyRecipesCtrl,
+                        onSubmit: () {
                           _filterRecipes().clear();
-                          _searchMyRecipesCtrl.clear();
                           stateSetter(() {});
                         },
                       ),
-                    ],
-                  ),
+                    ),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.clear,
+                        color: Colors.red,
+                      ),
+                      onPressed: () {
+                        _filterRecipes().clear();
+                        _searchMyRecipesCtrl.clear();
+                        stateSetter(() {});
+                      },
+                    ),
+                  ],
                 ),
               Expanded(
                 child: RecipesGrid(
                   recipes: _searchMyRecipesCtrl.text.isEmpty
                       ? widget.myRecipes
                       : _filterRecipes(),
-                  height: 80.h,
                 ),
               ),
             ],

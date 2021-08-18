@@ -21,7 +21,7 @@ class CategorySelector extends StatelessWidget {
           textList: [
             'food',
             'drink',
-            'vapes',
+            // 'vapes',
             'other',
           ],
           type: 'category',

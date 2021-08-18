@@ -48,32 +48,42 @@ class AddRecipeInstructions extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: int.parse(_recipe.recipeModel.ingredientsCount),
-                    itemBuilder: (_, int index) {
-                      final List _keys = _recipe.composition.keys.toList();
-                      final String _keyIndex = '${_keys[index]}';
-                      return Card(
-                        color: Theme.of(context).scaffoldBackgroundColor,
-                        child: ListTile(
-                          title: Row(
-                            children: [
-                              Text(
-                                '$_keyIndex:',
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
+                  child: _recipe.recipeModel.ingredientsCount != null
+                      ? ListView.builder(
+                          itemCount:
+                              int.parse(_recipe.recipeModel.ingredientsCount),
+                          itemBuilder: (_, int index) {
+                            final List _keys =
+                                _recipe.composition.keys.toList();
+                            final String _keyIndex = '${_keys[index]}';
+                            final String _name =
+                                '${_keyIndex[0]?.toUpperCase()}${_keyIndex?.substring(1, _keyIndex?.length)}';
+                            return Card(
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                              child: ListTile(
+                                title: Row(
+                                  children: [
+                                    Text(
+                                      '$_name:',
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      ' ${_recipe.composition[_keyIndex]}',
+                                    )
+                                  ],
                                 ),
                               ),
-                              Text(
-                                ' ${_recipe.composition[_keyIndex]}',
-                              )
-                            ],
+                            );
+                          },
+                        )
+                      : Center(
+                          child: Text(
+                            'noProduct'.tr(),
                           ),
                         ),
-                      );
-                    },
-                  ),
                 ),
               ],
             ),

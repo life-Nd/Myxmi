@@ -15,7 +15,8 @@ class NextButton extends StatelessWidget {
         final _recipe = watch(recipeProvider);
         final bool _detailsProvided = _recipe.recipeModel.title != null &&
             _recipe.recipeModel.category != null &&
-            _recipe.recipeModel.subCategory != null;
+            _recipe.recipeModel.subCategory != null ||
+            _recipe.recipeModel.category == 'other';
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: RawMaterialButton(

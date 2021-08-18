@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:myxmi/main.dart';
 import 'package:myxmi/widgets/category_selector.dart';
 import 'package:myxmi/widgets/difficulty_slider.dart';
 import 'package:myxmi/widgets/duration_field.dart';
@@ -11,8 +12,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:sizer/sizer.dart';
 import '../providers/recipe.dart';
 import 'add_recipe_products.dart';
-
-// <a href="https://storyset.com/work">Work illustrations by Storyset</a>
+import 'home.dart';
 
 final recipeProvider =
     ChangeNotifierProvider<RecipeProvider>((ref) => RecipeProvider());
@@ -28,12 +28,17 @@ class AddRecipeInfos extends StatelessWidget {
           SliverAppBar(
             leading: Consumer(builder: (context, watch, child) {
               final _recipe = watch(recipeProvider);
+              final _user = watch(userProvider);
               return IconButton(
                 alignment: Alignment.topLeft,
                 icon: const Icon(Icons.arrow_back_ios),
                 onPressed: () {
                   _recipe.reset();
-                  Navigator.of(context).pop();
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => Home(uid: _user.account.uid),
+                    ),
+                  );
                 },
               );
             }),
@@ -49,6 +54,16 @@ class AddRecipeInfos extends StatelessWidget {
                     ),
                     child: Image.asset('assets/add_recipe.png',
                         alignment: Alignment.topCenter),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Text(
+                    '<a href="https://storyset.com/work">Work illustrations by Storyset</a>',
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: Theme.of(context).secondaryHeaderColor,
+                    ),
                   ),
                 ),
                 Column(
@@ -67,7 +82,7 @@ class AddRecipeInfos extends StatelessWidget {
                 ),
               ],
             ),
-            expandedHeight: 55.h,
+            expandedHeight: 45.h,
           ),
           SliverList(
             delegate: SliverChildListDelegate.fixed(
