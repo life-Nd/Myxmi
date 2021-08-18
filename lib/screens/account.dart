@@ -75,9 +75,17 @@ class AccountScreen extends HookWidget {
                       // mini: false,
                       backgroundColor: Colors.deepOrange.shade300,
                       onPressed: () {
-                        debugPrint('tapped icon');
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(_image.chooseImageSource(context));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          _image.chooseImageSource(
+                            context: context,
+                            onComplete: () {
+                              _image.addImageToDb(context: context).then(
+                                    (url) => _user.changeUserPhoto(
+                                        context: context, photoUrl: url),
+                                  );
+                            },
+                          ),
+                        );
                       },
                       child: const Icon(
                         Icons.camera_alt,

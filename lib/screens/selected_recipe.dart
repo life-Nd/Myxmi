@@ -118,8 +118,7 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
                             FutureBuilder(
                                 builder: (context, AsyncSnapshot snapshot) {
                               return CreatorCard();
-                            }
-                            ),
+                            }),
                             _ViewsSelector(
                               instructions: _instructions,
                             ),
@@ -160,7 +159,7 @@ class CreatorCard extends StatelessWidget {
   String _name;
   String _avatar;
   String _total;
-  String _followed;
+  bool _followed;
   @override
   Widget build(BuildContext context) {
     // TODO Get current: Avatar + Name + Total recipes posted from a future
@@ -175,10 +174,29 @@ class CreatorCard extends StatelessWidget {
       child: ListTile(
         title: Text(_name),
         subtitle: Text(_total),
-        leading: const CircleAvatar(
+        leading: CircleAvatar(
           backgroundColor: Colors.amber,
-          child: Icon(Icons.person),
+          child: _avatar == null
+              ? Image.network(_avatar)
+              : const Icon(Icons.person),
         ),
+        trailing: _followed
+            ? InkWell(
+                onTap: () {},
+                child: Text(
+                  'follow'.tr(),
+                  style: TextStyle(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                  ),
+                ),
+              )
+            : InkWell(
+                onTap: () {},
+                child: Text(
+                  'following'.tr(),
+                  style: const TextStyle(color: Colors.green),
+                ),
+              ),
       ),
     );
   }

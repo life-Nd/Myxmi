@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:myxmi/app.dart';
 
 class UserProvider extends ChangeNotifier {
   User account;
@@ -12,9 +13,13 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future changeUserPhoto({String newPhoto}) async {
-    await account.updatePhotoURL(newPhoto);
-    account.reload();
+  Future changeUserPhoto({BuildContext context, String photoUrl}) async {
+    await account.updatePhotoURL(photoUrl);
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => App(),
+      ),
+    );
     notifyListeners();
   }
 }

@@ -46,7 +46,7 @@ class Home extends StatelessWidget {
     return Consumer(builder: (_, watch, __) {
       final _view = watch(homeViewProvider);
       final int _viewIndex = _view.view;
-      
+
       return Scaffold(
           resizeToAvoidBottomInset: true,
           appBar: PreferredSize(
@@ -68,7 +68,14 @@ class Home extends StatelessWidget {
                     if (_view.view == 4)
                       kIsWeb
                           ? Container()
-                          : const ListTile(title: Text('Myxmi')),
+                          : const Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'Myxmi',
+                                style: TextStyle(
+                                    fontSize: 17, fontWeight: FontWeight.w700),
+                              ),
+                            ),
                   ],
                 ),
               ),

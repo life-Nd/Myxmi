@@ -17,6 +17,7 @@ enum AppState {
   empty,
   picked,
   cropped,
+  webOS,
 }
 
 class ImageProvider extends ChangeNotifier {
@@ -30,13 +31,17 @@ class ImageProvider extends ChangeNotifier {
   String added;
   final picker = ImagePicker();
 
-  SnackBar chooseImageSource(BuildContext context) {
+// TODO make sure that when its to change the userPhoto it addToDb() then changeUserProfile()
+//      if its for recipes make sure its just saved but not addedToDb
+//      To change the userProfile if its web only show a page when the image is selected before addingToDb
+  SnackBar chooseImageSource(
+      {@required BuildContext context, @required Function onComplete}) {
     return SnackBar(
       elevation: 20,
       backgroundColor: Theme.of(context).cardColor,
       duration: const Duration(seconds: 777),
       content: SizedBox(
-        height: 100,
+        height: 110,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -58,12 +63,22 @@ class ImageProvider extends ChangeNotifier {
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
                         pickImage(ImageSource.gallery).then(
                           (a) {
-                            cropImage();
+                            cropImage().then(
+                              (value) {
+                                if (value != null) {
+                                  if (state == AppState.cropped) {
+                                    onComplete();
+                                  } else {
+                                    debugPrint('nothing cropped');
+                                  }
+                                }
+                              },
+                            );
                           },
                         );
                       },
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 13, right: 13),
+                        padding: const EdgeInsets.all(13),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
@@ -87,50 +102,49 @@ class ImageProvider extends ChangeNotifier {
                       ),
                     ),
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        gradient: const LinearGradient(
-                            end: Alignment.topLeft,
-                            begin: Alignment.bottomRight,
-                            colors: [
-                              Colors.red,
-                              Colors.purple,
-                              Colors.blue,
-                              Colors.white
-                            ])),
-                    child: RawMaterialButton(
-                      padding: const EdgeInsets.only(left: 13, right: 13),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      elevation: 20,
-                      onPressed: () {
+                  Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    elevation: 20,
+                    child: InkWell(
+                      onTap: () {
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                        pickImage(ImageSource.camera).then(
-                          (a) {
-                            cropImage();
-                          },
-                        );
+                        pickImage(ImageSource.camera).then((a) {
+                          cropImage().then(
+                            (value) {
+                              if (value != null) {
+                                if (state == AppState.cropped) {
+                                  onComplete();
+                                } else {
+                                  debugPrint('nothing cropped');
+                                }
+                              }
+                            },
+                          );
+                        });
                       },
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text(
-                            'camera'.tr(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
+                      child: Padding(
+                        padding: const EdgeInsets.all(13),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text(
+                              'camera'.tr(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 7,
-                          ),
-                          const Icon(
-                            Icons.camera_alt,
-                            color: Colors.white,
-                            size: 30,
-                          ),
-                        ],
+                            const SizedBox(
+                              height: 7,
+                            ),
+                            const Icon(
+                              Icons.camera_alt,
+                              color: Colors.white,
+                              size: 30,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -168,11 +182,7 @@ class ImageProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future addImageToDb(
-      {String addedImage,
-      BuildContext context,
-      Uint8List data,
-      GlobalKey<ScaffoldState> scaffoldKey}) async {
+  Future<String> addImageToDb({@required BuildContext context}) async {
     final ProgressDialog pr = ProgressDialog(context: context);
     pr.show(max: 1000, msg: '${'loading'.tr()} ${'image'.tr()}...');
     firebase_storage.UploadTask task;
@@ -188,9 +198,7 @@ class ImageProvider extends ChangeNotifier {
           ? firebaseStorageRef.putData(dataUint8)
           : firebaseStorageRef.putFile(imageFile);
       await task.whenComplete(() {
-        added = addedImage;
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        debugPrint("AddImageToDb: $added");
         notifyListeners();
       }).then((value) async {
         final downUrl = await value.ref.getDownloadURL();
@@ -202,10 +210,11 @@ class ImageProvider extends ChangeNotifier {
       debugPrint("Url for Download: $urlString");
     }
     debugPrint('No image selected');
+    return urlString;
   }
 
   Future cropImage() async {
-    if (!kIsWeb && imageFile.path != null) {
+    if (!kIsWeb && imageFile != null) {
       final File croppedFile = await ImageCropper.cropImage(
           sourcePath: imageFile.path,
           aspectRatioPresets: Platform.isAndroid
@@ -235,12 +244,15 @@ class ImageProvider extends ChangeNotifier {
           iosUiSettings: const IOSUiSettings(
             title: 'Cropper',
           ));
+
       if (croppedFile != null) {
         imageFile = croppedFile;
         state = AppState.cropped;
         notifyListeners();
       }
     }
+    state = AppState.webOS;
+    notifyListeners();
   }
 
   void delete() {

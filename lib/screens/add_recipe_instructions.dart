@@ -182,8 +182,13 @@ class AddRecipeInstructions extends StatelessWidget {
                       padding: const EdgeInsets.all(2),
                       icon: const Icon(Icons.add_a_photo),
                       onPressed: () {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(_image.chooseImageSource(context));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          _image.chooseImageSource(
+                              context: context,
+                              onComplete: () {
+                                Navigator.of(context).pop();
+                              }),
+                        );
                       },
                     ),
                   ],
