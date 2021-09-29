@@ -34,7 +34,7 @@ class SaveButton extends HookWidget {
               _recipe.instructions.ingredients = _recipe.composition;
               _recipe.instructions.uid = _user.account.uid;
               _recipe.recipeModel.username = _user.account.displayName;
-              _recipe.recipeModel.imageUrl = _user.account.photoURL;
+              _recipe.recipeModel.photoUrl = _user.account.photoURL;
               _recipe.recipeModel.made =
                   '${DateTime.now().millisecondsSinceEpoch}';
               _image.addImageToDb(context: context).whenComplete(() async {

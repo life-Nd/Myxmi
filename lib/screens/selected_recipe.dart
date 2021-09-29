@@ -1,10 +1,8 @@
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/instructions.dart';
@@ -14,7 +12,6 @@ import 'package:myxmi/widgets/recipe_details.dart';
 import 'package:myxmi/widgets/recipe_image.dart';
 import 'package:myxmi/widgets/view_selector_text.dart';
 import '../widgets/ads_widget.dart';
-import 'add_recipe_infos.dart';
 import 'creator_recipes.dart';
 
 final InstructionsModel _instructions = InstructionsModel();
@@ -127,8 +124,9 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
                         debugPrint(
                             'widget.recipeModel.uid:${widget.recipeModel.uid}');
                         return Column(
+                          
                           children: [
-                            CreatorCard(uid: widget.recipeModel.uid),
+                            CreatorCard(recipe: widget.recipeModel),
                             _ViewsSelector(instructions: _instructions),
                             SizedBox(
                               height: _size.height / 2,
@@ -159,81 +157,86 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
 }
 
 // ignore: must_be_immutable
-class CreatorCard extends HookWidget {
-  final String uid;
-  const CreatorCard({Key key, @required this.uid}) : super(key: key);
+class CreatorCard extends StatefulWidget {
+  final RecipeModel recipe;
+  const CreatorCard({Key key, @required this.recipe}) : super(key: key);
+  @override
+  State<StatefulWidget> createState() => _CreatorCardState();
+}
+
+class _CreatorCardState extends State<CreatorCard> {
   @override
   Widget build(BuildContext context) {
     // TODO Get current: Avatar + Name + Total recipes posted from a future
     // after 1-4 seconds if it's visible on the screen.
     // This throttle would limit reads on the db for ignored recipes.
 
-    final _recipe = useProvider(recipeProvider);
-    return Card(
-      elevation: 20,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: ListTile(
-        title: _recipe?.recipeModel?.username != null
-            ? Text(_recipe?.recipeModel?.username)
-            : Text('noName'.tr()),
-        // subtitle: Row(
-        //   children: [
-        //     const Text(
-        //       '0 ',
-        //       style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-        //     ),
-        //     Text(
-        //       'followers'.tr(),
-        //     ),
-        //   ],
-        // ),
-        leading: CircleAvatar(
-          backgroundColor: Colors.amber,
-          child: _recipe?.recipeModel?.username != null
-              ? Image.network('')
-              : const Icon(Icons.person),
+    return Consumer(builder: (_, watch, __) {
+      return Card(
+        elevation: 20,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
         ),
-        // trailing: 'a' == 'a'
-        //     ? InkWell(
-        //         onTap: () {},
-        //         child: Text(
-        //           'follow'.tr(),
-        //           style: TextStyle(
-        //               color: Theme.of(context).scaffoldBackgroundColor,
-        //               fontSize: 19,
-        //               fontWeight: FontWeight.w400),
-        //         ),
-        //       )
-        //     : InkWell(
-        //         onTap: () {},
-        //         child: Text(
-        //           'following'.tr(),
-        //           style: const TextStyle(color: Colors.green),
-        //         ),
-        //       ),
-        onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => CreatorRecipes(
-                uid: uid,
-                name: _recipe?.recipeModel?.username,
-                // TODO change photoUrl by avatar
-                avatar: _recipe?.recipeModel?.photoUrl,
-                followersCount: '${Random().nextInt(777)}',
+        child: ListTile(
+          dense: false,
+          title: widget.recipe?.username != null
+              ? Text(widget?.recipe?.username)
+              : Text('noName'.tr()),
+          // subtitle: Row(
+          //   children: [
+          //     const Text(
+          //       '0 ',
+          //       style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+          //     ),
+          //     Text(
+          //       'followers'.tr(),
+          //     ),
+          //   ],
+          // ),
+          leading: widget?.recipe?.photoUrl != null
+              ? CircleAvatar(
+                  backgroundColor: Colors.amber,
+                  foregroundImage: NetworkImage(widget?.recipe?.photoUrl))
+              : const Icon(Icons.person),
+          // trailing: 'a' == 'a'
+          //     ? InkWell(
+          //         onTap: () {},
+          //         child: Text(
+          //           'follow'.tr(),
+          //           style: TextStyle(
+          //               color: Theme.of(context).scaffoldBackgroundColor,
+          //               fontSize: 19,
+          //               fontWeight: FontWeight.w400),
+          //         ),
+          //       )
+          //     : InkWell(
+          //         onTap: () {},
+          //         child: Text(
+          //           'following'.tr(),
+          //           style: const TextStyle(color: Colors.green),
+          //         ),
+          //       ),
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => CreatorRecipes(
+                  uid: widget.recipe.uid,
+                  name: widget?.recipe?.username,
+                  // TODO change photoUrl by avatar
+                  avatar: widget?.recipe?.photoUrl,
+                  followersCount: '${Random().nextInt(777)}',
+                ),
               ),
-            ),
-          );
-        },
-      ),
-    );
+            );
+          },
+        ),
+      );
+    });
   }
 }
 
 class _ViewsSelector extends StatelessWidget {
   final InstructionsModel instructions;
-
   const _ViewsSelector({Key key, this.instructions}) : super(key: key);
   @override
   Widget build(BuildContext context) {

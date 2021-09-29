@@ -22,7 +22,11 @@ class CreatorRecipes extends StatelessWidget {
       appBar: AppBar(
         leadingWidth: 20,
         title: ListTile(
-          leading: const CircleAvatar(child: Icon(Icons.person)),
+           leading: avatar != null
+              ? CircleAvatar(
+                  backgroundColor: Colors.amber,
+                  foregroundImage: NetworkImage(avatar))
+              : const Icon(Icons.person),
           title: name != null ? Text(name) : Text('noName'.tr()),
           // subtitle: Text('$followersCount ${'followers'.tr()}'),
         ),
