@@ -1,24 +1,29 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:myxmi/providers/image.dart';
 import 'package:myxmi/widgets/details_tile.dart';
+import 'package:myxmi/widgets/image_selector.dart';
 import 'package:myxmi/widgets/user_avatar.dart';
 import 'package:sn_progress_dialog/sn_progress_dialog.dart';
-import 'package:myxmi/providers/image.dart';
+
 import '../main.dart';
 
 final TextEditingController _nameCtrl = TextEditingController();
-final _nameNode = FocusNode();
+
 
 class AccountScreen extends HookWidget {
+  final FocusNode _nameNode = FocusNode();
   @override
   Widget build(BuildContext context) {
     final _user = useProvider(userProvider);
     final Size _size = MediaQuery.of(context).size;
     final ProgressDialog pr = ProgressDialog(context: context);
     final _image = useProvider(imageProvider);
+    final double _radius =
+        kIsWeb && _size.width > 700 ? _size.width / 10 : _size.width / 3;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -64,31 +69,28 @@ class AccountScreen extends HookWidget {
                           },
                         );
                       },
-                      child: UserAvatar(
-                        photoURL: _user?.account?.photoURL,
-                        radius: kIsWeb && _size.width > 700
-                            ? _size.width / 10
-                            : _size.width / 3,
-                      ),
+                      child: _user.account.photoURL != null
+                          ? UserAvatar(
+                              photoURL: _user?.account?.photoURL,
+                              radius: _radius,
+                            )
+                          : Icon(
+                              Icons.person,
+                              size: _radius,
+                            ),
                     ),
                     FloatingActionButton(
-                      // mini: false,
                       backgroundColor: Colors.deepOrange.shade300,
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          _image.chooseImageSource(
-                            context: context,
-                            onComplete: () {
-                              _image.addImageToDb(context: context).then(
-                                    (url) => _user.changeUserPhoto(
-                                        context: context, photoUrl: url),
-                                  );
+                      onPressed: () {},
+                      child: ImageSelector(
+                        onComplete: () async {
+                          await _image.addImageToDb(context: context).then(
+                            (url) async {
+                              await _user.changeUserPhoto(
+                                  context: context, photoUrl: url);
                             },
-                          ),
-                        );
-                      },
-                      child: const Icon(
-                        Icons.camera_alt,
+                          );
+                        },
                       ),
                     ),
                   ],

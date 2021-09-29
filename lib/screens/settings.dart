@@ -1,7 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 import '../main.dart';
 
@@ -160,7 +160,7 @@ class _Language extends HookWidget {
                       context.locale.languageCode == 'en')
                     Icon(
                       Icons.radio_button_checked,
-                      color: Theme.of(context).accentColor,
+                      color: Theme.of(context).backgroundColor,
                     )
                   else
                     Icon(Icons.radio_button_unchecked,
@@ -181,8 +181,10 @@ class _Language extends HookWidget {
                 children: [
                   if (_prefs.language == 'French' ||
                       context.locale.languageCode == 'fr')
-                    Icon(Icons.radio_button_checked,
-                        color: Theme.of(context).accentColor)
+                    Icon(
+                      Icons.radio_button_checked,
+                      color: Theme.of(context).backgroundColor,
+                    )
                   else
                     Icon(Icons.radio_button_unchecked,
                         color: Theme.of(context).cardColor),

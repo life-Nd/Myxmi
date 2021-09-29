@@ -1,7 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:myxmi/models/instructions.dart';
 import 'package:myxmi/models/recipes.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class RecipeProvider extends ChangeNotifier {
   RecipeModel recipeModel = RecipeModel();
@@ -71,6 +71,11 @@ class RecipeProvider extends ChangeNotifier {
 
   void changeSubCategory({String newSubCategory}) {
     recipeModel.subCategory = newSubCategory;
+    notifyListeners();
+  }
+
+  void changeDiet({String newDiet}) {
+    recipeModel.diet = newDiet;
     notifyListeners();
   }
 

@@ -1,13 +1,14 @@
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
+
+import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:easy_localization/easy_localization.dart';
 import 'package:sn_progress_dialog/progress_dialog.dart';
 
 final imageProvider =
@@ -31,144 +32,19 @@ class ImageProvider extends ChangeNotifier {
   String added;
   final picker = ImagePicker();
 
-// TODO make sure that when its to change the userPhoto it addToDb() then changeUserProfile()
-//      if its for recipes make sure its just saved but not addedToDb
-//      To change the userProfile if its web only show a page when the image is selected before addingToDb
-  SnackBar chooseImageSource(
-      {@required BuildContext context, @required Function onComplete}) {
-    return SnackBar(
-      elevation: 20,
-      backgroundColor: Theme.of(context).cardColor,
-      duration: const Duration(seconds: 777),
-      content: SizedBox(
-        height: 110,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Center(
-                child: Text(
-              'chooseSource'.tr(),
-              style: const TextStyle(fontSize: 17),
-            )),
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    elevation: 20,
-                    child: InkWell(
-                      onTap: () {
-                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                        pickImage(ImageSource.gallery).then(
-                          (a) {
-                            cropImage().then(
-                              (value) {
-                                if (value != null) {
-                                  if (state == AppState.cropped) {
-                                    onComplete();
-                                  } else {
-                                    debugPrint('nothing cropped');
-                                  }
-                                }
-                              },
-                            );
-                          },
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(13),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Text(
-                              'gallery'.tr(),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 7,
-                            ),
-                            const Icon(
-                              Icons.image_search_sharp,
-                              color: Colors.white,
-                              size: 30,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    elevation: 20,
-                    child: InkWell(
-                      onTap: () {
-                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                        pickImage(ImageSource.camera).then((a) {
-                          cropImage().then(
-                            (value) {
-                              if (value != null) {
-                                if (state == AppState.cropped) {
-                                  onComplete();
-                                } else {
-                                  debugPrint('nothing cropped');
-                                }
-                              }
-                            },
-                          );
-                        });
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(13),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Text(
-                              'camera'.tr(),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 7,
-                            ),
-                            const Icon(
-                              Icons.camera_alt,
-                              color: Colors.white,
-                              size: 30,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Future pickImage(ImageSource source) async {
     final pickedFile = await picker.pickImage(source: source, imageQuality: 77);
     pickedFile != null ? pickedFile.readAsBytes() : debugPrint('Source Empty');
     pickedFile != null
         ? kIsWeb
-            ? changeImageWeb(pickedFile)
+            ? await changeImageWeb(pickedFile)
             : changeImageFile(pickedFile)
         : debugPrint('No image selected');
     notifyListeners();
   }
 
   void changeImageFile(XFile file) {
+    debugPrint('file: ${file.path}');
     imageFile = File(file.path);
     imageWidget = Image.memory(imageFile.readAsBytesSync());
     state = AppState.picked;
@@ -176,9 +52,13 @@ class ImageProvider extends ChangeNotifier {
   }
 
   Future changeImageWeb(XFile file) async {
+    debugPrint('file: ${file.path}');
     dataUint8 = await file.readAsBytes();
     imageWidget = Image.memory(dataUint8);
+    // imageFile = File(file.path);
+    // imageWidget = Image.memory(imageFile.readAsBytesSync());
     state = AppState.picked;
+    debugPrint('stateIMAGEWEB: $state');
     notifyListeners();
   }
 
@@ -190,6 +70,8 @@ class ImageProvider extends ChangeNotifier {
     final rng = Random();
     final _random = rng.nextInt(90000) + 10000;
     imageId = '$timeStamp-$_random}';
+    debugPrint(
+        'imageFile != null || dataUint8 != null: ${imageFile != null || dataUint8 != null}');
     if (imageFile != null || dataUint8 != null) {
       final firebaseStorageRef = firebase_storage.FirebaseStorage.instance
           .ref()
@@ -199,7 +81,7 @@ class ImageProvider extends ChangeNotifier {
           : firebaseStorageRef.putFile(imageFile);
       await task.whenComplete(() {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        notifyListeners();
+        // notifyListeners();
       }).then((value) async {
         final downUrl = await value.ref.getDownloadURL();
         debugPrint('DOWNURL: $downUrl');
@@ -209,7 +91,7 @@ class ImageProvider extends ChangeNotifier {
       });
       debugPrint("Url for Download: $urlString");
     }
-    debugPrint('No image selected');
+    debugPrint('No imageFile, no dataUint8');
     return urlString;
   }
 

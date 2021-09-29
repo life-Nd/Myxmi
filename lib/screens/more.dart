@@ -1,8 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rate_my_app/rate_my_app.dart';
+
 // import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 import '../utils/auth.dart';
 import 'about.dart';

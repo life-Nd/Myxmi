@@ -99,6 +99,7 @@
    "addProfilePic":"Add a profile picture",
    "completed":"Completed",
    "noName":"No name",
+   "followers":"Followers",
    "productName":"Product name",
    "more":"More",
    "profile":"Profile",
@@ -241,6 +242,8 @@
     "searchRecipe":"Search a recipe",
     "searchInMyProducts":"Search in my products",
     "aboutMyxmi":"About Myxmi",
-    "by":"By"
+    "by":"By",
+    "follow":"Follow",
+    "diet":"Diet"
    
 }

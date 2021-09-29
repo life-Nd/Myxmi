@@ -13,7 +13,7 @@ class FoodSubCategories extends StatelessWidget {
         'dessert',
         'other',
       ],
-      type: 'subCategory',
+      type: 'subcategory',
     );
   }
 }

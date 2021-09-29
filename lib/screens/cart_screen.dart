@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/main.dart';
 
@@ -12,7 +12,7 @@ class CartScreen extends StatelessWidget {
       ),
       body: Consumer(
         builder: (_, watch, child) {
-          final _prefs = watch(prefProvider);
+          final _prefs = watch(cartProvider);
           if (_prefs.cart != null && _prefs.cart.isNotEmpty) {
             return ListView.builder(
               itemCount: _prefs.cart.length,
@@ -29,7 +29,7 @@ class CartScreen extends StatelessWidget {
                       await _prefs.editItems(item: _prefs.cart[index]);
                     },
                   ),
-                  title: Text(_prefs.cart[index]),
+                  title: Text(_prefs.cart[index].toUpperCase()),
                 );
               },
             );

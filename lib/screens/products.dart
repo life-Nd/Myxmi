@@ -1,15 +1,19 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+// import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/main.dart';
 import 'package:myxmi/screens/cart_screen.dart';
 import 'package:myxmi/widgets/products_list.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:sizer/sizer.dart';
 
-class Products extends HookWidget {
+class Products extends StatelessWidget {
+  final ScrollController _controller = ScrollController();
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      controller: _controller,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -20,7 +24,7 @@ class Products extends HookWidget {
                   style: const TextStyle(
                       fontSize: 18, fontWeight: FontWeight.w700)),
               Consumer(builder: (context, watch, child) {
-                final _prefs = watch(prefProvider);
+                final _prefs = watch(cartProvider);
                 return FutureBuilder(
                     future: _prefs.readCart(),
                     builder: (context, snapshot) {
@@ -73,9 +77,10 @@ class Products extends HookWidget {
               }),
             ],
           ),
-          const ProductsList(
+          ProductsList(
             type: 'EditProducts',
-            padding: EdgeInsets.only(bottom: 8.0, right: 20, left: 20),
+            height: kIsWeb ? 50.h : 80.h,
+            padding: const EdgeInsets.only(bottom: 8.0, right: 20, left: 20),
           ),
         ],
       ),

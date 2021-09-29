@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:myxmi/screens/menu.dart';
 import 'package:myxmi/screens/more.dart';
-import 'package:myxmi/screens/recipes_stream.dart';
 import 'package:myxmi/screens/products.dart';
+import 'package:myxmi/screens/recipes_stream.dart';
 import 'package:myxmi/screens/sign_in.dart';
-import 'package:flutter/material.dart';
-import 'package:myxmi/widgets/my_recipes.dart';
+import 'package:myxmi/widgets/uid_recipes.dart';
 
 class HomeViewProvider extends ChangeNotifier {
+  
   int view = 0;
   TextEditingController searchCtrl = TextEditingController();
   bool searchRecipesInDb = false;
@@ -88,16 +89,17 @@ class HomeViewProvider extends ChangeNotifier {
     final bool isSignedIn = uid != null;
     switch (view) {
       case 0:
-        return searchRecipesInDb
+        debugPrint('view: $view');
+        return searchRecipesInDb && searchCtrl.text.isNotEmpty
             ? RecipesStream(
                 autoCompleteField: false,
                 path: searchRecipesWith(searchKey: 'title'),
               )
             : Menu();
       case 1:
-        return isSignedIn ? const MyRecipes(path: 'all') : SignIn();
+        return isSignedIn ? UidRecipes(path: 'all', uid: uid) : SignIn();
       case 2:
-        return isSignedIn ? const MyRecipes(path: 'liked') : SignIn();
+        return isSignedIn ? UidRecipes(path: 'liked', uid: uid) : SignIn();
       case 3:
         return isSignedIn ? Products() : SignIn();
       case 4:

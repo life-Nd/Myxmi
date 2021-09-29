@@ -1,6 +1,10 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/instructions.dart';
@@ -9,9 +13,9 @@ import 'package:myxmi/providers/recipe.dart';
 import 'package:myxmi/widgets/recipe_details.dart';
 import 'package:myxmi/widgets/recipe_image.dart';
 import 'package:myxmi/widgets/view_selector_text.dart';
-import 'package:easy_localization/easy_localization.dart';
-
 import '../widgets/ads_widget.dart';
+import 'add_recipe_infos.dart';
+import 'creator_recipes.dart';
 
 final InstructionsModel _instructions = InstructionsModel();
 final selectedRecipeView = ChangeNotifierProvider(
@@ -66,7 +70,6 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
           body: CustomScrollView(
             slivers: [
               SliverAppBar(
-                floating: true,
                 leading: IconButton(
                   icon: const Icon(
                     Icons.arrow_back_ios,
@@ -77,13 +80,21 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
                 ),
                 title: Consumer(
                   builder: (context, watch, child) {
-                    return Text(widget.recipeModel.title);
+                    return Text(
+                      '${widget.recipeModel.title[0].toUpperCase()}${widget.recipeModel.title.substring(1, widget.recipeModel.title.length).toLowerCase()} ',
+                      style: const TextStyle(
+                          fontSize: 19, fontWeight: FontWeight.w700),
+                    );
                   },
                 ),
-                flexibleSpace: RecipeImage(
-                  _size.height / 1.4,
+                flexibleSpace: Opacity(
+                  opacity: 0.9,
+                  child: RecipeImage(
+                    kIsWeb ? _size.height : _size.height / 1.4,
+                  ),
                 ),
-                expandedHeight: _size.height / 1.6,
+                expandedHeight:
+                    kIsWeb ? _size.height / 1.3 : _size.height / 1.6,
               ),
               SliverList(
                 delegate: SliverChildListDelegate.fixed(
@@ -113,20 +124,15 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
                           _data = _snapshot.data();
                           _instructions.fromSnapshot(snapshot: _data);
                         }
+                        debugPrint(
+                            'widget.recipeModel.uid:${widget.recipeModel.uid}');
                         return Column(
                           children: [
-                            FutureBuilder(
-                                builder: (context, AsyncSnapshot snapshot) {
-                              return CreatorCard();
-                            }),
-                            _ViewsSelector(
-                              instructions: _instructions,
-                            ),
+                            CreatorCard(uid: widget.recipeModel.uid),
+                            _ViewsSelector(instructions: _instructions),
                             SizedBox(
                               height: _size.height / 2,
-                              child: RecipeDetails(
-                                instructions: _instructions,
-                              ),
+                              child: RecipeDetails(instructions: _instructions),
                             ),
                             if (!kIsWeb && _isBannerAdReady)
                               Align(
@@ -153,50 +159,73 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
 }
 
 // ignore: must_be_immutable
-class CreatorCard extends StatelessWidget {
+class CreatorCard extends HookWidget {
   final String uid;
-  CreatorCard({Key key, this.uid}) : super(key: key);
-  String _name;
-  String _avatar;
-  String _total;
-  bool _followed;
+  const CreatorCard({Key key, @required this.uid}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     // TODO Get current: Avatar + Name + Total recipes posted from a future
     // after 1-4 seconds if it's visible on the screen.
     // This throttle would limit reads on the db for ignored recipes.
 
+    final _recipe = useProvider(recipeProvider);
     return Card(
       elevation: 20,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
       child: ListTile(
-        title: Text(_name),
-        subtitle: Text(_total),
+        title: _recipe?.recipeModel?.username != null
+            ? Text(_recipe?.recipeModel?.username)
+            : Text('noName'.tr()),
+        // subtitle: Row(
+        //   children: [
+        //     const Text(
+        //       '0 ',
+        //       style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+        //     ),
+        //     Text(
+        //       'followers'.tr(),
+        //     ),
+        //   ],
+        // ),
         leading: CircleAvatar(
           backgroundColor: Colors.amber,
-          child: _avatar == null
-              ? Image.network(_avatar)
+          child: _recipe?.recipeModel?.username != null
+              ? Image.network('')
               : const Icon(Icons.person),
         ),
-        trailing: _followed
-            ? InkWell(
-                onTap: () {},
-                child: Text(
-                  'follow'.tr(),
-                  style: TextStyle(
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                  ),
-                ),
-              )
-            : InkWell(
-                onTap: () {},
-                child: Text(
-                  'following'.tr(),
-                  style: const TextStyle(color: Colors.green),
-                ),
+        // trailing: 'a' == 'a'
+        //     ? InkWell(
+        //         onTap: () {},
+        //         child: Text(
+        //           'follow'.tr(),
+        //           style: TextStyle(
+        //               color: Theme.of(context).scaffoldBackgroundColor,
+        //               fontSize: 19,
+        //               fontWeight: FontWeight.w400),
+        //         ),
+        //       )
+        //     : InkWell(
+        //         onTap: () {},
+        //         child: Text(
+        //           'following'.tr(),
+        //           style: const TextStyle(color: Colors.green),
+        //         ),
+        //       ),
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => CreatorRecipes(
+                uid: uid,
+                name: _recipe?.recipeModel?.username,
+                // TODO change photoUrl by avatar
+                avatar: _recipe?.recipeModel?.photoUrl,
+                followersCount: '${Random().nextInt(777)}',
               ),
+            ),
+          );
+        },
       ),
     );
   }

@@ -238,7 +238,7 @@
    "duration":"Durée",
    "time":"Temps",
    "add":"Ajouter",
-   "diet":"Diete",
+   "diet":"Diète",
    "eliquid":"E-liquide",
    "foods":"Nourritures",
    "food":"Nourriture",
@@ -293,6 +293,9 @@
     "searchRecipe":"Chercher une recette",
     "searchInMyProducts":"Chercher dans mes produits",
     "aboutMyxmi":"À propos de Myxmi",
-    "by":"Par"
+    "by":"Par",
+    "noName":"Sans nom",
+    "followers":"Abonnés",
+    "follow":"S'abonner"
 
 }

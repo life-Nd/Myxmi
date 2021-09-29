@@ -1,7 +1,7 @@
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:myxmi/models/product.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class AutoCompleteProducts extends StatefulWidget {
   final List<ProductModel> suggestions;
@@ -60,7 +60,8 @@ class _AutoCompleteProductsState extends State<AutoCompleteProducts> {
         return a.name.compareTo(b.name);
       },
       itemSubmitted: (item) {
-        _searchTextField.textField.controller.text = item.name;
+        _searchTextField.textField.controller.text =
+            '${item.name[0].toUpperCase()}${item.name.substring(1, item.name.length)}';
         widget.onSubmit();
       },
       suggestions: widget.suggestions,

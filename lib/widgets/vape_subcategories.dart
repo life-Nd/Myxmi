@@ -9,6 +9,6 @@ class VapeSubCategories extends StatelessWidget {
       'thc',
       'cbd',
       'other',
-    ], type: 'subCategory');
+    ], type: 'subcategory');
   }
 }

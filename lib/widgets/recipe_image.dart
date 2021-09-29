@@ -28,7 +28,10 @@ class _RecipeImageState extends State<RecipeImage> {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(20),
-                child: InteractiveViewer(child: _recipe.image),
+                child: InteractiveViewer(
+                  alignPanAxis: true,
+                  child: _recipe.image,
+                ),
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

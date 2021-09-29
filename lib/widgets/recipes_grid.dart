@@ -1,10 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/recipes.dart';
-import 'package:flutter/foundation.dart';
 import 'package:myxmi/screens/add_recipe_infos.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:myxmi/screens/selected_recipe.dart';
+
 import '../main.dart';
 import 'add_favorite.dart';
 import 'rating_stars.dart';
@@ -19,11 +20,13 @@ class RecipesGrid extends StatefulWidget {
 }
 
 class _RecipesGridState extends State<RecipesGrid> {
+  final ScrollController _controller = ScrollController(); 
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
     return widget.recipes.isNotEmpty
         ? GridView.builder(
+            controller: _controller,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               childAspectRatio: 0.6,
               crossAxisCount: kIsWeb && _size.width > 500 ? 4 : 2,
@@ -151,7 +154,7 @@ class _RecipesGridState extends State<RecipesGrid> {
             children: [
               Image.asset('assets/data_not_found.png'),
               Text(
-                'recipesEmpty'.tr(),
+                'noRecipes'.tr(),
               ),
             ],
           );

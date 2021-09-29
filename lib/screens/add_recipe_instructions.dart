@@ -1,11 +1,13 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/providers/image.dart';
 import 'package:myxmi/screens/add_recipe_infos.dart';
+import 'package:myxmi/widgets/image_selector.dart';
 import 'package:myxmi/widgets/save_recipe.dart';
-import 'package:flutter/foundation.dart';
+
 import 'add_recipe_products.dart';
 
 TextEditingController _stepCtrl = TextEditingController();
@@ -178,18 +180,8 @@ class AddRecipeInstructions extends StatelessWidget {
                               fontWeight: FontWeight.bold),
                         ),
                       ),
-                    IconButton(
-                      padding: const EdgeInsets.all(2),
-                      icon: const Icon(Icons.add_a_photo),
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          _image.chooseImageSource(
-                              context: context,
-                              onComplete: () {
-                                Navigator.of(context).pop();
-                              }),
-                        );
-                      },
+                    ImageSelector(
+                      onComplete: () {},
                     ),
                   ],
                 ),

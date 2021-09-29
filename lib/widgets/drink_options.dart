@@ -1,9 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:easy_localization/easy_localization.dart';
+
 import 'menu_item.dart';
 
 class DrinkItems extends HookWidget {
+  final ScrollController _ctrl = ScrollController();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -18,6 +20,7 @@ class DrinkItems extends HookWidget {
         ),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
+          controller: _ctrl,
           child: Row(
             children: const [
               MenuItem(

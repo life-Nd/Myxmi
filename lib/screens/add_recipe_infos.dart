@@ -1,20 +1,23 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/main.dart';
 import 'package:myxmi/widgets/category_selector.dart';
+import 'package:myxmi/widgets/diet_selector.dart';
 import 'package:myxmi/widgets/difficulty_slider.dart';
 import 'package:myxmi/widgets/duration_field.dart';
 import 'package:myxmi/widgets/next_button.dart';
 import 'package:myxmi/widgets/portions_field.dart';
 import 'package:myxmi/widgets/subcategory_selector.dart';
 import 'package:myxmi/widgets/title_field.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:sizer/sizer.dart';
 import '../providers/recipe.dart';
 import 'add_recipe_products.dart';
 import 'home.dart';
 
 final recipeProvider =
+    ChangeNotifierProvider<RecipeProvider>((ref) => RecipeProvider());
+final creatorProvider =
     ChangeNotifierProvider<RecipeProvider>((ref) => RecipeProvider());
 List steps = [];
 
@@ -103,6 +106,8 @@ class AddRecipeInfos extends StatelessWidget {
                         )
                       : Container();
                 }),
+                Center(child: Text('diet'.tr())),
+                const Center(child: DietSelector()),
               ],
             ),
           ),

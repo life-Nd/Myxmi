@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/recipes.dart';
 import 'package:myxmi/screens/add_recipe_infos.dart';
-import 'package:flutter/foundation.dart';
 import 'package:myxmi/widgets/recipes_grid.dart';
+
 import '../widgets/auto_complete_recipes.dart';
 
 TextEditingController _searchMyRecipesCtrl = TextEditingController();
@@ -159,6 +160,7 @@ class _RecipesViewState extends State<RecipesView> {
                     ),
                   ],
                 ),
+              const SizedBox(height: 4),
               Expanded(
                 child: RecipesGrid(
                   recipes: _searchMyRecipesCtrl.text.isEmpty

@@ -4,9 +4,9 @@ import 'package:intl/intl.dart';
 import 'package:myxmi/models/product.dart';
 import '../main.dart';
 
-class EditProducts extends StatelessWidget {
+class ProductDetails extends StatelessWidget {
   final ProductModel product;
-  const EditProducts({@required this.product});
+  const ProductDetails({@required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +30,10 @@ class EditProducts extends StatelessWidget {
                 'Expiry Date: ${DateFormat('EEE, MMM d, ' 'yy').format(DateTime.parse(product.expiration))}'),
           ],
         ),
-        trailing: Consumer(builder: (_, watch, __) {
-          final _prefs = watch(prefProvider);
-          return IconButton(
+        trailing: Consumer(
+          builder: (_, watch, __) {
+            final _prefs = watch(cartProvider);
+            return IconButton(
               icon: _prefs?.cart != null && _prefs.cart.contains(product.name)
                   ? const Icon(
                       Icons.shopping_cart,
@@ -44,8 +45,10 @@ class EditProducts extends StatelessWidget {
                     ),
               onPressed: () async {
                 await _prefs.editCart(name: product.name);
-              });
-        }),
+              },
+            );
+          },
+        ),
       ),
     );
   }

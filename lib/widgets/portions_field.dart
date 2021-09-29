@@ -1,8 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/screens/add_recipe_infos.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class PortionsField extends StatelessWidget {
   const PortionsField({Key key}) : super(key: key);

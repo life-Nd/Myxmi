@@ -1,7 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/main.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:myxmi/screens/home.dart';
 import 'package:myxmi/widgets/selected_container.dart';
 import 'package:myxmi/widgets/user_avatar.dart';
@@ -12,7 +12,6 @@ class WebAppBar extends StatelessWidget {
     final Size _size = MediaQuery.of(context).size;
     return Consumer(builder: (context, watch, child) {
       final _user = watch(userProvider);
-      debugPrint('AVATAR: ${_user?.account?.photoURL}');
       return SizedBox(
         width: _size.width,
         child: SingleChildScrollView(
@@ -59,8 +58,17 @@ class WebAppBar extends StatelessWidget {
                         padding: const EdgeInsets.only(right: 10.0),
                         child: Row(
                           children: [
-                            UserAvatar(
-                                photoURL: _user?.account?.photoURL, radius: 33),
+                            if (_user.account.photoURL != null)
+                              UserAvatar(
+                                  photoURL: _user?.account?.photoURL,
+                                  radius: 33)
+                            else
+                              const Center(
+                                child: Icon(
+                                  Icons.person,
+                                  size: 33 * 1.2,
+                                ),
+                              ),
                             if (_user?.account?.displayName != null)
                               Text(_user?.account?.displayName)
                             else

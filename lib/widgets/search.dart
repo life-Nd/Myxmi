@@ -1,17 +1,15 @@
-import 'package:flutter/foundation.dart';
-import 'package:myxmi/screens/home.dart';
-import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:myxmi/screens/home.dart';
 
-class SearchRecipes extends StatelessWidget {
-  final Function onSubmit;
-  final Function clear;
-
-  const SearchRecipes({Key key, this.onSubmit, this.clear}) : super(key: key);
+class SearchRecipes extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('searchRecipe building');
     return Consumer(builder: (_, watch, __) {
       final _view = watch(homeViewProvider);
       return Row(

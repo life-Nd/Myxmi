@@ -1,9 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/screens/home.dart';
 import 'package:myxmi/utils/auth.dart';
-import 'package:flutter/material.dart';
-import 'package:easy_localization/easy_localization.dart';
+
 import '../widgets/dialog_no_account_found.dart';
 import '../widgets/dialog_reset_password.dart';
 import '../widgets/dialog_unknown_error.dart';
@@ -14,10 +15,11 @@ final _fieldsProvider =
 
 TextEditingController _emailCtrl = TextEditingController();
 TextEditingController _passwordCtrl = TextEditingController();
-FocusNode _passwordNode;
 final AuthServices _authServices = AuthServices();
+FocusNode _passwordNode = FocusNode();
 
 class SignIn extends StatelessWidget {
+  // final FocusNode _passwordNode = FocusNode();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -234,6 +236,7 @@ class _PasswordField extends StatefulWidget {
 }
 
 class _PasswordFieldState extends State<_PasswordField> {
+   
   @override
   void initState() {
     _passwordNode = FocusNode();
@@ -269,13 +272,13 @@ class _PasswordFieldState extends State<_PasswordField> {
     );
   }
 
-  @override
-  void dispose() {
-    // Clean up the focus node when the Form is disposed.
-    _passwordNode.dispose();
+  // @override
+  // void dispose() {
+  //   // Clean up the focus node when the Form is disposed.
+  //   _passwordNode.dispose();
 
-    super.dispose();
-  }
+  //   super.dispose();
+  // }
 
   // @override
   // void dispose() {

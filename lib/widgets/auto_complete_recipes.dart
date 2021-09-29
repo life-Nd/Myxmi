@@ -1,7 +1,7 @@
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:myxmi/models/recipes.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 // ignore: must_be_immutable
 class AutoCompleteRecipes extends StatefulWidget {
@@ -18,7 +18,7 @@ class AutoCompleteRecipes extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _AutoCompleteRecipesState();
 }
-
+//TODO AUTOCOMPLETE SEEMS TO RELOAD unneccessary previous pages(Widgets)
 class _AutoCompleteRecipesState extends State<AutoCompleteRecipes> {
   AutoCompleteTextField _searchTextField;
   GlobalKey<AutoCompleteTextFieldState<RecipeModel>> key = GlobalKey();
@@ -34,21 +34,23 @@ class _AutoCompleteRecipesState extends State<AutoCompleteRecipes> {
         widget.onSubmit();
       },
       itemBuilder: (context, item) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text(
-              '${item.title[0].toUpperCase()}${item.title.substring(1, item.title.length)}',
-              style: const TextStyle(fontSize: 20.0),
-            ),
-            const Padding(
-              padding: EdgeInsets.all(15.0),
-            ),
-            Text(
-              '${item.category[0].toUpperCase()}${item.category.substring(1, item.category.length)}',
-              style: const TextStyle(fontSize: 17.0),
-            )
-          ],
+        return ListTile(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                '${item.title[0].toUpperCase()}${item.title.substring(1, item.title.length)}',
+                style: const TextStyle(fontSize: 20.0),
+              ),
+              const Padding(
+                padding: EdgeInsets.all(15.0),
+              ),
+              Text(
+                '${item.category[0].toUpperCase()}${item.category.substring(1, item.category.length)}',
+                style: const TextStyle(fontSize: 17.0),
+              )
+            ],
+          ),
         );
       },
       itemFilter: (item, query) {
@@ -58,7 +60,8 @@ class _AutoCompleteRecipesState extends State<AutoCompleteRecipes> {
         return a.title.compareTo(b.title);
       },
       itemSubmitted: (item) {
-        _searchTextField.textField.controller.text = item.title;
+        _searchTextField.textField.controller.text =
+            '${item.title[0].toUpperCase()}${item.title.substring(1, item.title.length)}';
         widget.onSubmit();
       },
       suggestions: widget.suggestions,

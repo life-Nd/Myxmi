@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'category_selector.dart';
+import 'selector_button.dart';
 
 class SelectableRow extends StatelessWidget {
   final List<String> textList;

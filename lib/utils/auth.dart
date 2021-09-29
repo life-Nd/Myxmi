@@ -1,15 +1,16 @@
+// import 'package:apple_sign_in/apple_sign_in.dart';
+// import 'package:apple_sign_in/apple_sign_in.dart' as apple_sign_in;
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:myxmi/providers/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sn_progress_dialog/progress_dialog.dart';
-import 'package:flutter/foundation.dart' as foundation;
-import 'package:apple_sign_in/apple_sign_in.dart' as apple_sign_in;
+
 import '../app.dart';
 import 'platform_dialog.dart';
 import 'platform_exception_dialog.dart';
@@ -136,78 +137,78 @@ class AuthServices {
     return user;
   }
 
-  Future<void> signInWithApple(BuildContext context) async {
-    try {
-      final user = await _signInWithApple(
-          scopes: [apple_sign_in.Scope.email, apple_sign_in.Scope.fullName],
-          context: context);
-      debugPrint('uid: ${user.uid}');
-    } catch (e) {
-      debugPrint('$e');
-    }
-  }
+  // Future<void> signInWithApple(BuildContext context) async {
+  //   try {
+  //     final user = await _signInWithApple(
+  //         scopes: [apple_sign_in.Scope.email, apple_sign_in.Scope.fullName],
+  //         context: context);
+  //     debugPrint('uid: ${user.uid}');
+  //   } catch (e) {
+  //     debugPrint('$e');
+  //   }
+  // }
 
-  Future<User> _signInWithApple(
-      {List<Scope> scopes = const [], BuildContext context}) async {
-    User user;
-    final result = await AppleSignIn.performRequests(
-        [AppleIdRequest(requestedScopes: scopes)]);
-    switch (result.status) {
-      case AuthorizationStatus.error:
-        throw PlatformException(
-          code: 'ERROR_AUTHORIZATION_DENIED',
-          message: result.error.toString(),
-        );
+  // Future<User> _signInWithApple(
+  //     {List<Scope> scopes = const [], BuildContext context}) async {
+  //   User user;
+  //   final result = await AppleSignIn.performRequests(
+  //       [AppleIdRequest(requestedScopes: scopes)]);
+  //   switch (result.status) {
+  //     case AuthorizationStatus.error:
+  //       throw PlatformException(
+  //         code: 'ERROR_AUTHORIZATION_DENIED',
+  //         message: result.error.toString(),
+  //       );
 
-      case AuthorizationStatus.cancelled:
-        throw PlatformException(
-          code: 'ERROR_ABORTED_BY_USER',
-          message: 'Sign in aborted by user',
-        );
+  //     case AuthorizationStatus.cancelled:
+  //       throw PlatformException(
+  //         code: 'ERROR_ABORTED_BY_USER',
+  //         message: 'Sign in aborted by user',
+  //       );
 
-      case AuthorizationStatus.authorized:
-        final appleIdCredential = result.credential;
-        final oAuthProvider = OAuthProvider('apple.com');
-        final credential = oAuthProvider.credential(
-          idToken: String.fromCharCodes(appleIdCredential.identityToken),
-          accessToken:
-              String.fromCharCodes(appleIdCredential.authorizationCode),
-        );
-        try {
-          final UserCredential userCredential =
-              await FirebaseAuth.instance.signInWithCredential(credential);
-          user = userCredential.user;
-          debugPrint(
-              "New user: ${userCredential.additionalUserInfo.isNewUser}");
-          debugPrint("USER: ${user.email}");
-        } on FirebaseAuthException catch (e) {
-          if (e.code == 'account-exists-with-different-credential') {
-            ScaffoldMessenger.of(context).showSnackBar(
-              customSnackBar(
-                content:
-                    'The account already exists with a different credential.',
-              ),
-            );
-          } else if (e.code == 'invalid-credential') {
-            ScaffoldMessenger.of(context).showSnackBar(
-              customSnackBar(
-                content:
-                    'Error occurred while accessing credentials. Try again.',
-              ),
-            );
-          }
-        } catch (e) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            customSnackBar(
-              content: 'Error occurred using Apple Sign-In. Try again.',
-            ),
-          );
-        }
-        debugPrint('User: ${user.email} ${user.displayName}');
-        return user;
-    }
-    return user;
-  }
+  //     case AuthorizationStatus.authorized:
+  //       final appleIdCredential = result.credential;
+  //       final oAuthProvider = OAuthProvider('apple.com');
+  //       final credential = oAuthProvider.credential(
+  //         idToken: String.fromCharCodes(appleIdCredential.identityToken),
+  //         accessToken:
+  //             String.fromCharCodes(appleIdCredential.authorizationCode),
+  //       );
+  //       try {
+  //         final UserCredential userCredential =
+  //             await FirebaseAuth.instance.signInWithCredential(credential);
+  //         user = userCredential.user;
+  //         debugPrint(
+  //             "New user: ${userCredential.additionalUserInfo.isNewUser}");
+  //         debugPrint("USER: ${user.email}");
+  //       } on FirebaseAuthException catch (e) {
+  //         if (e.code == 'account-exists-with-different-credential') {
+  //           ScaffoldMessenger.of(context).showSnackBar(
+  //             customSnackBar(
+  //               content:
+  //                   'The account already exists with a different credential.',
+  //             ),
+  //           );
+  //         } else if (e.code == 'invalid-credential') {
+  //           ScaffoldMessenger.of(context).showSnackBar(
+  //             customSnackBar(
+  //               content:
+  //                   'Error occurred while accessing credentials. Try again.',
+  //             ),
+  //           );
+  //         }
+  //       } catch (e) {
+  //         ScaffoldMessenger.of(context).showSnackBar(
+  //           customSnackBar(
+  //             content: 'Error occurred using Apple Sign-In. Try again.',
+  //           ),
+  //         );
+  //       }
+  //       debugPrint('User: ${user.email} ${user.displayName}');
+  //       return user;
+  //   }
+  //   return user;
+  // }
 
   Future<dynamic> resetPassword({String emailCtrl}) async {
     await firebaseAuth.sendPasswordResetEmail(email: emailCtrl);

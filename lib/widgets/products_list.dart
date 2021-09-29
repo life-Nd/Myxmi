@@ -1,26 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/product.dart';
 import 'package:myxmi/screens/add_recipe_infos.dart';
-import 'package:sizer/sizer.dart';
 import '../main.dart';
 import 'auto_complete_products.dart';
-import 'edit_products.dart';
-import 'fields.dart';
-
-
+import 'product_details.dart';
+import 'product_fields.dart';
 
 TextEditingController _searchProductsCtrl = TextEditingController();
 
 class ProductsList extends StatelessWidget {
   final String type;
+  final double height;
   final EdgeInsetsGeometry padding;
-  const ProductsList({
-    @required this.type,
-    @required this.padding,
-  });
+  const ProductsList(
+      {@required this.type, @required this.padding, @required this.height});
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +54,7 @@ class ProductsList extends StatelessWidget {
           }
           if (snapshot.data != null) {
             return ProductsView(
+              height: height,
               type: type,
               padding: padding,
               products: _products(
@@ -79,18 +76,21 @@ class ProductsList extends StatelessWidget {
 class ProductsView extends StatefulWidget {
   final List<ProductModel> products;
   final String type;
+  final double height;
   final EdgeInsetsGeometry padding;
   const ProductsView({
     Key key,
     @required this.products,
     @required this.type,
     @required this.padding,
+    @required this.height,
   }) : super(key: key);
   @override
   State<StatefulWidget> createState() => _ProductsViewState();
 }
 
 class _ProductsViewState extends State<ProductsView> {
+  final ScrollController _controller = ScrollController();
   final List<ProductModel> _filteredProducts = [];
   List<ProductModel> _filterProducts() {
     final Iterable _filter = widget.products.asMap().entries.where((entry) {
@@ -116,6 +116,7 @@ class _ProductsViewState extends State<ProductsView> {
     return StatefulBuilder(
       builder: (context, StateSetter stateSetter) {
         return SingleChildScrollView(
+          controller: _controller,
           child: Column(
             children: [
               Padding(
@@ -153,7 +154,7 @@ class _ProductsViewState extends State<ProductsView> {
                   stateSetter(() {});
                 },
                 child: SizedBox(
-                  height: 80.h,
+                  height: widget.height,
                   child: _ProductsList(
                     products: _searchProductsCtrl.text.isEmpty
                         ? widget.products
@@ -230,11 +231,8 @@ class _ProductsList extends StatelessWidget {
                       ),
                       // TODO fix what shows when you filter the products
                       child: type == 'AddRecipe'
-                          ? Fields(
-                              product: products[index],
-                              recipe: _recipe,
-                            )
-                          : EditProducts(product: products[index]));
+                          ? ProductField(product: products[index])
+                          : ProductDetails(product: products[index]));
                 },
               );
             },
@@ -244,9 +242,7 @@ class _ProductsList extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset('assets/data_not_found.png'),
-              Text(
-                'productsEmpty'.tr(),
-              ),
+              Text('productsEmpty'.tr()),
             ],
           );
   }
