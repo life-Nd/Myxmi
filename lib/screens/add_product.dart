@@ -168,10 +168,6 @@ class AddProduct extends HookWidget {
                     type: 'sauces&spices',
                     color: Colors.yellow.shade400,
                   ),
-                  // _ProductEntryType(
-                  //   type: 'eliquid',
-                  //   color: Colors.grey.shade400,
-                  // ),
                   _ProductEntryType(
                     type: 'other',
                     color: Theme.of(context).iconTheme.color,

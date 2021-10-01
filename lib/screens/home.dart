@@ -68,7 +68,7 @@ class Home extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       if (kIsWeb && 100.w > 500)
-                        Expanded(flex: 2, child: WebAppBar()),
+                        Expanded(flex: 2, child: WebAppBar(uid: uid)),
                       if (_view.view == 0) SearchRecipes(),
                       if (_view.view == 4)
                         kIsWeb
