@@ -5,24 +5,20 @@ import 'package:myxmi/screens/add_recipe_infos.dart';
 
 TextEditingController textCtrl = TextEditingController();
 
-class ProductField extends StatefulWidget {
+class ProductField extends StatelessWidget {
   final ProductModel product;
   const ProductField({@required this.product});
-  @override
-  State<StatefulWidget> createState() => ProductFieldState();
-}
-
-class ProductFieldState extends State<ProductField> {
+  
   @override
   Widget build(BuildContext context) {
     final String _name =
-        '${widget.product.name[0]?.toUpperCase()}${widget.product.name?.substring(1, widget.product.name?.length)}';
+        '${product.name[0]?.toUpperCase()}${product.name?.substring(1, product.name?.length)}';
     return Consumer(builder: (_, watch, __) {
       final _recipe = watch(recipeProvider);
-      debugPrint('Composition ${_recipe.composition[widget.product.name]}');
+      debugPrint('Composition ${_recipe.composition[product.name]}');
       textCtrl = TextEditingController(
-          text: _recipe.composition[widget.product.name] != null
-              ? _recipe.composition[widget.product.name]
+          text: _recipe.composition[product.name] != null
+              ? _recipe.composition[product.name]
                   .toString()
                   .split(' ')
                   .toList()[0]
@@ -38,19 +34,19 @@ class ProductFieldState extends State<ProductField> {
           },
           onChanged: (value) {
             _recipe.changeComposition(
-                key: widget.product.name,
+                key: product.name,
                 value: value,
-                type: widget.product.mesureType);
+                type: product.mesureType);
             _recipe.changeQuantity(
-              key: widget.product.name.toString(),
+              key: product.name.toString(),
               value: value,
-              type: widget.product.mesureType,
+              type: product.mesureType,
             );
           },
           onEditingComplete: () {},
           decoration: InputDecoration(
             labelText: _name,
-            suffixText: widget.product.mesureType,
+            suffixText: product.mesureType,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
             ),

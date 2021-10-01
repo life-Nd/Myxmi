@@ -11,7 +11,6 @@ class RecipeModel {
   static const _subCategory = 'sub_category';
   static const _access = 'access';
   static const _difficulty = 'difficulty';
-  static const _vegan = 'vegan';
   static const _reference = 'reference';
   static const _made = 'made';
   static const _reviewsCount = 'reviews_count';
@@ -34,7 +33,6 @@ class RecipeModel {
   String subCategory;
   String access;
   String difficulty;
-  String vegan;
   String reference;
   String made;
   String reviewsCount;
@@ -59,7 +57,6 @@ class RecipeModel {
     this.subCategory,
     this.access,
     this.difficulty,
-    this.vegan,
     this.reference,
     this.made,
     this.reviewsCount,
@@ -86,7 +83,6 @@ class RecipeModel {
       subCategory: snapshot[_subCategory] as String,
       access: snapshot[_access] as String,
       difficulty: snapshot[_difficulty] as String,
-      vegan: snapshot[_vegan] as String,
       reference: snapshot[_reference] as String,
       reviewsCount: snapshot[_reviewsCount] as String,
       made: snapshot[_made] as String,
@@ -112,7 +108,6 @@ class RecipeModel {
       _subCategory: subCategory.toLowerCase(),
       _access: access.toLowerCase(),
       _difficulty: difficulty,
-      _vegan: vegan,
       _reference: reference,
       _made: made,
       _reviewsCount: reviewsCount,

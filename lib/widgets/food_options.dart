@@ -27,37 +27,44 @@ class FoodOptions extends HookWidget {
           child: Row(
             children: const [
               MenuItem(
+                category: 'foods',
                 legend: 'breakfast',
                 url:
                     'https://unsplash.com/photos/SQ20tWzxXO0?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink',
               ),
               MenuItem(
+                category: 'foods',
                 legend: 'appetizer',
                 url:
                     'https://unsplash.com/photos/n9xsu46NGaE?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink',
               ),
               MenuItem(
+                category: 'foods',
                 legend: 'salad',
                 url:
                     'https://unsplash.com/photos/AiHJiRCwB3w?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink',
               ),
               MenuItem(
+                category: 'foods',
                 legend: 'soup',
                 url:
                     'https://unsplash.com/photos/8mVLMZ0WW98?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink',
 
               ),
               MenuItem(
+                category: 'foods',
                 legend: 'dinner',
                 url:
                     'https://unsplash.com/photos/zzxqoEa64_0?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink',
               ),
               MenuItem(
+                category: 'foods',
                 legend: 'dessert',
                 url:
                     'https://unsplash.com/photos/6iqpLKqeaE0?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink',
               ),
               MenuItem(
+                category: 'foods',
                 legend: 'foods',
                 url: '',
               ),

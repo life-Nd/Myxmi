@@ -27,13 +27,13 @@ import 'add_recipe_infos.dart';
 // KETO https://unsplash.com/photos/auIbTAcSH6E?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
 // MEAT
 // SALAD https://unsplash.com/photos/AiHJiRCwB3w?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
+// SAUCES&SPICES <a href='https://www.freepik.com/photos/background'>Background photo created by KamranAydinov - www.freepik.com</a>
 // SEAFOOD
 // SHAKE https://unsplash.com/photos/4FujjkcI40g?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
 // SMOOTHIE https://unsplash.com/photos/5HNB4MqxkIM?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
 // SOUP https://unsplash.com/photos/8mVLMZ0WW98?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
 // VEGAN https://unsplash.com/photos/zOlQ7lF-3vs?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
 // VEGETERIAN https://unsplash.com/photos/IGfIGP5ONV0?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
-
 final homeViewProvider = ChangeNotifierProvider<HomeViewProvider>(
   (ref) => HomeViewProvider(),
 );
@@ -67,7 +67,8 @@ class Home extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      if (kIsWeb && 100.w > 500) Expanded(child: WebAppBar()),
+                      if (kIsWeb && 100.w > 500)
+                        Expanded(flex: 2, child: WebAppBar()),
                       if (_view.view == 0) SearchRecipes(),
                       if (_view.view == 4)
                         kIsWeb
@@ -86,16 +87,6 @@ class Home extends StatelessWidget {
                 ),
               ),
             ),
-            // floatingActionButton: FloatingActionButton(
-            //   onPressed: () {
-            //     Navigator.of(context).push(
-            //       MaterialPageRoute(
-            //         builder: (_) => AddRecipeProducts(),
-            //       ),
-            //     );
-            //   },
-            //   child: const Icon(Icons.send),
-            // ),
             floatingActionButton: _viewIndex == 0 ||
                     _viewIndex == 1 && uid != null ||
                     _viewIndex == 3 && uid != null

@@ -7,8 +7,13 @@ import 'package:myxmi/screens/filtered.dart';
 
 class MenuItem extends StatefulWidget {
   final String legend;
+  final String category;
   final String url;
-  const MenuItem({Key key, @required this.legend, @required this.url})
+  const MenuItem(
+      {Key key,
+      @required this.legend,
+      @required this.url,
+      @required this.category})
       : super(key: key);
   @override
   State<StatefulWidget> createState() => _MenuItemState();
@@ -26,7 +31,8 @@ class _MenuItemState extends State<MenuItem> {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => Filtered(
-                widget.legend,
+                legend: widget.legend,
+                category: widget.category,
               ),
             ),
           );

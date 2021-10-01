@@ -4,8 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sizer/sizer.dart';
-
 import '../main.dart';
 
 final _productEntryProvider = ChangeNotifierProvider<_ProductEntryProvider>(
@@ -141,43 +139,44 @@ class AddProduct extends HookWidget {
                   ),
                 ),
               ),
-              Container(
-                height: kIsWeb && _size.width > 700 ? 10.h : 35.h,
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: GridView(
-                  padding: const EdgeInsets.symmetric(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 1,
-                    mainAxisSpacing: 4,
-                  ),
-                  children: [
-                    _ProductEntryType(
-                      type: 'fruit',
-                      color: Colors.orange.shade300,
-                    ),
-                    _ProductEntryType(
-                      type: 'vegetable',
-                      color: Colors.green.shade300,
-                    ),
-                    _ProductEntryType(
-                      type: 'seafood',
-                      color: Colors.blue.shade100,
-                    ),
-                    _ProductEntryType(
-                      type: 'dairy',
-                      color: Colors.yellow.shade400,
-                    ),
-                    _ProductEntryType(
-                      type: 'eliquid',
-                      color: Colors.grey.shade400,
-                    ),
-                    _ProductEntryType(
-                      type: 'other',
-                      color: Colors.brown.shade200,
-                    ),
-                  ],
+              GridView(
+                shrinkWrap: true,
+                padding: const EdgeInsets.symmetric(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 1,
+                  mainAxisSpacing: 2,
                 ),
+                children: [
+                  _ProductEntryType(
+                    type: 'fruit',
+                    color: Colors.orange.shade300,
+                  ),
+                  _ProductEntryType(
+                    type: 'vegetable',
+                    color: Colors.green.shade300,
+                  ),
+                  _ProductEntryType(
+                    type: 'dairy',
+                    color: Colors.yellow.shade400,
+                  ),
+                  _ProductEntryType(
+                    type: 'meat&seafood&alt',
+                    color: Colors.red.shade100,
+                  ),
+                  _ProductEntryType(
+                    type: 'sauces&spices',
+                    color: Colors.yellow.shade400,
+                  ),
+                  // _ProductEntryType(
+                  //   type: 'eliquid',
+                  //   color: Colors.grey.shade400,
+                  // ),
+                  _ProductEntryType(
+                    type: 'other',
+                    color: Theme.of(context).iconTheme.color,
+                  ),
+                ],
               ),
               const SizedBox(
                 height: 10,
@@ -191,80 +190,77 @@ class AddProduct extends HookWidget {
                   ),
                 ),
               ),
-              Card(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    DropdownButton<int>(
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      value: _mesureValue,
-                      onChanged: (val) {
-                        _mesureValue = val;
-                        _change.value = !_change.value;
-                      },
-                      items: [
-                        DropdownMenuItem(
-                          value: 0,
-                          onTap: () {
-                            _mesureType = 'g';
-                          },
-                          child: const Text(
-                            'g',
-                          ),
-                        ),
-                        DropdownMenuItem(
-                          value: 1,
-                          onTap: () {
-                            _mesureType = 'ml';
-                          },
-                          child: const Text(
-                            'ml',
-                          ),
-                        ),
-                        DropdownMenuItem(
-                          value: 2,
-                          onTap: () {
-                            _mesureType = 'drops';
-                          },
-                          child: Text(
-                            'drops'.tr(),
-                          ),
-                        ),
-                        DropdownMenuItem(
-                          value: 3,
-                          onTap: () {
-                            _mesureType = 'teaspoons';
-                          },
-                          child: Text(
-                            'teaspoons'.tr(),
-                          ),
-                        ),
-                        DropdownMenuItem(
-                          value: 4,
-                          onTap: () {
-                            _mesureType = 'tablespoons';
-                          },
-                          child: Text(
-                            'tablespoons'.tr(),
-                          ),
-                        ),
-                        DropdownMenuItem(
-                          value: 5,
-                          onTap: () {
-                            _mesureType = 'pieces';
-                          },
-                          child: Text(
-                            'pieces'.tr(),
-                          ),
-                        ),
-                      ],
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  DropdownButton<int>(
+                    style: const TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ],
-                ),
+                    value: _mesureValue,
+                    onChanged: (val) {
+                      _mesureValue = val;
+                      _change.value = !_change.value;
+                    },
+                    items: [
+                      DropdownMenuItem(
+                        value: 0,
+                        onTap: () {
+                          _mesureType = 'g';
+                        },
+                        child: const Text(
+                          'g',
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: 1,
+                        onTap: () {
+                          _mesureType = 'ml';
+                        },
+                        child: const Text(
+                          'ml',
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: 2,
+                        onTap: () {
+                          _mesureType = 'drops';
+                        },
+                        child: Text(
+                          'drops'.tr(),
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: 3,
+                        onTap: () {
+                          _mesureType = 'teaspoons';
+                        },
+                        child: Text(
+                          'teaspoons'.tr(),
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: 4,
+                        onTap: () {
+                          _mesureType = 'tablespoons';
+                        },
+                        child: Text(
+                          'tablespoons'.tr(),
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: 5,
+                        onTap: () {
+                          _mesureType = 'pieces';
+                        },
+                        child: Text(
+                          'pieces'.tr(),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
               ListTile(
                 dense: true,
@@ -436,6 +432,16 @@ class _ProductEntryType extends StatelessWidget {
                 Expanded(
                   child: Image.asset(
                     'assets/$type.png',
+                  ),
+                )
+              else
+                const Expanded(
+                  child: FittedBox(
+                    fit: BoxFit.fill,
+                    child: Text(
+                      '?',
+                      style: TextStyle(fontSize: 80),
+                    ),
                   ),
                 ),
               Text(

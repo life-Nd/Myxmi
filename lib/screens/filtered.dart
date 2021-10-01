@@ -8,10 +8,12 @@ import '../widgets/ads_widget.dart';
 import 'recipes_stream.dart';
 
 String _equalTo = '';
+String _category = '';
 
 class Filtered extends StatefulWidget {
   final String legend;
-  const Filtered(this.legend);
+  final String category;
+  const Filtered({@required this.legend, @required this.category});
   @override
   State<StatefulWidget> createState() => _FilteredState();
 }
@@ -24,6 +26,7 @@ class _FilteredState extends State<Filtered> {
   @override
   void initState() {
     _equalTo = widget.legend;
+    _category = widget.category;
     if (!kIsWeb) {
       _bannerAd = BannerAd(
         adUnitId: _adHelper.bannerAdUnitId(),
@@ -76,13 +79,13 @@ class _ExpandedRecipesStream extends StatelessWidget {
   const _ExpandedRecipesStream({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final String _where = _category == 'diets' ? 'diet' : 'sub_category';
     return Expanded(
       child: RecipesStream(
         path: FirebaseFirestore.instance
             .collection('Recipes')
-            .where('sub_category', isEqualTo: _equalTo)
+            .where(_where, isEqualTo: _equalTo)
             .snapshots(),
-        // height: 100.h,
         autoCompleteField: true,
       ),
     );
