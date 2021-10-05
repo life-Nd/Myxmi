@@ -24,24 +24,24 @@ class DietOptions extends HookWidget {
           child: Row(
             children: const [
               MenuItem(
-                category: 'diets',
+                filter: 'diet',
                 legend: 'vegan',
                 url:
                     'https://unsplash.com/photos/zOlQ7lF-3vs?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink',
               ),
               MenuItem(
-                  category: 'diets',
+                  filter: 'diet',
                   legend: 'vegetarian',
                   url:
                       'https://unsplash.com/photos/IGfIGP5ONV0?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink'),
               MenuItem(
-                  category: 'diets',
+                  filter: 'diet',
                   legend: 'keto',
                   url:
                       'https://unsplash.com/photos/auIbTAcSH6E?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink'),
               MenuItem(
-                category: 'diets',
-                legend: 'diets',
+                filter: 'diet',
+                legend: 'diet',
                 url: 'https://unsplash.com/photos/NPBnWE1o07I',
               ),
             ],

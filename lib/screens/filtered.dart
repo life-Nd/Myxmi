@@ -8,12 +8,12 @@ import '../widgets/ads_widget.dart';
 import 'recipes_stream.dart';
 
 String _equalTo = '';
-String _category = '';
+String _where = '';
 
 class Filtered extends StatefulWidget {
   final String legend;
-  final String category;
-  const Filtered({@required this.legend, @required this.category});
+  final String filter;
+  const Filtered({@required this.legend, @required this.filter});
   @override
   State<StatefulWidget> createState() => _FilteredState();
 }
@@ -26,7 +26,7 @@ class _FilteredState extends State<Filtered> {
   @override
   void initState() {
     _equalTo = widget.legend;
-    _category = widget.category;
+    _where = widget.filter;
     if (!kIsWeb) {
       _bannerAd = BannerAd(
         adUnitId: _adHelper.bannerAdUnitId(),
@@ -77,15 +77,22 @@ class _FilteredState extends State<Filtered> {
 
 class _ExpandedRecipesStream extends StatelessWidget {
   const _ExpandedRecipesStream({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    final String _where = _category == 'diets' ? 'diet' : 'sub_category';
+    debugPrint('_where: $_where');
+    debugPrint('_equalTo: $_equalTo');
     return Expanded(
       child: RecipesStream(
-        path: FirebaseFirestore.instance
-            .collection('Recipes')
-            .where(_where, isEqualTo: _equalTo)
-            .snapshots(),
+        path: _equalTo != 'diet'
+            ? FirebaseFirestore.instance
+                .collection('Recipes')
+                .where(_where, isEqualTo: _equalTo)
+                .snapshots()
+            : FirebaseFirestore.instance
+                .collection('Recipes')
+                .orderBy('made')
+                .snapshots(),
         autoCompleteField: true,
       ),
     );

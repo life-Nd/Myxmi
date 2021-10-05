@@ -8,7 +8,6 @@ import 'package:myxmi/screens/sign_in.dart';
 import 'package:myxmi/widgets/uid_recipes.dart';
 
 class HomeViewProvider extends ChangeNotifier {
-  
   int view = 0;
   TextEditingController searchCtrl = TextEditingController();
   bool searchRecipesInDb = false;
@@ -40,15 +39,6 @@ class HomeViewProvider extends ChangeNotifier {
     return _stream;
   }
 
-  // Stream<QuerySnapshot> streamProductsWith(
-  //     {@required String key, @required String value}) {
-  //   final _stream = FirebaseFirestore.instance
-  //       .collection('Products')
-  //       .where(key, isEqualTo: value)
-  //       .snapshots();
-  //   return _stream;
-  // }
-
   String searchText() {
     final String _text = searchCtrl.text.toString().trim().toLowerCase();
     return _text;
@@ -57,10 +47,6 @@ class HomeViewProvider extends ChangeNotifier {
   Stream<QuerySnapshot> searchRecipesWith({@required String searchKey}) {
     return streamRecipesWith(key: searchKey, value: searchText());
   }
-
-  // Stream<QuerySnapshot> searchProductssWith({@required String searchKey}) {
-  //   return streamProductsWith(key: searchKey, value: searchText());
-  // }
 
   void search() {
     if (searchCtrl.text.isNotEmpty) {
@@ -104,6 +90,10 @@ class HomeViewProvider extends ChangeNotifier {
         return isSignedIn ? Products() : SignIn();
       case 4:
         return isSignedIn ? More() : SignIn();
+      case 5:
+        return isSignedIn ? More() : SignIn();
+      // case 6:
+      //   return isSignedIn ? More() : SignIn();
       default:
         return Menu();
     }

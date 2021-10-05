@@ -5,7 +5,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/recipes.dart';
 import 'package:myxmi/screens/add_recipe_infos.dart';
 import 'package:myxmi/screens/selected_recipe.dart';
-
 import '../main.dart';
 import 'add_favorite.dart';
 import 'rating_stars.dart';
@@ -150,9 +149,10 @@ class _RecipesGridState extends State<RecipesGrid> {
             },
           )
         : Column(
+          mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/data_not_found.png'),
+              Expanded(child: Image.asset('assets/data_not_found.png')),
               Text(
                 'noRecipes'.tr(),
               ),

@@ -7,13 +7,13 @@ import 'package:myxmi/screens/filtered.dart';
 
 class MenuItem extends StatefulWidget {
   final String legend;
-  final String category;
+  final String filter;
   final String url;
   const MenuItem(
       {Key key,
       @required this.legend,
       @required this.url,
-      @required this.category})
+      @required this.filter})
       : super(key: key);
   @override
   State<StatefulWidget> createState() => _MenuItemState();
@@ -24,6 +24,10 @@ class _MenuItemState extends State<MenuItem> {
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
+    // final String _legend =
+    //     widget.filter == 'category' || widget.legend == 'diet'
+    //         ? '${widget.legend}s'
+    //         : widget.legend;
     return Consumer(builder: (_, watch, __) {
       return InkWell(
         onTap: () {
@@ -32,7 +36,7 @@ class _MenuItemState extends State<MenuItem> {
             MaterialPageRoute(
               builder: (_) => Filtered(
                 legend: widget.legend,
-                category: widget.category,
+                filter: widget.filter,
               ),
             ),
           );
@@ -57,7 +61,7 @@ class _MenuItemState extends State<MenuItem> {
                 ),
               ),
               Text(
-                widget.legend.tr(),
+                '${widget.legend.tr()}s',
                 style:
                     const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
               ),
