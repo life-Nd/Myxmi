@@ -118,6 +118,11 @@ class RecipeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void removeStep({@required String step}) {
+    instructions.steps.remove(step);
+    notifyListeners();
+  }
+
   void addProduct({@required Map ingredient}) {
     instructions.ingredients = ingredient;
     notifyListeners();
@@ -147,7 +152,7 @@ class RecipeProvider extends ChangeNotifier {
 
   void reset() {
     recipeModel = RecipeModel();
-    instructions = InstructionsModel();
+    instructions = InstructionsModel(ingredients: {}, steps: []);
     estimatedWeight = 0.0;
     difficultyValue = 0.0;
     actualWeight = '';

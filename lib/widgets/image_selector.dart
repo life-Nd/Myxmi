@@ -5,10 +5,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:myxmi/providers/image.dart';
 
-// TODO make sure that when its to change the userPhoto it addToDb() then changeUserProfile()
-//      if its for recipes make sure its just saved but not addedToDb
-//      To change the userProfile if its web only show a page when the image is selected before addingToDb
-
 class ImageSelector extends HookWidget {
   final Function onComplete;
   const ImageSelector({@required this.onComplete});
@@ -75,7 +71,9 @@ class ImageSelector extends HookWidget {
                                                         AppState.cropped) {
                                                   debugPrint(
                                                       'cropped: ${cropped.toString()}');
-                                                  onComplete();
+                                                  onComplete().then(() async {
+                                                    _image.reset();
+                                                  });
                                                 }
                                               },
                                             );

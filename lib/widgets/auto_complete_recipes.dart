@@ -18,7 +18,6 @@ class AutoCompleteRecipes extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _AutoCompleteRecipesState();
 }
-//TODO AUTOCOMPLETE SEEMS TO RELOAD unneccessary previous pages(Widgets)
 class _AutoCompleteRecipesState extends State<AutoCompleteRecipes> {
   AutoCompleteTextField _searchTextField;
   GlobalKey<AutoCompleteTextFieldState<RecipeModel>> key = GlobalKey();

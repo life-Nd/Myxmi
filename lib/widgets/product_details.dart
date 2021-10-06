@@ -18,7 +18,6 @@ class ProductDetails extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: ListTile(
-        // TODO change the first letter of the title to a capital letter
         title: Center(child: Text(_name)),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

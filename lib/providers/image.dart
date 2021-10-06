@@ -139,7 +139,7 @@ class ImageProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void delete() {
+  void reset() {
     imageFile.delete();
     imageLink = '';
     urlString = '';

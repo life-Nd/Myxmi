@@ -121,11 +121,42 @@ class AddRecipeInstructions extends StatelessWidget {
                 itemCount: _keys,
                 itemBuilder: (_, int index) {
                   final int _index = index + 1;
-                  return Card(
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                    child: ListTile(
-                      title: Text('${'step'.tr()} $_index'),
-                      subtitle: Text('${_steps[index]}'),
+                  return Dismissible(
+                    key: UniqueKey(),
+                    background: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Card(
+                        color: Colors.red,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              'delete'.tr(),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 17,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 40,
+                            ),
+                            const Icon(Icons.delete),
+                          ],
+                        ),
+                      ),
+                    ),
+                    onDismissed: (direction) {
+                      _recipe.removeStep(step: _steps[index] as String);
+                    },
+                    child: Card(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      child: ListTile(
+                        title: Text('${'step'.tr()} $_index'),
+                        subtitle: Text('${_steps[index]}'),
+                      ),
                     ),
                   );
                 },

@@ -164,10 +164,6 @@ class CreatorCard extends StatefulWidget {
 class _CreatorCardState extends State<CreatorCard> {
   @override
   Widget build(BuildContext context) {
-    // TODO Get current: Avatar + Name + Total recipes posted from a future
-    // after 1-4 seconds if it's visible on the screen.
-    // This throttle would limit reads on the db for ignored recipes.
-
     return Consumer(builder: (_, watch, __) {
       return Card(
         elevation: 20,
@@ -219,7 +215,6 @@ class _CreatorCardState extends State<CreatorCard> {
                 builder: (_) => CreatorRecipes(
                   uid: widget.recipe.uid,
                   name: widget?.recipe?.username,
-                  // TODO change photoUrl by avatar
                   avatar: widget?.recipe?.photoUrl,
                   followersCount: '${Random().nextInt(777)}',
                 ),

@@ -120,7 +120,6 @@ class _RecipesGridState extends State<RecipesGrid> {
                                       MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    // TODO when tapping to add to favorites it shows a white screen
                                     AddFavoriteButton(recipe: _recipe),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
@@ -150,11 +149,13 @@ class _RecipesGridState extends State<RecipesGrid> {
           )
         : Column(
           mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
+            
             children: [
               Expanded(child: Image.asset('assets/data_not_found.png')),
-              Text(
-                'noRecipes'.tr(),
+              Expanded(
+                child: Text(
+                  'noRecipes'.tr(),
+                ),
               ),
             ],
           );

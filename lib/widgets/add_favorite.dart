@@ -85,6 +85,9 @@ class _AddFavoriteButtonState extends State<AddFavoriteButton> {
                             merge: true,
                           ),
                         );
+                        if (widget.recipe.likedBy.isEmpty) {
+                          widget.recipe.likedBy = {};
+                        }
                         widget.recipe.likedBy[_user.account.uid] = true;
                         setState(() {});
                       },

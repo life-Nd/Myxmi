@@ -54,6 +54,12 @@ class SaveButton extends HookWidget {
                     .set(_recipe.instructions.toMap());
               }).whenComplete(() {
                 // TODO after uploading the recipe, we should update the quantity of the products used
+                // _recipe.instructions.ingredients.forEach((key, value) async {
+                //   await FirebaseFirestore.instance
+                //       .collection('Products')
+                //       .doc(_user.account.uid)
+                //       .update(_recipe.instructions.toMap());
+                // });
                 pr.close();
                 _recipe.reset();
                 Navigator.of(context).pushAndRemoveUntil(

@@ -13,7 +13,6 @@ import '../main.dart';
 
 final TextEditingController _nameCtrl = TextEditingController();
 
-
 class AccountScreen extends HookWidget {
   final FocusNode _nameNode = FocusNode();
   @override

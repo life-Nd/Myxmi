@@ -171,16 +171,22 @@ class _ProductsViewState extends State<ProductsView> {
   }
 }
 
-class _ProductsList extends StatelessWidget {
+class _ProductsList extends StatefulWidget {
   final List<ProductModel> products;
   final String type;
   const _ProductsList({Key key, @required this.products, @required this.type})
       : super(key: key);
+
+  @override
+  State<_ProductsList> createState() => _ProductsListState();
+}
+
+class _ProductsListState extends State<_ProductsList> {
   @override
   Widget build(BuildContext context) {
-    return products.isNotEmpty
+    return widget.products.isNotEmpty
         ? ListView.builder(
-            itemCount: products.length,
+            itemCount: widget.products.length,
             itemBuilder: (_, index) {
               return Consumer(
                 builder: (_, watch, __) {
@@ -189,15 +195,18 @@ class _ProductsList extends StatelessWidget {
                   return Dismissible(
                       key: UniqueKey(),
                       onDismissed: (direction) {
-                        products.remove(products[index]);
-                        _recipe.hide(component: products[index] as String);
-                        if (type == 'EditProducts') {
+                        if (widget.type == 'EditProducts') {
                           FirebaseFirestore.instance
                               .collection('Products')
                               .doc(_user.account.uid)
                               .update({
-                            products[index].productId: FieldValue.delete()
+                            widget.products[index].productId:
+                                FieldValue.delete()
                           });
+                        } else {
+                          widget.products.remove(widget.products[index]);
+                          _recipe.hide(
+                              component: widget.products[index] as String);
                         }
                       },
                       background: Padding(
@@ -211,7 +220,7 @@ class _ProductsList extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                                type == 'EditProducts'
+                                widget.type == 'EditProducts'
                                     ? 'delete'.tr()
                                     : 'hide'.tr(),
                                 style: const TextStyle(
@@ -222,17 +231,16 @@ class _ProductsList extends StatelessWidget {
                               const SizedBox(
                                 width: 40,
                               ),
-                              Icon(type == 'EditProducts'
+                              Icon(widget.type == 'EditProducts'
                                   ? Icons.delete
                                   : Icons.visibility_off),
                             ],
                           ),
                         ),
                       ),
-                      // TODO fix what shows when you filter the products
-                      child: type == 'AddRecipe'
-                          ? ProductField(product: products[index])
-                          : ProductDetails(product: products[index]));
+                      child: widget.type == 'AddRecipe'
+                          ? ProductField(product: widget.products[index])
+                          : ProductDetails(product: widget.products[index]));
                 },
               );
             },
