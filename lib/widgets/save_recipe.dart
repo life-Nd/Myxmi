@@ -53,6 +53,7 @@ class SaveButton extends HookWidget {
                     .doc(_key)
                     .set(_recipe.instructions.toMap());
               }).whenComplete(() {
+                // TODO after uploading the recipe, we should update the quantity of the products used
                 pr.close();
                 _recipe.reset();
                 Navigator.of(context).pushAndRemoveUntil(

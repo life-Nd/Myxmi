@@ -66,20 +66,20 @@ class ImageSelector extends HookWidget {
                                         (picked) {
                                           debugPrint(
                                               'picked: ${picked.toString()} ${_image.state}');
-                                          _image.cropImage().then(
-                                            (cropped) {
-                                              // if (cropped != null) {
-                                              //   debugPrint(
-                                              //       'cropped: ${cropped.toString()}');
-                                              //   if (_image.state ==
-                                              //       AppState.cropped) {
-                                              onComplete();
-                                              // } else {
-                                              //   debugPrint('nothing cropped');
-                                              // }
-                                              // }
-                                            },
-                                          );
+                                          if (_image.state == AppState.picked) {
+                                            _image.cropImage().then(
+                                              (cropped) {
+                                                if (_image.state ==
+                                                        AppState.picked ||
+                                                    _image.state ==
+                                                        AppState.cropped) {
+                                                  debugPrint(
+                                                      'cropped: ${cropped.toString()}');
+                                                  onComplete();
+                                                }
+                                              },
+                                            );
+                                          }
                                         },
                                       );
                                     },

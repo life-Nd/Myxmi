@@ -34,13 +34,13 @@ class ImageProvider extends ChangeNotifier {
 
   Future pickImage(ImageSource source) async {
     final pickedFile = await picker.pickImage(source: source, imageQuality: 77);
-    pickedFile != null ? pickedFile.readAsBytes() : debugPrint('Source Empty');
-    pickedFile != null
-        ? kIsWeb
-            ? await changeImageWeb(pickedFile)
-            : changeImageFile(pickedFile)
-        : debugPrint('No image selected');
-    notifyListeners();
+    if (pickedFile != null) {
+      pickedFile.readAsBytes();
+      kIsWeb ? await changeImageWeb(pickedFile) : changeImageFile(pickedFile);
+      notifyListeners();
+    } else {
+      debugPrint('source is empty');
+    }
   }
 
   void changeImageFile(XFile file) {
@@ -96,7 +96,7 @@ class ImageProvider extends ChangeNotifier {
   }
 
   Future cropImage() async {
-    if (!kIsWeb && imageFile != null) {
+    if (!kIsWeb) {
       final File croppedFile = await ImageCropper.cropImage(
           sourcePath: imageFile.path,
           aspectRatioPresets: Platform.isAndroid
@@ -131,9 +131,11 @@ class ImageProvider extends ChangeNotifier {
         imageFile = croppedFile;
         state = AppState.cropped;
         notifyListeners();
+      } else {
+        state = AppState.empty;
+        notifyListeners();
       }
     }
-    state = AppState.webOS;
     notifyListeners();
   }
 

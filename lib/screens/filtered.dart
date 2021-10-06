@@ -3,8 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-
-import '../widgets/ads_widget.dart';
+import 'package:myxmi/apis/ads.dart';
 import 'recipes_stream.dart';
 
 String _equalTo = '';
@@ -21,7 +20,7 @@ class Filtered extends StatefulWidget {
 class _FilteredState extends State<Filtered> {
   BannerAd _bannerAd;
   bool _isBannerAdReady = false;
-  final AdHelper _adHelper = AdHelper();
+  final AdsApis _ads = AdsApis();
 
   @override
   void initState() {
@@ -29,7 +28,7 @@ class _FilteredState extends State<Filtered> {
     _where = widget.filter;
     if (!kIsWeb) {
       _bannerAd = BannerAd(
-        adUnitId: _adHelper.bannerAdUnitId(),
+        adUnitId: _ads.filteredBannerAdUnitId(),
         request: const AdRequest(),
         size: AdSize.banner,
         listener: BannerAdListener(

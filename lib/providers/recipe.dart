@@ -123,7 +123,7 @@ class RecipeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void saveToDb() {
+  void saveRecipeToDb() {
     recipeModel.toMap();
   }
 

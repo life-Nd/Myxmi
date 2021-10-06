@@ -5,13 +5,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:myxmi/apis/ads.dart';
 import 'package:myxmi/models/instructions.dart';
 import 'package:myxmi/models/recipes.dart';
 import 'package:myxmi/providers/recipe.dart';
 import 'package:myxmi/widgets/recipe_details.dart';
 import 'package:myxmi/widgets/recipe_image.dart';
 import 'package:myxmi/widgets/view_selector_text.dart';
-import '../widgets/ads_widget.dart';
 import 'creator_recipes.dart';
 
 final InstructionsModel _instructions = InstructionsModel();
@@ -29,12 +29,12 @@ class SelectedRecipe extends StatefulWidget {
 class _SelectionRecipeState extends State<SelectedRecipe> {
   BannerAd _bannerAd;
   bool _isBannerAdReady = false;
-  final AdHelper _adHelper = AdHelper();
+  final AdsApis _ads = AdsApis();
   @override
   void initState() {
     if (!kIsWeb) {
       _bannerAd = BannerAd(
-        adUnitId: _adHelper.bannerAdUnitId(),
+        adUnitId: _ads.selectedRecipeBannerAdUnitId(),
         request: const AdRequest(),
         size: AdSize.banner,
         listener: BannerAdListener(
@@ -50,10 +50,8 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
           },
         ),
       );
-
       _bannerAd.load();
     }
-
     super.initState();
   }
 
@@ -124,7 +122,6 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
                         debugPrint(
                             'widget.recipeModel.uid:${widget.recipeModel.uid}');
                         return Column(
-                          
                           children: [
                             CreatorCard(recipe: widget.recipeModel),
                             _ViewsSelector(instructions: _instructions),

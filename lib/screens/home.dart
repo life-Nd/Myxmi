@@ -54,79 +54,79 @@ class Home extends StatelessWidget {
         // debugPrint('_view.view == 0: ${_view.view == 0}');
         final int _viewIndex = _view.view;
         return Scaffold(
-            resizeToAvoidBottomInset: true,
-            appBar: PreferredSize(
-              preferredSize: kIsWeb && 100.w > 500
-                  ? _view.view == 0
-                      ? Size(100.w, 10.h)
-                      : Size(100.w, 6.h)
-                  : Size(100.w, 10.h),
-              child: SafeArea(
-                child: Container(
-                  padding: const EdgeInsets.only(top: 7, left: 4),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (kIsWeb && 100.w > 500)
-                        Expanded(flex: 2, child: WebAppBar(uid: uid)),
-                      if (_view.view == 0) SearchRecipes(),
-                      if (_view.view == 4)
-                        kIsWeb
-                            ? Container()
-                            : const Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  'Myxmi',
-                                  style: TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.w700),
-                                ),
+          resizeToAvoidBottomInset: true,
+          appBar: PreferredSize(
+            preferredSize: kIsWeb && 100.w > 500
+                ? _view.view == 0
+                    ? Size(100.w, 10.h)
+                    : Size(100.w, 6.h)
+                : Size(100.w, 10.h),
+            child: SafeArea(
+              child: Container(
+                padding: const EdgeInsets.only(top: 7, left: 4),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (kIsWeb && 100.w > 500)
+                      Expanded(flex: 2, child: WebAppBar(uid: uid)),
+                    if (_view.view == 0) SearchRecipes(),
+                    if (_view.view == 4)
+                      kIsWeb
+                          ? Container()
+                          : const Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'Myxmi',
+                                style: TextStyle(
+                                    fontSize: 17, fontWeight: FontWeight.w700),
                               ),
-                    ],
-                  ),
+                            ),
+                  ],
                 ),
               ),
             ),
-            floatingActionButton: _viewIndex == 0 ||
-                    _viewIndex == 1 && uid != null ||
-                    _viewIndex == 3 && uid != null
-                ? uid != null
-                    ? FloatingActionButton(
-                        backgroundColor: Colors.green.shade400,
-                        onPressed: () {
-                          _viewIndex != 3
-                              ? Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (_) => AddRecipeInfos(),
-                                  ),
-                                )
-                              : Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (_) => AddProduct(),
-                                  ),
-                                );
-                        },
-                        child: const Icon(
-                          Icons.add,
-                          color: Colors.black,
-                        ),
-                      )
-                    : FloatingActionButton(
-                        backgroundColor: Colors.red,
-                        onPressed: () {
-                          _view.changeViewIndex(index: 4, uid: uid);
-                        },
-                        child: const Icon(
-                          Icons.add,
-                          color: Colors.black,
-                        ),
-                      )
-                : null,
-            body: _view.viewBuilder(uid: uid),
-            extendBody: true,
-            // ignore: avoid_redundant_argument_values
-            bottomNavigationBar:
-                kIsWeb && 100.w > 500 ? null : AppBottomNavigation());
+          ),
+          floatingActionButton: _viewIndex == 0 ||
+                  _viewIndex == 1 && uid != null ||
+                  _viewIndex == 3 && uid != null
+              ? uid != null
+                  ? FloatingActionButton(
+                      backgroundColor: Colors.green.shade400,
+                      onPressed: () {
+                        _viewIndex != 3
+                            ? Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => AddRecipeInfos(),
+                                ),
+                              )
+                            : Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => AddProduct(),
+                                ),
+                              );
+                      },
+                      child: const Icon(
+                        Icons.add,
+                        color: Colors.black,
+                      ),
+                    )
+                  : FloatingActionButton(
+                      backgroundColor: Colors.red,
+                      onPressed: () {
+                        _view.changeViewIndex(index: 4, uid: uid);
+                      },
+                      child: const Icon(
+                        Icons.add,
+                        color: Colors.black,
+                      ),
+                    )
+              : null,
+          body: _view.viewBuilder(uid: uid),
+          extendBody: true,
+          // ignore: avoid_redundant_argument_values
+          bottomNavigationBar:
+              kIsWeb && 100.w > 500 ? null : AppBottomNavigation(),
+        );
       },
     );
   }
