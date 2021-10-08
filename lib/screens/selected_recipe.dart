@@ -27,34 +27,6 @@ class SelectedRecipe extends StatefulWidget {
 }
 
 class _SelectionRecipeState extends State<SelectedRecipe> {
-  BannerAd _bannerAd;
-  bool _isBannerAdReady = false;
-  final AdsApis _ads = AdsApis();
-  @override
-  void initState() {
-    if (!kIsWeb) {
-      _bannerAd = BannerAd(
-        adUnitId: _ads.selectedRecipeBannerAdUnitId(),
-        request: const AdRequest(),
-        size: AdSize.banner,
-        listener: BannerAdListener(
-          onAdLoaded: (_) {
-            setState(() {
-              _isBannerAdReady = true;
-            });
-          },
-          onAdFailedToLoad: (ad, err) {
-            debugPrint('Failed to load a banner ad: ${err.message}');
-            _isBannerAdReady = false;
-            ad.dispose();
-          },
-        ),
-      );
-      _bannerAd.load();
-    }
-    super.initState();
-  }
-
   Map<String, dynamic> _data = {};
   @override
   Widget build(BuildContext context) {
@@ -85,7 +57,10 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
                 flexibleSpace: Opacity(
                   opacity: 0.9,
                   child: RecipeImage(
-                    kIsWeb ? _size.height : _size.height / 1.4,
+                    height: kIsWeb ? _size.height : _size.height / 1.4,
+                    borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20)),
                   ),
                 ),
                 expandedHeight:
@@ -119,25 +94,15 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
                           _data = _snapshot.data();
                           _instructions.fromSnapshot(snapshot: _data);
                         }
-                        debugPrint(
-                            'widget.recipeModel.uid:${widget.recipeModel.uid}');
                         return Column(
                           children: [
                             CreatorCard(recipe: widget.recipeModel),
                             _ViewsSelector(instructions: _instructions),
-                            SizedBox(
-                              height: _size.height / 2,
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
                               child: RecipeDetails(instructions: _instructions),
                             ),
-                            if (!kIsWeb && _isBannerAdReady)
-                              Align(
-                                alignment: Alignment.bottomCenter,
-                                child: SizedBox(
-                                  width: _bannerAd.size.width.toDouble(),
-                                  height: _bannerAd.size.height.toDouble(),
-                                  child: AdWidget(ad: _bannerAd),
-                                ),
-                              )
+                            _AdHelper(),
                           ],
                         );
                       },
@@ -149,6 +114,54 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
           ),
         );
       },
+    );
+  }
+}
+
+class _AdHelper extends StatefulWidget {
+  @override
+  State<_AdHelper> createState() => _AdHelperState();
+}
+
+class _AdHelperState extends State<_AdHelper> {
+  BannerAd _bannerAd;
+  bool _isBannerAdReady = false;
+  final AdsApis _ads = AdsApis();
+  @override
+  void initState() {
+    if (!kIsWeb) {
+      _bannerAd = BannerAd(
+        adUnitId: _ads.selectedRecipeBannerAdUnitId(),
+        request: const AdRequest(),
+        size: AdSize.banner,
+        listener: BannerAdListener(
+          onAdLoaded: (_) {
+            setState(() {
+              _isBannerAdReady = true;
+            });
+          },
+          onAdFailedToLoad: (ad, err) {
+            debugPrint('Failed to load a banner ad: ${err.message}');
+            _isBannerAdReady = false;
+            ad.dispose();
+          },
+        ),
+      );
+      _bannerAd.load();
+    }
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: !kIsWeb && _isBannerAdReady
+          ? SizedBox(
+              width: _bannerAd.size.width.toDouble(),
+              height: _bannerAd.size.height.toDouble(),
+              child: AdWidget(ad: _bannerAd))
+          : const CircularProgressIndicator(),
     );
   }
 }

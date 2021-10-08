@@ -19,7 +19,7 @@ class RecipesGrid extends StatefulWidget {
 }
 
 class _RecipesGridState extends State<RecipesGrid> {
-  final ScrollController _controller = ScrollController(); 
+  final ScrollController _controller = ScrollController();
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
@@ -91,7 +91,6 @@ class _RecipesGridState extends State<RecipesGrid> {
                     );
                   },
                   child: Container(
-                    margin: const EdgeInsets.all(5),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                       gradient: LinearGradient(
@@ -106,7 +105,7 @@ class _RecipesGridState extends State<RecipesGrid> {
                       children: [
                         Expanded(
                           child: SizedBox(
-                            width: _size.width / 2,
+                            width: _size.width,
                             child: Stack(
                               children: [
                                 Hero(
@@ -148,8 +147,7 @@ class _RecipesGridState extends State<RecipesGrid> {
             },
           )
         : Column(
-          mainAxisSize: MainAxisSize.min,
-            
+            mainAxisSize: MainAxisSize.min,
             children: [
               Expanded(child: Image.asset('assets/data_not_found.png')),
               Expanded(

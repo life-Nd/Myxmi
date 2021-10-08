@@ -8,14 +8,12 @@ class IngredientsInRecipeListView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final List _keys = ingredients.keys.toList();
-    final Size _size = MediaQuery.of(context).size;
     final _change = useState<bool>(false);
-    return SizedBox(
-      height: _size.height / 2.1,
-      child: Stack(
+    return Stack(
         alignment: Alignment.bottomRight,
         children: [
           ListView.builder(
+            shrinkWrap: true,
             itemCount: _keys.length,
             itemBuilder: (_, int index) {
               final _checked = _checkedIngredients.contains(_keys[index]);
@@ -51,7 +49,6 @@ class IngredientsInRecipeListView extends HookWidget {
             },
           ),
         ],
-      ),
     );
   }
 }

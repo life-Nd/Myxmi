@@ -8,7 +8,6 @@ import 'package:myxmi/widgets/web_appbar.dart';
 import 'package:sizer/sizer.dart';
 import 'add_product.dart';
 import 'add_recipe_infos.dart';
-// import 'add_recipe_products.dart';
 
 // ADDRECIPE <a href="https://storyset.com/work">Work illustrations by Storyset</a>
 // APPETIZERS https://unsplash.com/photos/n9xsu46NGaE?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
@@ -30,10 +29,14 @@ import 'add_recipe_infos.dart';
 // SAUCES&SPICES <a href='https://www.freepik.com/photos/background'>Background photo created by KamranAydinov - www.freepik.com</a>
 // SEAFOOD
 // SHAKE https://unsplash.com/photos/4FujjkcI40g?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
+// SHAKE2 https://unsplash.com/photos/KlVIYmGVRQ8?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
 // SMOOTHIE https://unsplash.com/photos/5HNB4MqxkIM?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
 // SOUP https://unsplash.com/photos/8mVLMZ0WW98?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
 // VEGAN https://unsplash.com/photos/zOlQ7lF-3vs?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
+// VEGAN2 https://unsplash.com/photos/-ftWfohtjNw?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
 // VEGETERIAN https://unsplash.com/photos/IGfIGP5ONV0?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
+// VEGETARIAN2 https://unsplash.com/photos/nou2DipA4uM?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
+
 final homeViewProvider = ChangeNotifierProvider<HomeViewProvider>(
   (ref) => HomeViewProvider(),
 );
@@ -68,8 +71,8 @@ class Home extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     if (kIsWeb && 100.w > 500)
-                      Expanded(flex: 2, child: WebAppBar(uid: uid)),
-                    if (_view.view == 0) SearchRecipes(),
+                      Expanded(child: WebAppBar(uid: uid)),
+                    if (_view.view == 0) Expanded(child: SearchRecipes()),
                     if (_view.view == 4)
                       kIsWeb
                           ? Container()

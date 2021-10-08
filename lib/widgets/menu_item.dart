@@ -24,10 +24,6 @@ class _MenuItemState extends State<MenuItem> {
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
-    // final String _legend =
-    //     widget.filter == 'category' || widget.legend == 'diet'
-    //         ? '${widget.legend}s'
-    //         : widget.legend;
     return Consumer(builder: (_, watch, __) {
       return InkWell(
         onTap: () {
@@ -48,7 +44,9 @@ class _MenuItemState extends State<MenuItem> {
           child: Column(
             children: [
               SizedBox(
-                height: _kIsWeb ? _size.height / 3 : _size.height / 3.7,
+                height: _kIsWeb && _size.width > 700
+                    ? _size.height / 2.4
+                    : _size.height / 3.7,
                 width: _kIsWeb && _size.width > 700
                     ? _size.width / 3.2
                     : _size.width / 1.8,
@@ -61,7 +59,7 @@ class _MenuItemState extends State<MenuItem> {
                 ),
               ),
               Text(
-                '${widget.legend.tr()}s',
+                widget.legend.tr(),
                 style:
                     const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
               ),

@@ -29,6 +29,11 @@ class DrinkItems extends HookWidget {
                 url:
                     'https://unsplash.com/photos/J5wrhsSPN9o?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink',
               ),
+              // DIMENSIONS:
+              // Image good on all devices
+              // 320*320
+              // SIZE:4 kb
+
               MenuItem(
                 filter: 'sub_category',
                 legend: 'smoothie',

@@ -26,18 +26,29 @@ class FoodOptions extends HookWidget {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: const [
+              // DIMENSIONS:
+              // Image good on all devices
+              // 700*878
+              // SIZE: 107 kb
+
               MenuItem(
                 filter: 'sub_category',
                 legend: 'breakfast',
                 url:
                     'https://unsplash.com/photos/SQ20tWzxXO0?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink',
               ),
+              // DIMENSIONS:
+              // Image good on all devices
+              // 700*1050
+              // SIZE:85 kb
+
               MenuItem(
                 filter: 'sub_category',
                 legend: 'appetizer',
                 url:
                     'https://unsplash.com/photos/n9xsu46NGaE?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink',
               ),
+              
               MenuItem(
                 filter: 'sub_category',
                 legend: 'salad',
@@ -49,7 +60,6 @@ class FoodOptions extends HookWidget {
                 legend: 'soup',
                 url:
                     'https://unsplash.com/photos/8mVLMZ0WW98?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink',
-
               ),
               MenuItem(
                 filter: 'sub_category',

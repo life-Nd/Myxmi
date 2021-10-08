@@ -8,7 +8,8 @@ import 'rating_stars.dart';
 
 class RecipeImage extends StatefulWidget {
   final double height;
-  const RecipeImage(this.height);
+  final BorderRadius borderRadius;
+  const RecipeImage({@required this.height, @required this.borderRadius});
   @override
   State<StatefulWidget> createState() => _RecipeImageState();
 }
@@ -23,11 +24,10 @@ class _RecipeImageState extends State<RecipeImage> {
         child: SizedBox(
           width: _size.width,
           height: widget.height,
-          // height: kIsWeb ? widget.height : widget.height,
           child: Stack(
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.circular(20),
+               borderRadius: widget.borderRadius,
                 child: InteractiveViewer(
                   alignPanAxis: true,
                   child: _recipe.image,

@@ -13,7 +13,6 @@ TextEditingController _searchMyRecipesCtrl = TextEditingController();
 
 class RecipesStream extends StatelessWidget {
   final Stream<QuerySnapshot> path;
-
   final bool autoCompleteField;
   const RecipesStream(
       {Key key, @required this.path, @required this.autoCompleteField})
@@ -61,7 +60,6 @@ class RecipesStream extends StatelessWidget {
                 child: RecipesView(
                   showAutoCompleteField: autoCompleteField,
                   myRecipes: _recipes(querySnapshot: snapshot.data),
-                  // height: widget.height,
                 ),
               );
             } else {
