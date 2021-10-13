@@ -40,8 +40,10 @@ class IngredientsInRecipeListView extends HookWidget {
                     Text(
                       '${_keys[index]}: ',
                     ),
-                    Text(
+                    Expanded(
+                    child: Text(
                       '${ingredients[_keys[index]]}',
+                      ),
                     ),
                   ],
                 ),

@@ -129,6 +129,7 @@ class RecipeDetails extends StatelessWidget {
                               MaterialPageRoute(
                                 builder: (_) => Home(
                                   uid: _user?.account?.uid,
+                                  photoUrl: _user?.account?.photoURL,
                                 ),
                               ),
                             );

@@ -20,6 +20,7 @@ class _AppState extends State<App> {
         return HotRestartByPassBuilder(
           destinationFragment: Home(
             uid: _user?.uid,
+            photoUrl: _user?.photoURL,
           ),
           loginFragment: _StreamAuthBuilder(),
         );
@@ -40,10 +41,12 @@ class _StreamAuthBuilder extends StatelessWidget {
           _user.account = snapUser.data;
           return Home(
             uid: _user?.account?.uid,
+            photoUrl: _user?.account?.photoURL,
           );
         }
         return const Home(
           uid: null,
+          photoUrl: null
         );
       },
     );

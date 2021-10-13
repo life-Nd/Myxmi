@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class InstructionsModel {
   static const _ingredients = 'ingredients';
   static const _steps = 'steps';
@@ -7,7 +9,11 @@ class InstructionsModel {
   Map ingredients = {};
   List reviews = [];
   String uid = '';
-  InstructionsModel({this.ingredients, this.steps, this.reviews, this.uid});
+  InstructionsModel(
+      {@required this.ingredients,
+      @required this.steps,
+      this.reviews,
+      this.uid});
 
   void fromSnapshot({Map<String, dynamic> snapshot}) {
     ingredients = snapshot[_ingredients] as Map;

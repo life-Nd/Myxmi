@@ -1,11 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:myxmi/models/instructions.dart';
+import 'package:myxmi/models/recipes.dart';
 import 'package:myxmi/providers/home_view.dart';
 import 'package:myxmi/widgets/app_bottom_navigation.dart';
 import 'package:myxmi/widgets/search.dart';
 import 'package:myxmi/widgets/web_appbar.dart';
 import 'package:sizer/sizer.dart';
+import '../recipes_compiled.dart';
 import 'add_product.dart';
 import 'add_recipe_infos.dart';
 
@@ -40,13 +44,20 @@ import 'add_recipe_infos.dart';
 final homeViewProvider = ChangeNotifierProvider<HomeViewProvider>(
   (ref) => HomeViewProvider(),
 );
+int _saved = 0;
+int _total = 0;
 
 class Home extends StatelessWidget {
   final String uid;
-  const Home({Key key, @required this.uid}) : super(key: key);
-
+  final String photoUrl;
+  const Home({Key key, @required this.uid, @required this.photoUrl})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final RecipesCompiled _compiled = RecipesCompiled();
+    final RecipeModel _recipe = RecipeModel();
+    final InstructionsModel _instructions =
+        InstructionsModel(ingredients: {}, steps: []);
     return Consumer(
       builder: (_, watch, __) {
         final _view = watch(homeViewProvider);
@@ -89,6 +100,87 @@ class Home extends StatelessWidget {
               ),
             ),
           ),
+          // TODO fix error with INSTRUCTIONS > ingredients
+          // bottomSheet: StatefulBuilder(builder: (_, StateSetter stateSetter) {
+          //   return Column(
+          //     children: [
+          //       RawMaterialButton(
+          //         onPressed: () async {
+          //           String _key;
+          //           for (final recipe in _compiled.recipes) {
+          //             final List _steps = recipe['steps'] as List;
+          //             final List _ingredients = recipe['ingredients'] as List;
+          //             final int _stepsCount = _steps.length;
+          //             final int _ingredientsCount = _ingredients.length;
+          //             final String _imageUrl = recipe['image'] != null
+          //                 ? recipe['image'] as String
+          //                 : null;
+          //             final String _difficulty = _stepsCount > 10
+          //                 ? 'difficult'
+          //                 : _stepsCount > 4
+          //                     ? 'medium'
+          //                     : 'easy';
+          //             final int _duration = _stepsCount > 10
+          //                 ? 60
+          //                 : _stepsCount > 4
+          //                     ? 40
+          //                     : 15;
+          //             debugPrint('uid: $uid');
+
+          //             _recipe.access = 'public';
+          //             _recipe.category = 'food';
+          //             _recipe.difficulty = _difficulty;
+          //             _recipe.duration = '$_duration';
+          //             _recipe.imageUrl = _imageUrl;
+          //             _recipe.ingredientsCount = '$_ingredientsCount';
+          //             _recipe.likedBy = {};
+          //             _recipe.made = '';
+          //             _recipe.photoUrl = photoUrl;
+          //             _recipe.portions = '';
+          //             _recipe.reviewsCount = null;
+          //             _recipe.stars = null;
+          //             _recipe.stepsCount = '$_stepsCount';
+          //             _recipe.subCategory = '';
+          //             _recipe.title = recipe['title'] as String;
+          //             _recipe.uid = uid;
+          //             _recipe.reference = recipe['url'] as String;
+          //             _recipe.usedCount = '1';
+          //             _recipe.username = 'Lifen';
+          //             _recipe.tags = recipe['tags'] != null
+          //                 ? recipe['tags'] as List
+          //                 : null;
+          //             for (final element in _ingredients) {
+          //               _instructions.ingredients[
+          //                   '${_ingredients.indexOf(element)}'] = '$element';
+          //             }
+          //             _instructions.steps = _steps;
+          //             _instructions.uid = uid;
+          //             _recipe.made = '${DateTime.now().millisecondsSinceEpoch}';
+          //             final DocumentReference _db = await FirebaseFirestore
+          //                 .instance
+          //                 .collection('Recipes')
+          //                 .add(_recipe.toMap());
+          //             _key = _db.id;
+          //             debugPrint(
+          //                 'Instructions: ${_instructions.ingredients} \n ${_instructions.steps} ');
+          //             await FirebaseFirestore.instance
+          //                 .collection('Instructions')
+          //                 .doc(_key)
+          //                 .set(_instructions.toMap());
+          //             stateSetter(() {
+          //               _saved++;
+          //             });
+          //           }
+          //         },
+          //         fillColor: Colors.green,
+          //         child: const Text('Save to Firestore'),
+          //       ),
+          //       ListTile(
+          //         title: Text('$_saved/$_total saved'),
+          //       )
+          //     ],
+          //   );
+          // }),
           floatingActionButton: _viewIndex == 0 ||
                   _viewIndex == 1 && uid != null ||
                   _viewIndex == 3 && uid != null
