@@ -20,12 +20,16 @@
 # is commented out by default.
 #.vscode/
 
+Keys
+**/ios/Runner/GoogleService-Info.plist
+**/ios/Runner/Info.plist
+**/android/app/google-services.json
+**/android/app/AndroidManifest.xml
+
 # Flutter/Dart/Pub related
 **/doc/api/
 **/ios/Flutter/.last_build_id
-**/ios/Runner/GoogleService-Info.plist
-**/android/app/google-services.json
-**/android/app/AndroidManifest.xml
+
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
