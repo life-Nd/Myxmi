@@ -19,7 +19,7 @@ class ViewSelectorText extends StatelessWidget {
       final _selectedView = watch(selectedRecipeView);
       return InkWell(
         onTap: () {
-          _selectedView.changePageController(viewIndex);
+          _selectedView.jumpToPage(viewIndex);
         },
         child: Container(
           padding:
@@ -28,10 +28,7 @@ class ViewSelectorText extends StatelessWidget {
             border: Border(
               bottom: BorderSide(
                   width: 4,
-                  color: (_selectedView.pageController.hasClients &&
-                              _selectedView.pageController.page == viewIndex) ||
-                          (!_selectedView.pageController.hasClients &&
-                              viewIndex == 0)
+                  color: _selectedView.pageIndex == viewIndex
                       ? Theme.of(context).appBarTheme.titleTextStyle.color
                       : Colors.transparent),
             ),

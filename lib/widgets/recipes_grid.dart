@@ -91,6 +91,7 @@ class _RecipesGridState extends State<RecipesGrid> {
                     );
                   },
                   child: Container(
+                    margin: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                       gradient: LinearGradient(

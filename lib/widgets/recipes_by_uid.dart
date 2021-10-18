@@ -3,12 +3,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:myxmi/models/recipes.dart';
-import 'package:myxmi/screens/recipes_stream.dart';
+// import 'package:myxmi/screens/recipes_by_search.dart';
+import 'package:myxmi/screens/recipes_view.dart';
 
-class UidRecipes extends StatelessWidget {
+class RecipesByUid extends StatelessWidget {
+  // TODO The Home gridview's last row is being covered by the BottomNavigationBar
+
   final String uid;
   final String path;
-  const UidRecipes({@required this.path, @required this.uid});
+  const RecipesByUid({@required this.path, @required this.uid});
 
   Stream<QuerySnapshot> getPath({String userId}) {
     Stream<QuerySnapshot> _streamPath;
@@ -30,6 +33,7 @@ class UidRecipes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('---building uid_recipes.dart---');
     return StreamBuilder<QuerySnapshot>(
       stream: getPath(userId: uid),
       builder: (_, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -48,6 +52,7 @@ class UidRecipes extends StatelessWidget {
           );
         }
         if (snapshot.data != null) {
+          debugPrint('<<<<<Loaded data from db....>>>>>');
           return RecipesView(
             showAutoCompleteField: true,
             myRecipes: _recipes(querySnapshot: snapshot.data),

@@ -8,15 +8,12 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/app.dart';
 import 'package:sizer/sizer.dart';
-
 import 'providers/cart.dart';
 import 'providers/prefs.dart';
 import 'providers/user.dart';
 
-// <div>Icon made from <a href="http://www.onlinewebfonts.com/icon">Icon Fonts</a> is licensed by CC BY 3.0</div>
 final userProvider =
     ChangeNotifierProvider<UserProvider>((ref) => UserProvider());
-
 final prefProvider =
     ChangeNotifierProvider<PreferencesProvider>((ref) => PreferencesProvider());
 final cartProvider =
@@ -34,8 +31,9 @@ Future<void> main() async {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
+  
   kIsWeb ?? FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
-
+  
   final ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     visualDensity: const VisualDensity(vertical: 0.5, horizontal: 0.5),
@@ -100,10 +98,12 @@ Future<void> main() async {
         supportedLocales: const [Locale('en', 'US'), Locale('fr', 'FR')],
         child: ProviderScope(
           child: Consumer(builder: (context, watch, child) {
+            
             final _pref = watch(prefProvider);
             return FutureBuilder(
                 future: _pref.readPrefs(),
                 builder: (context, snapshot) {
+                  // Get the preferences of the user stored locally
                   ThemeMode _storedTheme;
                   if (snapshot.hasData && snapshot.data[0] != null) {
                     _storedTheme =

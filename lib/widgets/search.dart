@@ -6,7 +6,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/screens/home.dart';
 
 class SearchRecipes extends HookWidget {
-
   @override
   Widget build(BuildContext context) {
     debugPrint('searchRecipe building');

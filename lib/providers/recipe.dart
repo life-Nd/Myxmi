@@ -168,10 +168,23 @@ class RecipeProvider extends ChangeNotifier {
 
 class SelectedRecipeViewNotifier extends ChangeNotifier {
   int pageIndex = 0;
-  PageController pageController = PageController();
-  void changePageController(int index) {
-    pageController.jumpToPage(index);
+  final PageController pageController = PageController(keepPage: false);
+
+  void jumpToPage(int index) {
     pageIndex = index;
+    pageController.jumpToPage(index);
     notifyListeners();
   }
+
+  void animateToPage(int index) {
+    pageIndex = index;
+    pageController.animateToPage(
+      index,
+      curve: Curves.easeInBack,
+      duration: const Duration(milliseconds: 200),
+    );
+    notifyListeners();
+  }
+
+
 }

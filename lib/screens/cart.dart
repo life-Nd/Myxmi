@@ -1,9 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/apis/ads.dart';
+// import 'package:myxmi/apis/ads.dart';
 import 'package:myxmi/main.dart';
 
 class CartScreen extends StatefulWidget {
@@ -12,32 +12,32 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  BannerAd _bannerAd;
-  bool _isBannerAdReady = false;
-  final AdsApis _ads = AdsApis();
+  // BannerAd _bannerAd;
+  // bool _isBannerAdReady = false;
+  // final AdsApis _ads = AdsApis();
 
   @override
   void initState() {
-    if (!kIsWeb) {
-      _bannerAd = BannerAd(
-        adUnitId: _ads.cartBannerAdUnitId(),
-        request: const AdRequest(),
-        size: AdSize.banner,
-        listener: BannerAdListener(
-          onAdLoaded: (_) {
-            setState(() {
-              _isBannerAdReady = true;
-            });
-          },
-          onAdFailedToLoad: (ad, err) {
-            debugPrint('Failed to load a banner ad: ${err.message}');
-            _isBannerAdReady = false;
-            ad.dispose();
-          },
-        ),
-      );
-      _bannerAd.load();
-    }
+    // if (!kIsWeb) {
+    //   _bannerAd = BannerAd(
+    //     adUnitId: _ads.cartBannerAdUnitId(),
+    //     request: const AdRequest(),
+    //     size: AdSize.banner,
+    //     listener: BannerAdListener(
+    //       onAdLoaded: (_) {
+    //         setState(() {
+    //           _isBannerAdReady = true;
+    //         });
+    //       },
+    //       onAdFailedToLoad: (ad, err) {
+    //         debugPrint('Failed to load a banner ad: ${err.message}');
+    //         _isBannerAdReady = false;
+    //         ad.dispose();
+    //       },
+    //     ),
+    //   );
+    //   _bannerAd.load();
+    // }
 
     super.initState();
   }
@@ -83,15 +83,15 @@ class _CartScreenState extends State<CartScreen> {
               },
             ),
           ),
-          if (!kIsWeb && _isBannerAdReady)
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: SizedBox(
-                width: _bannerAd.size.width.toDouble(),
-                height: _bannerAd.size.height.toDouble(),
-                child: AdWidget(ad: _bannerAd),
-              ),
-            )
+          // if (!kIsWeb && _isBannerAdReady)
+          //   Align(
+          //     alignment: Alignment.bottomCenter,
+          //     child: SizedBox(
+          //       width: _bannerAd.size.width.toDouble(),
+          //       height: _bannerAd.size.height.toDouble(),
+          //       child: AdWidget(ad: _bannerAd),
+          //     ),
+          //   )
         ],
       ),
     );

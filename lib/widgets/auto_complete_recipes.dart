@@ -37,9 +37,11 @@ class _AutoCompleteRecipesState extends State<AutoCompleteRecipes> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text(
-                '${item.title[0].toUpperCase()}${item.title.substring(1, item.title.length)}',
-                style: const TextStyle(fontSize: 20.0),
+              Expanded(
+                child: Text(
+                  '${item.title[0].toUpperCase()}${item.title.substring(1, item.title.length)}',
+                  style: const TextStyle(fontSize: 20.0),
+                ),
               ),
               const Padding(
                 padding: EdgeInsets.all(15.0),

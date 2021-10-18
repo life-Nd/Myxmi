@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:myxmi/widgets/uid_recipes.dart';
+import 'package:myxmi/widgets/recipes_by_uid.dart';
 
 class CreatorRecipes extends StatelessWidget {
   final String uid;
@@ -30,7 +30,7 @@ class CreatorRecipes extends StatelessWidget {
           // subtitle: Text('$followersCount ${'followers'.tr()}'),
         ),
       ),
-      body: UidRecipes(
+      body: RecipesByUid(
         path: 'all',
         uid: uid,
       ),

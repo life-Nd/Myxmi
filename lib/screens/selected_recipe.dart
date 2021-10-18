@@ -14,7 +14,8 @@ import 'package:myxmi/widgets/recipe_image.dart';
 import 'package:myxmi/widgets/view_selector_text.dart';
 import 'creator_recipes.dart';
 
-final InstructionsModel _instructions = InstructionsModel();
+final InstructionsModel _instructions =
+    InstructionsModel(ingredients: {}, steps: []);
 final selectedRecipeView = ChangeNotifierProvider(
   (ref) => SelectedRecipeViewNotifier(),
 );
@@ -30,11 +31,13 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
   Map<String, dynamic> _data = {};
   @override
   Widget build(BuildContext context) {
+    final ScrollController _ctrl = ScrollController();
     final Size _size = MediaQuery.of(context).size;
     return Consumer(
       builder: (_, watch, __) {
         return Scaffold(
           body: CustomScrollView(
+            controller: _ctrl,
             slivers: [
               SliverAppBar(
                 leading: IconButton(
@@ -63,8 +66,7 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
                         bottomRight: Radius.circular(20)),
                   ),
                 ),
-                expandedHeight:
-                    kIsWeb ? _size.height / 1.3 : _size.height / 1.6,
+                expandedHeight: kIsWeb ? _size.height / 1.3 : _size.height / 2,
               ),
               SliverList(
                 delegate: SliverChildListDelegate.fixed(
@@ -94,15 +96,18 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
                           _data = _snapshot.data();
                           _instructions.fromSnapshot(snapshot: _data);
                         }
+                        
                         return Column(
                           children: [
                             CreatorCard(recipe: widget.recipeModel),
-                            _ViewsSelector(instructions: _instructions),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: RecipeDetails(instructions: _instructions),
+                            _ViewsSelector(
+                              ingredientsLength:
+                                  _instructions.ingredients.length,
+                              stepsLength: _instructions.steps.length,
+                              reviewsLength: _instructions.reviews.length,
                             ),
-                            _AdHelper(),
+                            RecipeDetails(instructions: _instructions),
+                            // _AdHelper(),
                           ],
                         );
                       },
@@ -240,26 +245,40 @@ class _CreatorCardState extends State<CreatorCard> {
   }
 }
 
-class _ViewsSelector extends StatelessWidget {
-  final InstructionsModel instructions;
-  const _ViewsSelector({Key key, this.instructions}) : super(key: key);
+class _ViewsSelector extends StatefulWidget {
+  final int stepsLength;
+  final int ingredientsLength;
+  final int reviewsLength;
+
+  const _ViewsSelector({
+    Key key,
+    this.stepsLength,
+    this.ingredientsLength,
+    this.reviewsLength,
+  }) : super(key: key);
+
+  @override
+  State<_ViewsSelector> createState() => _ViewsSelectorState();
+}
+
+class _ViewsSelectorState extends State<_ViewsSelector> {
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         ViewSelectorText(
-          length: instructions?.ingredients?.length ?? 0,
+          length: widget.ingredientsLength ?? 0,
           viewIndex: 0,
           text: 'ingredients',
         ),
         ViewSelectorText(
-          length: instructions?.steps?.length ?? 0,
+          length: widget.stepsLength ?? 0,
           viewIndex: 1,
           text: 'steps',
         ),
         ViewSelectorText(
-          length: instructions?.reviews?.length ?? 0,
+          length: widget.reviewsLength ?? 0,
           text: 'reviews',
           viewIndex: 2,
         ),

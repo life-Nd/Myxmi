@@ -37,7 +37,8 @@ class _RecipeImageState extends State<RecipeImage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  AddFavoriteButton(recipe: _recipe.recipeModel),
+                  Expanded(
+                      child: AddFavoriteButton(recipe: _recipe.recipeModel)),
                   InkWell(
                     onTap: () {
                       Navigator.of(context).push(

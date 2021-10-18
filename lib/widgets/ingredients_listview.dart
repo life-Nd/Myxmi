@@ -5,6 +5,7 @@ class IngredientsInRecipeListView extends HookWidget {
   final List _checkedIngredients = [];
   final Map ingredients;
   IngredientsInRecipeListView({this.ingredients});
+  final ScrollController _ctrl = ScrollController();
   @override
   Widget build(BuildContext context) {
     final List _keys = ingredients.keys.toList();
@@ -14,6 +15,7 @@ class IngredientsInRecipeListView extends HookWidget {
         children: [
           ListView.builder(
             shrinkWrap: true,
+            controller: _ctrl,
             itemCount: _keys.length,
             itemBuilder: (_, int index) {
               final _checked = _checkedIngredients.contains(_keys[index]);

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:myxmi/screens/menu.dart';
 import 'package:myxmi/screens/more.dart';
 import 'package:myxmi/screens/products.dart';
-import 'package:myxmi/screens/recipes_stream.dart';
+import 'package:myxmi/screens/recipes_by_search.dart';
 import 'package:myxmi/screens/sign_in.dart';
-import 'package:myxmi/widgets/uid_recipes.dart';
+import 'package:myxmi/widgets/recipes_by_uid.dart';
 
 class HomeViewProvider extends ChangeNotifier {
   int view = 0;
@@ -26,7 +26,6 @@ class HomeViewProvider extends ChangeNotifier {
       case 1:
         streamRecipesWith(key: 'uid', value: uid);
     }
-
     notifyListeners();
   }
 
@@ -50,17 +49,10 @@ class HomeViewProvider extends ChangeNotifier {
 
   void search() {
     if (searchCtrl.text.isNotEmpty) {
-      switch (view) {
-        case 0:
-          searchRecipesInDb = true;
-          break;
-        case 1:
-          searchRecipesWith(searchKey: 'title');
-          break;
-        case 2:
-          break;
-        case 3:
-          searchRecipesInDb = true;
+      if (view == 0) {
+        searchRecipesInDb = true;
+      } else {
+        searchRecipesWith(searchKey: 'title');
       }
       notifyListeners();
     }
@@ -77,23 +69,24 @@ class HomeViewProvider extends ChangeNotifier {
       case 0:
         debugPrint('view: $view');
         return searchRecipesInDb && searchCtrl.text.isNotEmpty
-            ? RecipesStream(
+            ? RecipesBySearch(
                 autoCompleteField: false,
                 path: searchRecipesWith(searchKey: 'title'),
               )
             : Menu();
       case 1:
-        return isSignedIn ? UidRecipes(path: 'all', uid: uid) : SignIn();
+        // Show stream of recipes filtered with the user id
+        return isSignedIn ? RecipesByUid(path: 'all', uid: uid) : SignIn();
       case 2:
-        return isSignedIn ? UidRecipes(path: 'liked', uid: uid) : SignIn();
+        // Show stream of recipes liked by the user id
+        return isSignedIn ? RecipesByUid(path: 'liked', uid: uid) : SignIn();
       case 3:
+        // Show stream of products under the user id
         return isSignedIn ? Products() : SignIn();
       case 4:
         return isSignedIn ? More() : SignIn();
       case 5:
         return isSignedIn ? More() : SignIn();
-      // case 6:
-      //   return isSignedIn ? More() : SignIn();
       default:
         return Menu();
     }
