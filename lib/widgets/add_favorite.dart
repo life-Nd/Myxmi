@@ -2,14 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/recipes.dart';
+import 'package:myxmi/screens/add_recipe_infos.dart';
 import 'package:myxmi/screens/home.dart';
 import 'package:universal_io/io.dart';
-
 import '../main.dart';
 
 class AddFavoriteButton extends StatefulWidget {
   final RecipeModel recipe;
-  const AddFavoriteButton({@required this.recipe});
+  final bool fromProvider;
+  const AddFavoriteButton({Key key, this.recipe, @required this.fromProvider})
+      : super(key: key);
   @override
   State<AddFavoriteButton> createState() => _AddFavoriteButtonState();
 }
@@ -20,7 +22,9 @@ class _AddFavoriteButtonState extends State<AddFavoriteButton> {
     return Consumer(builder: (_, watch, __) {
       final _user = watch(userProvider);
       final _view = watch(homeViewProvider);
-      final RecipeModel _recipe = widget.recipe;
+      final RecipeModel _recipe = widget.fromProvider
+          ? watch(recipeProvider).recipeModel
+          : widget.recipe;
       _recipe.liked = false;
       if (_user?.account?.uid != null && _recipe.likedBy != null) {
         final _uid = _user?.account?.uid;
@@ -85,11 +89,10 @@ class _AddFavoriteButtonState extends State<AddFavoriteButton> {
                             merge: true,
                           ),
                         );
-                        if (widget.recipe.likedBy != {} ||
-                            widget.recipe.likedBy.isEmpty) {
-                          widget.recipe.likedBy = {};
+                        if (_recipe.likedBy != {} || _recipe.likedBy.isEmpty) {
+                          _recipe.likedBy = {};
                         }
-                        widget.recipe.likedBy[_user.account.uid] = true;
+                        _recipe.likedBy[_user.account.uid] = true;
                         setState(() {});
                       },
                     )
@@ -121,7 +124,7 @@ class _AddFavoriteButtonState extends State<AddFavoriteButton> {
                             merge: true,
                           ),
                         );
-                        widget.recipe.likedBy[_user.account.uid] = false;
+                        _recipe.likedBy[_user.account.uid] = false;
                         setState(() {});
                       },
                     ),

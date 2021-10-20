@@ -8,7 +8,6 @@ import 'package:myxmi/screens/home.dart';
 class SearchRecipes extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    debugPrint('searchRecipe building');
     return Consumer(builder: (_, watch, __) {
       final _view = watch(homeViewProvider);
       return Row(
@@ -23,6 +22,7 @@ class SearchRecipes extends HookWidget {
                   !kIsWeb ?? FocusScope.of(context).requestFocus(FocusNode());
                 },
                 decoration: InputDecoration(
+                  filled: true,
                   isDense: true,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),

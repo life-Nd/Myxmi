@@ -5,9 +5,10 @@ import 'package:myxmi/models/recipes.dart';
 
 class RecipeProvider extends ChangeNotifier {
   RecipeModel recipeModel = RecipeModel();
-  List<RecipeModel> recipesList = [];
   InstructionsModel instructions =
       InstructionsModel(ingredients: {}, steps: []);
+  final List checkedIngredients = [];
+  final List checkedSteps = [];
   Map<String, double> quantity = {};
   Map composition = {};
   double estimatedWeight = 0.0;
@@ -141,6 +142,16 @@ class RecipeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void toggleIngredient(dynamic key) {
+    final bool _checked = checkedIngredients.contains(key);
+    _checked ? checkedIngredients.remove(key) : checkedIngredients.add(key);
+  }
+
+  void toggleStep(dynamic key) {
+    final bool _checked = checkedSteps.contains(key);
+    _checked ? checkedSteps.remove(key) : checkedSteps.add(key);
+  }
+
   void hide({String component}) {
     hidden.add(component);
   }
@@ -168,23 +179,10 @@ class RecipeProvider extends ChangeNotifier {
 
 class SelectedRecipeViewNotifier extends ChangeNotifier {
   int pageIndex = 0;
-  final PageController pageController = PageController(keepPage: false);
-
-  void jumpToPage(int index) {
+  void changeIndex(int index) {
     pageIndex = index;
-    pageController.jumpToPage(index);
     notifyListeners();
   }
-
-  void animateToPage(int index) {
-    pageIndex = index;
-    pageController.animateToPage(
-      index,
-      curve: Curves.easeInBack,
-      duration: const Duration(milliseconds: 200),
-    );
-    notifyListeners();
-  }
-
-
 }
+
+// class CheckedIngredientsProvider 

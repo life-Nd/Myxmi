@@ -1,4 +1,3 @@
-// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/screens/add_recipe_infos.dart';
@@ -27,18 +26,21 @@ class _RecipeImageState extends State<RecipeImage> {
           child: Stack(
             children: [
               ClipRRect(
-               borderRadius: widget.borderRadius,
+                borderRadius: widget.borderRadius,
                 child: InteractiveViewer(
-                  alignPanAxis: true,
                   child: _recipe.image,
                 ),
               ),
               Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                // mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Expanded(
-                      child: AddFavoriteButton(recipe: _recipe.recipeModel)),
+                  const Expanded(
+                    child: AddFavoriteButton(
+                      fromProvider: true,
+                    ),
+                  ),
+                  const Spacer(),
                   InkWell(
                     onTap: () {
                       Navigator.of(context).push(
@@ -47,11 +49,8 @@ class _RecipeImageState extends State<RecipeImage> {
                         ),
                       );
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: RatingStars(
-                        stars: _recipe.recipeModel.stars ?? '0.0',
-                      ),
+                    child: RatingStars(
+                      stars: _recipe.recipeModel.stars ?? '0.0',
                     ),
                   ),
                 ],

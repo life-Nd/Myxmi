@@ -264,7 +264,7 @@ class AddProduct extends HookWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 title: Text(
-                  '${'quantityInHand'.tr()} ${'optional'.tr()}',
+                  '${'quantityOnHand'.tr()} ${'optional'.tr()}',
                   style: const TextStyle(
                     fontSize: 17,
                   ),

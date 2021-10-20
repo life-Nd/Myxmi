@@ -6,12 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/app.dart';
 import 'package:sizer/sizer.dart';
+import 'app.dart';
 import 'providers/cart.dart';
 import 'providers/prefs.dart';
 import 'providers/user.dart';
 
+// TODO https://myxmi.app/more/about/privacy
 final userProvider =
     ChangeNotifierProvider<UserProvider>((ref) => UserProvider());
 final prefProvider =
@@ -31,9 +32,9 @@ Future<void> main() async {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
-  
+
   kIsWeb ?? FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
-  
+
   final ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     visualDensity: const VisualDensity(vertical: 0.5, horizontal: 0.5),
@@ -97,10 +98,10 @@ Future<void> main() async {
         path: 'translations',
         supportedLocales: const [Locale('en', 'US'), Locale('fr', 'FR')],
         child: ProviderScope(
-          child: Consumer(builder: (context, watch, child) {
-            
-            final _pref = watch(prefProvider);
-            return FutureBuilder(
+          child: Consumer(
+            builder: (context, watch, child) {
+              final _pref = watch(prefProvider);
+              return FutureBuilder(
                 future: _pref.readPrefs(),
                 builder: (context, snapshot) {
                   // Get the preferences of the user stored locally
@@ -122,8 +123,10 @@ Future<void> main() async {
                     debugShowCheckedModeBanner: false,
                     home: App(),
                   );
-                });
-          }),
+                },
+              );
+            },
+          ),
         ),
       );
     }),

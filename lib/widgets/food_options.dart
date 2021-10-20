@@ -75,7 +75,7 @@ class FoodOptions extends HookWidget {
               ),
               MenuItem(
                 filter: 'category',
-                legend: 'food',
+                legend: 'anyFood',
                 url: '',
               ),
             ],

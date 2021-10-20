@@ -58,6 +58,7 @@ dependencies:
   timeago: ^3.0.2
   timetable: 
   transparent_image: ^2.0.0
+  url_launcher: ^6.0.12
   visibility_detector: ^0.2.0
   
 

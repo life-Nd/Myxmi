@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_device_type/flutter_device_type.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/providers/home_view.dart';
+import 'package:myxmi/utils/app_sources.dart';
 import 'package:myxmi/widgets/app_bottom_navigation.dart';
-import 'package:myxmi/widgets/search.dart';
 import 'package:myxmi/widgets/web_appbar.dart';
-import 'package:sizer/sizer.dart';
 import 'add_product.dart';
 import 'add_recipe_infos.dart';
 
@@ -42,11 +41,30 @@ final homeViewProvider = ChangeNotifierProvider<HomeViewProvider>(
   (ref) => HomeViewProvider(),
 );
 
-class Home extends StatelessWidget {
-  static final bool _isPhone =
+class Home extends StatefulWidget {
+  static final bool _isPhone = !kIsWeb ??
       Device.get().isAndroid || Device.get().isIos || Device.get().isTablet;
   final String uid;
   const Home({Key key, @required this.uid}) : super(key: key);
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  final AppSources _appSources = AppSources();
+  @override
+  void initState() {
+    if (kIsWeb) {
+      if (Device.get().isPhone || Device.get().isTablet) {
+        Future.delayed(Duration.zero, () {
+          _appSources.downloadAppDialog(context);
+        });
+        super.initState();
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer(
@@ -55,42 +73,16 @@ class Home extends StatelessWidget {
         final int _viewIndex = _view.view;
         return Scaffold(
           resizeToAvoidBottomInset: true,
-          appBar: PreferredSize(
-            preferredSize: _isPhone
-                ? _view.view == 0
-                    ? Size(100.w, 7.h)
-                    : Size(100.w, 6.h)
-                : Size(100.w, 10.h),
-            // preferredSize: Size(100.w, 5.h),
-            child: SafeArea(
-              child: Container(
-                padding: const EdgeInsets.only(top: 7, left: 4),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (kIsWeb && !_isPhone)
-                      Expanded(child: WebAppBar(uid: uid)),
-                    if (_view.view == 0) Expanded(child: SearchRecipes()),
-                    if (_view.view == 4)
-                      kIsWeb
-                          ? Container()
-                          : const Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                'Myxmi',
-                                style: TextStyle(
-                                    fontSize: 17, fontWeight: FontWeight.w700),
-                              ),
-                            ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+          // ignore: avoid_redundant_argument_values
+          appBar: kIsWeb
+              ? AppBar(
+                  title: WebAppBar(uid: widget.uid),
+                )
+              : null,
           floatingActionButton: _viewIndex == 0 ||
-                  _viewIndex == 1 && uid != null ||
-                  _viewIndex == 3 && uid != null
-              ? uid != null
+                  _viewIndex == 1 && widget.uid != null ||
+                  _viewIndex == 3 && widget.uid != null
+              ? widget.uid != null
                   ? FloatingActionButton(
                       backgroundColor: Colors.green.shade400,
                       onPressed: () {
@@ -114,7 +106,7 @@ class Home extends StatelessWidget {
                   : FloatingActionButton(
                       backgroundColor: Colors.red,
                       onPressed: () {
-                        _view.changeViewIndex(index: 4, uid: uid);
+                        _view.changeViewIndex(index: 4, uid: widget.uid);
                       },
                       child: const Icon(
                         Icons.add,
@@ -122,11 +114,11 @@ class Home extends StatelessWidget {
                       ),
                     )
               : null,
-          body: _view.viewBuilder(uid: uid),
+          body: SafeArea(child: _view.viewBuilder(uid: widget.uid)),
           extendBody: true,
           // ignore: avoid_redundant_argument_values
           bottomNavigationBar:
-              kIsWeb && !_isPhone ? null : AppBottomNavigation(),
+              kIsWeb && !Home._isPhone ? null : AppBottomNavigation(),
         );
       },
     );

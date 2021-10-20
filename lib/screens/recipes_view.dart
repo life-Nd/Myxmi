@@ -6,11 +6,13 @@ import 'package:myxmi/widgets/recipes_grid.dart';
 TextEditingController _searchMyRecipesCtrl = TextEditingController();
 
 class RecipesView extends StatefulWidget {
-  final List<RecipeModel> myRecipes;
+  final List<RecipeModel> recipesList;
   final bool showAutoCompleteField;
 
   const RecipesView(
-      {Key key, @required this.myRecipes, @required this.showAutoCompleteField})
+      {Key key,
+      @required this.recipesList,
+      @required this.showAutoCompleteField})
       : super(key: key);
   @override
   State<StatefulWidget> createState() => _RecipesViewState();
@@ -25,7 +27,7 @@ class _RecipesViewState extends State<RecipesView> {
 
   List<RecipeModel> _filterRecipes() {
     final List<RecipeModel> _filteredRecipes = [];
-    final Iterable _filter = widget.myRecipes.asMap().entries.where((entry) {
+    final Iterable _filter = widget.recipesList.asMap().entries.where((entry) {
       return entry.value.toMap().containsValue(
             _searchMyRecipesCtrl.text.trim().toLowerCase(),
           );
@@ -57,7 +59,7 @@ class _RecipesViewState extends State<RecipesView> {
                     children: [
                       Expanded(
                         child: AutoCompleteRecipes(
-                          suggestions: widget.myRecipes,
+                          suggestions: widget.recipesList,
                           controller: _searchMyRecipesCtrl,
                           onSubmit: () {
                             _filterRecipes().clear();
@@ -79,10 +81,11 @@ class _RecipesViewState extends State<RecipesView> {
                     ],
                   ),
                 const SizedBox(height: 4),
+                // Put snapshot data in a gridview
                 Expanded(
                   child: RecipesGrid(
                     recipes: _searchMyRecipesCtrl.text.isEmpty
-                        ? widget.myRecipes
+                        ? widget.recipesList
                         : _filterRecipes(),
                   ),
                 ),

@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:myxmi/screens/menu.dart';
 import 'package:myxmi/screens/more.dart';
 import 'package:myxmi/screens/products.dart';
-import 'package:myxmi/screens/recipes_by_search.dart';
+import 'package:myxmi/screens/recipes_stream.dart';
 import 'package:myxmi/screens/sign_in.dart';
-import 'package:myxmi/widgets/recipes_by_uid.dart';
+import 'package:myxmi/widgets/search.dart';
 
 class HomeViewProvider extends ChangeNotifier {
+  bool showDownloadDialog = true;
   int view = 0;
   TextEditingController searchCtrl = TextEditingController();
   bool searchRecipesInDb = false;
@@ -29,6 +30,11 @@ class HomeViewProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  String textToSearchWith() {
+    final String _text = searchCtrl.text.toString().trim().toLowerCase();
+    return _text;
+  }
+
   Stream<QuerySnapshot> streamRecipesWith(
       {@required String key, @required String value}) {
     final _stream = FirebaseFirestore.instance
@@ -38,13 +44,8 @@ class HomeViewProvider extends ChangeNotifier {
     return _stream;
   }
 
-  String searchText() {
-    final String _text = searchCtrl.text.toString().trim().toLowerCase();
-    return _text;
-  }
-
-  Stream<QuerySnapshot> searchRecipesWith({@required String searchKey}) {
-    return streamRecipesWith(key: searchKey, value: searchText());
+  Stream<QuerySnapshot> searchWithCtrl({@required String searchKey}) {
+    return streamRecipesWith(key: searchKey, value: textToSearchWith());
   }
 
   void search() {
@@ -52,7 +53,7 @@ class HomeViewProvider extends ChangeNotifier {
       if (view == 0) {
         searchRecipesInDb = true;
       } else {
-        searchRecipesWith(searchKey: 'title');
+        searchWithCtrl(searchKey: 'title');
       }
       notifyListeners();
     }
@@ -64,22 +65,36 @@ class HomeViewProvider extends ChangeNotifier {
   }
 
   Widget viewBuilder({@required String uid}) {
+    final ScrollController _ctrl = ScrollController();
     final bool isSignedIn = uid != null;
     switch (view) {
       case 0:
-        debugPrint('view: $view');
-        return searchRecipesInDb && searchCtrl.text.isNotEmpty
-            ? RecipesBySearch(
-                autoCompleteField: false,
-                path: searchRecipesWith(searchKey: 'title'),
-              )
-            : Menu();
+        return _homePage(_ctrl);
+
       case 1:
         // Show stream of recipes filtered with the user id
-        return isSignedIn ? RecipesByUid(path: 'all', uid: uid) : SignIn();
+        // RecipesByUid(path: 'all', uid: uid)
+        return isSignedIn
+            ? RecipesStream(
+                showAutoCompleteField: true,
+                path: FirebaseFirestore.instance
+                    .collection('Recipes')
+                    .where('uid', isEqualTo: uid)
+                    .snapshots(),
+              )
+            : SignIn();
       case 2:
         // Show stream of recipes liked by the user id
-        return isSignedIn ? RecipesByUid(path: 'liked', uid: uid) : SignIn();
+        //RecipesByUid(path: 'liked', uid: uid)
+
+        return isSignedIn
+            ? RecipesStream(
+                showAutoCompleteField: true,
+                path: FirebaseFirestore.instance
+                    .collection('Recipes')
+                    .where('likedBy.$uid', isEqualTo: true)
+                    .snapshots())
+            : SignIn();
       case 3:
         // Show stream of products under the user id
         return isSignedIn ? Products() : SignIn();
@@ -88,7 +103,34 @@ class HomeViewProvider extends ChangeNotifier {
       case 5:
         return isSignedIn ? More() : SignIn();
       default:
-        return Menu();
+        return _homePage(_ctrl);
     }
+  }
+
+  CustomScrollView _homePage(ScrollController ctrl) {
+    return CustomScrollView(
+      controller: ctrl,
+      slivers: [
+        SliverAppBar(
+          floating: true,
+          pinned: true,
+          expandedHeight: 5,
+          title: SearchRecipes(),
+        ),
+        SliverList(
+          delegate: SliverChildListDelegate.fixed(
+            [
+              if (searchRecipesInDb && searchCtrl.text.isNotEmpty)
+                RecipesStream(
+                  showAutoCompleteField: false,
+                  path: searchWithCtrl(searchKey: 'title'),
+                )
+              else
+                const Menu()
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }

@@ -36,19 +36,20 @@ class _RecipesGridState extends State<RecipesGrid> {
               return Consumer(builder: (_, watch, __) {
                 final _user = watch(userProvider);
                 final _recipeProvider = watch(recipeProvider);
-                final _recipe =
-                    _recipeProvider.recipeModel = widget.recipes[index];
-                _recipe.liked = false;
-                if (_user?.account?.uid != null && _recipe.likedBy != null) {
+                final RecipeModel recipe = widget.recipes[index];
+                // final _recipe =
+                // _recipeProvider.recipeModel = widget.recipes[index];
+                recipe.liked = false;
+                if (_user?.account?.uid != null && recipe.likedBy != null) {
                   final _uid = _user?.account?.uid;
-                  _recipe.liked = _recipe.likedBy.containsKey(_uid) &&
-                      _recipe.likedBy[_uid] == true;
+                  recipe.liked = recipe.likedBy.containsKey(_uid) &&
+                      recipe.likedBy[_uid] == true;
                 }
                 return InkWell(
                   onTap: () {
-                    _recipeProvider.image = _recipe.imageUrl != null
+                    _recipeProvider.image = recipe.imageUrl != null
                         ? Image.network(
-                            _recipe.imageUrl,
+                            recipe.imageUrl,
                             width: _size.width,
                             height: _size.height,
                             fit: BoxFit.fitWidth,
@@ -60,9 +61,9 @@ class _RecipesGridState extends State<RecipesGrid> {
                             children: [
                               Opacity(
                                 opacity: 0.3,
-                                child: _recipe.subCategory != null
+                                child: recipe.subCategory != null
                                     ? Image.asset(
-                                        'assets/${_recipe.subCategory}.jpg',
+                                        'assets/${recipe.subCategory}.jpg',
                                         fit: BoxFit.fitWidth,
                                         height: _size.height,
                                         width: _size.width,
@@ -84,10 +85,7 @@ class _RecipesGridState extends State<RecipesGrid> {
                           );
                     _recipeProvider.recipeModel = widget.recipes[index];
                     Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            SelectedRecipe(recipeModel: widget.recipes[index]),
-                      ),
+                      MaterialPageRoute(builder: (_) => const SelectedRecipe()),
                     );
                   },
                   child: Container(
@@ -110,9 +108,9 @@ class _RecipesGridState extends State<RecipesGrid> {
                             child: Stack(
                               children: [
                                 Hero(
-                                  tag: _recipe.recipeId,
+                                  tag: recipe.recipeId,
                                   child: RecipeTileImage(
-                                    recipe: _recipe,
+                                    recipe: recipe,
                                   ),
                                 ),
                                 Column(
@@ -120,11 +118,14 @@ class _RecipesGridState extends State<RecipesGrid> {
                                       MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    AddFavoriteButton(recipe: _recipe),
+                                    AddFavoriteButton(
+                                      recipe: recipe,
+                                      fromProvider: false,
+                                    ),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: RatingStars(
-                                        stars: _recipe.stars ?? '0.0',
+                                        stars: recipe.stars ?? '0.0',
                                       ),
                                     ),
                                   ],
@@ -138,7 +139,7 @@ class _RecipesGridState extends State<RecipesGrid> {
                             left: 7.0,
                             right: 10.0,
                           ),
-                          child: RecipeTile(recipe: _recipe),
+                          child: RecipeTile(recipe: recipe),
                         )
                       ],
                     ),

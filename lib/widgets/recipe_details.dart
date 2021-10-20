@@ -1,132 +1,110 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:expandable_page_view/expandable_page_view.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/instructions.dart';
-import 'package:myxmi/screens/add_recipe_infos.dart';
-import 'package:myxmi/screens/home.dart';
 import 'package:myxmi/screens/selected_recipe.dart';
-import 'package:myxmi/widgets/add_reviews.dart';
-import '../main.dart';
+import 'package:sizer/sizer.dart';
 import 'ingredients_listview.dart';
 import 'no_details.dart';
-import 'rating_stars.dart';
+import 'reviews_view.dart';
 import 'steps_listview.dart';
+import 'view_selector_text.dart';
 
-class RecipeDetails extends StatelessWidget {
+class RecipeDetails extends StatefulWidget {
   final InstructionsModel instructions;
   const RecipeDetails({Key key, this.instructions}) : super(key: key);
 
   @override
+  State<RecipeDetails> createState() => _RecipeDetailsState();
+}
+
+class _RecipeDetailsState extends State<RecipeDetails> {
+  final PageController pageController = PageController();
+  @override
+  void initState() {
+    final _view = context.read(selectedRecipeView);
+    _view.pageIndex = 0;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, watch, child) {
-      final _user = watch(userProvider);
       final _selectedView = watch(selectedRecipeView);
-      final _recipe = watch(recipeProvider);
-      final _view = watch(homeViewProvider);
-      return ExpandablePageView(
-        controller: _selectedView.pageController,
-        onPageChanged: (index) {
-          _selectedView.jumpToPage(index);
-        },
+      return Column(
         children: [
-          if (instructions.ingredients != null)
-            IngredientsInRecipeListView(ingredients: instructions.ingredients)
-          else
-            const NoDetails('noIngredients'),
-          if (instructions.steps != null)
-            StepsListView(
-              steps: instructions.steps,
-            )
-          else
-            const NoDetails('noSteps'),
-          // if (instructions.reviews == null)
-          Stack(
-            children: [
-              StreamBuilder<DocumentSnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('Reviews')
-                    .doc(_recipe.recipeModel.recipeId)
-                    .snapshots(),
-                builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                  if (snapshot.hasData && snapshot.data.data() != null) {
-                    debugPrint('snapshot: ${snapshot.data.data()}');
-                    final Map _data =
-                        snapshot.data.data() as Map<String, dynamic>;
-                    final List _keys =
-                        _data?.keys != null ? _data?.keys?.toList() : [];
-                    return ListView.builder(
-                      itemCount: _keys.length,
-                      itemBuilder: (_, int index) {
-                        return Card(
-                          child: ListTile(
-                            contentPadding: const EdgeInsets.all(1),
-                            leading: CircleAvatar(
-                              child: _data[_keys[index]]['photo_url'] != null &&
-                                      _data[_keys[index]]['photo_url'] != 'null'
-                                  ? Image.network(
-                                      '${_data[_keys[index]]['photo_url']}')
-                                  : const Icon(Icons.person),
-                            ),
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Text('${_data[_keys[index]]['name']}'),
-                                ),
-                                RatingStars(
-                                  stars: '${_data[_keys[index]]['stars']}',
-                                ),
-                              ],
-                            ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('${_data[_keys[index]]['message']}'),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                        '${DateTime.fromMillisecondsSinceEpoch(int.parse('${_keys[index]}'))}'),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  }
-                  return const NoDetails('noReviews');
-                },
-              ),
-              Container(
-                alignment: Alignment.bottomRight,
-                padding: const EdgeInsets.all(7),
-                child: FloatingActionButton(
-                  onPressed: _user?.account?.uid != null
-                      ? () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => AddReviews(),
-                            ),
-                          );
-                        }
-                      : () {
-                          _view.view = 4;
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => Home(uid: _user?.account?.uid),
-                            ),
-                          );
-                        },
-                  child: const Icon(Icons.add),
-                ),
-              ),
-            ],
-          )
+          _ViewsSelector(
+            ingredientsLength: widget.instructions.ingredients.length,
+            stepsLength: widget.instructions.steps.length,
+            reviewsLength: widget.instructions.reviews.length,
+            pageCtrl: pageController,
+          ),
+          SizedBox(
+            height: 70.h,
+            child: PageView(
+              controller: pageController,
+              onPageChanged: (index) {
+                _selectedView.changeIndex(index);
+              },
+              children: [
+                if (widget.instructions.ingredients != null)
+                  IngredientsInRecipeListView(
+                      ingredients: widget.instructions.ingredients)
+                else
+                  const NoDetails('noIngredients'),
+                if (widget.instructions.steps != null)
+                  StepsListView(
+                    steps: widget.instructions.steps,
+                  )
+                else
+                  const NoDetails('noSteps'),
+                const ReviewsView()
+              ],
+            ),
+          ),
         ],
       );
     });
+  }
+}
+class _ViewsSelector extends StatelessWidget {
+  final int stepsLength;
+  final int ingredientsLength;
+  final int reviewsLength;
+  final PageController pageCtrl;
+
+  const _ViewsSelector(
+      {Key key,
+      @required this.stepsLength,
+      @required this.ingredientsLength,
+      @required this.reviewsLength,
+      @required this.pageCtrl})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        ViewSelectorText(
+          controller: pageCtrl,
+          length: ingredientsLength ?? 0,
+          viewIndex: 0,
+          text: 'ingredients',
+        ),
+        ViewSelectorText(
+          controller: pageCtrl,
+          length: stepsLength ?? 0,
+          viewIndex: 1,
+          text: 'steps',
+        ),
+        ViewSelectorText(
+          controller: pageCtrl,
+          length: reviewsLength ?? 0,
+          text: 'reviews',
+          viewIndex: 2,
+        ),
+      ],
+    );
   }
 }

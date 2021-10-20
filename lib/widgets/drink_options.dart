@@ -48,7 +48,7 @@ class DrinkItems extends HookWidget {
               ),
               MenuItem(
                 filter: 'category',
-                legend: 'drink',
+                legend: 'anyDrink',
                 url:
                     'https://unsplash.com/photos/4FujjkcI40g?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink',
               ),

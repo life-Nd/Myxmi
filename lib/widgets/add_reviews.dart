@@ -15,10 +15,21 @@ class AddReviews extends HookWidget {
   Widget build(BuildContext context) {
     final _recipe = useProvider(recipeProvider);
     final _user = useProvider(userProvider);
+    final String _title = _recipe.recipeModel.title;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        title: Text('${'reviewOf'.tr()} ${_recipe.recipeModel.title}'),
+        title: Row(
+          children: [
+            Expanded(
+              child: Text(
+                ' $_title',
+                style:
+                    const TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+              ),
+            )
+          ],
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(

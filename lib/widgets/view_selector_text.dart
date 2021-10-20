@@ -3,23 +3,31 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/screens/selected_recipe.dart';
 
-class ViewSelectorText extends StatelessWidget {
+class ViewSelectorText extends StatefulWidget {
   final String text;
   final int viewIndex;
   final int length;
-  const ViewSelectorText({
-    @required this.text,
-    @required this.length,
-    @required this.viewIndex,
-  });
+  final PageController controller;
+  const ViewSelectorText(
+      {@required this.text,
+      @required this.length,
+      @required this.viewIndex,
+      @required this.controller});
 
+  @override
+  State<ViewSelectorText> createState() => _ViewSelectorTextState();
+}
+
+class _ViewSelectorTextState extends State<ViewSelectorText> {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (_, watch, child) {
       final _selectedView = watch(selectedRecipeView);
       return InkWell(
         onTap: () {
-          _selectedView.jumpToPage(viewIndex);
+          setState(() {
+            widget.controller.jumpToPage(widget.viewIndex);
+          });
         },
         child: Container(
           padding:
@@ -28,7 +36,7 @@ class ViewSelectorText extends StatelessWidget {
             border: Border(
               bottom: BorderSide(
                   width: 4,
-                  color: _selectedView.pageIndex == viewIndex
+                  color: _selectedView.pageIndex == widget.viewIndex
                       ? Theme.of(context).appBarTheme.titleTextStyle.color
                       : Colors.transparent),
             ),
@@ -41,14 +49,14 @@ class ViewSelectorText extends StatelessWidget {
               ),
               children: [
                 TextSpan(
-                  text: text.tr().toUpperCase(),
+                  text: widget.text.tr().toUpperCase(),
                   style: TextStyle(color: Theme.of(context).iconTheme.color),
                 ),
                 WidgetSpan(
                   child: Transform.translate(
                     offset: const Offset(0.0, -9.0),
                     child: Text(
-                      '$length',
+                      '${widget.length}',
                       style: const TextStyle(
                           fontSize: 14, fontWeight: FontWeight.bold),
                     ),

@@ -41,7 +41,7 @@ class DietOptions extends HookWidget {
                       'https://unsplash.com/photos/auIbTAcSH6E?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink'),
               MenuItem(
                 filter: 'diet',
-                legend: 'diet',
+                legend: 'anyDiet',
                 url: 'https://unsplash.com/photos/NPBnWE1o07I',
               ),
             ],

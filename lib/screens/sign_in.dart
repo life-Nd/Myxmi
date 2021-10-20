@@ -47,7 +47,7 @@ class SignIn extends StatelessWidget {
               title: Text(
                 'signIn'.tr(),
                 style: const TextStyle(
-                  fontSize: 25,
+                  fontSize: 27,
                   fontWeight: FontWeight.bold,
                 ),
               ),

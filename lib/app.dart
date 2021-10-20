@@ -32,7 +32,6 @@ class _StreamAuthBuilder extends StatelessWidget {
         if (snapUser.data != null) {
           final _user = context.read(userProvider);
           _user.account = snapUser.data;
-          debugPrint(_user.account.photoURL);
           return Home(uid: _user?.account?.uid);
         }
         return const Home(uid: null);
@@ -44,7 +43,6 @@ class _StreamAuthBuilder extends StatelessWidget {
 class _HotRestartByPassBuilder extends StatelessWidget {
   static final Future<SharedPreferences> prefs =
       SharedPreferences.getInstance();
-
   ///Check if isLoggedIn locally
   static Future<bool> isLoggedIn() async {
     final SharedPreferences _prefs = await prefs;

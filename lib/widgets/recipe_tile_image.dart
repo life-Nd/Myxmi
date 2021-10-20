@@ -4,6 +4,7 @@ import 'package:myxmi/models/recipes.dart';
 
 class RecipeTileImage extends HookWidget {
   final RecipeModel recipe;
+
   const RecipeTileImage({@required this.recipe});
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class RecipeTileImage extends HookWidget {
               height: _size.height,
               child: Image.network(
                 recipe.imageUrl,
-                  fit: BoxFit.fitWidth,
+                  fit: BoxFit.values[4],
                 cacheWidth: 1000,
                 cacheHeight: 1000,
                 height: _size.height,

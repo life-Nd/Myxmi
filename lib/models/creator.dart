@@ -1,7 +1,7 @@
 class CreatorModel {
-  static const _name = 'name';
-  static const _avatar = 'avatar';
-  static const _recipesPosted = 'recipes_posted';
+  static const String _name = 'name';
+  static const String _avatar = 'avatar';
+  static const String _recipesPosted = 'recipes_posted';
 
   String name;
   String avatar;

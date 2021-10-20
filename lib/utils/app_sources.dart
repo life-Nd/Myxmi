@@ -1,0 +1,166 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_device_type/flutter_device_type.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:myxmi/screens/home.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+class AppSources {
+  Map _data = {};
+  String googlePlayUrl;
+  // android: https://play.google.com/store
+  String appstoreUrl;
+  // IOS : https://www.apple.com/ca/app-store/
+
+  String appStoreIdentifier;
+  String googlePlayIdentifier;
+
+  void getAppSourcesUrls() {
+    final _db = FirebaseFirestore.instance;
+    _db
+        .collection('Sources')
+        .doc('AppStores')
+        .snapshots()
+        .listen((DocumentSnapshot<Map> event) {
+      if (event.exists) {
+        _data = event.data();
+        debugPrint('_appSources: $_data');
+        googlePlayUrl = _data['googlePlayUrl'] as String;
+        appstoreUrl = _data['appStoreUrl'] as String;
+        googlePlayIdentifier = _data['googlePlayIdentifier'] as String;
+        appStoreIdentifier = _data['appStoreIdentifier'] as String;
+      }
+    });
+  }
+
+  void downloadAppDialog(BuildContext context) {
+    final _home = context.read(homeViewProvider);
+    if (_home.showDownloadDialog) {
+      getAppSourcesUrls();
+      debugPrint('_data:$_data ');
+      if (_data != null) {
+        showDialog(
+          context: context,
+          builder: (_) {
+            return AlertDialog(
+              contentPadding: const EdgeInsets.all(20),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              title: Center(
+                child: Text(
+                  'tryOurApp'.tr(),
+                ),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('aBetterExperience'.tr()),
+                  Row(
+                    children: [
+                      Text('downloadAppOn'.tr()),
+                      if (Device.get().isAndroid)
+                        const Text('Playstore')
+                      else
+                        const Text('AppStore')
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Column(
+                    children: [
+                      RawMaterialButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        fillColor: Device.get().isAndroid
+                            ? Colors.green.shade400
+                            : Colors.grey,
+                        onPressed: () {
+                          if (Device.get().isAndroid) {
+                            debugPrint('_googlePlayUrl: $googlePlayUrl');
+                            _launchURL(url: googlePlayUrl);
+                          }
+                        },
+                        child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Row(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Image.asset(
+                                    'assets/playstore.png',
+                                    height: 40,
+                                    width: 40,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 4,
+                                ),
+                                Text('downloadAndroidApp'.tr())
+                              ],
+                            )),
+                      ),
+                      const SizedBox(height: 10),
+                      RawMaterialButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        fillColor: Device.get().isIos
+                            ? Colors.green.shade400
+                            : Colors.grey,
+                        onPressed: () {
+                          debugPrint('_appstoreUrl: $appstoreUrl');
+                          _launchURL(url: appstoreUrl);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Row(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: Image.asset(
+                                  'assets/appstore.png',
+                                  height: 40,
+                                  width: 40,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              Text('downloadIosApp'.tr())
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              actions: [
+                RawMaterialButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  fillColor: Colors.red,
+                  onPressed: () {
+                    _home.showDownloadDialog = false;
+                    Navigator.of(context).pop();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text('close'.tr()),
+                  ),
+                )
+              ],
+            );
+          },
+        );
+      }
+    }
+  }
+
+  // ignore: avoid_void_async
+  void _launchURL({String url}) async {
+    await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
+  }
+}

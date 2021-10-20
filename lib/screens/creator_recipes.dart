@@ -1,6 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:myxmi/widgets/recipes_by_uid.dart';
+import 'recipes_stream.dart';
 
 class CreatorRecipes extends StatelessWidget {
   final String uid;
@@ -19,9 +20,9 @@ class CreatorRecipes extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leadingWidth: 20,
+        leadingWidth: 40,
         title: ListTile(
-           leading: avatar != null
+          leading: avatar != null
               ? CircleAvatar(
                   backgroundColor: Colors.amber,
                   foregroundImage: NetworkImage(avatar))
@@ -30,9 +31,12 @@ class CreatorRecipes extends StatelessWidget {
           // subtitle: Text('$followersCount ${'followers'.tr()}'),
         ),
       ),
-      body: RecipesByUid(
-        path: 'all',
-        uid: uid,
+      body: RecipesStream(
+        showAutoCompleteField: true,
+        path: FirebaseFirestore.instance
+            .collection('Recipes')
+            .where('uid', isEqualTo: uid)
+            .snapshots(),
       ),
     );
   }

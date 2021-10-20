@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 // import 'package:google_mobile_ads/google_mobile_ads.dart';
 // import 'package:myxmi/apis/ads.dart';
-import 'recipes_by_search.dart';
+import 'recipes_stream.dart';
 
 String _equalTo = '';
 String _where = '';
@@ -54,7 +54,7 @@ class _FilteredState extends State<Filtered> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${widget.legend.tr()}s'),
+        title: Text(widget.legend.tr()),
       ),
       body: Column(
         children: const [
@@ -81,18 +81,36 @@ class _ExpandedRecipesStream extends StatelessWidget {
   Widget build(BuildContext context) {
     debugPrint('_where: $_where');
     debugPrint('_equalTo: $_equalTo');
+    String value() {
+      String _value;
+      switch (_equalTo) {
+        case 'anyFood':
+          _value = 'food';
+          return _value;
+        case 'anyDrink':
+          _value = 'drink';
+          return _value;
+        case 'anyDiet':
+          _value = 'diet';
+          return _value;
+        default:
+          _value = _equalTo;
+          return _value;
+      }
+    }
+
     return Expanded(
-      child: RecipesBySearch(
-        path: _equalTo != 'diet'
+      child: RecipesStream(
+        path: _equalTo != 'anyDiet'
             ? FirebaseFirestore.instance
                 .collection('Recipes')
-                .where(_where, isEqualTo: _equalTo)
+                .where(_where, isEqualTo: value())
                 .snapshots()
             : FirebaseFirestore.instance
                 .collection('Recipes')
                 .orderBy('made')
                 .snapshots(),
-        autoCompleteField: true,
+        showAutoCompleteField: true,
       ),
     );
   }

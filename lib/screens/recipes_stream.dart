@@ -4,14 +4,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/recipes.dart';
-import 'package:myxmi/screens/add_recipe_infos.dart';
 import 'recipes_view.dart';
 
-class RecipesBySearch extends StatelessWidget {
+class RecipesStream extends StatelessWidget {
   final Stream<QuerySnapshot> path;
-  final bool autoCompleteField;
-  const RecipesBySearch(
-      {Key key, @required this.path, @required this.autoCompleteField})
+  final bool showAutoCompleteField;
+  const RecipesStream(
+      {Key key, @required this.path, @required this.showAutoCompleteField})
       : super(key: key);
 
   @override
@@ -31,7 +30,6 @@ class RecipesBySearch extends StatelessWidget {
 
     return Consumer(
       builder: (_, watch, __) {
-        final _recipe = watch(recipeProvider);
         return StreamBuilder<QuerySnapshot>(
           stream: path,
           builder: (_, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -49,10 +47,9 @@ class RecipesBySearch extends StatelessWidget {
               );
             }
             if (snapshot.data != null) {
-              _recipe.recipesList = _recipes(querySnapshot: snapshot.data);
               return RecipesView(
-                showAutoCompleteField: autoCompleteField,
-                myRecipes: _recipes(querySnapshot: snapshot.data),
+                showAutoCompleteField: showAutoCompleteField,
+                recipesList: _recipes(querySnapshot: snapshot.data),
               );
             } else {
               return Column(
