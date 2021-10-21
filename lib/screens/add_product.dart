@@ -55,7 +55,10 @@ class AddProduct extends HookWidget {
                   SetOptions(merge: true),
                 ).whenComplete(() {
                   _nameCtrl.clear();
-                  _mesureType = '';
+                  _mesureType = null;
+                  _ingredientType = null;
+                  _expiration = null;
+                  _quantityCtrl = null;
                   Navigator.of(context).pop();
                 });
               }
@@ -170,7 +173,7 @@ class AddProduct extends HookWidget {
                   ),
                   _ProductEntryType(
                     type: 'other',
-                    color: Theme.of(context).iconTheme.color,
+                    color: Colors.grey.shade700,
                   ),
                 ],
               ),
@@ -349,42 +352,52 @@ class AddProduct extends HookWidget {
                 subtitle:
                     _explainExpiration ? Text('expirationDate'.tr()) : null,
               ),
-              RawMaterialButton(
-                onPressed: () async {
-                  final _date = await showDatePicker(
-                      context: context,
-                      currentDate: _expiration,
-                      initialDate: DateTime.now(),
-                      firstDate:
-                          DateTime.now().subtract(const Duration(days: 5)),
-                      lastDate: DateTime.now().add(
-                        const Duration(days: 1200),
-                      ),
-                      builder: (_, child) {
-                        return child;
-                      });
-                  if (_date != null && _date != _expiration) {
-                    _expiration = _date;
-                  }
-                  _change.value = !_change.value;
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if (_expiration != null)
-                      Text(
-                        DateFormat.yMMMMEEEEd().format(_expiration),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
+              Row(
+                children: [
+                  RawMaterialButton(
+                    onPressed: () async {
+                      final _date = await showDatePicker(
+                          context: context,
+                          currentDate: _expiration,
+                          initialDate: DateTime.now(),
+                          firstDate:
+                              DateTime.now().subtract(const Duration(days: 5)),
+                          lastDate: DateTime.now().add(
+                            const Duration(days: 1200),
+                          ),
+                          builder: (_, child) {
+                            return child;
+                          });
+                      if (_date != null && _date != _expiration) {
+                        _expiration = _date;
+                      }
+                      _change.value = !_change.value;
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (_expiration != null)
+                          Text(
+                            DateFormat.yMMMMEEEEd().format(_expiration),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        else
+                          const Text(''),
+                        const Icon(
+                          Icons.calendar_today_outlined,
                         ),
-                      )
-                    else
-                      const Text(''),
-                    const Icon(
-                      Icons.calendar_today_outlined,
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      _expiration = null;
+                    },
+                    icon: const Icon(Icons.clear),
+                  )
+                ],
               ),
               const SizedBox(
                 width: 4,

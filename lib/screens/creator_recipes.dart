@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'recipes_stream.dart';
+import 'recipes.dart';
 
 class CreatorRecipes extends StatelessWidget {
   final String uid;
@@ -31,7 +31,7 @@ class CreatorRecipes extends StatelessWidget {
           // subtitle: Text('$followersCount ${'followers'.tr()}'),
         ),
       ),
-      body: RecipesStream(
+      body: Recipes(
         showAutoCompleteField: true,
         path: FirebaseFirestore.instance
             .collection('Recipes')

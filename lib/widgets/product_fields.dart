@@ -15,7 +15,6 @@ class ProductField extends StatelessWidget {
         '${product.name[0]?.toUpperCase()}${product.name?.substring(1, product.name?.length)}';
     return Consumer(builder: (_, watch, __) {
       final _recipe = watch(recipeProvider);
-      debugPrint('Composition ${_recipe.composition[product.name]}');
       textCtrl = TextEditingController(
           text: _recipe.composition[product.name] != null
               ? _recipe.composition[product.name]

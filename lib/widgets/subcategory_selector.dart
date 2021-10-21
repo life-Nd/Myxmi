@@ -18,9 +18,7 @@ class SubCategorySelector extends StatelessWidget {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (_recipe.recipeModel.category.isNotEmpty &&
-              _recipe.recipeModel.category != 'other')
-            Text('subCategory'.tr()),
+          Text('subCategory'.tr()),
           SizedBox(
             width: 100.w,
             height: 7.h,

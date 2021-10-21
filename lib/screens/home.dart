@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_device_type/flutter_device_type.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:myxmi/main.dart';
 import 'package:myxmi/providers/home_view.dart';
 import 'package:myxmi/utils/app_sources.dart';
 import 'package:myxmi/widgets/app_bottom_navigation.dart';
@@ -42,8 +43,6 @@ final homeViewProvider = ChangeNotifierProvider<HomeViewProvider>(
 );
 
 class Home extends StatefulWidget {
-  static final bool _isPhone = !kIsWeb ??
-      Device.get().isAndroid || Device.get().isIos || Device.get().isTablet;
   final String uid;
   const Home({Key key, @required this.uid}) : super(key: key);
 
@@ -52,16 +51,28 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  bool _webView = false;
   final AppSources _appSources = AppSources();
+
   @override
   void initState() {
     if (kIsWeb) {
-      if (Device.get().isPhone || Device.get().isTablet) {
-        Future.delayed(Duration.zero, () {
-          _appSources.downloadAppDialog(context);
-        });
-        super.initState();
+      final _user = context.read(userProvider);
+      try {
+        if (Device.get().isPhone || Device.get().isTablet) {
+          Future.delayed(Duration.zero, () {
+            _user.onMobileApp = true;
+            _appSources.downloadAppDialog(context);
+          });
+          _webView = false;
+        }
+      } catch (error) {
+        _user.onMobileApp = false;
+        debugPrint('Web && !phone');
+        _webView = true;
       }
+
+      super.initState();
     }
   }
 
@@ -74,8 +85,9 @@ class _HomeState extends State<Home> {
         return Scaffold(
           resizeToAvoidBottomInset: true,
           // ignore: avoid_redundant_argument_values
-          appBar: kIsWeb
+          appBar: _webView
               ? AppBar(
+                  automaticallyImplyLeading: false,
                   title: WebAppBar(uid: widget.uid),
                 )
               : null,
@@ -117,8 +129,7 @@ class _HomeState extends State<Home> {
           body: SafeArea(child: _view.viewBuilder(uid: widget.uid)),
           extendBody: true,
           // ignore: avoid_redundant_argument_values
-          bottomNavigationBar:
-              kIsWeb && !Home._isPhone ? null : AppBottomNavigation(),
+          bottomNavigationBar: _webView ? null : AppBottomNavigation(),
         );
       },
     );

@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 // import 'package:google_mobile_ads/google_mobile_ads.dart';
 // import 'package:myxmi/apis/ads.dart';
-import 'recipes_stream.dart';
+import 'recipes.dart';
 
 String _equalTo = '';
 String _where = '';
@@ -100,7 +100,7 @@ class _ExpandedRecipesStream extends StatelessWidget {
     }
 
     return Expanded(
-      child: RecipesStream(
+      child: Recipes(
         path: _equalTo != 'anyDiet'
             ? FirebaseFirestore.instance
                 .collection('Recipes')

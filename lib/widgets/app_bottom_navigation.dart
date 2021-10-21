@@ -35,6 +35,11 @@ class AppBottomNavigation extends StatelessWidget {
               icon: const Icon(
                 Icons.fastfood_outlined,
               )),
+          // BottomNavigationBarItem(
+          //     label: 'cart'.tr(),
+          //     icon: const Icon(
+          //       Icons.fastfood_outlined,
+          //     )),
           if (_user.account?.uid != null)
             BottomNavigationBarItem(
               label: 'more'.tr(),

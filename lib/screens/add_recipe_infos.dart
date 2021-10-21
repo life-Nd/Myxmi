@@ -96,18 +96,37 @@ class AddRecipeInfos extends StatelessWidget {
                 const DurationField(),
                 Center(child: Text('portions'.tr())),
                 const PortionsField(),
-                Center(child: Text('category'.tr())),
-                const Center(child: CategorySelector()),
+                const SizedBox(height: 4),
+                SizedBox(
+                  height: 7.h,
+                  width: 100.w,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(child: Text('category'.tr())),
+                      const Expanded(child: CategorySelector()),
+                    ],
+                  ),
+                ),
                 Consumer(builder: (_, watch, __) {
                   final _recipe = watch(recipeProvider);
-                  return _recipe.recipeModel.category != null
-                      ? const Center(
-                          child: SubCategorySelector(),
+                  debugPrint(
+                      '_recipe.recipeModel.category :${_recipe.recipeModel.category}');
+                  debugPrint(
+                      '_recipe.recipeModel.subCategory :${_recipe.recipeModel.subCategory}');
+                  return (_recipe.recipeModel.category != null &&
+                          _recipe.recipeModel.category != 'other')
+                      ? Center(
+                          child: Column(
+                            children: [
+                              const SubCategorySelector(),
+                              Center(child: Text('diet'.tr())),
+                              const Center(child: DietSelector()),
+                            ],
+                          ),
                         )
                       : Container();
                 }),
-                Center(child: Text('diet'.tr())),
-                const Center(child: DietSelector()),
               ],
             ),
           ),

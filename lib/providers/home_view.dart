@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:myxmi/screens/menu.dart';
 import 'package:myxmi/screens/more.dart';
-import 'package:myxmi/screens/products.dart';
-import 'package:myxmi/screens/recipes_stream.dart';
+import 'package:myxmi/screens/recipes.dart';
 import 'package:myxmi/screens/sign_in.dart';
+import 'package:myxmi/widgets/products.dart';
 import 'package:myxmi/widgets/search.dart';
 
 class HomeViewProvider extends ChangeNotifier {
@@ -65,17 +65,17 @@ class HomeViewProvider extends ChangeNotifier {
   }
 
   Widget viewBuilder({@required String uid}) {
-    final ScrollController _ctrl = ScrollController();
     final bool isSignedIn = uid != null;
     switch (view) {
       case 0:
+        final ScrollController _ctrl = ScrollController();
         return _homePage(_ctrl);
 
       case 1:
         // Show stream of recipes filtered with the user id
         // RecipesByUid(path: 'all', uid: uid)
         return isSignedIn
-            ? RecipesStream(
+            ? Recipes(
                 showAutoCompleteField: true,
                 path: FirebaseFirestore.instance
                     .collection('Recipes')
@@ -88,7 +88,7 @@ class HomeViewProvider extends ChangeNotifier {
         //RecipesByUid(path: 'liked', uid: uid)
 
         return isSignedIn
-            ? RecipesStream(
+            ? Recipes(
                 showAutoCompleteField: true,
                 path: FirebaseFirestore.instance
                     .collection('Recipes')
@@ -97,12 +97,13 @@ class HomeViewProvider extends ChangeNotifier {
             : SignIn();
       case 3:
         // Show stream of products under the user id
-        return isSignedIn ? Products() : SignIn();
+        return isSignedIn ? const Products(type: 'EditProducts') : SignIn();
       case 4:
         return isSignedIn ? More() : SignIn();
       case 5:
         return isSignedIn ? More() : SignIn();
       default:
+        final ScrollController _ctrl = ScrollController();
         return _homePage(_ctrl);
     }
   }
@@ -112,6 +113,7 @@ class HomeViewProvider extends ChangeNotifier {
       controller: ctrl,
       slivers: [
         SliverAppBar(
+          automaticallyImplyLeading: false,
           floating: true,
           pinned: true,
           expandedHeight: 5,
@@ -121,7 +123,7 @@ class HomeViewProvider extends ChangeNotifier {
           delegate: SliverChildListDelegate.fixed(
             [
               if (searchRecipesInDb && searchCtrl.text.isNotEmpty)
-                RecipesStream(
+                Recipes(
                   showAutoCompleteField: false,
                   path: searchWithCtrl(searchKey: 'title'),
                 )

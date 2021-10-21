@@ -20,7 +20,7 @@ class RecipeModel {
   static const _photoUrl = 'photoUrl';
   static const _diet = 'diet';
   static const _tags = 'tags';
-  static const _lang = 'lang'; 
+  static const _lang = 'lang';
   String recipeId;
   String title = '';
   String ingredientsCount;
@@ -46,64 +46,62 @@ class RecipeModel {
   List tags = [];
   String lang;
 
-  RecipeModel({
-    this.recipeId,
-    this.title,
-    this.ingredientsCount,
-    this.stepsCount,
-    this.stars,
-    this.usedCount,
-    this.imageUrl,
-    this.uid,
-    this.duration,
-    this.category,
-    this.subCategory,
-    this.access,
-    this.difficulty,
-    this.reference,
-    this.made,
-    this.reviewsCount,
-    this.portions,
-    this.likedBy,
-    this.liked,
-    this.photoUrl,
-    this.username,
-    this.diet,
-    this.tags,
-      this.lang
-  });
+  RecipeModel(
+      {this.recipeId,
+      this.title,
+      this.ingredientsCount,
+      this.stepsCount,
+      this.stars,
+      this.usedCount,
+      this.imageUrl,
+      this.uid,
+      this.duration,
+      this.category,
+      this.subCategory,
+      this.access,
+      this.difficulty,
+      this.reference,
+      this.made,
+      this.reviewsCount,
+      this.portions,
+      this.likedBy,
+      this.liked,
+      this.photoUrl,
+      this.username,
+      this.diet,
+      this.tags,
+      this.lang});
   factory RecipeModel.fromSnapshot(
       {Map<String, dynamic> snapshot, String keyIndex}) {
     return RecipeModel(
-      recipeId: keyIndex,
-      title: snapshot[_title] as String,
-      ingredientsCount: snapshot[_ingredientsCount] as String,
-      stepsCount: snapshot[_stepsCount] as String,
-      stars: snapshot[_stars] as String,
-      usedCount: snapshot[_usedCount] as String,
-      imageUrl: snapshot[_imageUrl] as String,
-      uid: snapshot[_uid] as String,
-      duration: snapshot[_duration] as String,
-      category: snapshot[_category] as String,
-      subCategory: snapshot[_subCategory] as String,
-      access: snapshot[_access] as String,
-      difficulty: snapshot[_difficulty] as String,
-      reference: snapshot[_reference] as String,
-      reviewsCount: snapshot[_reviewsCount] as String,
-      made: snapshot[_made] as String,
-      portions: snapshot[_portions] as String,
-      likedBy: snapshot[_likedBy] as Map,
-      username: snapshot[_username] as String,
-      photoUrl: snapshot[_photoUrl] as String,
-      diet: snapshot[_diet] as String,
-      tags: snapshot[_tags] as List,
-        lang: snapshot[_lang] as String
-    );
+        recipeId: keyIndex,
+        title: snapshot[_title] as String,
+        ingredientsCount: snapshot[_ingredientsCount] as String,
+        stepsCount: snapshot[_stepsCount] as String,
+        stars: snapshot[_stars] as String,
+        usedCount: snapshot[_usedCount] as String,
+        imageUrl: snapshot[_imageUrl] as String,
+        uid: snapshot[_uid] as String,
+        duration: snapshot[_duration] as String,
+        category: snapshot[_category] as String,
+        subCategory: snapshot[_subCategory] as String,
+        access: snapshot[_access] as String,
+        difficulty: snapshot[_difficulty] as String,
+        reference: snapshot[_reference] as String,
+        reviewsCount: snapshot[_reviewsCount] as String,
+        made: snapshot[_made] as String,
+        portions: snapshot[_portions] as String,
+        likedBy: snapshot[_likedBy] as Map,
+        username: snapshot[_username] as String,
+        photoUrl: snapshot[_photoUrl] as String,
+        diet: snapshot[_diet] as String,
+        tags: snapshot[_tags] as List,
+        lang: snapshot[_lang] as String);
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      _title: title.trim().toLowerCase(),
+      _title: title?.trim()?.toLowerCase(),
       _ingredientsCount: ingredientsCount,
       _stepsCount: stepsCount,
       _stars: stars,
@@ -111,9 +109,9 @@ class RecipeModel {
       _imageUrl: imageUrl,
       _uid: uid,
       _duration: duration,
-      _category: category.toLowerCase(),
-      _subCategory: subCategory.toLowerCase(),
-      _access: access.toLowerCase(),
+      _category: category?.toLowerCase(),
+      _subCategory: subCategory?.toLowerCase(),
+      _access: access?.toLowerCase(),
       _difficulty: difficulty,
       _reference: reference,
       _made: made,

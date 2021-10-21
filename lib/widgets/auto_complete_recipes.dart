@@ -8,16 +8,19 @@ class AutoCompleteRecipes extends StatefulWidget {
   final List<RecipeModel> suggestions;
   final TextEditingController controller;
   final Function onSubmit;
-  const AutoCompleteRecipes(
-      {Key key,
-      @required this.suggestions,
-      @required this.controller,
-      @required this.onSubmit})
-      : super(key: key);
+  final Function onClear;
+  const AutoCompleteRecipes({
+    Key key,
+    @required this.suggestions,
+    @required this.controller,
+    @required this.onSubmit,
+    @required this.onClear,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _AutoCompleteRecipesState();
 }
+
 class _AutoCompleteRecipesState extends State<AutoCompleteRecipes> {
   AutoCompleteTextField _searchTextField;
   GlobalKey<AutoCompleteTextFieldState<RecipeModel>> key = GlobalKey();
@@ -33,24 +36,28 @@ class _AutoCompleteRecipesState extends State<AutoCompleteRecipes> {
         widget.onSubmit();
       },
       itemBuilder: (context, item) {
-        return ListTile(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: Text(
-                  '${item.title[0].toUpperCase()}${item.title.substring(1, item.title.length)}',
-                  style: const TextStyle(fontSize: 20.0),
+        return Card(
+          elevation: 20,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    '${item.title[0].toUpperCase()}${item.title.substring(1, item.title.length)}',
+                    style: const TextStyle(fontSize: 20.0),
+                  ),
                 ),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(15.0),
-              ),
-              Text(
-                '${item.category[0].toUpperCase()}${item.category.substring(1, item.category.length)}',
-                style: const TextStyle(fontSize: 17.0),
-              )
-            ],
+                const Padding(
+                  padding: EdgeInsets.all(15.0),
+                ),
+                Text(
+                  '${item.category[0].toUpperCase()}${item.category.substring(1, item.category.length)}',
+                  style: const TextStyle(fontSize: 17.0),
+                )
+              ],
+            ),
           ),
         );
       },
@@ -67,10 +74,17 @@ class _AutoCompleteRecipesState extends State<AutoCompleteRecipes> {
       },
       suggestions: widget.suggestions,
       decoration: InputDecoration(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-        filled: true,
-        hintText: 'searchRecipe'.tr(),
-      ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+          contentPadding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+          filled: true,
+          hintText: 'searchRecipe'.tr(),
+          prefixIcon: IconButton(
+            icon: const Icon(Icons.clear, color: Colors.red),
+            onPressed: () {
+              _searchTextField.clear();
+              widget.onClear();
+            },
+          )),
     );
     return _searchTextField;
   }

@@ -7,11 +7,13 @@ class AutoCompleteProducts extends StatefulWidget {
   final List<ProductModel> suggestions;
   final TextEditingController controller;
   final Function onSubmit;
+  final Function onClear;
   const AutoCompleteProducts(
       {Key key,
       @required this.suggestions,
       @required this.controller,
-      @required this.onSubmit})
+      @required this.onSubmit,
+      @required this.onClear})
       : super(key: key);
   @override
   State<StatefulWidget> createState() => _AutoCompleteProductsState();
@@ -29,6 +31,11 @@ class _AutoCompleteProductsState extends State<AutoCompleteProducts> {
       clearOnSubmit: false,
       controller: widget.controller,
       key: key,
+      textSubmitted: (submitted) {
+        _searchTextField.textField.controller.text = submitted;
+        widget.onSubmit();
+      },
+      
       itemBuilder: (context, item) {
         return Card(
           elevation: 20,
@@ -37,9 +44,11 @@ class _AutoCompleteProductsState extends State<AutoCompleteProducts> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text(
-                  '${item.name[0].toUpperCase()}${item.name.substring(1, item.name.length)}',
-                  style: const TextStyle(fontSize: 20.0),
+                Expanded(
+                  child: Text(
+                    '${item.name[0].toUpperCase()}${item.name.substring(1, item.name.length)}',
+                    style: const TextStyle(fontSize: 20.0),
+                  ),
                 ),
                 const Padding(
                   padding: EdgeInsets.all(15.0),
@@ -70,8 +79,34 @@ class _AutoCompleteProductsState extends State<AutoCompleteProducts> {
         contentPadding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
         filled: true,
         hintText: 'searchInMyProducts'.tr(),
+        prefixIcon: IconButton(
+            icon: const Icon(
+              Icons.clear,
+              color: Colors.red,
+            ),
+            onPressed: () {
+              widget.onClear();
+              _searchTextField.clear();
+            }),
       ),
     );
     return _searchTextField;
+  }
+}
+
+class ProductSuggestionsProvider extends ChangeNotifier {
+  String text;
+  bool doSearch;
+  List<ProductModel> suggestions;
+
+  void searchText(String _text) {
+    text = _text;
+    doSearch = true;
+    notifyListeners();
+  }
+
+  void stopSearch() {
+    doSearch = false;
+    notifyListeners();
   }
 }

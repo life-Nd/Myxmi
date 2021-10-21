@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:myxmi/models/product.dart';
 import '../main.dart';
 
@@ -10,7 +9,6 @@ class ProductDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('product?.name: ${product?.name}');
     final String _name =
         '${product.name[0]?.toUpperCase()}${product.name?.substring(1, product.name?.length)}';
     return Card(
@@ -18,15 +16,18 @@ class ProductDetails extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: ListTile(
+        dense: true,
         title: Center(child: Text(_name)),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const Text(''),
             Text('Type: ${product.ingredientType}'),
             Text('Mesured in: ${product.mesureType}'),
-            Text('Quantity in stock: ${product.total} ${product.mesureType}'),
-            Text(
-                'Expiry Date: ${DateFormat('EEE, MMM d, ' 'yy').format(DateTime.parse(product.expiration))}'),
+            const Text(''),
+            // Text('Quantity in stock: ${product.total} ${product.mesureType}'),
+            // Text(
+            //     'Expiry Date: ${DateFormat('EEE, MMM d, ' 'yy').format(DateTime.parse(product.expiration))}'),
           ],
         ),
         trailing: Consumer(
