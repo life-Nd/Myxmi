@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:myxmi/utils/auth.dart';
-
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import '../main.dart';
 import 'retry_button.dart';
 
 Future<dynamic> dialogNoAccountFound(
@@ -56,23 +56,28 @@ class SignUpButton extends StatelessWidget {
   final String password;
   @override
   Widget build(BuildContext context) {
-    return RawMaterialButton(
-      padding: const EdgeInsets.all(4),
-      elevation: 20,
-      fillColor: Colors.green,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      onPressed: () {
-        AuthServices().newUserEmailPassword(
-            email: email, password: password, context: context);
+    return Consumer(
+      builder: (_, watch, child) {
+        final _auth = watch(authProvider);
+        return RawMaterialButton(
+          padding: const EdgeInsets.all(4),
+          elevation: 20,
+          fillColor: Colors.green,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          onPressed: () {
+            _auth.newUserEmailPassword(
+                email: email, password: password, context: context);
+          },
+          child: Text(
+            'signUp'.tr(),
+            style: const TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        );
       },
-      child: Text(
-        'signUp'.tr(),
-        style: const TextStyle(
-          color: Colors.white,
-        ),
-      ),
     );
   }
 }

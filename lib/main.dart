@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:myxmi/screens/home.dart';
+import 'package:myxmi/screens/selected_recipe.dart';
+import 'package:myxmi/utils/auth.dart';
 import 'package:sizer/sizer.dart';
 import 'app.dart';
 import 'providers/cart.dart';
@@ -15,6 +18,8 @@ import 'providers/user.dart';
 // TODO https://myxmi.app/more/about/privacy
 final userProvider =
     ChangeNotifierProvider<UserProvider>((ref) => UserProvider());
+final authProvider =
+    ChangeNotifierProvider<AuthProvider>((ref) => AuthProvider());
 final prefProvider =
     ChangeNotifierProvider<PreferencesProvider>((ref) => PreferencesProvider());
 final cartProvider =
@@ -121,7 +126,13 @@ Future<void> main() async {
                     darkTheme: darkTheme,
                     themeMode: _storedTheme,
                     debugShowCheckedModeBanner: false,
-                    home: App(),
+                    initialRoute: '/',
+                    routes: {
+                      App.route: (context) => App(),
+                      Home.route: (context) => Home(),
+                      SelectedRecipe.route: (context) => const SelectedRecipe(),
+                    },
+                    // home: App(),
                   );
                 },
               );

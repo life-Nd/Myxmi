@@ -7,6 +7,7 @@ import 'package:myxmi/providers/home_view.dart';
 import 'package:myxmi/utils/app_sources.dart';
 import 'package:myxmi/widgets/app_bottom_navigation.dart';
 import 'package:myxmi/widgets/web_appbar.dart';
+import 'package:sizer/sizer.dart';
 import 'add_product.dart';
 import 'add_recipe_infos.dart';
 
@@ -43,36 +44,34 @@ final homeViewProvider = ChangeNotifierProvider<HomeViewProvider>(
 );
 
 class Home extends StatefulWidget {
-  final String uid;
-  const Home({Key key, @required this.uid}) : super(key: key);
-
+  static const String route = '/home';
   @override
   State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  bool _webView = false;
   final AppSources _appSources = AppSources();
 
   @override
   void initState() {
+    final _user = context.read(userProvider);
     if (kIsWeb) {
-      final _user = context.read(userProvider);
       try {
-        if (Device.get().isPhone || Device.get().isTablet) {
+        if (Device.get().isPhone) {
+          _user.onPhone = true;
           Future.delayed(Duration.zero, () {
-            _user.onMobileApp = true;
             _appSources.downloadAppDialog(context);
           });
-          _webView = false;
+        } else {
+          if (Device.get().isTablet && 100.w > 700) _user.onPhone = false;
         }
       } catch (error) {
-        _user.onMobileApp = false;
-        debugPrint('Web && !phone');
-        _webView = true;
+        _user.onPhone = false;
       }
 
       super.initState();
+    } else {
+      _user.onPhone = true;
     }
   }
 
@@ -81,20 +80,20 @@ class _HomeState extends State<Home> {
     return Consumer(
       builder: (_, watch, __) {
         final _view = watch(homeViewProvider);
+        final _user = watch(userProvider);
         final int _viewIndex = _view.view;
         return Scaffold(
           resizeToAvoidBottomInset: true,
-          // ignore: avoid_redundant_argument_values
-          appBar: _webView
+          appBar: !_user.onPhone
               ? AppBar(
                   automaticallyImplyLeading: false,
-                  title: WebAppBar(uid: widget.uid),
+                  title: WebAppBar(uid: _user?.account?.uid),
                 )
               : null,
           floatingActionButton: _viewIndex == 0 ||
-                  _viewIndex == 1 && widget.uid != null ||
-                  _viewIndex == 3 && widget.uid != null
-              ? widget.uid != null
+                  _viewIndex == 1 && _user?.account?.uid != null ||
+                  _viewIndex == 3 && _user?.account?.uid != null
+              ? _user?.account?.uid != null
                   ? FloatingActionButton(
                       backgroundColor: Colors.green.shade400,
                       onPressed: () {
@@ -118,7 +117,8 @@ class _HomeState extends State<Home> {
                   : FloatingActionButton(
                       backgroundColor: Colors.red,
                       onPressed: () {
-                        _view.changeViewIndex(index: 4, uid: widget.uid);
+                        _view.changeViewIndex(
+                            index: 4, uid: _user?.account?.uid);
                       },
                       child: const Icon(
                         Icons.add,
@@ -126,10 +126,14 @@ class _HomeState extends State<Home> {
                       ),
                     )
               : null,
-          body: SafeArea(child: _view.viewBuilder(uid: widget.uid)),
+          body: SafeArea(
+              child: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: _view.viewBuilder(uid: _user?.account?.uid),
+          )),
           extendBody: true,
           // ignore: avoid_redundant_argument_values
-          bottomNavigationBar: _webView ? null : AppBottomNavigation(),
+          bottomNavigationBar: _user.onPhone ? AppBottomNavigation() : null,
         );
       },
     );

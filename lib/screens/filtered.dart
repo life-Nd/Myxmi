@@ -79,8 +79,6 @@ class _ExpandedRecipesStream extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('_where: $_where');
-    debugPrint('_equalTo: $_equalTo');
     String value() {
       String _value;
       switch (_equalTo) {

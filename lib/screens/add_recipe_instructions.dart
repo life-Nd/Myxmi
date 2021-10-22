@@ -114,8 +114,7 @@ class AddRecipeInstructions extends StatelessWidget {
         final List _steps = _recipe?.instructions?.steps;
         final int _keys = _steps?.length != null ? _steps.length : 0;
         final int _newKey = _keys + 1;
-        debugPrint(
-            '_recipe?.recipeModel.subCategory:${_recipe?.recipeModel?.subCategory}');
+       
         return Column(
           children: [
             Expanded(

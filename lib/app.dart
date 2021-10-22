@@ -6,12 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'main.dart';
 import 'screens/home.dart';
 
-class App extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _AppState();
-}
-
-class _AppState extends State<App> {
+class App extends StatelessWidget {
+  static const String route = '/';
   @override
   Widget build(BuildContext context) {
     if (foundation.kDebugMode && foundation.kIsWeb) {
@@ -32,9 +28,9 @@ class _StreamAuthBuilder extends StatelessWidget {
         if (snapUser.data != null) {
           final _user = context.read(userProvider);
           _user.account = snapUser.data;
-          return Home(uid: _user?.account?.uid);
+          return Home();
         }
-        return const Home(uid: null);
+        return Home();
       },
     );
   }
@@ -43,6 +39,7 @@ class _StreamAuthBuilder extends StatelessWidget {
 class _HotRestartByPassBuilder extends StatelessWidget {
   static final Future<SharedPreferences> prefs =
       SharedPreferences.getInstance();
+
   ///Check if isLoggedIn locally
   static Future<bool> isLoggedIn() async {
     final SharedPreferences _prefs = await prefs;
@@ -60,9 +57,7 @@ class _HotRestartByPassBuilder extends StatelessWidget {
             if (snapshot.data) {
               // if locally saved on web that isLoggedIn get the user's infos from FirebaseAuth local storage
               _userProvider.account = FirebaseAuth?.instance?.currentUser;
-              return Home(
-                uid: _userProvider?.account?.uid,
-              );
+              return Home();
             } else {
               // if not locally saved on web that isLoggedIn stream the user's infos from FirebaseAuth online
               return _StreamAuthBuilder();

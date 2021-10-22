@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:myxmi/screens/menu.dart';
 import 'package:myxmi/screens/more.dart';
+import 'package:myxmi/screens/products.dart';
 import 'package:myxmi/screens/recipes.dart';
 import 'package:myxmi/screens/sign_in.dart';
-import 'package:myxmi/widgets/products.dart';
 import 'package:myxmi/widgets/search.dart';
 
 class HomeViewProvider extends ChangeNotifier {

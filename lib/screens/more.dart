@@ -6,30 +6,22 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/utils/app_sources.dart';
 import 'package:rate_my_app/rate_my_app.dart';
-
-// import 'package:sn_progress_dialog/sn_progress_dialog.dart';
-import '../utils/auth.dart';
+import '../main.dart';
 import 'about.dart';
 import 'account.dart';
-import 'home.dart';
 import 'settings.dart';
 
 class More extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    // final ProgressDialog pr = ProgressDialog(context: context);
-    final _view = useProvider(homeViewProvider);
+    final _auth = useProvider(authProvider);
+    final _user = useProvider(userProvider);
     bool _isPhone = true;
     try {
       _isPhone = Device.get().isPhone;
-      debugPrint('try: $_isPhone');
     } catch (error) {
-      debugPrint('error: $_isPhone');
-      debugPrint('width: ${MediaQuery.of(context).size.width}');
       _isPhone = MediaQuery.of(context).size.width <= 500;
-      debugPrint('error2: $_isPhone');
     }
-
     return Column(
       children: [
         if (!kIsWeb || _isPhone)
@@ -84,7 +76,7 @@ class More extends HookWidget {
             trailing: const Icon(Icons.arrow_forward_ios),
             onTap: () async {
               final AppSources _appSources = AppSources();
-              _appSources.downloadAppDialog(context);
+              _appSources.getAppSourcesUrls();
               final RateMyApp rateMyApp = RateMyApp(
                 minDays: 1,
                 minLaunches: 1,
@@ -92,13 +84,7 @@ class More extends HookWidget {
                 appStoreIdentifier: _appSources.appStoreIdentifier,
               );
               rateMyApp.init();
-              rateMyApp.showRateDialog(
-                context,
-                // listener: (RateMyAppDialogButton status) {
-                //   debugPrint('status.index: ${status.index}');
-                //   return true;
-                // },
-              );
+              rateMyApp.showRateDialog(context);
             },
           ),
         const Divider(),
@@ -120,9 +106,10 @@ class More extends HookWidget {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           fillColor: Colors.red,
-          onPressed: () {
-            _view.view = 0;
-            AuthServices().confirmSignOut(context);
+          onPressed: () async {
+            await _auth.confirmSignOut(context).then(
+                  (value) => _user.signedOut(),
+                );
           },
           child: Text(
             'logout'.tr(),

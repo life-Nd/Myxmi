@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/product.dart';
 import 'package:myxmi/screens/add_recipe_infos.dart';
@@ -8,7 +9,7 @@ TextEditingController textCtrl = TextEditingController();
 class ProductField extends StatelessWidget {
   final ProductModel product;
   const ProductField({@required this.product});
-  
+
   @override
   Widget build(BuildContext context) {
     final String _name =
@@ -27,15 +28,18 @@ class ProductField extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: TextField(
           controller: textCtrl,
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.digitsOnly
+          ],
+
           keyboardType: TextInputType.number,
           onSubmitted: (submitted) {
             _recipe.changeEstimatedWeight();
           },
+
           onChanged: (value) {
             _recipe.changeComposition(
-                key: product.name,
-                value: value,
-                type: product.mesureType);
+                key: product.name, value: value, type: product.mesureType);
             _recipe.changeQuantity(
               key: product.name.toString(),
               value: value,

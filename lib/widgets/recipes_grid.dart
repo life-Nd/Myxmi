@@ -12,7 +12,7 @@ import 'recipe_tile.dart';
 import 'recipe_tile_image.dart';
 
 class RecipesGrid extends StatefulWidget {
-  final List<RecipeModel> recipes;
+  final List recipes;
   const RecipesGrid({Key key, @required this.recipes}) : super(key: key);
   @override
   State<StatefulWidget> createState() => _RecipesGridState();
@@ -36,7 +36,7 @@ class _RecipesGridState extends State<RecipesGrid> {
               return Consumer(builder: (_, watch, __) {
                 final _user = watch(userProvider);
                 final _recipeProvider = watch(recipeProvider);
-                final RecipeModel recipe = widget.recipes[index];
+                final RecipeModel recipe = widget.recipes[index] as RecipeModel;
                 // final _recipe =
                 // _recipeProvider.recipeModel = widget.recipes[index];
                 recipe.liked = false;
@@ -76,14 +76,20 @@ class _RecipesGridState extends State<RecipesGrid> {
                                         color: Colors.red,
                                       ),
                               ),
-                              const Icon(
-                                Icons.no_photography,
-                                color: Colors.red,
-                                size: 40,
+                              Container(
+                                width: _size.width,
+                                height: _size.height,
+                                alignment: Alignment.center,
+                                child: const Icon(
+                                  Icons.no_photography,
+                                  color: Colors.red,
+                                  size: 40,
+                                ),
                               ),
                             ],
                           );
-                    _recipeProvider.recipeModel = widget.recipes[index];
+                    _recipeProvider.recipeModel =
+                        widget.recipes[index] as RecipeModel;
                     Navigator.of(context).push(
                       MaterialPageRoute(builder: (_) => const SelectedRecipe()),
                     );

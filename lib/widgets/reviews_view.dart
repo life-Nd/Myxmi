@@ -95,7 +95,7 @@ class ReviewsView extends HookWidget {
                     _view.view = 4;
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (_) => Home(uid: _user?.account?.uid),
+                        builder: (_) => Home(),
                       ),
                     );
                   },

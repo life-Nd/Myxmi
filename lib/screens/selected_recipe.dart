@@ -20,6 +20,7 @@ final selectedRecipeView = ChangeNotifierProvider(
 );
 
 class SelectedRecipe extends StatefulWidget {
+  static const String route = '/recipe';
   const SelectedRecipe({Key key}) : super(key: key);
   @override
   State<StatefulWidget> createState() => _SelectionRecipeState();

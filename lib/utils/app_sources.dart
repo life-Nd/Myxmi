@@ -25,7 +25,6 @@ class AppSources {
         .listen((DocumentSnapshot<Map> event) {
       if (event.exists) {
         _data = event.data();
-        debugPrint('_appSources: $_data');
         googlePlayUrl = _data['googlePlayUrl'] as String;
         appstoreUrl = _data['appStoreUrl'] as String;
         googlePlayIdentifier = _data['googlePlayIdentifier'] as String;
@@ -38,7 +37,6 @@ class AppSources {
     final _home = context.read(homeViewProvider);
     if (_home.showDownloadDialog) {
       getAppSourcesUrls();
-      debugPrint('_data:$_data ');
       if (_data != null) {
         showDialog(
           context: context,
@@ -77,7 +75,6 @@ class AppSources {
                             : Colors.grey,
                         onPressed: () {
                           if (Device.get().isAndroid) {
-                            debugPrint('_googlePlayUrl: $googlePlayUrl');
                             _launchURL(url: googlePlayUrl);
                           }
                         },
@@ -109,7 +106,6 @@ class AppSources {
                             ? Colors.green.shade400
                             : Colors.grey,
                         onPressed: () {
-                          debugPrint('_appstoreUrl: $appstoreUrl');
                           _launchURL(url: appstoreUrl);
                         },
                         child: Padding(

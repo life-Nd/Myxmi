@@ -1,10 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/screens/add_recipe_infos.dart';
+import 'package:myxmi/screens/products.dart';
 import 'package:myxmi/widgets/next_button.dart';
-import 'package:myxmi/widgets/products.dart';
 import 'add_product.dart';
 import 'add_recipe_instructions.dart';
 
@@ -26,8 +25,6 @@ class AddRecipeProducts extends StatelessWidget {
         title: Consumer(
           builder: (_, watch, child) {
             final _recipe = watch(recipeProvider);
-            debugPrint(
-                '_recipe?.recipeModel.subCategory:${_recipe?.recipeModel?.subCategory}');
             return Row(
               children: [
                 Text('${'productsIn'.tr()}: '),

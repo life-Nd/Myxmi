@@ -34,13 +34,13 @@ class _RecipeDetailsState extends State<RecipeDetails> {
       return Column(
         children: [
           _ViewsSelector(
-            ingredientsLength: widget.instructions.ingredients.length,
-            stepsLength: widget.instructions.steps.length,
-            reviewsLength: widget.instructions.reviews.length,
+            ingredientsLength: widget?.instructions?.ingredients?.length,
+            stepsLength: widget?.instructions?.steps?.length,
+            reviewsLength: widget?.instructions?.reviews?.length,
             pageCtrl: pageController,
           ),
           SizedBox(
-            height: 70.h,
+            height: 70.h, 
             child: PageView(
               controller: pageController,
               onPageChanged: (index) {

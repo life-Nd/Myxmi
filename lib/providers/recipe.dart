@@ -13,7 +13,6 @@ class RecipeProvider extends ChangeNotifier {
   Map composition = {};
   double estimatedWeight = 0.0;
   String actualWeight = '';
-  List hidden = [];
   double difficultyValue = 0.0;
   int pageIndex = 0;
   Widget image;
@@ -152,15 +151,6 @@ class RecipeProvider extends ChangeNotifier {
     _checked ? checkedSteps.remove(key) : checkedSteps.add(key);
   }
 
-  void hide({String component}) {
-    hidden.add(component);
-  }
-
-  void unhide() {
-    hidden.clear();
-    notifyListeners();
-  }
-
   void reset() {
     recipeModel = RecipeModel();
     instructions = InstructionsModel(ingredients: {}, steps: []);
@@ -173,7 +163,6 @@ class RecipeProvider extends ChangeNotifier {
     portionsCtrl.clear();
     quantity.clear();
     composition.clear();
-    hidden.clear();
   }
 }
 

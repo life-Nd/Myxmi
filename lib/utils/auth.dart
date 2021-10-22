@@ -15,7 +15,7 @@ import '../app.dart';
 import 'platform_dialog.dart';
 import 'platform_exception_dialog.dart';
 
-class AuthServices {
+class AuthProvider extends ChangeNotifier {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   String status;
@@ -44,8 +44,6 @@ class AuthServices {
   }) async {
     final String _email = email.trim();
     final String _password = password.trim();
-    debugPrint('email: $_email');
-    debugPrint('password: $_password');
     final currentUser = await firebaseAuth
         .createUserWithEmailAndPassword(email: _email, password: _password)
         .whenComplete(() async {
@@ -56,7 +54,6 @@ class AuthServices {
               builder: (_) => App(),
             ),
           );
-          debugPrint('');
         },
       );
       await sendEmail();
@@ -109,7 +106,6 @@ class AuthServices {
         final UserCredential userCredential =
             await auth.signInWithCredential(credential);
         user = userCredential.user;
-        debugPrint("USER: ${user.email}");
       } on FirebaseAuthException catch (e) {
         if (e.code == 'account-exists-with-different-credential') {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -133,7 +129,7 @@ class AuthServices {
         );
       }
     }
-    debugPrint('User: ${user.email} ${user.displayName}');
+    debugPrint('Signed-in User: ${user?.email} ${user?.displayName}');
     return user;
   }
 
@@ -234,7 +230,7 @@ class AuthServices {
       defaultActionText: 'logout'.tr(),
     ).show(context);
     if (didRequestSignOut == true) {
-      _signOut(context);
+      await _signOut(context);
     }
   }
 
@@ -243,15 +239,15 @@ class AuthServices {
 
     pr.show(max: 1000, msg: '${'loading'.tr()}...', barrierDismissible: true);
     try {
-      signOut(context).whenComplete(() async {
+      await signOut(context).whenComplete(() async {
         pr.close();
         final SharedPreferences prefs = await _prefs;
-        prefs.setBool('is_logged_in', false);
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (_) => App(),
-            ),
-            (route) => false);
+        await prefs.setBool('is_logged_in', false);
+        // Navigator.of(context).pushAndRemoveUntil(
+        //     MaterialPageRoute(
+        //       builder: (_) => App(),
+        //     ),
+        //     (route) => false);
       });
     } on PlatformException catch (e) {
       pr.close();
@@ -265,24 +261,22 @@ class AuthServices {
   Future signOut(BuildContext context) async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
     final bool _google = googleSignIn.currentUser?.email != null;
-    debugPrint("GOOGLE: ${googleSignIn.currentUser?.email != null}");
     if (_google) {
-      googleSignIn.currentUser.clearAuthCache();
-      googleSignIn.signOut().then((google) {
-        google.clearAuthCache();
-        firebaseAuth.signOut().then(
+      // await googleSignIn.currentUser.clearAuthCache();
+      await googleSignIn.signOut().then((google) async {
+        await google.clearAuthCache();
+        await firebaseAuth.signOut().then(
           (firebase) {
-            debugPrint('Firebase of Google Signed-Out user');
+            debugPrint('Google-Auth: Signed-Out user');
           },
         );
       });
     } else {
-      firebaseAuth.signOut().then(
+      await firebaseAuth.signOut().then(
         (firebase) {
-          debugPrint('Firebase Signed-Out user');
+          debugPrint('Email/Password-Auth: Signed-Out user');
         },
       );
-      debugPrint('Completed');
     }
   }
 

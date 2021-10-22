@@ -107,10 +107,8 @@ class _Theme extends HookWidget {
                   onPressed: _prefs.theme != 'Dark'
                       ? () {
                           _prefs.changeTheme(newTheme: 'Dark');
-                          debugPrint('THEME:${_prefs.theme}');
                         }
                       : () {
-                          debugPrint('THEME is ?DARK?:${_prefs.theme}');
                         },
                   child: Text(
                     'dark'.tr(),

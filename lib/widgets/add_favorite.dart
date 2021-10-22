@@ -4,7 +4,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/recipes.dart';
 import 'package:myxmi/screens/add_recipe_infos.dart';
 import 'package:myxmi/screens/home.dart';
-import 'package:universal_io/io.dart';
 import '../main.dart';
 
 class AddFavoriteButton extends StatefulWidget {
@@ -53,7 +52,7 @@ class _AddFavoriteButtonState extends State<AddFavoriteButton> {
                   _view.view = 4;
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => Home(uid: _user?.account?.uid),
+                      builder: (_) => Home(),
                     ),
                   );
                 },
@@ -128,21 +127,21 @@ class _AddFavoriteButtonState extends State<AddFavoriteButton> {
                         setState(() {});
                       },
                     ),
-            IconButton(
-              icon: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.white,
-                ),
-                padding: const EdgeInsets.all(4),
-                child: Icon(
-                    Platform.isIOS
-                        ? Icons.ios_share_outlined
-                        : Icons.share_outlined,
-                    color: Colors.black),
-              ),
-              onPressed: () {},
-            ),
+            // IconButton(
+            //   icon: Container(
+            //     decoration: BoxDecoration(
+            //       borderRadius: BorderRadius.circular(20),
+            //       color: Colors.white,
+            //     ),
+            //     padding: const EdgeInsets.all(4),
+            //     child: Icon(
+            //         Platform.isIOS
+            //             ? Icons.ios_share_outlined
+            //             : Icons.share_outlined,
+            //         color: Colors.black),
+            //   ),
+            //   onPressed: () {},
+            // ),
           ],
         );
       });

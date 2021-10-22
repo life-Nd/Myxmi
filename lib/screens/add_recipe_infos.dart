@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/main.dart';
 import 'package:myxmi/widgets/category_selector.dart';
 import 'package:myxmi/widgets/diet_selector.dart';
 import 'package:myxmi/widgets/difficulty_slider.dart';
@@ -31,7 +30,6 @@ class AddRecipeInfos extends StatelessWidget {
           SliverAppBar(
             leading: Consumer(builder: (context, watch, child) {
               final _recipe = watch(recipeProvider);
-              final _user = watch(userProvider);
               return IconButton(
                 alignment: Alignment.topLeft,
                 icon: const Icon(Icons.arrow_back_ios),
@@ -39,7 +37,7 @@ class AddRecipeInfos extends StatelessWidget {
                   _recipe.reset();
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => Home(uid: _user.account.uid),
+                      builder: (_) => Home(),
                     ),
                   );
                 },
@@ -110,10 +108,6 @@ class AddRecipeInfos extends StatelessWidget {
                 ),
                 Consumer(builder: (_, watch, __) {
                   final _recipe = watch(recipeProvider);
-                  debugPrint(
-                      '_recipe.recipeModel.category :${_recipe.recipeModel.category}');
-                  debugPrint(
-                      '_recipe.recipeModel.subCategory :${_recipe.recipeModel.subCategory}');
                   return (_recipe.recipeModel.category != null &&
                           _recipe.recipeModel.category != 'other')
                       ? Center(

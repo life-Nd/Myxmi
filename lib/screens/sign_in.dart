@@ -3,8 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/screens/home.dart';
-import 'package:myxmi/utils/auth.dart';
-
+import '../main.dart';
 import '../widgets/dialog_no_account_found.dart';
 import '../widgets/dialog_reset_password.dart';
 import '../widgets/dialog_unknown_error.dart';
@@ -15,183 +14,186 @@ final _fieldsProvider =
 
 TextEditingController _emailCtrl = TextEditingController();
 TextEditingController _passwordCtrl = TextEditingController();
-final AuthServices _authServices = AuthServices();
+
 FocusNode _passwordNode = FocusNode();
 
 class SignIn extends StatelessWidget {
   // final FocusNode _passwordNode = FocusNode();
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(
-          topRight: Radius.circular(
-            20,
-          ),
-          topLeft: Radius.circular(
-            20,
-          ),
-          bottomRight: Radius.circular(
-            20,
-          ),
-          bottomLeft: Radius.circular(
-            20,
-          ),
-        ),
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              title: Text(
-                'signIn'.tr(),
-                style: const TextStyle(
-                  fontSize: 27,
-                  fontWeight: FontWeight.bold,
-                ),
+    return Consumer(
+      builder: (_, watch, child) {
+        final _auth = watch(authProvider);
+        return Container(
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(
+                20,
+              ),
+              topLeft: Radius.circular(
+                20,
+              ),
+              bottomRight: Radius.circular(
+                20,
+              ),
+              bottomLeft: Radius.circular(
+                20,
               ),
             ),
-            _EmailWithValidator(),
-            const SizedBox(height: 10),
-            _PasswordField(),
-            Container(
-              padding: const EdgeInsets.only(left: 10),
-              alignment: Alignment.centerLeft,
-              child: RawMaterialButton(
-                onPressed: () {
-                  dialogResetPassword(
-                    context: context,
-                    email: _emailCtrl.text,
-                  );
-                },
-                child: Text(
-                  'forgotPass'.tr(),
-                  style: const TextStyle(color: Colors.red),
-                ),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Consumer(builder: (context, watch, child) {
-                  final _view = watch(homeViewProvider);
-                  return _view.loading
-                      ? const Center(
-                          child: CircularProgressIndicator(),
-                        )
-                      : RawMaterialButton(
-                          fillColor: const Color.fromRGBO(64, 123, 255, 32),
-                          elevation: 15,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(30),
-                            ),
-                          ),
-                          onPressed: () async {
-                            _view.loadingEntry(isLoading: true);
-                            await _authServices
-                                .signInWithEmailPassword(
-                              email: _emailCtrl.text,
-                              password: _passwordCtrl.text,
-                            )
-                                .then(
-                              (value) {
-                                debugPrint('Value:$value');
-                                _view.loadingEntry(isLoading: false);
-                                debugPrint(
-                                    'Status value:${_authServices.status}');
-                                switch (_authServices.status) {
-                                  case 'success':
-                                    _view.view = 0;
-                                    _emailCtrl.clear();
-                                    _passwordCtrl.clear();
-                                    break;
-                                  case 'user-not-found':
-                                    dialogNoAccountFound(
-                                      context: context,
-                                      email: _emailCtrl.text,
-                                      password: _passwordCtrl.text,
-                                      error: _authServices.error,
-                                    );
-                                    break;
-                                  case 'wrong-password':
-                                    dialogWrongPassword(
-                                      context: context,
-                                      email: _emailCtrl.text,
-                                      error: _authServices.error,
-                                    );
-                                    break;
-                                  case 'null':
-                                    dialogUnknownError(context: context);
-                                }
-                              },
-                            );
-                          },
-                          child: Text(
-                            'signIn'.tr(),
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                        );
-                }),
-              ],
-            ),
-            const SizedBox(
-              height: 50,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                RawMaterialButton(
-                  padding: const EdgeInsets.all(8),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  fillColor: Colors.white,
-                  onPressed: () {
-                    _authServices.signInWithGoogle(context: context);
-                  },
-                  child: Row(
-                    children: [
-                      Container(
-                        height: 70,
-                        width: 70,
-                        padding: const EdgeInsets.all(4),
-                        child: Image.asset('assets/google_logo.png'),
-                      ),
-                      Text(
-                        'signInWithGoogle'.tr(),
-                        style: const TextStyle(color: Colors.black),
-                      ),
-                    ],
+                ListTile(
+                  title: Text(
+                    'signIn'.tr(),
+                    style: const TextStyle(
+                      fontSize: 27,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
+                _EmailWithValidator(),
+                const SizedBox(height: 10),
+                _PasswordField(),
+                Container(
+                  padding: const EdgeInsets.only(left: 10),
+                  alignment: Alignment.centerLeft,
+                  child: RawMaterialButton(
+                    onPressed: () {
+                      dialogResetPassword(
+                        context: context,
+                        email: _emailCtrl.text,
+                      );
+                    },
+                    child: Text(
+                      'forgotPass'.tr(),
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Consumer(builder: (context, watch, child) {
+                      final _view = watch(homeViewProvider);
+                      return _view.loading
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : RawMaterialButton(
+                              fillColor: const Color.fromRGBO(64, 123, 255, 32),
+                              elevation: 15,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(30),
+                                ),
+                              ),
+                              onPressed: () async {
+                                _view.loadingEntry(isLoading: true);
+                                await _auth
+                                    .signInWithEmailPassword(
+                                  email: _emailCtrl.text,
+                                  password: _passwordCtrl.text,
+                                )
+                                    .then(
+                                  (value) {
+                                    _view.loadingEntry(isLoading: false);
+                                    debugPrint('Status value:${_auth.status}');
+                                    switch (_auth.status) {
+                                      case 'success':
+                                        _view.view = 0;
+                                        _emailCtrl.clear();
+                                        _passwordCtrl.clear();
+                                        break;
+                                      case 'user-not-found':
+                                        dialogNoAccountFound(
+                                          context: context,
+                                          email: _emailCtrl.text,
+                                          password: _passwordCtrl.text,
+                                          error: _auth.error,
+                                        );
+                                        break;
+                                      case 'wrong-password':
+                                        dialogWrongPassword(
+                                          context: context,
+                                          email: _emailCtrl.text,
+                                          error: _auth.error,
+                                        );
+                                        break;
+                                      case 'null':
+                                        dialogUnknownError(context: context);
+                                    }
+                                  },
+                                );
+                              },
+                              child: Text(
+                                'signIn'.tr(),
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            );
+                    }),
+                  ],
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    RawMaterialButton(
+                      padding: const EdgeInsets.all(8),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      fillColor: Colors.white,
+                      onPressed: () {
+                        _auth.signInWithGoogle(context: context);
+                      },
+                      child: Row(
+                        children: [
+                          Container(
+                            height: 70,
+                            width: 70,
+                            padding: const EdgeInsets.all(4),
+                            child: Image.asset('assets/google_logo.png'),
+                          ),
+                          Text(
+                            'signInWithGoogle'.tr(),
+                            style: const TextStyle(color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+                // if (!Platform.isAndroid && Platform.isIOS)
+                //   Container(
+                //     decoration: BoxDecoration(
+                //       borderRadius: BorderRadius.circular(20),
+                //     ),
+                //     width: 200,
+                //     alignment: Alignment.center,
+                //     child: apple_sign_in.AppleSignInButton(
+                //       style: apple_sign_in.ButtonStyle.black,
+                //       cornerRadius: 20,
+                //       type: apple_sign_in.ButtonType.continueButton,
+                //       onPressed: () {
+                //         _authServices.signInWithApple(context);
+                //       },
+                //     ),
+                //   )
+                // else
+                //   const Text(''),
               ],
             ),
-            const SizedBox(
-              height: 50,
-            ),
-            // if (!Platform.isAndroid && Platform.isIOS)
-            //   Container(
-            //     decoration: BoxDecoration(
-            //       borderRadius: BorderRadius.circular(20),
-            //     ),
-            //     width: 200,
-            //     alignment: Alignment.center,
-            //     child: apple_sign_in.AppleSignInButton(
-            //       style: apple_sign_in.ButtonStyle.black,
-            //       cornerRadius: 20,
-            //       type: apple_sign_in.ButtonType.continueButton,
-            //       onPressed: () {
-            //         _authServices.signInWithApple(context);
-            //       },
-            //     ),
-            //   )
-            // else
-            //   const Text(''),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
@@ -236,7 +238,6 @@ class _PasswordField extends StatefulWidget {
 }
 
 class _PasswordFieldState extends State<_PasswordField> {
-   
   @override
   void initState() {
     _passwordNode = FocusNode();

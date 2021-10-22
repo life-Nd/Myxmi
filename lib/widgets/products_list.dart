@@ -1,12 +1,9 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/product.dart';
-import 'package:myxmi/screens/add_recipe_infos.dart';
-
 import '../main.dart';
 import 'product_details.dart';
 import 'product_fields.dart';
@@ -32,7 +29,6 @@ class _ProductsListState extends State<ProductsList> {
             itemBuilder: (_, index) {
               return Consumer(
                 builder: (_, watch, __) {
-                  final _recipe = watch(recipeProvider);
                   final _user = watch(userProvider);
                   return Dismissible(
                     key: UniqueKey(),
@@ -46,8 +42,6 @@ class _ProductsListState extends State<ProductsList> {
                         });
                       } else {
                         widget.products.remove(widget.products[index]);
-                        _recipe.hide(
-                            component: widget.products[index] as String);
                       }
                     },
                     background: Padding(
@@ -86,7 +80,7 @@ class _ProductsListState extends State<ProductsList> {
                               ? ProductField(product: widget.products[index])
                               : ProductDetails(product: widget.products[index]),
                         ),
-                        if (kIsWeb && !_user.onMobileApp)
+                        if (kIsWeb && !_user.onPhone)
                           IconButton(
                             icon: Icon(
                                 widget.type == 'EditProducts'
@@ -103,10 +97,12 @@ class _ProductsListState extends State<ProductsList> {
                                       FieldValue.delete()
                                 });
                               } else {
-                                widget.products.remove(widget.products[index]);
-                                _recipe.hide(
-                                    component:
-                                        widget.products[index] as String);
+                                widget.products.removeWhere(
+                                  (ProductModel element) =>
+                                      element.productId ==
+                                      widget.products[index].productId,
+                                );
+                                setState(() {});
                               }
                             },
                           ),

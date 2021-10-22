@@ -28,6 +28,7 @@ class _RecipeImageState extends State<RecipeImage> {
               ClipRRect(
                 borderRadius: widget.borderRadius,
                 child: InteractiveViewer(
+                  panEnabled: false,
                   child: _recipe.image,
                 ),
               ),
