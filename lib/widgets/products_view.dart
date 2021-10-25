@@ -42,8 +42,10 @@ class _ProductsViewState extends State<ProductsView> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('productview building');
     return StatefulBuilder(
       builder: (context, StateSetter stateSetter) {
+        debugPrint('productview StatefulBuilder building');
         return Column(
           children: [
             Row(

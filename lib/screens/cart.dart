@@ -54,10 +54,13 @@ class _CartScreenState extends State<CartScreen> {
             child: Consumer(
               builder: (_, watch, child) {
                 final _prefs = watch(cartProvider);
+
                 if (_prefs.cart != null && _prefs.cart.isNotEmpty) {
                   return ListView.builder(
                     itemCount: _prefs.cart.length,
                     itemBuilder: (_, int index) {
+                      final String _name = _prefs.cart[index].toString();
+                      
                       return ListTile(
                         leading: IconButton(
                           icon: _prefs.checkedItem.contains(_prefs.cart[index])
@@ -70,7 +73,8 @@ class _CartScreenState extends State<CartScreen> {
                             await _prefs.editItems(item: _prefs.cart[index]);
                           },
                         ),
-                        title: Text(_prefs.cart[index].toUpperCase()),
+                        title: Text(
+                            '${_name[0].toUpperCase()}${_name.substring(1, _name.length)}'),
                       );
                     },
                   );

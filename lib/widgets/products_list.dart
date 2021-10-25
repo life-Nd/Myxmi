@@ -32,18 +32,21 @@ class _ProductsListState extends State<ProductsList> {
                   final _user = watch(userProvider);
                   return Dismissible(
                     key: UniqueKey(),
-                    onDismissed: (direction) {
-                      if (widget.type == 'EditProducts') {
-                        FirebaseFirestore.instance
-                            .collection('Products')
-                            .doc(_user.account.uid)
-                            .update({
-                          widget.products[index].productId: FieldValue.delete()
-                        });
-                      } else {
-                        widget.products.remove(widget.products[index]);
-                      }
-                    },
+                    onDismissed: kIsWeb
+                        ? (direction) {
+                            if (widget.type == 'EditProducts') {
+                              FirebaseFirestore.instance
+                                  .collection('Products')
+                                  .doc(_user.account.uid)
+                                  .update({
+                                widget.products[index].productId:
+                                    FieldValue.delete()
+                              });
+                            } else {
+                              widget.products.remove(widget.products[index]);
+                            }
+                          }
+                        : (direction) {},
                     background: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Card(
@@ -80,13 +83,16 @@ class _ProductsListState extends State<ProductsList> {
                               ? ProductField(product: widget.products[index])
                               : ProductDetails(product: widget.products[index]),
                         ),
-                        if (kIsWeb && !_user.onPhone)
+                        if (!_user.onPhone)
                           IconButton(
+                            padding: const EdgeInsets.all(1),
                             icon: Icon(
-                                widget.type == 'EditProducts'
-                                    ? Icons.delete
-                                    : Icons.visibility_off,
-                                color: Colors.red),
+                              widget.type == 'EditProducts'
+                                  ? Icons.delete
+                                  : Icons.visibility_off,
+                              color: Colors.red,
+                              size: 20,
+                            ),
                             onPressed: () {
                               if (widget.type == 'EditProducts') {
                                 FirebaseFirestore.instance
@@ -115,10 +121,10 @@ class _ProductsListState extends State<ProductsList> {
           )
         : Column(
             mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
+
             children: [
-              Image.asset('assets/data_not_found.png'),
-              Text('productsEmpty'.tr()),
+              Expanded(child: Image.asset('assets/data_not_found.png')),
+              Expanded(child: Text('productsEmpty'.tr())),
             ],
           );
   }

@@ -94,19 +94,19 @@ class _AutoCompleteProductsState extends State<AutoCompleteProducts> {
   }
 }
 
-class ProductSuggestionsProvider extends ChangeNotifier {
-  String text;
-  bool doSearch;
-  List<ProductModel> suggestions;
+// class ProductSuggestionsProvider extends ChangeNotifier {
+//   String text;
+//   bool doSearch;
+//   List<ProductModel> suggestions;
 
-  void searchText(String _text) {
-    text = _text;
-    doSearch = true;
-    notifyListeners();
-  }
+//   void searchText(String _text) {
+//     text = _text;
+//     doSearch = true;
+//     notifyListeners();
+//   }
 
-  void stopSearch() {
-    doSearch = false;
-    notifyListeners();
-  }
-}
+//   void stopSearch() {
+//     doSearch = false;
+//     notifyListeners();
+//   }
+// }

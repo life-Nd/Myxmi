@@ -25,11 +25,8 @@ class _StreamAuthBuilder extends StatelessWidget {
     return StreamBuilder<User>(
       stream: FirebaseAuth.instance.userChanges(),
       builder: (context, AsyncSnapshot<User> snapUser) {
-        if (snapUser.data != null) {
-          final _user = context.read(userProvider);
-          _user.account = snapUser.data;
-          return Home();
-        }
+        final _user = context.read(userProvider);
+        _user.account = snapUser.data;
         return Home();
       },
     );
@@ -39,7 +36,6 @@ class _StreamAuthBuilder extends StatelessWidget {
 class _HotRestartByPassBuilder extends StatelessWidget {
   static final Future<SharedPreferences> prefs =
       SharedPreferences.getInstance();
-
   ///Check if isLoggedIn locally
   static Future<bool> isLoggedIn() async {
     final SharedPreferences _prefs = await prefs;

@@ -99,6 +99,8 @@ class _ExpandedRecipesStream extends StatelessWidget {
 
     return Expanded(
       child: Recipes(
+        // recipesPath:
+        //     _equalTo != 'anyDiet' ? RECIPESBY.subCategory : RECIPESBY.timeStamp,
         path: _equalTo != 'anyDiet'
             ? FirebaseFirestore.instance
                 .collection('Recipes')

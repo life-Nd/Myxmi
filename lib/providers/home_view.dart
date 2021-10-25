@@ -1,11 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:myxmi/screens/menu.dart';
-import 'package:myxmi/screens/more.dart';
-import 'package:myxmi/screens/products.dart';
-import 'package:myxmi/screens/recipes.dart';
-import 'package:myxmi/screens/sign_in.dart';
-import 'package:myxmi/widgets/search.dart';
 
 class HomeViewProvider extends ChangeNotifier {
   bool showDownloadDialog = true;
@@ -62,77 +56,5 @@ class HomeViewProvider extends ChangeNotifier {
   void doSearch({bool value}) {
     searchRecipesInDb = value;
     notifyListeners();
-  }
-
-  Widget viewBuilder({@required String uid}) {
-    final bool isSignedIn = uid != null;
-    switch (view) {
-      case 0:
-        final ScrollController _ctrl = ScrollController();
-        return _homePage(_ctrl);
-
-      case 1:
-        // Show stream of recipes filtered with the user id
-        // RecipesByUid(path: 'all', uid: uid)
-        return isSignedIn
-            ? Recipes(
-                showAutoCompleteField: true,
-                path: FirebaseFirestore.instance
-                    .collection('Recipes')
-                    .where('uid', isEqualTo: uid)
-                    .snapshots(),
-              )
-            : SignIn();
-      case 2:
-        // Show stream of recipes liked by the user id
-        //RecipesByUid(path: 'liked', uid: uid)
-
-        return isSignedIn
-            ? Recipes(
-                showAutoCompleteField: true,
-                path: FirebaseFirestore.instance
-                    .collection('Recipes')
-                    .where('likedBy.$uid', isEqualTo: true)
-                    .snapshots())
-            : SignIn();
-      case 3:
-        // Show stream of products under the user id
-        return isSignedIn ? const Products(type: 'EditProducts') : SignIn();
-      case 4:
-        return isSignedIn ? More() : SignIn();
-      case 5:
-        return isSignedIn ? More() : SignIn();
-      default:
-        final ScrollController _ctrl = ScrollController();
-        return _homePage(_ctrl);
-    }
-  }
-
-  CustomScrollView _homePage(ScrollController ctrl) {
-    return CustomScrollView(
-      controller: ctrl,
-      slivers: [
-        SliverAppBar(
-          automaticallyImplyLeading: false,
-          floating: true,
-          pinned: true,
-          expandedHeight: 5,
-          title: SearchRecipes(),
-        ),
-        SliverList(
-          delegate: SliverChildListDelegate.fixed(
-            [
-              if (searchRecipesInDb && searchCtrl.text.isNotEmpty)
-                Recipes(
-                  showAutoCompleteField: false,
-                  path: searchWithCtrl(searchKey: 'title'),
-                )
-              else
-                const Menu()
-            ],
-          ),
-        ),
-      ],
-    );
   }
 }

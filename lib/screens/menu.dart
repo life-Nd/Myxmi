@@ -12,7 +12,7 @@ class Menu extends StatelessWidget {
     return Column(
       children: [
         DrinkItems(),
-        FoodOptions(),
+        FoodOptions(),   
         DietOptions(),
         // VapeOptions(),
       ],

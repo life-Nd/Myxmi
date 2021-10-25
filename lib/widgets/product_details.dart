@@ -11,45 +11,68 @@ class ProductDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     final String _name =
         '${product.name[0]?.toUpperCase()}${product.name?.substring(1, product.name?.length)}';
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: ListTile(
-        dense: true,
-        title: Center(child: Text(_name)),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(''),
-            Text('Type: ${product.ingredientType}'),
-            Text('Mesured in: ${product.mesureType}'),
-            const Text(''),
-            // Text('Quantity in stock: ${product.total} ${product.mesureType}'),
-            // Text(
-            //     'Expiry Date: ${DateFormat('EEE, MMM d, ' 'yy').format(DateTime.parse(product.expiration))}'),
-          ],
+    return Consumer(builder: (_, watch, child) {
+      return Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
         ),
-        trailing: Consumer(
-          builder: (_, watch, __) {
-            final _prefs = watch(cartProvider);
-            return IconButton(
-              icon: _prefs?.cart != null && _prefs.cart.contains(product.name)
-                  ? const Icon(
-                      Icons.shopping_cart,
-                      color: Colors.green,
-                    )
-                  : const Icon(
-                      Icons.add_shopping_cart,
-                      color: Colors.grey,
-                    ),
-              onPressed: () async {
-                await _prefs.editCart(name: product.name);
-              },
-            );
-          },
+        child: ListTile(
+          dense: true,
+          title: Center(child: Text(_name)),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(''),
+              Text('Type: ${product.ingredientType}'),
+              Text('Mesured in: ${product.mesureType}'),
+              const Text(''),
+              // Text('Quantity in stock: ${product.total} ${product.mesureType}'),
+              // Text(
+              //     'Expiry Date: ${DateFormat('EEE, MMM d, ' 'yy').format(DateTime.parse(product.expiration))}'),
+            ],
+          ),
+          trailing: Consumer(
+            builder: (_, watch, __) {
+              final _prefs = watch(cartProvider);
+              return IconButton(
+                icon: _prefs?.cart != null && _prefs.cart.contains(product.name)
+                    ? const Icon(
+                        Icons.shopping_cart,
+                        color: Colors.green,
+                      )
+                    : const Icon(
+                        Icons.add_shopping_cart,
+                        color: Colors.grey,
+                      ),
+                onPressed: () async {
+                  await _prefs.editCart(name: product.name);
+                },
+
+                // if (!_user.onPhone)
+                //   Expanded(
+                //     child: IconButton(
+                //       icon: const Icon(Icons.delete, color: Colors.red),
+                //       onPressed: () {
+                //         FirebaseFirestore.instance
+                //             .collection('Products')
+                //             .doc(_user.account.uid)
+                //             .update({product.productId: FieldValue.delete()});
+
+                // else {
+                //   widget.products.removeWhere(
+                //     (ProductModel element) =>
+                //         element.productId ==
+                //         widget.products[index].productId,
+                //   );
+                // _change.value = !_change.value;
+                //     },
+                //   ),
+                // ),
+              );
+            },
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

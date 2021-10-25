@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/screens/home.dart';
-import 'package:myxmi/screens/selected_recipe.dart';
 import 'package:myxmi/utils/auth.dart';
 import 'package:sizer/sizer.dart';
 import 'app.dart';
@@ -127,12 +125,7 @@ Future<void> main() async {
                     themeMode: _storedTheme,
                     debugShowCheckedModeBanner: false,
                     initialRoute: '/',
-                    routes: {
-                      App.route: (context) => App(),
-                      Home.route: (context) => Home(),
-                      SelectedRecipe.route: (context) => const SelectedRecipe(),
-                    },
-                    // home: App(),
+                    home: App(),
                   );
                 },
               );

@@ -6,6 +6,7 @@ import 'package:myxmi/main.dart';
 import 'package:myxmi/providers/home_view.dart';
 import 'package:myxmi/utils/app_sources.dart';
 import 'package:myxmi/widgets/app_bottom_navigation.dart';
+import 'package:myxmi/widgets/body.dart';
 import 'package:myxmi/widgets/web_appbar.dart';
 import 'package:sizer/sizer.dart';
 import 'add_product.dart';
@@ -68,23 +69,24 @@ class _HomeState extends State<Home> {
       } catch (error) {
         _user.onPhone = false;
       }
-
-      super.initState();
     } else {
       _user.onPhone = true;
     }
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final Size _size = MediaQuery.of(context).size;
     return Consumer(
       builder: (_, watch, __) {
         final _view = watch(homeViewProvider);
         final _user = watch(userProvider);
         final int _viewIndex = _view.view;
         return Scaffold(
+          extendBodyBehindAppBar: true,
           resizeToAvoidBottomInset: true,
-          appBar: !_user.onPhone
+          appBar: _size.width >= 700
               ? AppBar(
                   automaticallyImplyLeading: false,
                   title: WebAppBar(uid: _user?.account?.uid),
@@ -126,14 +128,10 @@ class _HomeState extends State<Home> {
                       ),
                     )
               : null,
-          body: SafeArea(
-              child: Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: _view.viewBuilder(uid: _user?.account?.uid),
-          )),
-          extendBody: true,
+          body: const Body(),
           // ignore: avoid_redundant_argument_values
-          bottomNavigationBar: _user.onPhone ? AppBottomNavigation() : null,
+          bottomNavigationBar:
+              _size.width <= 700 ? AppBottomNavigation() : null,
         );
       },
     );

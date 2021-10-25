@@ -83,7 +83,7 @@ class AddRecipeInstructions extends StatelessWidget {
                         )
                       : Center(
                           child: Text(
-                            'noProduct'.tr(),
+                            'noProducts'.tr(),
                           ),
                         ),
                 ),

@@ -16,6 +16,7 @@ class IngredientsInRecipeListView extends HookWidget {
     final _recipe = useProvider(recipeProvider);
     final _checkedIngredients = _recipe.checkedIngredients;
     bool _isText;
+    String _keyText;
     return ListView.builder(
       shrinkWrap: true,
       controller: _ctrl,
@@ -29,6 +30,9 @@ class IngredientsInRecipeListView extends HookWidget {
           _isText = false;
         } catch (error) {
           _isText = true;
+          final String _key = _keys[index].toString();
+          _keyText =
+              '${_key[0].toUpperCase()}${_key.substring(1, _key.length)}';
         }
         return ListTile(
           onTap: () {
@@ -48,7 +52,7 @@ class IngredientsInRecipeListView extends HookWidget {
             children: [
               if (_isText)
                 Text(
-                  '${_keys[index]}: ',
+                  '$_keyText: ',
                 ),
               Expanded(
                 child: Text(
