@@ -206,7 +206,8 @@ class _CreatorCardState extends State<CreatorCard> {
           leading: _recipe?.photoUrl != null
               ? CircleAvatar(
                   backgroundColor: Colors.amber,
-                  foregroundImage: NetworkImage(_recipe?.photoUrl))
+                  foregroundImage: NetworkImage(_recipe?.photoUrl),
+                )
               : const Icon(Icons.person),
           // trailing: 'a' == 'a'
           //     ? InkWell(

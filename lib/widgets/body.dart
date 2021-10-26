@@ -13,8 +13,6 @@ import '../main.dart';
 import 'search.dart';
 
 class Body extends StatelessWidget {
-  const Body({Key key}) : super(key: key);
-
   Widget _build(int _view, String _uid) {
     final bool isSignedIn = _uid != null;
     Widget child;

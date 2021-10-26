@@ -128,7 +128,7 @@ class _HomeState extends State<Home> {
                       ),
                     )
               : null,
-          body: const Body(),
+          body: Body(),
           // ignore: avoid_redundant_argument_values
           bottomNavigationBar:
               _size.width <= 700 ? AppBottomNavigation() : null,
