@@ -10,8 +10,8 @@ import '../main.dart';
 import 'no_details.dart';
 import 'rating_stars.dart';
 
-class ReviewsView extends HookWidget {
-  const ReviewsView({Key key}) : super(key: key);
+class CommentsView extends HookWidget {
+  const CommentsView({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

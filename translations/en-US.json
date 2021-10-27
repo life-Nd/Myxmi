@@ -209,7 +209,7 @@
    "noIngredients":"No ingredients",
    "noSteps":"No steps",
    "all":"All",
-   "cart":"Cart",
+   "myCart":"My cart",
    "cartEmpty":"The cart is empty",
    "reviewOf":"Review of",
    "addScore":"Add a score",
@@ -252,5 +252,6 @@
    "downloadAppOn":"Download the app with",
    "downloadAndroidApp":"Download Android app",
    "downloadIosApp":"Download IOS App",
-   "addProduct":"Add a product"
+   "addProduct":"Add a product",
+   "addEverythingToCart":"Add everything to cart"
 }   

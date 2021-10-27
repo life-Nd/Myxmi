@@ -31,48 +31,38 @@ class ProductDetails extends StatelessWidget {
               //     'Expiry Date: ${DateFormat('EEE, MMM d, ' 'yy').format(DateTime.parse(product.expiration))}'),
             ],
           ),
-          trailing: Consumer(
-            builder: (_, watch, __) {
-              final _prefs = watch(cartProvider);
-              return IconButton(
-                icon: _prefs?.cart != null && _prefs.cart.contains(product.name)
-                    ? const Icon(
-                        Icons.shopping_cart,
-                        color: Colors.green,
-                      )
-                    : const Icon(
-                        Icons.add_shopping_cart,
-                        color: Colors.grey,
-                      ),
-                onPressed: () async {
-                  await _prefs.editCart(name: product.name);
-                },
-
-                // if (!_user.onPhone)
-                //   Expanded(
-                //     child: IconButton(
-                //       icon: const Icon(Icons.delete, color: Colors.red),
-                //       onPressed: () {
-                //         FirebaseFirestore.instance
-                //             .collection('Products')
-                //             .doc(_user.account.uid)
-                //             .update({product.productId: FieldValue.delete()});
-
-                // else {
-                //   widget.products.removeWhere(
-                //     (ProductModel element) =>
-                //         element.productId ==
-                //         widget.products[index].productId,
-                //   );
-                // _change.value = !_change.value;
-                //     },
-                //   ),
-                // ),
-              );
-            },
-          ),
+          trailing: EditCartButton(name: product.name),
         ),
       );
     });
+  }
+}
+
+class EditCartButton extends StatelessWidget {
+  const EditCartButton({Key key, this.name}) : super(key: key);
+
+  final String name;
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer(
+      builder: (_, watch, __) {
+        final _prefs = watch(cartProvider);
+        return IconButton(
+          icon: _prefs?.cart != null && _prefs.cart.contains(name)
+              ? const Icon(
+                  Icons.shopping_cart,
+                  color: Colors.green,
+                )
+              : const Icon(
+                  Icons.add_shopping_cart,
+                  color: Colors.grey,
+                ),
+          onPressed: () async {
+            await _prefs.editCart(name: name);
+          },
+        );
+      },
+    );
   }
 }

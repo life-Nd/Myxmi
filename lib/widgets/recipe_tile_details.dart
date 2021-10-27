@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:myxmi/models/recipes.dart';
 
-class RecipeTile extends HookWidget {
+class RecipeTileDetails extends HookWidget {
   final RecipeModel recipe;
-  const RecipeTile({@required this.recipe});
+  const RecipeTileDetails({@required this.recipe});
 
   @override
   Widget build(BuildContext context) {
-    final String _title = 
+    final String _title =
         '${recipe?.title[0]?.toUpperCase()}${recipe?.title?.substring(1, recipe?.title?.length)}';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -17,7 +17,6 @@ class RecipeTile extends HookWidget {
       children: [
         Text(
           _title,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
         ),
         Divider(
           color: Theme.of(context).appBarTheme.titleTextStyle.color,

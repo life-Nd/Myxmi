@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 import 'recipes.dart';
 
 class CreatorRecipes extends StatelessWidget {
@@ -19,16 +20,48 @@ class CreatorRecipes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leadingWidth: 40,
-        title: ListTile(
-          leading: avatar != null
-              ? CircleAvatar(
-                  backgroundColor: Colors.amber,
-                  foregroundImage: NetworkImage(avatar))
-              : const Icon(Icons.person),
-          title: name != null ? Text(name) : Text('noName'.tr()),
-          // subtitle: Text('$followersCount ${'followers'.tr()}'),
+      appBar: PreferredSize(
+        preferredSize: Size(100.w, 114),
+        child: SafeArea(
+          child: Row(
+            // minLeadingWidth: 1,
+            // contentPadding: EdgeInsets.only(left: 1),
+            children: [
+              if (avatar != null)
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: const Icon(
+                        Icons.arrow_back_ios,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        // Navigator.of(context).push(
+                        //   MaterialPageRoute(
+                        //     builder: (_) => const SelectedRecipe(),
+                        //   ),
+                        // );
+                      },
+                    ),
+                    CircleAvatar(
+                        radius: 44,
+                        backgroundColor: Colors.amber,
+                        foregroundImage: NetworkImage(avatar)),
+                  ],
+                )
+              else
+                const Icon(Icons.person),
+              const SizedBox(
+                width: 20,
+              ),
+              if (name != null)
+                Text('$name recipes')
+              else
+                Text('${'noName'.tr()} recipes'),
+              // subtitle: Text('$followersCount ${'followers'.tr()}'),
+            ],
+          ),
         ),
       ),
       body: Recipes(

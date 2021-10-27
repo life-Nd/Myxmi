@@ -4,9 +4,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/instructions.dart';
 import 'package:myxmi/screens/selected_recipe.dart';
 import 'package:sizer/sizer.dart';
+import 'comments_view.dart';
 import 'ingredients_listview.dart';
 import 'no_details.dart';
-import 'reviews_view.dart';
 import 'steps_listview.dart';
 import 'view_selector_text.dart';
 
@@ -40,7 +40,7 @@ class _RecipeDetailsState extends State<RecipeDetails> {
             pageCtrl: pageController,
           ),
           SizedBox(
-            height: 70.h, 
+            height: 70.h,
             child: PageView(
               controller: pageController,
               onPageChanged: (index) {
@@ -58,7 +58,7 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                   )
                 else
                   const NoDetails('noSteps'),
-                const ReviewsView()
+                const CommentsView()
               ],
             ),
           ),
@@ -67,6 +67,7 @@ class _RecipeDetailsState extends State<RecipeDetails> {
     });
   }
 }
+
 class _ViewsSelector extends StatelessWidget {
   final int stepsLength;
   final int ingredientsLength;
@@ -101,7 +102,7 @@ class _ViewsSelector extends StatelessWidget {
         ViewSelectorText(
           controller: pageCtrl,
           length: reviewsLength ?? 0,
-          text: 'reviews',
+          text: 'comments',
           viewIndex: 2,
         ),
       ],

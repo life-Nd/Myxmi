@@ -221,7 +221,7 @@
    "noIngredients":"Pas d'ingrédient",
    "noSteps":"Pas d'étapes",
    "all":"Tout",
-   "cart":"Panier",
+   "myCart":"Mon panier",
    "cartEmpty":"Le panier est vide",
    "reviewOf":"Avis sur",
    "addScore":"Ajouter un score",
@@ -264,6 +264,7 @@
    "downloadAppOn":"Télécharger l'app avec",
    "downloadAndroidApp":"Télécharger l'appli Android",
    "downloadIosApp":"Télécharger l'appli IOS",
-   "addProduct":"Ajouter un produit"
+   "addProduct":"Ajouter un produit",
+   "addEverythingToCart":"Add everything to cart"
 }   
   

@@ -46,7 +46,7 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('cart'.tr()),
+        title: Text('myCart'.tr()),
       ),
       body: Column(
         children: [
@@ -60,21 +60,28 @@ class _CartScreenState extends State<CartScreen> {
                     itemCount: _prefs.cart.length,
                     itemBuilder: (_, int index) {
                       final String _name = _prefs.cart[index].toString();
-                      
-                      return ListTile(
-                        leading: IconButton(
-                          icon: _prefs.checkedItem.contains(_prefs.cart[index])
-                              ? const Icon(
-                                  Icons.check_circle_outline,
-                                  color: Colors.green,
-                                )
-                              : const Icon(Icons.radio_button_unchecked),
-                          onPressed: () async {
-                            await _prefs.editItems(item: _prefs.cart[index]);
-                          },
-                        ),
-                        title: Text(
-                            '${_name[0].toUpperCase()}${_name.substring(1, _name.length)}'),
+
+                      return Column(
+                        children: [
+                          ListTile(
+                            leading: IconButton(
+                              icon: _prefs.checkedItem
+                                      .contains(_prefs.cart[index])
+                                  ? const Icon(
+                                      Icons.check_circle_outline,
+                                      color: Colors.green,
+                                    )
+                                  : const Icon(Icons.radio_button_unchecked),
+                              onPressed: () async {
+                                await _prefs.editItems(
+                                    item: _prefs.cart[index]);
+                              },
+                            ),
+                            title: Text(
+                                '${_name[0].toUpperCase()}${_name.substring(1, _name.length)}'),
+                          ),
+                          const Divider(indent: 80, color: Colors.grey)
+                        ],
                       );
                     },
                   );

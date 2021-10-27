@@ -5,6 +5,7 @@ import 'package:myxmi/models/recipes.dart';
 
 class RecipeProvider extends ChangeNotifier {
   RecipeModel recipeModel = RecipeModel();
+  List<RecipeModel> recipes = [];
   InstructionsModel instructions =
       InstructionsModel(ingredients: {}, steps: []);
   final List checkedIngredients = [];
