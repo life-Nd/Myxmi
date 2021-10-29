@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/screens/add_recipe_infos.dart';
 import 'package:myxmi/screens/home.dart';
 import 'package:myxmi/widgets/add_reviews.dart';
+import 'package:myxmi/widgets/user_avatar.dart';
 import '../main.dart';
 import 'no_details.dart';
 import 'rating_stars.dart';
@@ -40,13 +41,13 @@ class CommentsView extends HookWidget {
                   return Card(
                     child: ListTile(
                       contentPadding: const EdgeInsets.all(1),
-                      leading: CircleAvatar(
-                        child: _data[_keys[index]]['photo_url'] != null &&
-                                _data[_keys[index]]['photo_url'] != 'null'
-                            ? Image.network(
-                                '${_data[_keys[index]]['photo_url']}')
-                            : const Icon(Icons.person),
-                      ),
+                      leading: _data[_keys[index]]['photo_url'] != null &&
+                              _data[_keys[index]]['photo_url'] != 'null'
+                          ? UserAvatar(
+                              photoUrl: '${_data[_keys[index]]['photo_url']}',
+                              radius: 44,
+                            )
+                          : const Icon(Icons.person),
                       title: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [

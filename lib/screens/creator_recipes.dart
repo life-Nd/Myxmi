@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:myxmi/widgets/user_avatar.dart';
 import 'package:sizer/sizer.dart';
 import 'recipes.dart';
 
@@ -8,15 +9,13 @@ class CreatorRecipes extends StatelessWidget {
   final String uid;
   final String name;
   final String avatar;
-  final String followersCount;
 
-  const CreatorRecipes(
-      {Key key,
-      @required this.uid,
-      @required this.name,
-      @required this.avatar,
-      @required this.followersCount})
-      : super(key: key);
+  const CreatorRecipes({
+    Key key,
+    @required this.uid,
+    @required this.name,
+    @required this.avatar,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,10 +43,10 @@ class CreatorRecipes extends StatelessWidget {
                         // );
                       },
                     ),
-                    CircleAvatar(
-                        radius: 44,
-                        backgroundColor: Colors.amber,
-                        foregroundImage: NetworkImage(avatar)),
+                    UserAvatar(
+                      radius: 77,
+                      photoUrl: avatar,
+                    ),
                   ],
                 )
               else

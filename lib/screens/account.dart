@@ -41,42 +41,9 @@ class AccountScreen extends HookWidget {
                 child: Stack(
                   alignment: Alignment.bottomRight,
                   children: [
-                    RawMaterialButton(
-                      shape: const CircleBorder(),
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (_) {
-                            return AlertDialog(
-                              contentPadding: const EdgeInsets.all(1),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              content: Hero(
-                                tag: _user?.account?.photoURL,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: InteractiveViewer(
-                                    child: Image.network(
-                                      _user?.account?.photoURL,
-                                      cacheHeight: 1000,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                      child: _user.account.photoURL != null
-                          ? UserAvatar(
-                              photoURL: _user?.account?.photoURL,
-                              radius: _radius,
-                            )
-                          : Icon(
-                              Icons.person,
-                              size: _radius,
-                            ),
+                    UserAvatar(
+                      photoUrl: _user?.account?.photoURL,
+                      radius: _radius,
                     ),
                     FloatingActionButton(
                       backgroundColor: Colors.deepOrange.shade300,
@@ -85,8 +52,10 @@ class AccountScreen extends HookWidget {
                         onComplete: () async {
                           await _image.addImageToDb(context: context).then(
                             (url) async {
-                              await _user.changeUserPhoto(
-                                  context: context, photoUrl: url);
+                              if (url != null) {
+                                await _user.changeUserPhoto(
+                                    context: context, photoUrl: url);
+                              }
                             },
                           );
                         },

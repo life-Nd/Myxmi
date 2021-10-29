@@ -34,7 +34,7 @@ class SaveButton extends HookWidget {
               _recipe.instructions.ingredients = _recipe.composition;
               _recipe.instructions.uid = _user.account.uid;
               _recipe.recipeModel.username = _user.account.displayName;
-              _recipe.recipeModel.photoUrl = _user.account.photoURL;
+              _recipe.recipeModel.userphoto = _user.account.photoURL;
               debugPrint(
                   '_recipe?.recipeModel.subCategory:${_recipe?.recipeModel?.subCategory}');
               _recipe.recipeModel.made =

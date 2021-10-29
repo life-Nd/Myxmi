@@ -20,12 +20,12 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future changeUserPhoto({BuildContext context, String photoUrl}) async {
-    await account.updatePhotoURL(photoUrl);
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => App(),
-      ),
-    );
-    notifyListeners();
+    await account.updatePhotoURL(photoUrl).whenComplete(
+          () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => App(),
+            ),
+          ),
+        );
   }
 }

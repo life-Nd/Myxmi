@@ -65,8 +65,10 @@ class IngredientsInRecipeListView extends HookWidget {
                   ),
                 ],
               ),
-              trailing:
-                  EditCartButton(name: ingredients[_keys[index]] as String),
+              trailing: EditCartButton(
+                  name: _isText
+                      ? '${_keys[index]} ${ingredients[_keys[index]]}'
+                      : ingredients[_keys[index]] as String),
             ),
             if (_user.onPhone)
               const Divider(

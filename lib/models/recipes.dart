@@ -15,12 +15,14 @@ class RecipeModel {
   static const _made = 'made';
   static const _reviewsCount = 'reviews_count';
   static const _portions = 'portions';
-  static const _likedBy = 'likedBy';
+  static const _likedBy = 'liked_by';
   static const _username = 'username';
-  static const _photoUrl = 'photoUrl';
+  static const _userphoto = 'userphoto';
   static const _diet = 'diet';
   static const _tags = 'tags';
   static const _lang = 'lang';
+  static const _area = 'area';
+  static const _youtube = 'youtube';
   String recipeId;
   String title = '';
   String ingredientsCount;
@@ -41,10 +43,12 @@ class RecipeModel {
   Map likedBy = {};
   bool liked;
   String username;
-  String photoUrl;
+  String userphoto;
   String diet;
   List tags = [];
   String lang;
+  String area;
+  String youtube;
 
   RecipeModel(
       {this.recipeId,
@@ -66,37 +70,42 @@ class RecipeModel {
       this.portions,
       this.likedBy,
       this.liked,
-      this.photoUrl,
+      this.userphoto,
       this.username,
       this.diet,
       this.tags,
-      this.lang});
+      this.lang,
+      this.area,
+      this.youtube});
   factory RecipeModel.fromSnapshot(
       {Map<String, dynamic> snapshot, String keyIndex}) {
     return RecipeModel(
-        recipeId: keyIndex,
-        title: snapshot[_title] as String,
-        ingredientsCount: snapshot[_ingredientsCount] as String,
-        stepsCount: snapshot[_stepsCount] as String,
-        stars: snapshot[_stars] as String,
-        usedCount: snapshot[_usedCount] as String,
-        imageUrl: snapshot[_imageUrl] as String,
-        uid: snapshot[_uid] as String,
-        duration: snapshot[_duration] as String,
-        category: snapshot[_category] as String,
-        subCategory: snapshot[_subCategory] as String,
-        access: snapshot[_access] as String,
-        difficulty: snapshot[_difficulty] as String,
-        reference: snapshot[_reference] as String,
-        reviewsCount: snapshot[_reviewsCount] as String,
-        made: snapshot[_made] as String,
-        portions: snapshot[_portions] as String,
-        likedBy: snapshot[_likedBy] as Map,
-        username: snapshot[_username] as String,
-        photoUrl: snapshot[_photoUrl] as String,
-        diet: snapshot[_diet] as String,
-        tags: snapshot[_tags] as List,
-        lang: snapshot[_lang] as String);
+      recipeId: keyIndex,
+      title: snapshot[_title] as String,
+      ingredientsCount: snapshot[_ingredientsCount] as String,
+      stepsCount: snapshot[_stepsCount] as String,
+      stars: snapshot[_stars] as String,
+      usedCount: snapshot[_usedCount] as String,
+      imageUrl: snapshot[_imageUrl] as String,
+      uid: snapshot[_uid] as String,
+      duration: snapshot[_duration] as String,
+      category: snapshot[_category] as String,
+      subCategory: snapshot[_subCategory] as String,
+      access: snapshot[_access] as String,
+      difficulty: snapshot[_difficulty] as String,
+      reference: snapshot[_reference] as String,
+      reviewsCount: snapshot[_reviewsCount] as String,
+      made: snapshot[_made] as String,
+      portions: snapshot[_portions] as String,
+      likedBy: snapshot[_likedBy] as Map,
+      username: snapshot[_username] as String,
+      userphoto: snapshot[_userphoto] as String,
+      diet: snapshot[_diet] as String,
+      tags: snapshot[_tags] as List,
+      lang: snapshot[_lang] as String,
+      area: snapshot[_area] as String,
+      youtube: snapshot[_youtube] as String,
+    );
   }
 
   Map<String, dynamic> toMap() {
@@ -115,13 +124,16 @@ class RecipeModel {
       _difficulty: difficulty,
       _reference: reference,
       _made: made,
+      _likedBy: likedBy,
       _reviewsCount: reviewsCount,
       _portions: portions,
       _username: username,
-      _photoUrl: photoUrl,
+      _userphoto: userphoto,
       _diet: diet,
       _tags: tags,
-      _lang: lang
+      _lang: lang,
+      _area: area,
+      _youtube: youtube,
     };
   }
 }

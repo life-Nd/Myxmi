@@ -63,7 +63,7 @@ class WebAppBar extends StatelessWidget {
                           children: [
                             if (_user.account.photoURL != null)
                               UserAvatar(
-                                  photoURL: _user?.account?.photoURL,
+                                  photoUrl: _user?.account?.photoURL,
                                   radius: 33)
                             else
                               const Center(

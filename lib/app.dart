@@ -46,6 +46,8 @@ class _HotRestartByPassBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer(builder: (_, watch, __) {
       final _userProvider = watch(userProvider);
+      
+      
       return FutureBuilder<bool>(
         future: isLoggedIn(),
         builder: (context, AsyncSnapshot<bool> snapshot) {

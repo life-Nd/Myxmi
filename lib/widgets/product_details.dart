@@ -59,6 +59,7 @@ class EditCartButton extends StatelessWidget {
                   color: Colors.grey,
                 ),
           onPressed: () async {
+            debugPrint('name: $name');
             await _prefs.editCart(name: name);
           },
         );

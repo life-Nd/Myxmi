@@ -5,11 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/instructions.dart';
 import 'package:myxmi/providers/recipe.dart';
-import 'package:myxmi/widgets/ad_loader.dart';
+import 'package:myxmi/widgets/creator_card.dart';
 import 'package:myxmi/widgets/recipe_details.dart';
 import 'package:myxmi/widgets/recipe_image.dart';
 import 'add_recipe_infos.dart';
-
 
 final InstructionsModel _instructions =
     InstructionsModel(ingredients: {}, steps: []);
@@ -74,6 +73,7 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
               SliverList(
                 delegate: SliverChildListDelegate.fixed(
                   [
+                    const CreatorCard(),
                     StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
                       stream: FirebaseFirestore.instance
                           .collection('Instructions')
@@ -99,15 +99,9 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
                           _data = _snapshot.data();
                           _instructions.fromSnapshot(snapshot: _data);
                         }
-                        return Column(
-                          children: [
-                            const CreatorCard(),
-                            RecipeDetails(instructions: _instructions),
-
-                            // AdLoader(),
-                            // SimilarRecipes(suggestedRecipes: _recipe.recipes)
-                          ],
-                        );
+                        return RecipeDetails(instructions: _instructions);
+                        // AdLoader(),
+                        // SimilarRecipes(suggestedRecipes: _recipe.recipes)
                       },
                     ),
                   ],

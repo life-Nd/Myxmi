@@ -11,50 +11,53 @@ class RecipeTileDetails extends HookWidget {
   Widget build(BuildContext context) {
     final String _title =
         '${recipe?.title[0]?.toUpperCase()}${recipe?.title?.substring(1, recipe?.title?.length)}';
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          _title,
-        ),
-        Divider(
-          color: Theme.of(context).appBarTheme.titleTextStyle.color,
-          endIndent: 40,
-        ),
-        Row(
-          children: [
-            Text('${'ingredients'.tr()}: '),
-            Text(
-              recipe.ingredientsCount ?? '0',
-              style: const TextStyle(fontWeight: FontWeight.w700),
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            Text('${'steps'.tr()}: '),
-            Text(
-              recipe?.stepsCount ?? '0',
-              style: const TextStyle(fontWeight: FontWeight.w700),
-            ),
-            const Spacer(),
-            Row(
-              children: [
-                const Icon(
-                  Icons.comment,
-                  color: Colors.blue,
-                  size: 15,
-                ),
-                Text(
-                  recipe.reviewsCount ?? '0',
-                  style: const TextStyle(fontSize: 17),
-                )
-              ],
-            )
-          ],
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(left: 10.0, bottom: 10, top: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            _title,
+          ),
+          Divider(
+            color: Theme.of(context).appBarTheme.titleTextStyle.color,
+            endIndent: 40,
+          ),
+          Row(
+            children: [
+              Text('${'ingredients'.tr()}: '),
+              Text(
+                recipe.ingredientsCount ?? '0',
+                style: const TextStyle(fontWeight: FontWeight.w700),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Text('${'steps'.tr()}: '),
+              Text(
+                recipe?.stepsCount ?? '0',
+                style: const TextStyle(fontWeight: FontWeight.w700),
+              ),
+              const Spacer(),
+              Row(
+                children: [
+                  const Icon(
+                    Icons.comment,
+                    color: Colors.blue,
+                    size: 15,
+                  ),
+                  Text(
+                    recipe.reviewsCount ?? '0',
+                    style: const TextStyle(fontSize: 17),
+                  )
+                ],
+              )
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
