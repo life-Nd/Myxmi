@@ -8,15 +8,14 @@ class UserAvatar extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    debugPrint('---photoUrl---: $photoUrl');
     return InkWell(
+      borderRadius: BorderRadius.circular(20),
       onTap: () {
-        debugPrint('---photoUrl---: $photoUrl');
         showDialog(
           context: context,
           builder: (_) {
             return AlertDialog(
-              contentPadding: const EdgeInsets.all(1),
+              contentPadding: const EdgeInsets.all(0),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),

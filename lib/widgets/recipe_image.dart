@@ -51,7 +51,7 @@ class _RecipeImageState extends State<RecipeImage> {
                       );
                     },
                     child: RatingStars(
-                      stars: _recipe.recipeModel.stars ?? '0.0',
+                      stars: _recipe.recipe.stars ?? '0.0',
                     ),
                   ),
                 ],

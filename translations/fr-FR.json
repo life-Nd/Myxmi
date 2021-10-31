@@ -265,6 +265,13 @@
    "downloadAndroidApp":"Télécharger l'appli Android",
    "downloadIosApp":"Télécharger l'appli IOS",
    "addProduct":"Ajouter un produit",
-   "addEverythingToCart":"Add everything to cart"
+   "addEverythingToCart": "Tout ajouter au panier",
+   "similarRecipes": "Recettes similaires",
+   "deleteYourAccount": "Effacer votre compte",
+   "deleteMyAccount": "Effacer mon compte",
+   "sureYouWant": "Etes vous sur de vouloir",
+   "everythingWillBeLost": "Si vous effacer votre compte vous perdrez vos recettes,produits,favoris,etc...",
+   "privacy": "Politique de confidentialité",
+   "terms": "Conditions d'utilisation"
 }   
   

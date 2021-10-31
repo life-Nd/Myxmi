@@ -20,40 +20,40 @@ class SaveButton extends HookWidget {
     final _image = useProvider(imageProvider);
     final _user = useProvider(userProvider);
     return RawMaterialButton(
-      onPressed: _recipe.recipeModel.title != null
+      onPressed: _recipe.recipe.title != null
           ? () async {
               pr.show(max: 100, msg: '${'loading'.tr()} ${'recipe'.tr()}...');
               final rng = Random();
               final _random = rng.nextInt(9000) + 1000;
-              _recipe.recipeModel.reference = '$_random';
-              _recipe.recipeModel.uid = _user.account.uid;
-              _recipe.recipeModel.access = 'Public';
-              _recipe.recipeModel.usedCount = '1';
-              _recipe.recipeModel.stepsCount =
+              _recipe.recipe.reference = '$_random';
+              _recipe.recipe.uid = _user.account.uid;
+              _recipe.recipe.access = 'Public';
+              _recipe.recipe.usedCount = '1';
+              _recipe.recipe.stepsCount =
                   '${_recipe.instructions.steps.length}';
               _recipe.instructions.ingredients = _recipe.composition;
               _recipe.instructions.uid = _user.account.uid;
-              _recipe.recipeModel.username = _user.account.displayName;
-              _recipe.recipeModel.userphoto = _user.account.photoURL;
+              _recipe.recipe.username = _user.account.displayName;
+              _recipe.recipe.userphoto = _user.account.photoURL;
               debugPrint(
-                  '_recipe?.recipeModel.subCategory:${_recipe?.recipeModel?.subCategory}');
-              _recipe.recipeModel.made =
+                  '_recipe?.recipe.subCategory:${_recipe?.recipe?.subCategory}');
+              _recipe.recipe.made =
                   '${DateTime.now().millisecondsSinceEpoch}';
-              if (_recipe.recipeModel.category == 'other') {
-                _recipe.recipeModel.subCategory = null;
+              if (_recipe.recipe.category == 'other') {
+                _recipe.recipe.subCategory = null;
               }
               if (_image.imageFile != null &&
-                  _recipe.recipeModel.imageUrl != null) {
+                  _recipe.recipe.imageUrl != null) {
                 _image.addImageToDb(context: context).whenComplete(() async {
-                  _recipe.recipeModel.imageUrl =
+                  _recipe.recipe.imageUrl =
                       _image.imageLink.isNotEmpty ? _image.imageLink : null;
-                  await saveRecipe(_recipe.recipeModel.toMap()).then((value) =>
+                  await saveRecipe(_recipe.recipe.toMap()).then((value) =>
                       saveInstructions(
                           id: value,
                           instructions: _recipe.instructions.toMap()));
                 });
               } else {
-                await saveRecipe(_recipe.recipeModel.toMap()).then((value) =>
+                await saveRecipe(_recipe.recipe.toMap()).then((value) =>
                     saveInstructions(
                         id: value, instructions: _recipe.instructions.toMap()));
               }
@@ -68,11 +68,11 @@ class SaveButton extends HookWidget {
 
               // .whenComplete(() async {
               //   pr.show(max: 100, msg: '${'loading'.tr()} ${'recipe'.tr()}...');
-              //   _recipe.recipeModel.imageUrl =
+              //   _recipe.recipe.imageUrl =
               //       _image.imageLink.isNotEmpty ? _image.imageLink : null;
               //   final DocumentReference _db = await FirebaseFirestore.instance
               //       .collection('Recipes')
-              //       .add(_recipe.recipeModel.toMap());
+              //       .add(_recipe.recipe.toMap());
               //   _key = _db.id;
               // }).whenComplete(() async {
               //   debugPrint(

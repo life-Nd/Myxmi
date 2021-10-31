@@ -56,6 +56,7 @@ class RecipeTileDetails extends HookWidget {
               )
             ],
           ),
+          //     const Spacer(),
         ],
       ),
     );

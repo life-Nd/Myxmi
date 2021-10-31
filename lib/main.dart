@@ -14,6 +14,7 @@ import 'providers/prefs.dart';
 import 'providers/user.dart';
 
 // TODO https://myxmi.app/more/about/privacy
+
 final userProvider =
     ChangeNotifierProvider<UserProvider>((ref) => UserProvider());
 final authProvider =

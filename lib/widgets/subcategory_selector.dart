@@ -24,7 +24,7 @@ class SubCategorySelector extends StatelessWidget {
             height: 7.h,
             child: Center(
               child: subCategory(
-                category: _recipe.recipeModel.category,
+                category: _recipe.recipe.category,
               ),
             ),
           ),

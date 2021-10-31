@@ -28,9 +28,9 @@ class AddRecipeProducts extends StatelessWidget {
             return Row(
               children: [
                 Text('${'productsIn'.tr()}: '),
-                if (_recipe?.recipeModel?.title != null)
+                if (_recipe?.recipe?.title != null)
                   Text(
-                    _recipe?.recipeModel?.title,
+                    _recipe?.recipe?.title,
                     style: const TextStyle(
                         fontSize: 17, fontWeight: FontWeight.w700),
                   )

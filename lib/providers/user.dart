@@ -28,4 +28,10 @@ class UserProvider extends ChangeNotifier {
           ),
         );
   }
+    Future deleteAccount() async {
+    await account.delete();
+    account.reload();
+    notifyListeners();
+  }
+
 }

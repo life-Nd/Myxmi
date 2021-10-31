@@ -22,7 +22,7 @@ class _AddFavoriteButtonState extends State<AddFavoriteButton> {
       final _user = watch(userProvider);
       final _view = watch(homeViewProvider);
       final RecipeModel _recipe = widget.fromProvider
-          ? watch(recipeProvider).recipeModel
+          ? watch(recipeProvider).recipe
           : widget.recipe;
       _recipe.liked = false;
       if (_user?.account?.uid != null && _recipe.likedBy != null) {

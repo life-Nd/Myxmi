@@ -15,7 +15,7 @@ class AddReviews extends HookWidget {
   Widget build(BuildContext context) {
     final _recipe = useProvider(recipeProvider);
     final _user = useProvider(userProvider);
-    final String _title = _recipe.recipeModel.title;
+    final String _title = _recipe.recipe.title;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
@@ -72,14 +72,14 @@ class AddReviews extends HookWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
               onPressed: () {
-                final String _dbStars = _recipe.recipeModel.stars ?? '0.0';
+                final String _dbStars = _recipe.recipe.stars ?? '0.0';
                 final _averageStars = (_stars + double.parse(_dbStars)) / 2;
                 final int _reviewsCount =
-                    int.parse(_recipe?.recipeModel?.reviewsCount) + 1;
+                    int.parse(_recipe?.recipe?.reviewsCount) + 1;
                 debugPrint('$_stars + $_dbStars = $_averageStars');
                 final _db = FirebaseFirestore.instance
                     .collection('Reviews')
-                    .doc(_recipe.recipeModel.recipeId);
+                    .doc(_recipe.recipe.recipeId);
                 _db.set(
                   {
                     '${DateTime.now().millisecondsSinceEpoch}': {
@@ -94,7 +94,7 @@ class AddReviews extends HookWidget {
                 ).whenComplete(() {
                   FirebaseFirestore.instance
                       .collection('Recipes')
-                      .doc(_recipe.recipeModel.recipeId)
+                      .doc(_recipe.recipe.recipeId)
                       .update({
                     'stars': '$_averageStars',
                     'reviews_count': '$_reviewsCount',

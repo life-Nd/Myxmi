@@ -17,7 +17,8 @@ class TitleField extends StatelessWidget {
           decoration: InputDecoration(
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
             hintText: 'recipeTitle'.tr(),
-            errorText: _recipe.recipeModel.title == null
+            errorText:
+                _recipe.recipe.title == null
                 ? 'titleCantBeEmpty'.tr()
                 : null,
           ),

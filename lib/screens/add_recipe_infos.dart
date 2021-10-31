@@ -108,8 +108,8 @@ class AddRecipeInfos extends StatelessWidget {
                 ),
                 Consumer(builder: (_, watch, __) {
                   final _recipe = watch(recipeProvider);
-                  return (_recipe.recipeModel.category != null &&
-                          _recipe.recipeModel.category != 'other')
+                  return (_recipe.recipe.category != null &&
+                          _recipe.recipe.category != 'other')
                       ? Center(
                           child: Column(
                             children: [

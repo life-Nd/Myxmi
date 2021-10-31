@@ -75,7 +75,7 @@ class AppSources {
                             : Colors.grey,
                         onPressed: () {
                           if (Device.get().isAndroid) {
-                            _launchURL(url: googlePlayUrl);
+                            launchURL(url: googlePlayUrl);
                           }
                         },
                         child: Padding(
@@ -106,7 +106,7 @@ class AppSources {
                             ? Colors.green.shade400
                             : Colors.grey,
                         onPressed: () {
-                          _launchURL(url: appstoreUrl);
+                          launchURL(url: appstoreUrl);
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(10.0),
@@ -156,7 +156,7 @@ class AppSources {
   }
 
   // ignore: avoid_void_async
-  void _launchURL({String url}) async {
+  void launchURL({String url}) async {
     await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
   }
 }

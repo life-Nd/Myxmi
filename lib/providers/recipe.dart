@@ -4,8 +4,9 @@ import 'package:myxmi/models/instructions.dart';
 import 'package:myxmi/models/recipes.dart';
 
 class RecipeProvider extends ChangeNotifier {
-  RecipeModel recipeModel = RecipeModel();
-  List<RecipeModel> recipes = [];
+  RecipeModel recipe = RecipeModel();
+  List<RecipeModel> suggestedRecipes = [];
+  // List<RecipeModel> recipes = [];
   InstructionsModel instructions =
       InstructionsModel(ingredients: {}, steps: []);
   final List checkedIngredients = [];
@@ -33,20 +34,20 @@ class RecipeProvider extends ChangeNotifier {
   }
 
   void like({bool value, String uid}) {
-    recipeModel.likedBy[uid] = value;
+    recipe.likedBy[uid] = value;
   }
 
   void changeTitle() {
-    recipeModel.title = titleCtrl.text;
+    recipe.title = titleCtrl.text;
     notifyListeners();
   }
 
   void changeDuration() {
-    recipeModel.duration = durationCtrl.text;
+    recipe.duration = durationCtrl.text;
   }
 
   void changePortions() {
-    recipeModel.portions = portionsCtrl.text;
+    recipe.portions = portionsCtrl.text;
   }
 
   void changeDifficulty(double newDifficultyValue) {
@@ -55,7 +56,7 @@ class RecipeProvider extends ChangeNotifier {
   }
 
   String getDifficulty() {
-    return recipeModel.difficulty = difficultyValue == 0.0
+    return recipe.difficulty = difficultyValue == 0.0
         ? 'easy'.tr()
         : difficultyValue == 0.5
             ? 'medium'.tr()
@@ -65,25 +66,25 @@ class RecipeProvider extends ChangeNotifier {
   }
 
   void changeCategory({String newCategory}) {
-    recipeModel.category = newCategory;
-    recipeModel.subCategory = null;
+    recipe.category = newCategory;
+    recipe.subCategory = null;
     notifyListeners();
   }
 
   void changeSubCategory({String newSubCategory}) {
-    recipeModel.subCategory = newSubCategory;
+    recipe.subCategory = newSubCategory;
     notifyListeners();
   }
 
   void changeDiet({String newDiet}) {
-    recipeModel.diet = newDiet;
+    recipe.diet = newDiet;
     notifyListeners();
   }
 
   void changeComposition(
       {@required String key, @required String type, @required String value}) {
     composition[key] = '$value $type';
-    recipeModel.ingredientsCount = '${composition.keys.toList().length}';
+    recipe.ingredientsCount = '${composition.keys.toList().length}';
   }
 
   void changeQuantity(
@@ -130,7 +131,7 @@ class RecipeProvider extends ChangeNotifier {
   }
 
   void saveRecipeToDb() {
-    recipeModel.toMap();
+    recipe.toMap();
   }
 
   void changeEstimatedWeight() {
@@ -153,7 +154,7 @@ class RecipeProvider extends ChangeNotifier {
   }
 
   void reset() {
-    recipeModel = RecipeModel();
+    recipe = RecipeModel();
     instructions = InstructionsModel(ingredients: {}, steps: []);
     estimatedWeight = 0.0;
     difficultyValue = 0.0;

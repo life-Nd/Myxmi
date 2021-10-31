@@ -15,7 +15,7 @@ class _CreatorCardState extends State<CreatorCard> {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (_, watch, __) {
-      final _recipe = watch(recipeProvider).recipeModel;
+      final _recipe = watch(recipeProvider).recipe;
       return GestureDetector(
         onTap: () {
           Navigator.of(context).push(

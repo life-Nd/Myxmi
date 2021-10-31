@@ -50,10 +50,10 @@ class AddRecipeInstructions extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  child: _recipe.recipeModel.ingredientsCount != null
+                  child: _recipe.recipe.ingredientsCount != null
                       ? ListView.builder(
                           itemCount:
-                              int.parse(_recipe.recipeModel.ingredientsCount),
+                              int.parse(_recipe.recipe.ingredientsCount),
                           itemBuilder: (_, int index) {
                             final List _keys =
                                 _recipe.composition.keys.toList();
@@ -102,7 +102,7 @@ class AddRecipeInstructions extends StatelessWidget {
         title: Consumer(builder: (_, watch, child) {
           final _recipe = watch(recipeProvider);
           return Text(
-              '${'instructionsFor'.tr()}: ${_recipe.recipeModel.title}');
+              '${'instructionsFor'.tr()}: ${_recipe.recipe.title}');
         }),
         actions: [
           SaveButton(),

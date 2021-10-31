@@ -5,7 +5,7 @@ import 'package:myxmi/main.dart';
 import 'package:myxmi/screens/home.dart';
 import 'package:myxmi/widgets/selected_container.dart';
 import 'package:myxmi/widgets/user_avatar.dart';
-
+import 'package:sizer/sizer.dart';
 class WebAppBar extends StatelessWidget {
   final String uid;
   const WebAppBar({Key key, this.uid}) : super(key: key);
@@ -64,7 +64,7 @@ class WebAppBar extends StatelessWidget {
                             if (_user.account.photoURL != null)
                               UserAvatar(
                                   photoUrl: _user?.account?.photoURL,
-                                  radius: 33)
+                                  radius: 5.w)
                             else
                               const Center(
                                 child: Icon(

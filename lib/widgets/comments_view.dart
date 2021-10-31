@@ -24,7 +24,7 @@ class CommentsView extends HookWidget {
         StreamBuilder<DocumentSnapshot>(
           stream: FirebaseFirestore.instance
               .collection('Reviews')
-              .doc(_recipe.recipeModel.recipeId)
+              .doc(_recipe.recipe.recipeId)
               .snapshots(),
           builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {

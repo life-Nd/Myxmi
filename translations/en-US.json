@@ -253,5 +253,12 @@
    "downloadAndroidApp":"Download Android app",
    "downloadIosApp":"Download IOS App",
    "addProduct":"Add a product",
-   "addEverythingToCart":"Add everything to cart"
+   "addEverythingToCart": "Add everything to cart",
+   "similarRecipes": "Similar recipes",
+   "deleteYourAccount": "Delete your account",
+   "deleteMyAccount": "Delete your account",
+   "sureYouWant": "Are you sure you want to",
+   "everythingWillBeLost": "If you delete your account you will lose your recipes,products,favorites,etc...",
+   "privacy": "Privacy policy",
+   "terms": "Terms of service"
 }   

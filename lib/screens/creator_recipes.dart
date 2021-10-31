@@ -23,8 +23,6 @@ class CreatorRecipes extends StatelessWidget {
         preferredSize: Size(100.w, 114),
         child: SafeArea(
           child: Row(
-            // minLeadingWidth: 1,
-            // contentPadding: EdgeInsets.only(left: 1),
             children: [
               if (avatar != null)
                 Row(
@@ -36,11 +34,6 @@ class CreatorRecipes extends StatelessWidget {
                       ),
                       onPressed: () {
                         Navigator.of(context).pop();
-                        // Navigator.of(context).push(
-                        //   MaterialPageRoute(
-                        //     builder: (_) => const SelectedRecipe(),
-                        //   ),
-                        // );
                       },
                     ),
                     UserAvatar(

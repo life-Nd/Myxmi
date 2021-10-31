@@ -8,6 +8,7 @@ import 'package:myxmi/providers/recipe.dart';
 import 'package:myxmi/widgets/creator_card.dart';
 import 'package:myxmi/widgets/recipe_details.dart';
 import 'package:myxmi/widgets/recipe_image.dart';
+import 'package:myxmi/widgets/similar_recipes.dart';
 import 'add_recipe_infos.dart';
 
 final InstructionsModel _instructions =
@@ -51,7 +52,7 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
                     return SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Text(
-                        '${_recipe.recipeModel.title[0].toUpperCase()}${_recipe.recipeModel.title.substring(1, _recipe.recipeModel.title.length).toLowerCase()} ',
+                        '${_recipe.recipe.title[0].toUpperCase()}${_recipe.recipe.title.substring(1, _recipe.recipe.title.length).toLowerCase()} ',
                         style: const TextStyle(
                             fontSize: 19, fontWeight: FontWeight.w700),
                       ),
@@ -77,7 +78,7 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
                     StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
                       stream: FirebaseFirestore.instance
                           .collection('Instructions')
-                          .doc(_recipe.recipeModel.recipeId)
+                          .doc(_recipe.recipe.recipeId)
                           .snapshots(),
                       builder: (context,
                           AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>>
@@ -100,10 +101,14 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
                           _instructions.fromSnapshot(snapshot: _data);
                         }
                         return RecipeDetails(instructions: _instructions);
-                        // AdLoader(),
-                        // SimilarRecipes(suggestedRecipes: _recipe.recipes)
                       },
                     ),
+                    // AdLoader(),
+                    ListTile(
+                      title: Text('similarRecipes'.tr(),
+                          style: const TextStyle(fontSize: 20)),
+                    ),
+                    SimilarRecipes(suggestedRecipes: _recipe.suggestedRecipes)
                   ],
                 ),
               ),
