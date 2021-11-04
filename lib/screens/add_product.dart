@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../main.dart';
 
 final _productEntryProvider = ChangeNotifierProvider<_ProductEntryProvider>(
@@ -13,7 +15,6 @@ TextEditingController _nameCtrl = TextEditingController();
 TextEditingController _quantityCtrl = TextEditingController();
 DateTime _expiration;
 int _mesureValue = 0;
-String _ingredientType = 'Other';
 String _mesureType = 'g';
 bool _explainAccess = false;
 bool _explainQuantity = false;
@@ -24,6 +25,7 @@ class AddProduct extends HookWidget {
   Widget build(BuildContext context) {
     final _change = useState<bool>(false);
     final _user = useProvider(userProvider);
+    final _product = useProvider(_productEntryProvider);
     final Size _size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -39,6 +41,21 @@ class AddProduct extends HookWidget {
         fillColor: Colors.green,
         onPressed: _nameCtrl.text.isNotEmpty && _mesureType != null
             ? () async {
+                final String _now = '${DateTime.now().millisecondsSinceEpoch}';
+                debugPrint(_nameCtrl.text);
+                debugPrint(_mesureType);
+                debugPrint(_product.type);
+                debugPrint(_expiration.millisecondsSinceEpoch.toString());
+                final Future<SharedPreferences> _prefs =
+                    SharedPreferences.getInstance();
+                final SharedPreferences prefs = await _prefs;
+                if (_quantityCtrl.text.isNotEmpty) {
+                  await prefs.setStringList(_now,
+                      [_product.type, _quantityCtrl.text]).then((bool success) {
+                    return _now;
+                  });
+                }
+
                 await FirebaseFirestore.instance
                     .collection('Products')
                     .doc(_user.account.uid)
@@ -47,20 +64,18 @@ class AddProduct extends HookWidget {
                     '${DateTime.now().millisecondsSinceEpoch}': {
                       'name': _nameCtrl.text.toLowerCase(),
                       'mesureType': _mesureType,
-                      'ingredientType': _ingredientType,
-                      'expiration': '$_expiration',
-                      'total': _quantityCtrl.text
+                      'ingredientType': _product.type,
+                      'expiration': '${_expiration.millisecondsSinceEpoch}',
                     },
                   },
                   SetOptions(merge: true),
-                ).whenComplete(() {
-                  _nameCtrl.clear();
-                  _mesureType = null;
-                  _ingredientType = null;
-                  _expiration = null;
-                  _quantityCtrl = null;
-                  Navigator.of(context).pop();
-                });
+                );
+                _nameCtrl.clear();
+                _mesureType = null;
+                _product.type = null;
+                _expiration = null;
+                _quantityCtrl = null;
+                Navigator.of(context).pop();
               }
             : () {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -144,7 +159,7 @@ class AddProduct extends HookWidget {
               ),
               GridView(
                 shrinkWrap: true,
-                padding: const EdgeInsets.symmetric(),
+                padding: const EdgeInsets.all(4),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
                   crossAxisSpacing: 1,
@@ -193,11 +208,13 @@ class AddProduct extends HookWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   DropdownButton<int>(
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.bold,
+                      color: Theme.of(context).appBarTheme.titleTextStyle.color,
                     ),
                     value: _mesureValue,
+                    dropdownColor: Theme.of(context).cardColor,
                     onChanged: (val) {
                       _mesureValue = val;
                       _change.value = !_change.value;
@@ -266,10 +283,12 @@ class AddProduct extends HookWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
-                title: Text(
-                  '${'quantityOnHand'.tr()} ${'optional'.tr()}',
-                  style: const TextStyle(
-                    fontSize: 17,
+                title: SingleChildScrollView(
+                  child: Text(
+                    '${'quantityOnHand'.tr()} (${'optional'.tr()})',
+                    style: const TextStyle(
+                      fontSize: 17,
+                    ),
                   ),
                 ),
                 trailing: _explainQuantity
@@ -320,10 +339,12 @@ class AddProduct extends HookWidget {
                 ),
                 title: Row(
                   children: [
-                    Text(
-                      '${'selectExpirationDate'.tr()} ',
-                      style: const TextStyle(
-                        fontSize: 17,
+                    Expanded(
+                      child: Text(
+                        '${'selectExpirationDate'.tr()} (${'optional'.tr()})',
+                        style: const TextStyle(
+                          fontSize: 17,
+                        ),
                       ),
                     ),
                   ],
@@ -352,52 +373,53 @@ class AddProduct extends HookWidget {
                 subtitle:
                     _explainExpiration ? Text('expirationDate'.tr()) : null,
               ),
-              Row(
-                children: [
-                  RawMaterialButton(
-                    onPressed: () async {
-                      final _date = await showDatePicker(
-                          context: context,
-                          currentDate: _expiration,
-                          initialDate: DateTime.now(),
-                          firstDate:
-                              DateTime.now().subtract(const Duration(days: 5)),
-                          lastDate: DateTime.now().add(
-                            const Duration(days: 1200),
-                          ),
-                          builder: (_, child) {
-                            return child;
-                          });
-                      if (_date != null && _date != _expiration) {
-                        _expiration = _date;
-                      }
-                      _change.value = !_change.value;
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if (_expiration != null)
-                          Text(
-                            DateFormat.yMMMMEEEEd().format(_expiration),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        else
-                          const Text(''),
-                        const Icon(
-                          Icons.calendar_today_outlined,
+              Padding(
+                padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    if (_expiration != null)
+                      Text(
+                        DateFormat.yMMMMEEEEd().format(_expiration),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
                         ),
-                      ],
+                      )
+                    else
+                      const Text(''),
+                    IconButton(
+                      onPressed: () async {
+                        final _date = await showDatePicker(
+                            context: context,
+                            currentDate: _expiration,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime.now()
+                                .subtract(const Duration(days: 5)),
+                            lastDate: DateTime.now().add(
+                              const Duration(days: 1200),
+                            ),
+                            builder: (_, child) {
+                              return child;
+                            });
+                        if (_date != null && _date != _expiration) {
+                          _expiration = _date;
+                        }
+                        _change.value = !_change.value;
+                      },
+                      icon: const Icon(Icons.calendar_today),
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      _expiration = null;
-                    },
-                    icon: const Icon(Icons.clear),
-                  )
-                ],
+                    IconButton(
+                      onPressed: () {
+                        _expiration = null;
+                        _change.value = !_change.value;
+                      },
+                      icon: const Icon(
+                        Icons.clear,
+                        color: Colors.red,
+                      ),
+                    )
+                  ],
+                ),
               ),
               const SizedBox(
                 width: 4,
@@ -412,11 +434,12 @@ class AddProduct extends HookWidget {
 
 class _ProductEntryType extends StatelessWidget {
   final String type;
-  final String image;
   final Color color;
-  const _ProductEntryType(
-      {Key key, @required this.type, this.color, this.image})
-      : super(key: key);
+  const _ProductEntryType({
+    Key key,
+    @required this.type,
+    @required this.color,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -433,7 +456,9 @@ class _ProductEntryType extends StatelessWidget {
           _product.changeType(type);
         },
         child: Padding(
-          padding: const EdgeInsets.only(right: 4),
+          padding: const EdgeInsets.only(
+            right: 4,
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -453,8 +478,14 @@ class _ProductEntryType extends StatelessWidget {
                     ),
                   ),
                 ),
-              Text(
-                type.tr(),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20.0, right: 20),
+                  child: Text(
+                    type.tr(),
+                  ),
+                ),
               ),
             ],
           ),

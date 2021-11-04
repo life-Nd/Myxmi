@@ -6,63 +6,15 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/recipes.dart';
 import 'recipes_view.dart';
 
-// enum RECIPESBY {
-//   like,
-//   creatorUid,
-//   searchText,
-//   category,
-//   subCategory,
-//   timeStamp
-// }
 
 class Recipes extends StatelessWidget {
   final Stream<QuerySnapshot> path;
   final bool showAutoCompleteField;
-  // final RECIPESBY recipesPath;
   const Recipes({
     Key key,
     @required this.path,
     @required this.showAutoCompleteField,
   }) : super(key: key);
-
-  // Stream<QuerySnapshot> _path(String _uid, String searchText) {
-  //   Stream<QuerySnapshot> _recipesPath;
-  //   switch (recipesPath) {
-  //     case RECIPESBY.like:
-  //       return _recipesPath = FirebaseFirestore.instance
-  //           .collection('Recipes')
-  //           .where('likedBy.$_uid', isEqualTo: true)
-  //           .snapshots();
-  //     case RECIPESBY.creatorUid:
-  //       return _recipesPath = FirebaseFirestore.instance
-  //           .collection('Recipes')
-  //           .where('uid', isEqualTo: _uid)
-  //           .snapshots();
-  //     case RECIPESBY.searchText:
-  //       return _recipesPath = FirebaseFirestore.instance
-  //           .collection('Recipes')
-  //           .where('title', isEqualTo: searchText)
-  //           .snapshots();
-
-  //     case RECIPESBY.timeStamp:
-  //       return _recipesPath = FirebaseFirestore.instance
-  //           .collection('Recipes')
-  //           .orderBy('made')
-  //           .snapshots();
-  //     case RECIPESBY.category:
-  //       return _recipesPath = FirebaseFirestore.instance
-  //           .collection('Recipes')
-  //           .where('category', isEqualTo: searchText)
-  //           .snapshots();
-  //     case RECIPESBY.subCategory:
-  //       return _recipesPath = FirebaseFirestore.instance
-  //           .collection('Recipes')
-  //           .where('subcategory', isEqualTo: searchText)
-  //           .snapshots();
-  //     default:
-  //       return _recipesPath;
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {

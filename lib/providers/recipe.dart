@@ -34,7 +34,7 @@ class RecipeProvider extends ChangeNotifier {
   }
 
   void like({bool value, String uid}) {
-    recipe.likedBy[uid] = value;
+    recipe.likes[uid] = value;
   }
 
   void changeTitle() {

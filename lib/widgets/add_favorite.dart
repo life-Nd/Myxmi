@@ -2,33 +2,23 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/recipes.dart';
-import 'package:myxmi/screens/add_recipe_infos.dart';
 import 'package:myxmi/screens/home.dart';
 import '../main.dart';
 
-class AddFavoriteButton extends StatefulWidget {
+class AddFavoriteButton extends StatelessWidget {
   final RecipeModel recipe;
-  final bool fromProvider;
-  const AddFavoriteButton({Key key, this.recipe, @required this.fromProvider})
-      : super(key: key);
-  @override
-  State<AddFavoriteButton> createState() => _AddFavoriteButtonState();
-}
 
-class _AddFavoriteButtonState extends State<AddFavoriteButton> {
+  const AddFavoriteButton({Key key, @required this.recipe}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (_, watch, __) {
       final _user = watch(userProvider);
       final _view = watch(homeViewProvider);
-      final RecipeModel _recipe = widget.fromProvider
-          ? watch(recipeProvider).recipe
-          : widget.recipe;
-      _recipe.liked = false;
-      if (_user?.account?.uid != null && _recipe.likedBy != null) {
+      final _recipe = recipe;
+      if (_user?.account?.uid != null && _recipe?.likes != null) {
         final _uid = _user?.account?.uid;
-        _recipe.liked =
-            _recipe.likedBy.containsKey(_uid) && _recipe.likedBy[_uid] == true;
+        _recipe.isLiked =
+            _recipe.likes.containsKey(_uid) && _recipe.likes[_uid] == true;
       }
       return StatefulBuilder(builder: (context, StateSetter stateSetter) {
         return Row(
@@ -58,7 +48,7 @@ class _AddFavoriteButtonState extends State<AddFavoriteButton> {
                 },
               )
             else
-              (!_recipe.liked)
+              (!_recipe.isLiked)
                   ? IconButton(
                       icon: Container(
                         decoration: BoxDecoration(
@@ -80,7 +70,7 @@ class _AddFavoriteButtonState extends State<AddFavoriteButton> {
                             .doc(_recipe.recipeId)
                             .set(
                           {
-                            'likedBy': {
+                            'likes': {
                               _user.account.uid: true,
                             }
                           },
@@ -88,11 +78,11 @@ class _AddFavoriteButtonState extends State<AddFavoriteButton> {
                             merge: true,
                           ),
                         );
-                        if (_recipe.likedBy != {} || _recipe.likedBy.isEmpty) {
-                          _recipe.likedBy = {};
+                        if (_recipe.likes != {} || _recipe.likes.isEmpty) {
+                          _recipe.likes = {};
                         }
-                        _recipe.likedBy[_user.account.uid] = true;
-                        setState(() {});
+                        _recipe.likes[_user.account.uid] = true;
+                        // setState(() {});
                       },
                     )
                   : IconButton(
@@ -115,7 +105,7 @@ class _AddFavoriteButtonState extends State<AddFavoriteButton> {
                             .doc(_recipe.recipeId)
                             .set(
                           {
-                            'likedBy': {
+                            'likes': {
                               _user.account.uid: false,
                             },
                           },
@@ -123,8 +113,8 @@ class _AddFavoriteButtonState extends State<AddFavoriteButton> {
                             merge: true,
                           ),
                         );
-                        _recipe.likedBy[_user.account.uid] = false;
-                        setState(() {});
+                        _recipe.likes[_user.account.uid] = false;
+                        // setState(() {});
                       },
                     ),
             // IconButton(

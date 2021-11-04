@@ -80,6 +80,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
+    
     return Consumer(
       builder: (_, watch, __) {
         final _view = watch(homeViewProvider);

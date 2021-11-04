@@ -13,9 +13,9 @@ class RecipeModel {
   static const _difficulty = 'difficulty';
   static const _reference = 'reference';
   static const _made = 'made';
-  static const _reviewsCount = 'reviews_count';
+  static const _reviewsCount = 'comments_count';
   static const _portions = 'portions';
-  static const _likedBy = 'liked_by';
+  static const _likes = 'likes';
   static const _username = 'username';
   static const _userphoto = 'userphoto';
   static const _diet = 'diet';
@@ -38,10 +38,10 @@ class RecipeModel {
   String difficulty;
   String reference;
   String made;
-  String reviewsCount;
+  String commentsCount;
   String portions;
-  Map likedBy = {};
-  bool liked;
+  Map likes = {};
+  bool isLiked;
   String username;
   String userphoto;
   String diet;
@@ -66,10 +66,10 @@ class RecipeModel {
       this.difficulty,
       this.reference,
       this.made,
-      this.reviewsCount,
+      this.commentsCount,
       this.portions,
-      this.likedBy,
-      this.liked,
+      this.likes,
+      this.isLiked,
       this.userphoto,
       this.username,
       this.diet,
@@ -94,10 +94,10 @@ class RecipeModel {
       access: snapshot[_access] as String,
       difficulty: snapshot[_difficulty] as String,
       reference: snapshot[_reference] as String,
-      reviewsCount: snapshot[_reviewsCount] as String,
+      commentsCount: snapshot[_reviewsCount] as String,
       made: snapshot[_made] as String,
       portions: snapshot[_portions] as String,
-      likedBy: snapshot[_likedBy] as Map,
+      likes: snapshot[_likes] as Map,
       username: snapshot[_username] as String,
       userphoto: snapshot[_userphoto] as String,
       diet: snapshot[_diet] as String,
@@ -124,8 +124,8 @@ class RecipeModel {
       _difficulty: difficulty,
       _reference: reference,
       _made: made,
-      _likedBy: likedBy,
-      _reviewsCount: reviewsCount,
+      _likes: likes,
+      _reviewsCount: commentsCount,
       _portions: portions,
       _username: username,
       _userphoto: userphoto,

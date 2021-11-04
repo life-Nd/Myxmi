@@ -56,8 +56,6 @@ class AddRecipeProducts extends StatelessWidget {
         ],
       ),
       body: Column(
-        //  const Expanded(child: ProductsList(type: 'EditProducts')),
-        // alignment: Alignment.bottomRight,
         children: [
           const Expanded(
             child: Products(type: 'AddRecipe'),

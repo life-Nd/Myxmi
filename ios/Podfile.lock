@@ -126,6 +126,8 @@ PODS:
   - shared_preferences (0.0.1):
     - Flutter
   - TOCropViewController (2.6.0)
+  - url_launcher (0.0.1):
+    - Flutter
   - video_player (0.0.1):
     - Flutter
   - wakelock (0.0.1):
@@ -147,6 +149,7 @@ DEPENDENCIES:
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - rate_my_app (from `.symlinks/plugins/rate_my_app/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
+  - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
   - video_player (from `.symlinks/plugins/video_player/ios`)
   - wakelock (from `.symlinks/plugins/wakelock/ios`)
   - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
@@ -199,6 +202,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/rate_my_app/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
+  url_launcher:
+    :path: ".symlinks/plugins/url_launcher/ios"
   video_player:
     :path: ".symlinks/plugins/video_player/ios"
   wakelock:
@@ -242,10 +247,11 @@ SPEC CHECKSUMS:
   rate_my_app: 8e49687f3520c56352f974f0cb401afea07cd496
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   TOCropViewController: 3105367e808b7d3d886a74ff59bf4804e7d3ab38
+  url_launcher: b6e016d912f04be9f5bf6e8e82dc599b7ba59649
   video_player: 9cc823b1d9da7e8427ee591e8438bfbcde500e6e
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
   webview_flutter: 3603125dfd3bcbc9d8d418c3f80aeecf331c068b
 
-PODFILE CHECKSUM: e97fdb901c55dc288d8f682a54e1ea454aebbcc8
+PODFILE CHECKSUM: e843ffb7d63d9c94b0c3754ecf7a2287a59f6b8c
 
 COCOAPODS: 1.10.1

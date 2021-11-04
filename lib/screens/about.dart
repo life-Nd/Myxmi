@@ -19,6 +19,7 @@ class AboutView extends HookWidget {
       body: Column(
         children: [
           ListTile(
+            leading: const Icon(Icons.privacy_tip),
             onTap: () {
               _appSources.launchURL(url: _privacyUrl);
             },
@@ -29,8 +30,9 @@ class AboutView extends HookWidget {
             subtitle: const Text(_privacyUrl),
           ),
           ListTile(
+            leading: const Icon(Icons.book),
             onTap: () {
-              _appSources.launchURL(url: _termsUrl);
+                   _appSources.launchURL(url: _termsUrl);
             },
             title: Text(
               'terms'.tr(),
@@ -50,19 +52,15 @@ class _Version extends HookWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: const Icon(Icons.layers),
-      title: Row(
-        children: [
-          Text('appVersion'.tr()),
-          FutureBuilder(
-            future: PackageInfo.fromPlatform(),
-            builder: (_, AsyncSnapshot<PackageInfo> data) {
-              if (data != null) {
-                return Text(data.data.version);
-              }
-              return const Text('-');
-            },
-          ),
-        ],
+      title: Text('${'appVersion'.tr()} '),
+      subtitle: FutureBuilder(
+        future: PackageInfo.fromPlatform(),
+        builder: (_, AsyncSnapshot<PackageInfo> data) {
+          if (data != null && data?.data != null) {
+            return Text(data?.data?.version);
+          }
+          return const Text('-');
+        },
       ),
     );
   }

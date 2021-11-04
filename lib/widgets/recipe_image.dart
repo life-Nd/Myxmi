@@ -33,12 +33,12 @@ class _RecipeImageState extends State<RecipeImage> {
                 ),
               ),
               Column(
-                // mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: AddFavoriteButton(
-                      fromProvider: true,
+                      recipe: _recipe.recipe,
+                      // liked: _recipe.recipe.liked,
                     ),
                   ),
                   const Spacer(),

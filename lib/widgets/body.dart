@@ -17,6 +17,7 @@ class Body extends StatelessWidget {
     final bool isSignedIn = _uid != null;
     Widget child;
     switch (_view) {
+      // Show the menu or the recipes found in search
       case 0:
         return child = Column(
           children: [
@@ -27,7 +28,6 @@ class Body extends StatelessWidget {
 
       case 1:
         // Show stream of recipes filtered with the user id
-        // RecipesByUid(path: 'all', uid: uid)
         return child = isSignedIn
             ? Recipes(
                 showAutoCompleteField: true,
@@ -38,18 +38,15 @@ class Body extends StatelessWidget {
                     .snapshots(),
               )
             : SignIn();
-      // return child;
       case 2:
         // Show stream of recipes liked by the user id
-        //RecipesByUid(path: 'liked', uid: uid)
 
         return child = isSignedIn
             ? Recipes(
-                // recipesPath: RECIPESBY.like,
                 showAutoCompleteField: true,
                 path: FirebaseFirestore.instance
                     .collection('Recipes')
-                    .where('likedBy.$_uid', isEqualTo: true)
+                    .where('likes.$_uid', isEqualTo: true)
                     .snapshots())
             : SignIn();
       case 3:
@@ -57,11 +54,11 @@ class Body extends StatelessWidget {
         return child =
             isSignedIn ? const Products(type: 'EditProducts') : SignIn();
       case 4:
-        return child = isSignedIn ? More() : SignIn();
-      case 5:
+        // Show profile, settings, about,and sign out
         return child = isSignedIn ? More() : SignIn();
       default:
         return child = const Menu();
+
         return child;
     }
   }

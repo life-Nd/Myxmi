@@ -12,8 +12,8 @@ import '../widgets/dialog_wrong_password.dart';
 final _fieldsProvider =
     ChangeNotifierProvider<_FieldsNotifier>((ref) => _FieldsNotifier());
 
-TextEditingController _emailCtrl = TextEditingController();
-TextEditingController _passwordCtrl = TextEditingController();
+final TextEditingController _emailCtrl = TextEditingController();
+final TextEditingController _passwordCtrl = TextEditingController();
 
 FocusNode _passwordNode = FocusNode();
 

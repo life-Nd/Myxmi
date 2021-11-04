@@ -41,10 +41,8 @@ class _RecipesViewState extends State<RecipesView> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('recipeview building');
     return StatefulBuilder(
       builder: (context, StateSetter stateSetter) {
-        debugPrint('recipeview StatefulBuilder building');
         return Column(
           children: [
             if (widget.showAutoCompleteField)

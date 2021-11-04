@@ -73,8 +73,9 @@ class _MenuItemState extends State<MenuItem> {
                   child: Text(
                     widget.url,
                     style: TextStyle(
-                        fontSize: 10,
-                        color: Theme.of(context).secondaryHeaderColor),
+                      fontSize: 10,
+                      color: Colors.grey.shade400,
+                    ),
                   ),
                 ),
               )

@@ -9,8 +9,12 @@ class RecipeTileDetails extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String _title =
-        '${recipe?.title[0]?.toUpperCase()}${recipe?.title?.substring(1, recipe?.title?.length)}';
+    String _title = '';
+    if (recipe.title != null) {
+      _title =
+          '${recipe?.title[0]?.toUpperCase()}${recipe?.title?.substring(1, recipe?.title?.length)}';
+    }
+
     return Padding(
       padding: const EdgeInsets.only(left: 10.0, bottom: 10, top: 10),
       child: Column(
@@ -28,7 +32,7 @@ class RecipeTileDetails extends HookWidget {
             children: [
               Text('${'ingredients'.tr()}: '),
               Text(
-                recipe.ingredientsCount ?? '0',
+                recipe?.ingredientsCount ?? '0',
                 style: const TextStyle(fontWeight: FontWeight.w700),
               ),
             ],
@@ -49,7 +53,7 @@ class RecipeTileDetails extends HookWidget {
                     size: 15,
                   ),
                   Text(
-                    recipe.reviewsCount ?? '0',
+                    recipe?.commentsCount ?? '0',
                     style: const TextStyle(fontSize: 17),
                   )
                 ],

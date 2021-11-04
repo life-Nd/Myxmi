@@ -32,21 +32,10 @@ class _ProductsListState extends State<ProductsList> {
                   final _user = watch(userProvider);
                   return Dismissible(
                     key: UniqueKey(),
-                    onDismissed: kIsWeb
-                        ? (direction) {
-                            if (widget.type == 'EditProducts') {
-                              FirebaseFirestore.instance
-                                  .collection('Products')
-                                  .doc(_user.account.uid)
-                                  .update({
-                                widget.products[index].productId:
-                                    FieldValue.delete()
-                              });
-                            } else {
-                              widget.products.remove(widget.products[index]);
-                            }
-                          }
-                        : (direction) {},
+                    confirmDismiss: (direction) async {
+                      return false;
+                    },
+                    movementDuration: const Duration(seconds: 7),
                     background: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Card(
@@ -62,16 +51,19 @@ class _ProductsListState extends State<ProductsList> {
                                   ? 'delete'.tr()
                                   : 'hide'.tr(),
                               style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 17,
-                              ),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 17,
+                                  color: Colors.white),
                             ),
                             const SizedBox(
-                              width: 40,
+                              width: 10,
                             ),
-                            Icon(widget.type == 'EditProducts'
-                                ? Icons.delete
-                                : Icons.visibility_off),
+                            _EditProductButton(
+                              index: index,
+                              color: Colors.white,
+                              type: widget.type,
+                              products: widget.products,
+                            ),
                           ],
                         ),
                       ),
@@ -84,33 +76,11 @@ class _ProductsListState extends State<ProductsList> {
                               : ProductDetails(product: widget.products[index]),
                         ),
                         if (!_user.onPhone)
-                          IconButton(
-                            padding: const EdgeInsets.all(1),
-                            icon: Icon(
-                              widget.type == 'EditProducts'
-                                  ? Icons.delete
-                                  : Icons.visibility_off,
-                              color: Colors.red,
-                              size: 20,
-                            ),
-                            onPressed: () {
-                              if (widget.type == 'EditProducts') {
-                                FirebaseFirestore.instance
-                                    .collection('Products')
-                                    .doc(_user.account.uid)
-                                    .update({
-                                  widget.products[index].productId:
-                                      FieldValue.delete()
-                                });
-                              } else {
-                                widget.products.removeWhere(
-                                  (ProductModel element) =>
-                                      element.productId ==
-                                      widget.products[index].productId,
-                                );
-                                setState(() {});
-                              }
-                            },
+                          _EditProductButton(
+                            index: index,
+                            color: Colors.red,
+                            type: widget.type,
+                            products: widget.products,
                           ),
                       ],
                     ),
@@ -121,11 +91,65 @@ class _ProductsListState extends State<ProductsList> {
           )
         : Column(
             mainAxisSize: MainAxisSize.min,
-
             children: [
               Expanded(child: Image.asset('assets/data_not_found.png')),
               Expanded(child: Text('productsEmpty'.tr())),
             ],
           );
+  }
+}
+
+class _EditProductButton extends StatelessWidget {
+  final int index;
+  final Color color;
+  final String type;
+  final List<ProductModel> products;
+  const _EditProductButton({
+    Key key,
+    @required this.index,
+    @required this.color,
+    @required this.type,
+    @required this.products,
+  }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Consumer(
+      builder: (_, watch, child) {
+        final _user = watch(userProvider);
+        return IconButton(
+          padding: const EdgeInsets.all(1),
+          icon: Icon(
+            type == 'EditProducts' ? Icons.delete : Icons.visibility_off,
+            color: color,
+            size: 30,
+          ),
+          onPressed: () {
+            type == 'EditProducts'
+                ? _delete(
+                    uid: _user?.account?.uid,
+                    productId: products[index].productId)
+                : _hide(
+                    productId: products[index].productId,
+                    products: products,
+                  );
+          },
+        );
+      },
+    );
+  }
+
+  Future _delete({@required String productId, @required String uid}) async {
+    await FirebaseFirestore.instance.collection('Products').doc(uid).update(
+      {
+        productId: FieldValue.delete(),
+      },
+    );
+  }
+
+  void _hide(
+      {@required List<ProductModel> products, @required String productId}) {
+    products.removeWhere(
+      (ProductModel element) => element.productId == productId,
+    );
   }
 }

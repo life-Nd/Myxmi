@@ -3,7 +3,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/recipes.dart';
 import 'package:myxmi/screens/add_recipe_infos.dart';
 import 'package:myxmi/screens/selected_recipe.dart';
-
 import '../main.dart';
 import 'add_favorite.dart';
 import 'rating_stars.dart';
@@ -22,11 +21,11 @@ class RecipeTile extends StatelessWidget {
       final _recipeProvider = watch(recipeProvider);
       final _recipe = recipes[index];
       final _size = MediaQuery.of(context).size;
-      _recipe.liked = false;
-      if (_user?.account?.uid != null && _recipe.likedBy != null) {
+      _recipe.isLiked = false;
+      if (_user?.account?.uid != null && _recipe.likes != null) {
         final _uid = _user?.account?.uid;
-        _recipe.liked =
-            _recipe.likedBy.containsKey(_uid) && _recipe.likedBy[_uid] == true;
+        _recipe.isLiked =
+            _recipe.likes.containsKey(_uid) && _recipe.likes[_uid] == true;
       }
       return InkWell(
         onTap: () {
@@ -106,10 +105,7 @@ class RecipeTile extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          AddFavoriteButton(
-                            recipe: _recipe,
-                            fromProvider: false,
-                          ),
+                          AddFavoriteButton(recipe: _recipe),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: RatingStars(
