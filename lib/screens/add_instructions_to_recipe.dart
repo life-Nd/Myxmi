@@ -4,11 +4,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/providers/image.dart';
-import 'package:myxmi/screens/add_recipe_infos.dart';
+import 'package:myxmi/screens/add_infos_to_recipe.dart';
 import 'package:myxmi/widgets/image_selector.dart';
 import 'package:myxmi/widgets/save_recipe.dart';
 
-import 'add_recipe_products.dart';
+import 'add_products_to_recipes.dart';
 
 TextEditingController _stepCtrl = TextEditingController();
 
@@ -20,6 +20,21 @@ class AddRecipeInstructions extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       key: _scaffoldKey,
       drawerDragStartBehavior: DragStartBehavior.down,
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.dehaze),
+          onPressed: () {
+            _scaffoldKey.currentState.openDrawer();
+          },
+        ),
+        title: Consumer(builder: (_, watch, child) {
+          final _recipe = watch(recipeProvider);
+          return Text('${'instructionsFor'.tr()}: ${_recipe.recipe.title}');
+        }),
+        actions: [
+          SaveButton(),
+        ],
+      ),
       drawer: SafeArea(
         child: Consumer(builder: (_, watch, child) {
           final _recipe = watch(recipeProvider);
@@ -33,7 +48,7 @@ class AddRecipeInstructions extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (_) => AddRecipeProducts(),
+                          builder: (_) => AddNewProductsToRecipe(),
                         ),
                       );
                     },
@@ -52,8 +67,7 @@ class AddRecipeInstructions extends StatelessWidget {
                 Expanded(
                   child: _recipe.recipe.ingredientsCount != null
                       ? ListView.builder(
-                          itemCount:
-                              int.parse(_recipe.recipe.ingredientsCount),
+                          itemCount: int.parse(_recipe.recipe.ingredientsCount),
                           itemBuilder: (_, int index) {
                             final List _keys =
                                 _recipe.composition.keys.toList();
@@ -92,29 +106,13 @@ class AddRecipeInstructions extends StatelessWidget {
           );
         }),
       ),
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.dehaze),
-          onPressed: () {
-            _scaffoldKey.currentState.openDrawer();
-          },
-        ),
-        title: Consumer(builder: (_, watch, child) {
-          final _recipe = watch(recipeProvider);
-          return Text(
-              '${'instructionsFor'.tr()}: ${_recipe.recipe.title}');
-        }),
-        actions: [
-          SaveButton(),
-        ],
-      ),
       body: Consumer(builder: (_, watch, child) {
         final _recipe = watch(recipeProvider);
         final _image = watch(imageProvider);
         final List _steps = _recipe?.instructions?.steps;
         final int _keys = _steps?.length != null ? _steps.length : 0;
         final int _newKey = _keys + 1;
-       
+
         return Column(
           children: [
             Expanded(

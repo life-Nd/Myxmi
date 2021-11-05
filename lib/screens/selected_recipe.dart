@@ -9,7 +9,7 @@ import 'package:myxmi/widgets/creator_card.dart';
 import 'package:myxmi/widgets/recipe_details.dart';
 import 'package:myxmi/widgets/recipe_image.dart';
 import 'package:myxmi/widgets/similar_recipes.dart';
-import 'add_recipe_infos.dart';
+import 'add_infos_to_recipe.dart';
 
 final InstructionsModel _instructions =
     InstructionsModel(ingredients: {}, steps: []);

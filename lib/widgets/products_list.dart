@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/product.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../main.dart';
 import 'product_details.dart';
 import 'product_fields.dart';
@@ -20,6 +22,14 @@ class ProductsList extends StatefulWidget {
 
 class _ProductsListState extends State<ProductsList> {
   final ScrollController _ctrl = ScrollController();
+  Future<List> getProductDetails({String id}) async {
+    final SharedPreferences _prefs = await SharedPreferences.getInstance();
+    final _stringList = _prefs.getStringList(id);
+    debugPrint('_stringList: $_stringList');
+
+    return _stringList;
+  }
+
   @override
   Widget build(BuildContext context) {
     return widget.products.isNotEmpty
@@ -32,6 +42,9 @@ class _ProductsListState extends State<ProductsList> {
                   final _user = watch(userProvider);
                   return Dismissible(
                     key: UniqueKey(),
+                    dismissThresholds: const {
+                      DismissDirection.startToEnd: 0.4,
+                    },
                     confirmDismiss: (direction) async {
                       return false;
                     },
@@ -70,11 +83,29 @@ class _ProductsListState extends State<ProductsList> {
                     ),
                     child: Row(
                       children: [
-                        Expanded(
-                          child: widget.type == 'AddRecipe'
-                              ? ProductField(product: widget.products[index])
-                              : ProductDetails(product: widget.products[index]),
-                        ),
+                        FutureBuilder(
+                            future: getProductDetails(
+                                id: widget.products[index].productId),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                if (snapshot.data[0] != null ||
+                                    snapshot.data[0] != 'null') {
+                                  widget.products[index].total =
+                                      snapshot.data[0] as String;
+                                } else {
+                                  widget.products[index].total = '0';
+                                }
+                                widget.products[index].expiration =
+                                    snapshot.data[1] as String;
+                              }
+                              return Expanded(
+                                child: widget.type == 'AddProcuctsToRecipe'
+                                    ? ProductField(
+                                        product: widget.products[index])
+                                    : ProductDetails(
+                                        product: widget.products[index]),
+                              );
+                            }),
                         if (!_user.onPhone)
                           _EditProductButton(
                             index: index,

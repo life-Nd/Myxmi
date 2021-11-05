@@ -11,16 +11,15 @@ import 'package:myxmi/widgets/subcategory_selector.dart';
 import 'package:myxmi/widgets/title_field.dart';
 import 'package:sizer/sizer.dart';
 import '../providers/recipe.dart';
-import 'add_recipe_products.dart';
+import 'add_products_to_recipes.dart';
 import 'home.dart';
 
 final recipeProvider =
     ChangeNotifierProvider<RecipeProvider>((ref) => RecipeProvider());
-final creatorProvider =
-    ChangeNotifierProvider<RecipeProvider>((ref) => RecipeProvider());
+
 List steps = [];
 
-class AddRecipeInfos extends StatelessWidget {
+class AddInfosToRecipe extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -129,7 +128,7 @@ class AddRecipeInfos extends StatelessWidget {
       bottomNavigationBar: NextButton(tapNext: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (_) => AddRecipeProducts(),
+            builder: (_) => AddNewProductsToRecipe(),
           ),
         );
       }),

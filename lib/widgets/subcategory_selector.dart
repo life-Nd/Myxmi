@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/screens/add_recipe_infos.dart';
+import 'package:myxmi/screens/add_infos_to_recipe.dart';
 import 'package:sizer/sizer.dart';
 
 import 'drinks_subcategories.dart';

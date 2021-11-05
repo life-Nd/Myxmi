@@ -20,7 +20,7 @@ bool _explainAccess = false;
 bool _explainQuantity = false;
 bool _explainExpiration = false;
 
-class AddProduct extends HookWidget {
+class AddNewProduct extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final _change = useState<bool>(false);
@@ -46,26 +46,25 @@ class AddProduct extends HookWidget {
                 debugPrint(_mesureType);
                 debugPrint(_product.type);
                 debugPrint(_expiration.millisecondsSinceEpoch.toString());
-                final Future<SharedPreferences> _prefs =
-                    SharedPreferences.getInstance();
-                final SharedPreferences prefs = await _prefs;
-                if (_quantityCtrl.text.isNotEmpty) {
-                  await prefs.setStringList(_now,
-                      [_product.type, _quantityCtrl.text]).then((bool success) {
-                    return _now;
-                  });
-                }
-
+                debugPrint(_quantityCtrl.text.toString());
+                final SharedPreferences _prefs =
+                    await SharedPreferences.getInstance();
+                await _prefs.setStringList(_now, [
+                  _quantityCtrl.text,
+                  _expiration.millisecondsSinceEpoch.toString()
+                ]).then((bool success) {
+                  debugPrint('success: $success $_now');
+                  return _now;
+                });
                 await FirebaseFirestore.instance
                     .collection('Products')
                     .doc(_user.account.uid)
                     .set(
                   {
-                    '${DateTime.now().millisecondsSinceEpoch}': {
+                    _now: {
                       'name': _nameCtrl.text.toLowerCase(),
                       'mesureType': _mesureType,
                       'ingredientType': _product.type,
-                      'expiration': '${_expiration.millisecondsSinceEpoch}',
                     },
                   },
                   SetOptions(merge: true),
@@ -75,6 +74,7 @@ class AddProduct extends HookWidget {
                 _product.type = null;
                 _expiration = null;
                 _quantityCtrl = null;
+
                 Navigator.of(context).pop();
               }
             : () {

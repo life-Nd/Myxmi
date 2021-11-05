@@ -32,9 +32,6 @@ class PreferencesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
-
-
   Future changeTheme({String newTheme}) async {
     final SharedPreferences prefs = await _prefs;
     theme = newTheme;
@@ -44,9 +41,8 @@ class PreferencesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future readTheme() async {
+  Future _readTheme() async {
     final SharedPreferences prefs = await _prefs;
-    await _readLanguage();
     return theme = prefs.getString('Theme');
   }
 
@@ -55,10 +51,17 @@ class PreferencesProvider extends ChangeNotifier {
     return language = prefs.getString('Language');
   }
 
+  Future _readProductsQuantity() async {
+    final SharedPreferences prefs = await _prefs;
+    final _products = prefs.getString('1637643600000');
+    debugPrint('_productsQuantity: $_products');
+  }
+
   Future readPrefs() {
     final Future _data = Future.wait([
-      readTheme(),
+      _readTheme(),
       _readLanguage(),
+      _readProductsQuantity(),
     ]);
     return _data;
   }

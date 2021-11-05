@@ -1,13 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/screens/add_recipe_infos.dart';
+import 'package:myxmi/screens/add_infos_to_recipe.dart';
 import 'package:myxmi/screens/products.dart';
 import 'package:myxmi/widgets/next_button.dart';
-import 'add_product.dart';
-import 'add_recipe_instructions.dart';
+import 'add_instructions_to_recipe.dart';
 
-class AddRecipeProducts extends StatelessWidget {
+class AddNewProductsToRecipe extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +16,7 @@ class AddRecipeProducts extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (_) => AddRecipeInfos(),
+                builder: (_) => AddInfosToRecipe(),
               ),
             );
           },
@@ -38,34 +37,11 @@ class AddRecipeProducts extends StatelessWidget {
             );
           },
         ),
-        actions: [
-          RawMaterialButton(
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-            fillColor: Colors.green.shade400,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            child: Text('addProduct'.tr()),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => AddProduct(),
-                ),
-              );
-            },
-          )
-        ],
       ),
       body: Column(
         children: [
           const Expanded(
-            child: Products(type: 'AddRecipe'),
-          ),
-          NextButton(
-            tapNext: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => AddRecipeInstructions(),
-              ),
-            ),
+            child: Products(type: 'AddProcuctsToRecipe'),
           ),
           Card(
             child: Padding(
@@ -78,6 +54,13 @@ class AddRecipeProducts extends StatelessWidget {
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 );
               }),
+            ),
+          ),
+          NextButton(
+            tapNext: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => AddRecipeInstructions(),
+              ),
             ),
           ),
         ],

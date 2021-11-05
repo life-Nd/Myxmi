@@ -7,18 +7,23 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/providers/image.dart';
 import 'package:myxmi/screens/home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sn_progress_dialog/progress_dialog.dart';
-
 import '../main.dart';
-import '../screens/add_recipe_infos.dart';
+import '../screens/add_infos_to_recipe.dart';
 
 class SaveButton extends HookWidget {
   @override
   Widget build(BuildContext context) {
+    
     final ProgressDialog pr = ProgressDialog(context: context);
     final _recipe = useProvider(recipeProvider);
     final _image = useProvider(imageProvider);
     final _user = useProvider(userProvider);
+    debugPrint(
+        '_recipe.instructions.ingredients: ${_recipe.instructions.ingredients}');
+
+        
     return RawMaterialButton(
       onPressed: _recipe.recipe.title != null
           ? () async {
@@ -37,13 +42,14 @@ class SaveButton extends HookWidget {
               _recipe.recipe.userphoto = _user.account.photoURL;
               debugPrint(
                   '_recipe?.recipe.subCategory:${_recipe?.recipe?.subCategory}');
-              _recipe.recipe.made =
-                  '${DateTime.now().millisecondsSinceEpoch}';
+              // final SharedPreferences _prefs =
+              //     await SharedPreferences.getInstance();
+
+              _recipe.recipe.made = '${DateTime.now().millisecondsSinceEpoch}';
               if (_recipe.recipe.category == 'other') {
                 _recipe.recipe.subCategory = null;
               }
-              if (_image.imageFile != null &&
-                  _recipe.recipe.imageUrl != null) {
+              if (_image.imageFile != null && _recipe.recipe.imageUrl != null) {
                 _image.addImageToDb(context: context).whenComplete(() async {
                   _recipe.recipe.imageUrl =
                       _image.imageLink.isNotEmpty ? _image.imageLink : null;
@@ -52,10 +58,24 @@ class SaveButton extends HookWidget {
                           id: value,
                           instructions: _recipe.instructions.toMap()));
                 });
+                debugPrint(
+                    '_recipe.instructions.ingredients: ${_recipe.instructions.ingredients}');
               } else {
                 await saveRecipe(_recipe.recipe.toMap()).then((value) =>
                     saveInstructions(
                         id: value, instructions: _recipe.instructions.toMap()));
+              }
+              // TODO add the function to substract the usedCount and update the sharedPreferences
+              for (int i = 0;
+                  i < _recipe.instructions.ingredients.length;
+                  i++) {
+                debugPrint(
+                    '_recipe.instructions.ingredients[i]: ${_recipe.instructions.ingredients}');
+                // // // final List _product = _prefs.getStringList(
+                // // //     _recipe.instructions.ingredients. as String);
+                // // final double _updatedProduct =
+                // //     double.parse(_product[0] as String) - 1;
+                // debugPrint('_updatedProduct: $_updatedProduct');
               }
 
               pr.close();
@@ -129,4 +149,17 @@ Future saveInstructions({String id, Map<String, dynamic> instructions}) async {
       .collection('Instructions')
       .doc(id)
       .set(instructions);
+}
+
+Future substractUsedProducts({List ingredients}) {
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  for (var i = 0; i < ingredients.length; i++) {
+    // _prefs.then((prefs) {
+    //   prefs.setInt(ingredients[i]['name'],
+    //       prefs.getInt(ingredients[i]['name']) - ingredients[i]['quantity']);
+    // });
+  }
+  return _prefs.then((pref) {
+    pref.setInt('usedProducts', pref.getInt('usedProducts') - 1);
+  });
 }

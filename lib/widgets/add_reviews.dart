@@ -5,7 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/main.dart';
-import 'package:myxmi/screens/add_recipe_infos.dart';
+import 'package:myxmi/screens/add_infos_to_recipe.dart';
 
 double _stars = 0;
 TextEditingController _msgCtrl = TextEditingController();

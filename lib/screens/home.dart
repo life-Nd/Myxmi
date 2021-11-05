@@ -9,8 +9,8 @@ import 'package:myxmi/widgets/app_bottom_navigation.dart';
 import 'package:myxmi/widgets/body.dart';
 import 'package:myxmi/widgets/web_appbar.dart';
 import 'package:sizer/sizer.dart';
-import 'add_product.dart';
-import 'add_recipe_infos.dart';
+import 'add_infos_to_recipe.dart';
+import 'add_new_product.dart';
 
 // ADDRECIPE <a href="https://storyset.com/work">Work illustrations by Storyset</a>
 // APPETIZERS https://unsplash.com/photos/n9xsu46NGaE?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
@@ -80,7 +80,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
-    
+
     return Consumer(
       builder: (_, watch, __) {
         final _view = watch(homeViewProvider);
@@ -105,12 +105,12 @@ class _HomeState extends State<Home> {
                         _viewIndex != 3
                             ? Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (_) => AddRecipeInfos(),
+                                  builder: (_) => AddInfosToRecipe(),
                                 ),
                               )
                             : Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (_) => AddProduct(),
+                                  builder: (_) => AddNewProduct(),
                                 ),
                               );
                       },

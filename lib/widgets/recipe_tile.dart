@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/recipes.dart';
-import 'package:myxmi/screens/add_recipe_infos.dart';
+import 'package:myxmi/screens/add_infos_to_recipe.dart';
 import 'package:myxmi/screens/selected_recipe.dart';
 import '../main.dart';
 import 'add_favorite.dart';

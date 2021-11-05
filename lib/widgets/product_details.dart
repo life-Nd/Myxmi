@@ -1,7 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/product.dart';
 import '../main.dart';
+
+String _expiration;
 
 class ProductDetails extends StatelessWidget {
   final ProductModel product;
@@ -11,6 +14,16 @@ class ProductDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     final String _name =
         '${product.name[0]?.toUpperCase()}${product.name?.substring(1, product.name?.length)}';
+    if (product?.expiration != null) {
+      _expiration = DateFormat('EEEE d MMM , ' 'yyyy')
+          .format(DateTime.fromMillisecondsSinceEpoch(
+        int.parse(product?.expiration?.toString()),
+      ));
+    }
+    if (product?.total == null) {
+      product.total = '0';
+    }
+
     return Consumer(builder: (_, watch, child) {
       return Card(
         shape: RoundedRectangleBorder(
@@ -23,12 +36,10 @@ class ProductDetails extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(''),
-              Text('Type: ${product.ingredientType}'),
-              Text('Mesured in: ${product.mesureType}'),
+              Text('Type: ${product.ingredientType.tr()}'),
+              Text('Quantity in stock: ${product.total} ${product.mesureType}'),
+              Text('Expiry Date:  $_expiration'),
               const Text(''),
-              // Text('Quantity in stock: ${product.total} ${product.mesureType}'),
-              // Text(
-              //     'Expiry Date: ${DateFormat('EEE, MMM d, ' 'yy').format(DateTime.parse(product.expiration))}'),
             ],
           ),
           trailing: EditCartButton(name: product.name),

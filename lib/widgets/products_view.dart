@@ -1,5 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:myxmi/models/product.dart';
+import 'package:myxmi/screens/add_new_product.dart';
+
 import 'auto_complete_products.dart';
 import 'cart_button.dart';
 import 'products_list.dart';
@@ -64,7 +67,26 @@ class _ProductsViewState extends State<ProductsView> {
                         stateSetter(() {});
                       }),
                 ),
-                const CartButton(),
+                if (widget.type == 'AddProcuctsToRecipe')
+                  Center(
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => AddNewProduct(),
+                          ),
+                        );
+                      },
+                      tooltip: 'addProduct'.tr(),
+                      icon: const Icon(
+                        Icons.add_circle,
+                        color: Colors.green,
+                        size: 40,
+                      ),
+                    ),
+                  )
+                else
+                  const CartButton()
               ],
             ),
             const SizedBox(
