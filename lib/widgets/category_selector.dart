@@ -9,16 +9,14 @@ class CategorySelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: SelectableRow(
-        textList: [
-          'food',
-          'drink',
-          // 'vapes',
-          'other',
-        ],
-        type: 'category',
-      ),
+    return const SelectableRow(
+      textList: [
+        'food',
+        'drink',
+        // 'vapes',
+        'other',
+      ],
+      type: 'category',
     );
   }
 }

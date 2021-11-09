@@ -52,7 +52,10 @@ class UserAvatar extends StatelessWidget {
               fit: BoxFit.fitWidth,
               errorBuilder: (context, child, error) {
                 debugPrint('error: $error');
-                return const Icon(Icons.person_outline);
+                return Icon(
+                  Icons.person_outline,
+                  size: radius / 2,
+                );
               },
             ),
           )),

@@ -70,3 +70,11 @@ class _ViewSelectorTextState extends State<ViewSelectorText> {
     });
   }
 }
+
+class SelectedRecipeViewNotifier extends ChangeNotifier {
+  int pageIndex = 0;
+  void changeIndex(int index) {
+    pageIndex = index;
+    notifyListeners();
+  }
+}

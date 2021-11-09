@@ -16,7 +16,7 @@ class CommentsView extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _recipe = useProvider(recipeProvider);
+    final _recipe = useProvider(recipeEntriesProvider);
     final _user = useProvider(userProvider);
     final _view = useProvider(homeViewProvider);
     return Stack(

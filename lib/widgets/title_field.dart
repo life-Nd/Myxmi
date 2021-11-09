@@ -11,7 +11,7 @@ class TitleField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 8, bottom: 2, right: 20, left: 20),
       child: Consumer(builder: (_, watch, child) {
-        final _recipe = watch(recipeProvider);
+        final _recipe = watch(recipeEntriesProvider);
         return TextField(
           controller: _recipe.titleCtrl,
           decoration: InputDecoration(

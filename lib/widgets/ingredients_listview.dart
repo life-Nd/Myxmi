@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/screens/add_infos_to_recipe.dart';
 import '../main.dart';
 import 'product_details.dart';
+import 'recipe_details.dart';
 
 class IngredientsInRecipeListView extends HookWidget {
   final Map ingredients;
@@ -13,7 +13,7 @@ class IngredientsInRecipeListView extends HookWidget {
   Widget build(BuildContext context) {
     final List _keys = ingredients.keys.toList();
     final _change = useState<bool>(false);
-    final _recipe = useProvider(recipeProvider);
+    final _recipe = useProvider(recipeDetailsProvider);
     final _user = useProvider(userProvider);
     final _checkedIngredients = _recipe.checkedIngredients;
     bool _isText;

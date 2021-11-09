@@ -15,7 +15,7 @@ class DurationField extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.only(left: 60, right: 60),
             child: Consumer(builder: (_, watch, child) {
-              final _recipe = watch(recipeProvider);
+              final _recipe = watch(recipeEntriesProvider);
               return TextField(
                 controller: _recipe.durationCtrl,
                 keyboardType: TextInputType.number,

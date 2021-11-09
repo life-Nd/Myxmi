@@ -11,8 +11,8 @@ import '../main.dart';
 final _productEntryProvider = ChangeNotifierProvider<_ProductEntryProvider>(
     (ref) => _ProductEntryProvider());
 
-TextEditingController _nameCtrl = TextEditingController();
-TextEditingController _quantityCtrl = TextEditingController();
+final TextEditingController _nameCtrl = TextEditingController();
+final TextEditingController _quantityCtrl = TextEditingController();
 DateTime _expiration;
 int _mesureValue = 0;
 String _mesureType = 'g';
@@ -73,7 +73,8 @@ class AddNewProduct extends HookWidget {
                 _mesureType = null;
                 _product.type = null;
                 _expiration = null;
-                _quantityCtrl = null;
+                _quantityCtrl.clear();
+                
 
                 Navigator.of(context).pop();
               }

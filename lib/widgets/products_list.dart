@@ -22,11 +22,11 @@ class ProductsList extends StatefulWidget {
 
 class _ProductsListState extends State<ProductsList> {
   final ScrollController _ctrl = ScrollController();
+
   Future<List> getProductDetails({String id}) async {
     final SharedPreferences _prefs = await SharedPreferences.getInstance();
     final _stringList = _prefs.getStringList(id);
     debugPrint('_stringList: $_stringList');
-
     return _stringList;
   }
 
@@ -90,13 +90,15 @@ class _ProductsListState extends State<ProductsList> {
                               if (snapshot.hasData) {
                                 if (snapshot.data[0] != null ||
                                     snapshot.data[0] != 'null') {
-                                  widget.products[index].total =
-                                      snapshot.data[0] as String;
+                                      debugPrint(
+                                      'snapshot.data[0]: ${snapshot.data[0]}');
+                                  widget.products[index].left = '';
+                                  // snapshot.data[0] as String;
                                 } else {
-                                  widget.products[index].total = '0';
+                                  widget.products[index].left = '0';
                                 }
-                                widget.products[index].expiration =
-                                    snapshot.data[1] as String;
+                                widget.products[index].expiration = '1';
+                                // snapshot.data[1] as String;
                               }
                               return Expanded(
                                 child: widget.type == 'AddProcuctsToRecipe'

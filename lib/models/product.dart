@@ -3,13 +3,13 @@ class ProductModel {
   static const _ingredientType = 'ingredientType';
   static const _mesureType = 'mesureType';
   static const _name = 'name';
-  static const _total = 'total';
+  static const _left = 'left';
   String productId;
   String expiration;
   String ingredientType;
   String mesureType;
   String name;
-  String total;
+  String left;
 
   ProductModel(
       {this.productId,
@@ -17,7 +17,7 @@ class ProductModel {
       this.ingredientType,
       this.mesureType,
       this.name,
-      this.total});
+      this.left});
 
   factory ProductModel.fromSnapshot(
       {Map<String, dynamic> snapshot, String keyIndex}) {
@@ -27,7 +27,7 @@ class ProductModel {
       ingredientType: snapshot[_ingredientType] as String,
       mesureType: snapshot[_mesureType] as String,
       name: snapshot[_name] as String,
-      total: snapshot[_total] as String,
+      left: snapshot[_left] as String,
     );
   }
 
@@ -37,7 +37,7 @@ class ProductModel {
       _ingredientType: ingredientType,
       _mesureType: mesureType,
       _name: name,
-      _total: total,
+      _left: left,
     };
   }
 }

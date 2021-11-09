@@ -1,26 +1,25 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/recipes.dart';
-import 'package:myxmi/screens/add_infos_to_recipe.dart';
 import 'package:myxmi/screens/selected_recipe.dart';
 import '../main.dart';
-import 'add_favorite.dart';
-import 'rating_stars.dart';
+import 'recipe_details.dart';
+import 'recipe_image.dart';
 import 'recipe_tile_details.dart';
-import 'recipe_tile_image.dart';
 
 class RecipeTile extends StatelessWidget {
   const RecipeTile({@required this.recipes, @required this.index, Key key})
       : super(key: key);
   final List<RecipeModel> recipes;
   final int index;
+
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (_, watch, __) {
       final _user = watch(userProvider);
-      final _recipeProvider = watch(recipeProvider);
+      final _recipeProvider = watch(recipeDetailsProvider);
       final _recipe = recipes[index];
-      final _size = MediaQuery.of(context).size;
       _recipe.isLiked = false;
       if (_user?.account?.uid != null && _recipe.likes != null) {
         final _uid = _user?.account?.uid;
@@ -29,51 +28,16 @@ class RecipeTile extends StatelessWidget {
       }
       return InkWell(
         onTap: () {
-          _recipeProvider.image = _recipe.imageUrl != null
-              ? Image.network(
-                  _recipe.imageUrl,
-                  width: _size.width,
-                  height: _size.height,
-                  fit: BoxFit.fitWidth,
-                  cacheWidth: 1000,
-                  cacheHeight: 1000,
-                )
-              : Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Opacity(
-                      opacity: 0.3,
-                      child: _recipe.subCategory != null
-                          ? Image.asset(
-                              'assets/${_recipe.subCategory}.jpg',
-                              fit: BoxFit.fitWidth,
-                              height: _size.height,
-                              width: _size.width,
-                              cacheWidth: 1000,
-                              cacheHeight: 1000,
-                              colorBlendMode: BlendMode.color,
-                            )
-                          : const Icon(
-                              Icons.no_photography,
-                              color: Colors.red,
-                            ),
-                    ),
-                    Container(
-                      width: _size.width,
-                      height: _size.height,
-                      alignment: Alignment.center,
-                      child: const Icon(
-                        Icons.no_photography,
-                        color: Colors.red,
-                        size: 40,
-                      ),
-                    ),
-                  ],
-                );
           _recipeProvider.recipe = _recipe;
+          _recipeProvider.image = RecipeImage(
+            recipe: _recipe,
+            fitWidth: true,
+          );
           _recipeProvider.suggestedRecipes = recipes;
           Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => const SelectedRecipe()),
+            MaterialPageRoute(
+              builder: (_) => const SelectedRecipe(),
+            ),
           );
         },
         child: Container(
@@ -82,6 +46,7 @@ class RecipeTile extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             gradient: LinearGradient(
               colors: [
+                Colors.grey.shade600,
                 Theme.of(context).cardColor,
                 Theme.of(context).scaffoldBackgroundColor,
               ],
@@ -91,30 +56,13 @@ class RecipeTile extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Expanded(
-                child: SizedBox(
-                  width: _size.width,
-                  child: Stack(
-                    children: [
-                      Hero(
-                        tag: _recipe.recipeId,
-                        child: RecipeTileImage(
-                          recipe: _recipe,
-                        ),
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          AddFavoriteButton(recipe: _recipe),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: RatingStars(
-                              stars: _recipe.stars ?? '0.0',
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                  child: RecipeImage(
+                    recipe: _recipe,
                   ),
                 ),
               ),

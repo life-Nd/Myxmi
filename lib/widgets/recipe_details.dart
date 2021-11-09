@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/instructions.dart';
+import 'package:myxmi/providers/recipe_details.dart';
 import 'package:myxmi/screens/selected_recipe.dart';
 import 'package:sizer/sizer.dart';
 import 'comments_view.dart';
@@ -9,6 +10,9 @@ import 'ingredients_listview.dart';
 import 'no_details.dart';
 import 'steps_listview.dart';
 import 'view_selector_text.dart';
+
+final recipeDetailsProvider = ChangeNotifierProvider<RecipeDetailsProvider>(
+    (_) => RecipeDetailsProvider());
 
 class RecipeDetails extends StatefulWidget {
   final InstructionsModel instructions;
@@ -29,15 +33,16 @@ class _RecipeDetailsState extends State<RecipeDetails> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('building RecipeDetails');
     return Consumer(builder: (context, watch, child) {
       final _selectedView = watch(selectedRecipeView);
       return Column(
         children: [
           _ViewsSelector(
+            pageCtrl: pageController,
             ingredientsLength: widget?.instructions?.ingredients?.length,
             stepsLength: widget?.instructions?.steps?.length,
             reviewsLength: widget?.instructions?.reviews?.length,
-            pageCtrl: pageController,
           ),
           SizedBox(
             height: 70.h,
@@ -84,6 +89,7 @@ class _ViewsSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('building _viewselector');
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [

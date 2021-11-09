@@ -16,12 +16,14 @@ class SimilarRecipes extends StatelessWidget {
       alignment: Alignment.bottomLeft,
       padding: const EdgeInsets.only(left: 10),
       child: ListView.builder(
+        shrinkWrap: true,
         scrollDirection: Axis.horizontal,
         itemCount: suggestedRecipes.length,
         itemBuilder: (_, int index) {
           debugPrint('suggestedRecipes: ${suggestedRecipes[index]}');
           return SizedBox(
-            width: 40.w,
+            width: 44.w,
+            height: 44.h,
             child: RecipeTile(
               recipes: suggestedRecipes,
               index: index,

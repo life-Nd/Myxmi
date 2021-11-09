@@ -28,7 +28,7 @@ class AddRecipeInstructions extends StatelessWidget {
           },
         ),
         title: Consumer(builder: (_, watch, child) {
-          final _recipe = watch(recipeProvider);
+          final _recipe = watch(recipeEntriesProvider);
           return Text('${'instructionsFor'.tr()}: ${_recipe.recipe.title}');
         }),
         actions: [
@@ -37,7 +37,7 @@ class AddRecipeInstructions extends StatelessWidget {
       ),
       drawer: SafeArea(
         child: Consumer(builder: (_, watch, child) {
-          final _recipe = watch(recipeProvider);
+          final _recipe = watch(recipeEntriesProvider);
           return Drawer(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -67,13 +67,19 @@ class AddRecipeInstructions extends StatelessWidget {
                 Expanded(
                   child: _recipe.recipe.ingredientsCount != null
                       ? ListView.builder(
-                          itemCount: int.parse(_recipe.recipe.ingredientsCount),
+                          itemCount: _recipe.recipe.ingredientsCount.length,
                           itemBuilder: (_, int index) {
                             final List _keys =
                                 _recipe.composition.keys.toList();
                             final String _keyIndex = '${_keys[index]}';
+                            debugPrint(
+                                '_recipe.composition[_keyIndex]: ${_recipe.composition[_keyIndex]['name']}');
+
+                            final String _nameKey =
+                                '${_recipe.composition[_keyIndex]['name']}';
                             final String _name =
-                                '${_keyIndex[0]?.toUpperCase()}${_keyIndex?.substring(1, _keyIndex?.length)}';
+                                // '${_recipe.composition[_keyIndex]['name']}';
+                                '${_nameKey.toString()[0]?.toUpperCase()}${_nameKey.toString().substring(1, _nameKey?.length)}';
                             return Card(
                               color: Theme.of(context).scaffoldBackgroundColor,
                               child: ListTile(
@@ -87,7 +93,7 @@ class AddRecipeInstructions extends StatelessWidget {
                                       ),
                                     ),
                                     Text(
-                                      ' ${_recipe.composition[_keyIndex]}',
+                                      ' ${_recipe.composition[_keyIndex]['value']} ${_recipe.composition[_keyIndex]['type']}',
                                     )
                                   ],
                                 ),
@@ -107,7 +113,7 @@ class AddRecipeInstructions extends StatelessWidget {
         }),
       ),
       body: Consumer(builder: (_, watch, child) {
-        final _recipe = watch(recipeProvider);
+        final _recipe = watch(recipeEntriesProvider);
         final _image = watch(imageProvider);
         final List _steps = _recipe?.instructions?.steps;
         final int _keys = _steps?.length != null ? _steps.length : 0;

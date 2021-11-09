@@ -16,7 +16,7 @@ class RecipeTileDetails extends HookWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.only(left: 10.0, bottom: 10, top: 10),
+      padding: const EdgeInsets.only(left: 10.0, bottom: 5, top: 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -60,7 +60,6 @@ class RecipeTileDetails extends HookWidget {
               )
             ],
           ),
-          //     const Spacer(),
         ],
       ),
     );

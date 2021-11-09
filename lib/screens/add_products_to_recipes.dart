@@ -6,6 +6,7 @@ import 'package:myxmi/screens/products.dart';
 import 'package:myxmi/widgets/next_button.dart';
 import 'add_instructions_to_recipe.dart';
 
+
 class AddNewProductsToRecipe extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class AddNewProductsToRecipe extends StatelessWidget {
         ),
         title: Consumer(
           builder: (_, watch, child) {
-            final _recipe = watch(recipeProvider);
+            final _recipe = watch(recipeEntriesProvider);
             return Row(
               children: [
                 Text('${'productsIn'.tr()}: '),
@@ -48,7 +49,7 @@ class AddNewProductsToRecipe extends StatelessWidget {
               padding: const EdgeInsets.only(
                   top: 8.0, bottom: 20.0, right: 10, left: 10),
               child: Consumer(builder: (_, watch, child) {
-                final _recipe = watch(recipeProvider);
+                final _recipe = watch(recipeEntriesProvider);
                 return Text(
                   '± ${_recipe.estimatedWeight.toStringAsFixed(3)} g',
                   style: const TextStyle(fontWeight: FontWeight.bold),

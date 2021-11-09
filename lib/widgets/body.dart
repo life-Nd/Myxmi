@@ -16,6 +16,7 @@ class Body extends StatelessWidget {
   Widget _build(int _view, String _uid) {
     final bool isSignedIn = _uid != null;
     Widget child;
+
     switch (_view) {
       // Show the menu or the recipes found in search
       case 0:
@@ -28,27 +29,10 @@ class Body extends StatelessWidget {
 
       case 1:
         // Show stream of recipes filtered with the user id
-        return child = isSignedIn
-            ? Recipes(
-                showAutoCompleteField: true,
-                // recipesPath: RECIPESBY.creatorUid,
-                path: FirebaseFirestore.instance
-                    .collection('Recipes')
-                    .where('uid', isEqualTo: _uid)
-                    .snapshots(),
-              )
-            : SignIn();
+        return child = isSignedIn ? const _MyRecipes() : SignIn();
       case 2:
         // Show stream of recipes liked by the user id
-
-        return child = isSignedIn
-            ? Recipes(
-                showAutoCompleteField: true,
-                path: FirebaseFirestore.instance
-                    .collection('Recipes')
-                    .where('likes.$_uid', isEqualTo: true)
-                    .snapshots())
-            : SignIn();
+        return child = isSignedIn ? const _Favorites() : SignIn();
       case 3:
         // Show stream of products under the user id
         return child =
@@ -95,5 +79,43 @@ class _HomePageBody extends HookWidget {
         child: const Menu(),
       );
     }
+  }
+}
+
+class _MyRecipes extends HookWidget {
+  const _MyRecipes({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final _user = useProvider(userProvider);
+    final String _uid = _user?.account?.uid;
+    return Recipes(
+      showAutoCompleteField: true,
+      // recipesPath: RECIPESBY.creatorUid,
+      path: FirebaseFirestore.instance
+          .collection('Recipes')
+          .where('uid', isEqualTo: _uid)
+          .snapshots(),
+    );
+  }
+}
+
+class _Favorites extends HookWidget {
+  const _Favorites({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final _user = useProvider(userProvider);
+    final String _uid = _user?.account?.uid;
+    return Recipes(
+        showAutoCompleteField: true,
+        path: FirebaseFirestore.instance
+            .collection('Recipes')
+            .where('likes.$_uid', isEqualTo: true)
+            .snapshots());
   }
 }

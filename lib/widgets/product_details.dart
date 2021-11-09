@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/product.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../main.dart';
 
 String _expiration;
@@ -20,8 +21,8 @@ class ProductDetails extends StatelessWidget {
         int.parse(product?.expiration?.toString()),
       ));
     }
-    if (product?.total == null) {
-      product.total = '0';
+    if (product?.left == null) {
+      product.left = '0';
     }
 
     return Consumer(builder: (_, watch, child) {
@@ -35,11 +36,61 @@ class ProductDetails extends StatelessWidget {
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // const Text(''),
+              Text('${product.ingredientType.tr()} '),
+              // Text('Quantity in stock: ${product.left} ${product.mesureType}'),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  RawMaterialButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    fillColor: Colors.red,
+                    onPressed: () async {
+                      final SharedPreferences _prefs =
+                          await SharedPreferences.getInstance();
+                      _prefs.setStringList(product.productId,
+                          ['${int.parse(product.left) - 1}', _expiration]);
+                    },
+                    child: const Text(
+                      '-',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                      ),
+                    ),
+                  ),
+                  Card(
+                    child: Text(
+                      '${product.left} ${product.mesureType}',
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                  ),
+                  RawMaterialButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    fillColor: Colors.green,
+                    onPressed: () async {
+                      final SharedPreferences _prefs =
+                          await SharedPreferences.getInstance();
+                      _prefs.setStringList(product.productId,
+                          ['${int.parse(product.left) + 1}', _expiration]);
+                    },
+                    child: const Text(
+                      '+',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               const Text(''),
-              Text('Type: ${product.ingredientType.tr()}'),
-              Text('Quantity in stock: ${product.total} ${product.mesureType}'),
               Text('Expiry Date:  $_expiration'),
-              const Text(''),
             ],
           ),
           trailing: EditCartButton(name: product.name),

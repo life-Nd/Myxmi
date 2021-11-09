@@ -1,9 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/screens/add_infos_to_recipe.dart';
 import 'package:myxmi/screens/creator_recipes.dart';
 import 'package:myxmi/widgets/user_avatar.dart';
+
+import 'recipe_details.dart';
 
 class CreatorCard extends StatefulWidget {
   const CreatorCard({Key key}) : super(key: key);
@@ -15,7 +16,7 @@ class _CreatorCardState extends State<CreatorCard> {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (_, watch, __) {
-      final _recipe = watch(recipeProvider).recipe;
+      final _recipe = watch(recipeDetailsProvider).recipe;
       return GestureDetector(
         onTap: () {
           Navigator.of(context).push(
@@ -44,7 +45,7 @@ class _CreatorCardState extends State<CreatorCard> {
                 radius: 77,
               )
             else
-              const Icon(Icons.person),
+              const Icon(Icons.person, size: 35),
             const SizedBox(
               width: 20,
             ),
@@ -52,38 +53,7 @@ class _CreatorCardState extends State<CreatorCard> {
               Text(_recipe?.username)
             else
               Text('noName'.tr()),
-            // subtitle: Row(
-            //   children: [
-            //     const Text(
-            //       '0 ',
-            //       style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-            //     ),
-            //     Text(
-            //       'followers'.tr(),
-            //     ),
-            //   ],
-            // ),
-          ]
-
-              // trailing: 'a' == 'a'
-              //     ? InkWell(
-              //         onTap: () {},
-              //         child: Text(
-              //           'follow'.tr(),
-              //           style: TextStyle(
-              //               color: Theme.of(context).scaffoldBackgroundColor,
-              //               fontSize: 19,
-              //               fontWeight: FontWeight.w400),
-              //         ),
-              //       )
-              //     : InkWell(
-              //         onTap: () {},
-              //         child: Text(
-              //           'following'.tr(),
-              //           style: const TextStyle(color: Colors.green),
-              //         ),
-              //       ),
-              ),
+          ]),
         ),
       );
     });

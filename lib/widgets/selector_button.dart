@@ -12,7 +12,7 @@ class SelectorButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (_, watch, child) {
-      final _recipe = watch(recipeProvider);
+      final _recipe = watch(recipeEntriesProvider);
       final String _key = type == 'category'
           ? _recipe.recipe.category
           : type == 'subcategory'
@@ -20,7 +20,7 @@ class SelectorButton extends StatelessWidget {
               : _recipe.recipe.diet;
       final bool _selected = _key == value;
       return RawMaterialButton(
-        padding: const EdgeInsets.only(left: 8, right: 8),
+        // padding: const EdgeInsets.only(left: 8, right: 8),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         fillColor: _selected ? Colors.green : Theme.of(context).cardColor,
         onPressed: () {

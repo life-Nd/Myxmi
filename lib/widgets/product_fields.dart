@@ -13,31 +13,33 @@ class ProductField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String _name =
-        '${product.name[0]?.toUpperCase()}${product.name?.substring(1, product.name?.length)}';
+    final String _name = product.name != null
+        ? '${product.name[0]?.toUpperCase()}${product.name?.substring(1, product.name?.length)}'
+        : '';
+    debugPrint('product.productId: ${product.productId}');
+    debugPrint('name: $_name');
     return Consumer(
       builder: (_, watch, __) {
-        final _recipe = watch(recipeProvider);
+        final _recipe = watch(recipeEntriesProvider);
+        debugPrint('_recipe.composition: ${_recipe.composition}');
+        debugPrint(
+            '_recipe.composition: ${_recipe.composition[product.productId]}');
+        debugPrint('product?.left: ${product?.left}');
         textCtrl = TextEditingController(
-            text: _recipe.composition[product.name] != null
-                ? _recipe.composition[product.name]
+            text: _recipe.composition.isNotEmpty &&
+                    product.productId.isNotEmpty &&
+                    _recipe.composition[product.productId] != null
+                ? _recipe.composition[product.productId]['value']
                     .toString()
                     .split(' ')
                     .toList()[0]
                 : '');
-        // if (textCtrl.text.isEmpty) {
-        // _remainder = '${int.parse(product?.total) - int.parse(textCtrl?.text)}';
-        // }
-        if (product?.total == null) {
-          product.total = '0';
+        if (product?.left == null || product?.left == '') {
+          product.left = '0';
         }
-
-        // _remainder = '${int.parse(product?.total) - int.parse(textCtrl?.text)}';
-
         return Column(
           children: [
             ListTile(
-              // visualDensity: VisualDensity.compact,
               leading: Text(
                 _name,
                 style: const TextStyle(
@@ -59,7 +61,8 @@ class ProductField extends StatelessWidget {
                   },
                   onChanged: (value) {
                     _recipe.changeComposition(
-                        key: product.name,
+                        name: product.name,
+                        key: product.productId,
                         value: value,
                         type: product.mesureType);
                     _recipe.changeQuantity(
@@ -75,10 +78,10 @@ class ProductField extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     errorText:
-                        '${product.total} ${product.mesureType} ${'left'.tr()}',
+                        '${product.left} ${product.mesureType} ${'left'.tr()}',
                     errorStyle: TextStyle(
                       fontSize: 12,
-                      color: int.parse(product.total.toString()) < 1
+                      color: int.parse(product.left.toString()) < 1
                           ? Colors.red
                           : Colors.grey.shade700,
                     ),
@@ -86,7 +89,7 @@ class ProductField extends StatelessWidget {
                     errorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
                       borderSide: BorderSide(
-                        color: int.parse(product.total.toString()) < 1
+                        color: int.parse(product.left.toString()) < 1
                             ? Colors.red
                             : Colors.grey.shade700,
                       ),
@@ -101,10 +104,6 @@ class ProductField extends StatelessWidget {
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
-              // subtitle: Text(
-              //   '${product.total} ${'left'.tr()}',
-              //   style: const TextStyle(fontWeight: FontWeight.bold),
-              // ),
             ),
             Divider(color: Colors.grey.shade700)
           ],

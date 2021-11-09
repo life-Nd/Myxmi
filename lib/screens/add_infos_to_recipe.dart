@@ -10,12 +10,12 @@ import 'package:myxmi/widgets/portions_field.dart';
 import 'package:myxmi/widgets/subcategory_selector.dart';
 import 'package:myxmi/widgets/title_field.dart';
 import 'package:sizer/sizer.dart';
-import '../providers/recipe.dart';
+import '../providers/recipe_entries.dart';
 import 'add_products_to_recipes.dart';
 import 'home.dart';
 
-final recipeProvider =
-    ChangeNotifierProvider<RecipeProvider>((ref) => RecipeProvider());
+final recipeEntriesProvider = ChangeNotifierProvider<RecipeEntriesProvider>(
+    (ref) => RecipeEntriesProvider());
 
 List steps = [];
 
@@ -28,7 +28,7 @@ class AddInfosToRecipe extends StatelessWidget {
         slivers: [
           SliverAppBar(
             leading: Consumer(builder: (context, watch, child) {
-              final _recipe = watch(recipeProvider);
+              final _recipe = watch(recipeEntriesProvider);
               return IconButton(
                 alignment: Alignment.topLeft,
                 icon: const Icon(Icons.arrow_back_ios),
@@ -95,7 +95,7 @@ class AddInfosToRecipe extends StatelessWidget {
                 const PortionsField(),
                 const SizedBox(height: 4),
                 SizedBox(
-                  height: 7.h,
+                  height: 10.h,
                   width: 100.w,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -106,7 +106,7 @@ class AddInfosToRecipe extends StatelessWidget {
                   ),
                 ),
                 Consumer(builder: (_, watch, __) {
-                  final _recipe = watch(recipeProvider);
+                  final _recipe = watch(recipeEntriesProvider);
                   return (_recipe.recipe.category != null &&
                           _recipe.recipe.category != 'other')
                       ? Center(

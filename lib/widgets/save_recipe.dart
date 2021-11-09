@@ -15,15 +15,13 @@ import '../screens/add_infos_to_recipe.dart';
 class SaveButton extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    
     final ProgressDialog pr = ProgressDialog(context: context);
-    final _recipe = useProvider(recipeProvider);
+    final _recipe = useProvider(recipeEntriesProvider);
     final _image = useProvider(imageProvider);
     final _user = useProvider(userProvider);
     debugPrint(
         '_recipe.instructions.ingredients: ${_recipe.instructions.ingredients}');
 
-        
     return RawMaterialButton(
       onPressed: _recipe.recipe.title != null
           ? () async {
@@ -40,10 +38,23 @@ class SaveButton extends HookWidget {
               _recipe.instructions.uid = _user.account.uid;
               _recipe.recipe.username = _user.account.displayName;
               _recipe.recipe.userphoto = _user.account.photoURL;
-              debugPrint(
-                  '_recipe?.recipe.subCategory:${_recipe?.recipe?.subCategory}');
-              // final SharedPreferences _prefs =
-              //     await SharedPreferences.getInstance();
+              final SharedPreferences _prefs =
+                  await SharedPreferences.getInstance();
+              final List _keys = _recipe.instructions.ingredients.keys.toList();
+              for (int i = 0; i < _keys.length; i++) {
+                debugPrint('i: ${_keys[i]}');
+                debugPrint(
+                    '_recipe.instructions.ingredients[i]: ${_recipe.instructions.ingredients[_keys[i]]}');
+                final List _product = _prefs.getStringList(_keys[i] as String);
+                debugPrint('_product: $_product');
+                if (_product != null) {
+                  final double _updatedProduct =
+                      double.parse(_product[0] as String) - 1;
+                  _prefs.setStringList(_keys[i] as String,
+                      ['$_updatedProduct', _product[1] as String]);
+                  debugPrint('_updatedProduct: $_updatedProduct');
+                }
+              }
 
               _recipe.recipe.made = '${DateTime.now().millisecondsSinceEpoch}';
               if (_recipe.recipe.category == 'other') {
@@ -60,6 +71,8 @@ class SaveButton extends HookWidget {
                 });
                 debugPrint(
                     '_recipe.instructions.ingredients: ${_recipe.instructions.ingredients}');
+                debugPrint(
+                    '_recipe.instructions.ingredients[i]: ${_recipe.instructions.ingredients.keys}');
               } else {
                 await saveRecipe(_recipe.recipe.toMap()).then((value) =>
                     saveInstructions(
@@ -67,15 +80,17 @@ class SaveButton extends HookWidget {
               }
               // TODO add the function to substract the usedCount and update the sharedPreferences
               for (int i = 0;
-                  i < _recipe.instructions.ingredients.length;
+                  i < _recipe.instructions.ingredients.keys.length;
                   i++) {
-                debugPrint(
-                    '_recipe.instructions.ingredients[i]: ${_recipe.instructions.ingredients}');
-                // // // final List _product = _prefs.getStringList(
-                // // //     _recipe.instructions.ingredients. as String);
-                // // final double _updatedProduct =
-                // //     double.parse(_product[0] as String) - 1;
-                // debugPrint('_updatedProduct: $_updatedProduct');
+                debugPrint('i: $i');
+                final List _product = _prefs.getStringList(
+                    _recipe.instructions.ingredients[i] as String);
+                final double _updatedProduct =
+                    double.parse(_product[0] as String) - 1;
+                _prefs.setStringList(
+                    _recipe.instructions.ingredients[i] as String,
+                    ['$_updatedProduct', _product[1] as String]);
+                debugPrint('_updatedProduct: $_updatedProduct');
               }
 
               pr.close();

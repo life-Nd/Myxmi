@@ -1,65 +1,111 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/screens/add_infos_to_recipe.dart';
+import 'package:myxmi/models/recipes.dart';
+import 'package:sizer/sizer.dart';
 import 'add_favorite.dart';
 import 'add_reviews.dart';
 import 'rating_stars.dart';
 
-class RecipeImage extends StatefulWidget {
-  final double height;
-  final BorderRadius borderRadius;
-  const RecipeImage({@required this.height, @required this.borderRadius});
-  @override
-  State<StatefulWidget> createState() => _RecipeImageState();
-}
+class RecipeImage extends StatelessWidget {
+  final RecipeModel recipe;
+  final bool fitWidth;
+  const RecipeImage({
+    @required this.recipe,
+    this.fitWidth = false,
+  });
 
-class _RecipeImageState extends State<RecipeImage> {
   @override
   Widget build(BuildContext context) {
-    final Size _size = MediaQuery.of(context).size;
-    return Consumer(builder: (context, watch, child) {
-      final _recipe = watch(recipeProvider);
-      return SafeArea(
-        child: SizedBox(
-          width: _size.width,
-          height: widget.height,
-          child: Stack(
-            children: [
-              ClipRRect(
-                borderRadius: widget.borderRadius,
-                child: InteractiveViewer(
-                  panEnabled: false,
-                  child: _recipe.image,
+    return Consumer(
+      builder: (context, watch, child) {
+        final _recipe = recipe;
+
+        return Stack(
+          children: [
+            _RecipeImageClip(
+              fitWidth: fitWidth,
+              imageUrl: _recipe.imageUrl,
+              subCategory: _recipe.subCategory,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Flexible(child: AddFavoriteButton(recipe: _recipe)),
+                const Spacer(),
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => AddReviews(),
+                      ),
+                    );
+                  },
+                  child: RatingStars(
+                    stars: _recipe.stars ?? '0.0',
+                  ),
                 ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Expanded(
-                    child: AddFavoriteButton(
-                      recipe: _recipe.recipe,
-                      // liked: _recipe.recipe.liked,
-                    ),
-                  ),
-                  const Spacer(),
-                  InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => AddReviews(),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _RecipeImageClip extends HookWidget {
+  final String imageUrl;
+  final String subCategory;
+  final bool fitWidth;
+  const _RecipeImageClip({
+    @required this.imageUrl,
+    @required this.subCategory,
+    @required this.fitWidth,
+  });
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: imageUrl != null
+          ? Image.network(
+              imageUrl,
+              // fit: BoxFit.fitWidth,
+              fit: fitWidth ? BoxFit.fitWidth : BoxFit.values[4],
+              cacheWidth: 1000,
+              cacheHeight: 1000,
+              height: 100.h,
+              width: 100.w,
+            )
+          : Stack(
+              alignment: Alignment.center,
+              children: [
+                Opacity(
+                  opacity: 0.3,
+                  child: subCategory != null
+                      ? Image.asset(
+                          'assets/$subCategory.jpg',
+                          fit: BoxFit.fitWidth,
+                          cacheWidth: 1000,
+                          cacheHeight: 1000,
+                          colorBlendMode: BlendMode.color,
+                        )
+                      : const Icon(
+                          Icons.no_photography,
+                          color: Colors.red,
                         ),
-                      );
-                    },
-                    child: RatingStars(
-                      stars: _recipe.recipe.stars ?? '0.0',
-                    ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  child: const Icon(
+                    Icons.no_photography,
+                    color: Colors.red,
+                    size: 40,
                   ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      );
-    });
+                ),
+              ],
+            ),
+    );
   }
 }

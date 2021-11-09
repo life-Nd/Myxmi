@@ -3,39 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:myxmi/models/instructions.dart';
 import 'package:myxmi/models/recipes.dart';
 
-class RecipeProvider extends ChangeNotifier {
+class RecipeEntriesProvider extends ChangeNotifier {
   RecipeModel recipe = RecipeModel();
-  List<RecipeModel> suggestedRecipes = [];
-  // List<RecipeModel> recipes = [];
   InstructionsModel instructions =
       InstructionsModel(ingredients: {}, steps: []);
-  final List checkedIngredients = [];
-  final List checkedSteps = [];
   Map<String, double> quantity = {};
   Map composition = {};
   double estimatedWeight = 0.0;
   String actualWeight = '';
   double difficultyValue = 0.0;
-  int pageIndex = 0;
-  Widget image;
-  PageController pageController = PageController();
+
   final TextEditingController titleCtrl = TextEditingController();
   final TextEditingController durationCtrl = TextEditingController();
   final TextEditingController portionsCtrl = TextEditingController();
-
-  void changePageController(int index) {
-    pageController.jumpToPage(index);
-    pageIndex = index;
-    notifyListeners();
-  }
-
-  Widget imageViewer({@required Widget newImage}) {
-    return image = newImage;
-  }
-
-  void like({bool value, String uid}) {
-    recipe.likes[uid] = value;
-  }
 
   void changeTitle() {
     recipe.title = titleCtrl.text;
@@ -82,8 +62,15 @@ class RecipeProvider extends ChangeNotifier {
   }
 
   void changeComposition(
-      {@required String key, @required String type, @required String value}) {
-    composition[key] = '$value $type';
+      {@required String key,
+      @required String name,
+      @required String type,
+      @required String value}) {
+    composition[key] = {
+      'name': name,
+      'type': type,
+      'value': value,
+    };
     recipe.ingredientsCount = '${composition.keys.toList().length}';
   }
 
@@ -125,10 +112,10 @@ class RecipeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addProduct({@required Map ingredient}) {
-    instructions.ingredients = ingredient;
-    notifyListeners();
-  }
+  // void addProduct({@required Map ingredient}) {
+  //   instructions.ingredients = ingredient;
+  //   notifyListeners();
+  // }
 
   void saveRecipeToDb() {
     recipe.toMap();
@@ -143,23 +130,12 @@ class RecipeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void toggleIngredient(dynamic key) {
-    final bool _checked = checkedIngredients.contains(key);
-    _checked ? checkedIngredients.remove(key) : checkedIngredients.add(key);
-  }
-
-  void toggleStep(dynamic key) {
-    final bool _checked = checkedSteps.contains(key);
-    _checked ? checkedSteps.remove(key) : checkedSteps.add(key);
-  }
-
   void reset() {
     recipe = RecipeModel();
     instructions = InstructionsModel(ingredients: {}, steps: []);
     estimatedWeight = 0.0;
     difficultyValue = 0.0;
     actualWeight = '';
-    pageIndex = 0;
     titleCtrl.clear();
     durationCtrl.clear();
     portionsCtrl.clear();
@@ -167,13 +143,3 @@ class RecipeProvider extends ChangeNotifier {
     composition.clear();
   }
 }
-
-class SelectedRecipeViewNotifier extends ChangeNotifier {
-  int pageIndex = 0;
-  void changeIndex(int index) {
-    pageIndex = index;
-    notifyListeners();
-  }
-}
-
-// class CheckedIngredientsProvider 

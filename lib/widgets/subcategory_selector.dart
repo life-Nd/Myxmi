@@ -14,7 +14,7 @@ class SubCategorySelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (_, watch, child) {
-      final _recipe = watch(recipeProvider);
+      final _recipe = watch(recipeEntriesProvider);
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [

@@ -15,7 +15,7 @@ class PortionsField extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.only(left: 100, right: 100),
             child: Consumer(builder: (_, watch, child) {
-              final _recipe = watch(recipeProvider);
+              final _recipe = watch(recipeEntriesProvider);
               return TextField(
                 controller: _recipe.portionsCtrl,
                 keyboardType: TextInputType.number,

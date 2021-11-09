@@ -5,7 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/main.dart';
-import 'package:myxmi/screens/add_infos_to_recipe.dart';
+import 'recipe_details.dart';
 
 double _stars = 0;
 TextEditingController _msgCtrl = TextEditingController();
@@ -13,7 +13,7 @@ TextEditingController _msgCtrl = TextEditingController();
 class AddReviews extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final _recipe = useProvider(recipeProvider);
+    final _recipe = useProvider(recipeDetailsProvider);
     final _user = useProvider(userProvider);
     final String _title = _recipe.recipe.title;
     return Scaffold(

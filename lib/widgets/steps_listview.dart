@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/screens/add_infos_to_recipe.dart';
-
 import '../main.dart';
+import 'recipe_details.dart';
 
 class StepsListView extends HookWidget {
   final List steps;
@@ -11,7 +10,7 @@ class StepsListView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final _change = useState<bool>(false);
-    final _recipe = useProvider(recipeProvider);
+    final _recipe = useProvider(recipeDetailsProvider);
     final _user = useProvider(userProvider);
     final _checkedSteps = _recipe.checkedSteps;
     return ListView.builder(

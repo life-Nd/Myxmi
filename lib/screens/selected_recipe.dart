@@ -4,12 +4,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/instructions.dart';
-import 'package:myxmi/providers/recipe.dart';
 import 'package:myxmi/widgets/creator_card.dart';
 import 'package:myxmi/widgets/recipe_details.dart';
-import 'package:myxmi/widgets/recipe_image.dart';
 import 'package:myxmi/widgets/similar_recipes.dart';
-import 'add_infos_to_recipe.dart';
+import 'package:myxmi/widgets/view_selector_text.dart';
+import 'package:sizer/sizer.dart';
 
 final InstructionsModel _instructions =
     InstructionsModel(ingredients: {}, steps: []);
@@ -18,7 +17,6 @@ final selectedRecipeView = ChangeNotifierProvider(
 );
 
 class SelectedRecipe extends StatefulWidget {
-  static const String route = '/recipe';
   const SelectedRecipe({Key key}) : super(key: key);
   @override
   State<StatefulWidget> createState() => _SelectionRecipeState();
@@ -30,9 +28,10 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
   Widget build(BuildContext context) {
     final ScrollController _ctrl = ScrollController();
     final Size _size = MediaQuery.of(context).size;
+
     return Consumer(
       builder: (_, watch, __) {
-        final _recipe = watch(recipeProvider);
+        final _recipe = watch(recipeDetailsProvider);
         return Scaffold(
           body: CustomScrollView(
             controller: _ctrl,
@@ -61,12 +60,7 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
                 ),
                 flexibleSpace: Opacity(
                   opacity: 0.9,
-                  child: RecipeImage(
-                    height: kIsWeb ? _size.height : _size.height / 2.5,
-                    borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20)),
-                  ),
+                  child: _recipe.image,
                 ),
                 expandedHeight:
                     kIsWeb ? _size.height / 1.3 : _size.height / 2.5,
@@ -75,40 +69,47 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
                 delegate: SliverChildListDelegate.fixed(
                   [
                     const CreatorCard(),
-                    StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-                      stream: FirebaseFirestore.instance
-                          .collection('Instructions')
-                          .doc(_recipe.recipe.recipeId)
-                          .snapshots(),
-                      builder: (context,
-                          AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>>
-                              snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          debugPrint('Loading');
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text('loading'.tr()),
-                              const CircularProgressIndicator(),
-                            ],
-                          );
-                        }
-                        if (snapshot.hasData && snapshot.data.data() != null) {
-                          final DocumentSnapshot<Map<String, dynamic>>
-                              _snapshot = snapshot.data;
-                          _data = _snapshot.data();
-                          _instructions.fromSnapshot(snapshot: _data);
-                        }
-                        return RecipeDetails(instructions: _instructions);
-                      },
+                    SizedBox(
+                      height: 85.h,
+                      child:
+                          StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                        stream: FirebaseFirestore.instance
+                            .collection('Instructions')
+                            .doc(_recipe.recipe.recipeId)
+                            .snapshots(),
+                        builder: (context,
+                            AsyncSnapshot<
+                                    DocumentSnapshot<Map<String, dynamic>>>
+                                snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            debugPrint('Loading');
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('loading'.tr()),
+                                const CircularProgressIndicator(),
+                              ],
+                            );
+                          }
+                          if (snapshot.hasData &&
+                              snapshot.data.data() != null) {
+                            final DocumentSnapshot<Map<String, dynamic>>
+                                _snapshot = snapshot.data;
+                            _data = _snapshot.data();
+                            _instructions.fromSnapshot(snapshot: _data);
+                          }
+                          return RecipeDetails(instructions: _instructions);
+                        },
+                      ),
                     ),
-                    // AdLoader(),
                     ListTile(
                       title: Text('similarRecipes'.tr(),
                           style: const TextStyle(fontSize: 20)),
                     ),
-                    SimilarRecipes(suggestedRecipes: _recipe.suggestedRecipes)
+                    SimilarRecipes(
+                      suggestedRecipes: _recipe.suggestedRecipes,
+                    ),
                   ],
                 ),
               ),
