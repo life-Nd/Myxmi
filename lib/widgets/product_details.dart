@@ -13,90 +13,118 @@ class ProductDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String _name =
-        '${product.name[0]?.toUpperCase()}${product.name?.substring(1, product.name?.length)}';
     if (product?.expiration != null) {
       _expiration = DateFormat('EEEE d MMM , ' 'yyyy')
           .format(DateTime.fromMillisecondsSinceEpoch(
         int.parse(product?.expiration?.toString()),
       ));
     }
-    if (product?.left == null) {
-      product.left = '0';
-    }
-
-    return Consumer(builder: (_, watch, child) {
-      return Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: ListTile(
-          dense: true,
-          title: Center(child: Text(_name)),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // const Text(''),
-              Text('${product.ingredientType.tr()} '),
-              // Text('Quantity in stock: ${product.left} ${product.mesureType}'),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  RawMaterialButton(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    fillColor: Colors.red,
-                    onPressed: () async {
-                      final SharedPreferences _prefs =
-                          await SharedPreferences.getInstance();
-                      _prefs.setStringList(product.productId,
-                          ['${int.parse(product.left) - 1}', _expiration]);
-                    },
-                    child: const Text(
-                      '-',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 30,
-                      ),
-                    ),
-                  ),
-                  Card(
-                    child: Text(
-                      '${product.left} ${product.mesureType}',
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                  ),
-                  RawMaterialButton(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    fillColor: Colors.green,
-                    onPressed: () async {
-                      final SharedPreferences _prefs =
-                          await SharedPreferences.getInstance();
-                      _prefs.setStringList(product.productId,
-                          ['${int.parse(product.left) + 1}', _expiration]);
-                    },
-                    child: const Text(
-                      '+',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 30,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const Text(''),
-              Text('Expiry Date:  $_expiration'),
-            ],
+    return Consumer(
+      builder: (_, watch, child) {
+        final String _name =
+            '${product.name[0]?.toUpperCase()}${product.name?.substring(1, product.name?.length)}';
+        return Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
           ),
-          trailing: EditCartButton(name: product.name),
-        ),
-      );
-    });
+          child: Padding(
+            padding: const EdgeInsets.only(left: 4.0, right: 4.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        _name,
+                        style: const TextStyle(
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                    const Spacer(),
+                    EditCartButton(name: product.name),
+                  ],
+                ),
+                Text('${product.ingredientType.tr()} '),
+                // Text('Quantity in stock: ${product.left} ${product.mesureType}'),
+
+                StatefulBuilder(builder: (_, StateSetter stateSetter) {
+                  final String _productLeft =
+                      product?.left != null ? product.left : '0';
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      RawMaterialButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        fillColor: Colors.red,
+                        onPressed: () async {
+                          product.left = '${int.parse(product.left) - 1}';
+                          changeProductDetails(
+                            expiration: product.expiration,
+                            id: product.productId,
+                            quantity: int.parse(product.left) - 1,
+                          );
+                          stateSetter(() {});
+                        },
+                        child: const Text(
+                          '-',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 30,
+                          ),
+                        ),
+                      ),
+                      Card(
+                        child: Text(
+                          '$_productLeft ${product?.mesureType}',
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                      ),
+                      RawMaterialButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        fillColor: Colors.green,
+                        onPressed: () async {
+                          product.left = '${int.parse(_productLeft) + 1}';
+                          changeProductDetails(
+                              expiration: product.expiration,
+                              id: product.productId,
+                              quantity: int.parse(_productLeft) + 1);
+                          stateSetter(() {});
+                        },
+                        child: const Text(
+                          '+',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 30,
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }),
+                const Text(''),
+                Text('Expiry Date:  $_expiration'),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future changeProductDetails(
+      {int quantity, String expiration, String id}) async {
+    final SharedPreferences _prefs = await SharedPreferences.getInstance();
+    _prefs.setStringList(
+      id,
+      ['$quantity', expiration],
+    );
   }
 }
 

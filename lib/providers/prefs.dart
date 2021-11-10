@@ -51,17 +51,10 @@ class PreferencesProvider extends ChangeNotifier {
     return language = prefs.getString('Language');
   }
 
-  Future _readProductsQuantity() async {
-    final SharedPreferences prefs = await _prefs;
-    final _products = prefs.getString('1637643600000');
-    debugPrint('_productsQuantity: $_products');
-  }
-
   Future readPrefs() {
     final Future _data = Future.wait([
       _readTheme(),
       _readLanguage(),
-      _readProductsQuantity(),
     ]);
     return _data;
   }

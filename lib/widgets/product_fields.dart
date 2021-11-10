@@ -16,19 +16,14 @@ class ProductField extends StatelessWidget {
     final String _name = product.name != null
         ? '${product.name[0]?.toUpperCase()}${product.name?.substring(1, product.name?.length)}'
         : '';
-    debugPrint('product.productId: ${product.productId}');
-    debugPrint('name: $_name');
     return Consumer(
       builder: (_, watch, __) {
         final _recipe = watch(recipeEntriesProvider);
-        debugPrint('_recipe.composition: ${_recipe.composition}');
-        debugPrint(
-            '_recipe.composition: ${_recipe.composition[product.productId]}');
-        debugPrint('product?.left: ${product?.left}');
+        final _isNotEmpty = _recipe.composition.isNotEmpty &&
+            product.productId.isNotEmpty &&
+            _recipe.composition[product.productId] != null;
         textCtrl = TextEditingController(
-            text: _recipe.composition.isNotEmpty &&
-                    product.productId.isNotEmpty &&
-                    _recipe.composition[product.productId] != null
+            text: _isNotEmpty
                 ? _recipe.composition[product.productId]['value']
                     .toString()
                     .split(' ')

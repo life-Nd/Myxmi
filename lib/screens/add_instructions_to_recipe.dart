@@ -72,13 +72,10 @@ class AddRecipeInstructions extends StatelessWidget {
                             final List _keys =
                                 _recipe.composition.keys.toList();
                             final String _keyIndex = '${_keys[index]}';
-                            debugPrint(
-                                '_recipe.composition[_keyIndex]: ${_recipe.composition[_keyIndex]['name']}');
 
                             final String _nameKey =
                                 '${_recipe.composition[_keyIndex]['name']}';
                             final String _name =
-                                // '${_recipe.composition[_keyIndex]['name']}';
                                 '${_nameKey.toString()[0]?.toUpperCase()}${_nameKey.toString().substring(1, _nameKey?.length)}';
                             return Card(
                               color: Theme.of(context).scaffoldBackgroundColor,

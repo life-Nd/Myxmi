@@ -50,21 +50,22 @@ class AddNewProduct extends HookWidget {
                 final SharedPreferences _prefs =
                     await SharedPreferences.getInstance();
                 await _prefs.setStringList(_now, [
-                  _quantityCtrl.text,
+                  _quantityCtrl.text.trim(),
                   _expiration.millisecondsSinceEpoch.toString()
                 ]).then((bool success) {
                   debugPrint('success: $success $_now');
                   return _now;
                 });
+
                 await FirebaseFirestore.instance
                     .collection('Products')
                     .doc(_user.account.uid)
                     .set(
                   {
                     _now: {
-                      'name': _nameCtrl.text.toLowerCase(),
-                      'mesureType': _mesureType,
-                      'ingredientType': _product.type,
+                      'name': _nameCtrl.text.toLowerCase().trim(),
+                      'mesureType': _mesureType.trim(),
+                      'ingredientType': _product.type.trim(),
                     },
                   },
                   SetOptions(merge: true),
@@ -74,7 +75,6 @@ class AddNewProduct extends HookWidget {
                 _product.type = null;
                 _expiration = null;
                 _quantityCtrl.clear();
-                
 
                 Navigator.of(context).pop();
               }

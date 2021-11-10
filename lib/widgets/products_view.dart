@@ -9,7 +9,7 @@ import 'products_list.dart';
 
 TextEditingController _searchProductsCtrl = TextEditingController();
 
-class ProductsView extends StatefulWidget {
+class ProductsView extends StatelessWidget {
   final List<ProductModel> products;
   final String type;
   const ProductsView({
@@ -17,21 +17,16 @@ class ProductsView extends StatefulWidget {
     @required this.products,
     @required this.type,
   }) : super(key: key);
-  @override
-  State<StatefulWidget> createState() => _ProductsViewState();
-}
 
-class _ProductsViewState extends State<ProductsView> {
-  final List<ProductModel> _filteredProducts = [];
-
-  @override
-  void initState() {
-    _searchProductsCtrl = TextEditingController();
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   _searchProductsCtrl = TextEditingController();
+  //   super.initState();
+  // }
 
   List<ProductModel> _filterProducts() {
-    final Iterable _filter = widget.products.asMap().entries.where((entry) {
+    final List<ProductModel> _filteredProducts = [];
+    final Iterable _filter = products.asMap().entries.where((entry) {
       return entry.value.toMap().containsValue(
             _searchProductsCtrl.text.trim().toLowerCase(),
           );
@@ -45,20 +40,20 @@ class _ProductsViewState extends State<ProductsView> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('productview building');
+    debugPrint('--productview building--');
     return StatefulBuilder(
       builder: (context, StateSetter stateSetter) {
-        debugPrint('productview StatefulBuilder building');
+        debugPrint('----productview StatefulBuilder building---');
         return Column(
           children: [
             Row(
               children: [
                 Expanded(
                   child: AutoCompleteProducts(
-                      suggestions: widget.products,
+                      suggestions: products,
                       controller: _searchProductsCtrl,
                       onSubmit: () {
-                        _filteredProducts.clear();
+                        // _filteredProducts.clear();
                         stateSetter(() {});
                       },
                       onClear: () {
@@ -67,7 +62,7 @@ class _ProductsViewState extends State<ProductsView> {
                         stateSetter(() {});
                       }),
                 ),
-                if (widget.type == 'AddProcuctsToRecipe')
+                if (type == 'AddProcuctsToRecipe')
                   Center(
                     child: IconButton(
                       onPressed: () {
@@ -95,9 +90,9 @@ class _ProductsViewState extends State<ProductsView> {
             Expanded(
               child: ProductsList(
                 products: _searchProductsCtrl.text.isEmpty
-                    ? widget.products
+                    ? products
                     : _filterProducts(),
-                type: widget.type,
+                type: type,
               ),
             ),
           ],

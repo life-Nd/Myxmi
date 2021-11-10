@@ -23,13 +23,6 @@ class ProductsList extends StatefulWidget {
 class _ProductsListState extends State<ProductsList> {
   final ScrollController _ctrl = ScrollController();
 
-  Future<List> getProductDetails({String id}) async {
-    final SharedPreferences _prefs = await SharedPreferences.getInstance();
-    final _stringList = _prefs.getStringList(id);
-    debugPrint('_stringList: $_stringList');
-    return _stringList;
-  }
-
   @override
   Widget build(BuildContext context) {
     return widget.products.isNotEmpty
@@ -76,6 +69,7 @@ class _ProductsListState extends State<ProductsList> {
                               color: Colors.white,
                               type: widget.type,
                               products: widget.products,
+                              setState: () => setState(() {}),
                             ),
                           ],
                         ),
@@ -83,37 +77,30 @@ class _ProductsListState extends State<ProductsList> {
                     ),
                     child: Row(
                       children: [
-                        FutureBuilder(
+                        Expanded(
+                          child: FutureBuilder(
                             future: getProductDetails(
                                 id: widget.products[index].productId),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                if (snapshot.data[0] != null ||
-                                    snapshot.data[0] != 'null') {
-                                      debugPrint(
-                                      'snapshot.data[0]: ${snapshot.data[0]}');
-                                  widget.products[index].left = '';
-                                  // snapshot.data[0] as String;
-                                } else {
-                                  widget.products[index].left = '0';
-                                }
-                                widget.products[index].expiration = '1';
-                                // snapshot.data[1] as String;
-                              }
-                              return Expanded(
-                                child: widget.type == 'AddProcuctsToRecipe'
-                                    ? ProductField(
-                                        product: widget.products[index])
-                                    : ProductDetails(
-                                        product: widget.products[index]),
-                              );
-                            }),
+                            builder: (_, AsyncSnapshot<ProductModel> snapshot) {
+                              widget.products[index].left =
+                                  snapshot?.data?.left;
+                              widget.products[index].expiration =
+                                  snapshot?.data?.expiration;
+                              return widget.type == 'AddProcuctsToRecipe'
+                                  ? ProductField(
+                                      product: widget.products[index])
+                                  : ProductDetails(
+                                      product: widget.products[index]);
+                            },
+                          ),
+                        ),
                         if (!_user.onPhone)
                           _EditProductButton(
                             index: index,
                             color: Colors.red,
                             type: widget.type,
                             products: widget.products,
+                            setState: () => setState(() {}),
                           ),
                       ],
                     ),
@@ -130,6 +117,16 @@ class _ProductsListState extends State<ProductsList> {
             ],
           );
   }
+
+  Future<ProductModel> getProductDetails({String id}) async {
+    final Future<SharedPreferences> prefs = SharedPreferences.getInstance();
+    final SharedPreferences _prefs = await prefs;
+    final _stringList = _prefs.getStringList(id);
+    final ProductModel _product = ProductModel();
+    _product.left = _stringList[0];
+    _product.expiration = _stringList[1];
+    return _product;
+  }
 }
 
 class _EditProductButton extends StatelessWidget {
@@ -137,12 +134,14 @@ class _EditProductButton extends StatelessWidget {
   final Color color;
   final String type;
   final List<ProductModel> products;
+  final Function setState;
   const _EditProductButton({
     Key key,
     @required this.index,
     @required this.color,
     @required this.type,
     @required this.products,
+    @required this.setState,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -156,16 +155,20 @@ class _EditProductButton extends StatelessWidget {
             color: color,
             size: 30,
           ),
-          onPressed: () {
-            type == 'EditProducts'
-                ? _delete(
-                    uid: _user?.account?.uid,
-                    productId: products[index].productId)
-                : _hide(
+          onPressed: type == 'EditProducts'
+              ? () {
+                  _delete(
+                      uid: _user?.account?.uid,
+                      productId: products[index].productId);
+                }
+              : () {
+                  _hide(
                     productId: products[index].productId,
                     products: products,
                   );
-          },
+                  setState();
+                  // stateSetter(() {});
+                },
         );
       },
     );
@@ -181,8 +184,11 @@ class _EditProductButton extends StatelessWidget {
 
   void _hide(
       {@required List<ProductModel> products, @required String productId}) {
-    products.removeWhere(
-      (ProductModel element) => element.productId == productId,
-    );
+    debugPrint('products: $products $productId');
+    products.removeWhere((ProductModel element) {
+      debugPrint(
+          'element.productId == productId: ${element.productId == productId}');
+      return element.productId == productId;
+    });
   }
 }

@@ -7,30 +7,35 @@ import 'package:myxmi/models/product.dart';
 import '../main.dart';
 import '../widgets/products_view.dart';
 
-class Products extends StatelessWidget {
+class Products extends StatefulWidget {
   final String type;
   const Products({@required this.type});
 
   @override
-  Widget build(BuildContext context) {
-    List<ProductModel> _products(
-        {DocumentSnapshot<Map<String, dynamic>> snapshot}) {
-      if (snapshot.exists) {
-        final Map _data = snapshot.data();
-        final List _keys = snapshot.data().keys.toList();
-        _keys.sort();
-        final List _reversed = _keys.reversed.toList();
-        return _reversed.map((key) {
-          return ProductModel.fromSnapshot(
-            keyIndex: key as String,
-            snapshot: _data[key] as Map<String, dynamic>,
-          );
-        }).toList();
-      } else {
-        return [];
-      }
-    }
+  State<Products> createState() => _ProductsState();
+}
 
+class _ProductsState extends State<Products> {
+  List<ProductModel> _products(
+      {DocumentSnapshot<Map<String, dynamic>> snapshot}) {
+    if (snapshot.exists) {
+      final Map _data = snapshot.data();
+      final List _keys = snapshot.data().keys.toList();
+      _keys.sort();
+      final List _reversed = _keys.reversed.toList();
+      return _reversed.map((key) {
+        return ProductModel.fromSnapshot(
+          keyIndex: key as String,
+          snapshot: _data[key] as Map<String, dynamic>,
+        );
+      }).toList();
+    } else {
+      return [];
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Consumer(builder: (_, watch, child) {
       final _user = watch(userProvider);
       return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
@@ -55,7 +60,7 @@ class Products extends StatelessWidget {
             final DocumentSnapshot<Map<String, dynamic>> _data =
                 snapshot.data as DocumentSnapshot<Map<String, dynamic>>;
             return ProductsView(
-              type: type,
+              type: widget.type,
               products: _products(snapshot: _data),
             );
           }

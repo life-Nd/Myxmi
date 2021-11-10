@@ -69,20 +69,14 @@ class SaveButton extends HookWidget {
                           id: value,
                           instructions: _recipe.instructions.toMap()));
                 });
-                debugPrint(
-                    '_recipe.instructions.ingredients: ${_recipe.instructions.ingredients}');
-                debugPrint(
-                    '_recipe.instructions.ingredients[i]: ${_recipe.instructions.ingredients.keys}');
               } else {
                 await saveRecipe(_recipe.recipe.toMap()).then((value) =>
                     saveInstructions(
                         id: value, instructions: _recipe.instructions.toMap()));
               }
-              // TODO add the function to substract the usedCount and update the sharedPreferences
               for (int i = 0;
                   i < _recipe.instructions.ingredients.keys.length;
                   i++) {
-                debugPrint('i: $i');
                 final List _product = _prefs.getStringList(
                     _recipe.instructions.ingredients[i] as String);
                 final double _updatedProduct =
@@ -90,7 +84,6 @@ class SaveButton extends HookWidget {
                 _prefs.setStringList(
                     _recipe.instructions.ingredients[i] as String,
                     ['$_updatedProduct', _product[1] as String]);
-                debugPrint('_updatedProduct: $_updatedProduct');
               }
 
               pr.close();
@@ -100,38 +93,6 @@ class SaveButton extends HookWidget {
                     builder: (context) => Home(),
                   ),
                   (route) => false);
-
-              // .whenComplete(() async {
-              //   pr.show(max: 100, msg: '${'loading'.tr()} ${'recipe'.tr()}...');
-              //   _recipe.recipe.imageUrl =
-              //       _image.imageLink.isNotEmpty ? _image.imageLink : null;
-              //   final DocumentReference _db = await FirebaseFirestore.instance
-              //       .collection('Recipes')
-              //       .add(_recipe.recipe.toMap());
-              //   _key = _db.id;
-              // }).whenComplete(() async {
-              //   debugPrint(
-              //       'Instructions: ${_recipe.instructions.ingredients} \n ${_recipe.instructions.steps} ');
-              //   await FirebaseFirestore.instance
-              //       .collection('Instructions')
-              //       .doc(_key)
-              //       .set(_recipe.instructions.toMap());
-              // }).whenComplete(() {
-              //   // TODO after uploading the recipe, we should update the quantity of the products used
-              //   // _recipe.instructions.ingredients.forEach((key, value) async {
-              //   //   await FirebaseFirestore.instance
-              //   //       .collection('Products')
-              //   //       .doc(_user.account.uid)
-              //   //       .update(_recipe.instructions.toMap());
-              //   // });
-              //   pr.close();
-              //   _recipe.reset();
-              //   Navigator.of(context).pushAndRemoveUntil(
-              //       MaterialPageRoute(
-              //         builder: (context) => Home(uid: _user?.account?.uid),
-              //       ),
-              //       (route) => false);
-              // });
             }
           : () {
               ScaffoldMessenger.of(context).showSnackBar(

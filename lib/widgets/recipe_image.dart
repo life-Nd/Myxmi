@@ -22,6 +22,7 @@ class RecipeImage extends StatelessWidget {
         final _recipe = recipe;
 
         return Stack(
+          alignment: Alignment.topRight,
           children: [
             _RecipeImageClip(
               fitWidth: fitWidth,
@@ -30,10 +31,13 @@ class RecipeImage extends StatelessWidget {
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Flexible(child: AddFavoriteButton(recipe: _recipe)),
+                Flexible(
+                  child: AddFavoriteButton(recipe: _recipe),
+                ),
                 const Spacer(),
+                // const Spacer(),
                 InkWell(
                   onTap: () {
                     Navigator.of(context).push(

@@ -17,7 +17,7 @@ class ProductModel {
       this.ingredientType,
       this.mesureType,
       this.name,
-      this.left});
+      this.left = '0'});
 
   factory ProductModel.fromSnapshot(
       {Map<String, dynamic> snapshot, String keyIndex}) {
