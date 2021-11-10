@@ -19,21 +19,18 @@ class UserAvatar extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
-              content: Hero(
-                tag: photoUrl,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: InteractiveViewer(
-                    child: Image.network(
-                      photoUrl,
-                      cacheHeight: 1000,
-                      errorBuilder: (context, child, error) {
-                        return const Icon(
-                          Icons.person_outline,
-                          size: 40,
-                        );
-                      },
-                    ),
+              content: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: InteractiveViewer(
+                  child: Image.network(
+                    photoUrl,
+                    cacheHeight: 1000,
+                    errorBuilder: (context, child, error) {
+                      return const Icon(
+                        Icons.person_outline,
+                        size: 40,
+                      );
+                    },
                   ),
                 ),
               ),
@@ -41,24 +38,22 @@ class UserAvatar extends StatelessWidget {
           },
         );
       },
-      child: Hero(
-          tag: photoUrl,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(44),
-            child: Image.network(
-              photoUrl,
-              height: radius,
-              width: radius,
-              fit: BoxFit.fitWidth,
-              errorBuilder: (context, child, error) {
-                debugPrint('error: $error');
-                return Icon(
-                  Icons.person_outline,
-                  size: radius / 2,
-                );
-              },
-            ),
-          )),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(44),
+        child: Image.network(
+          photoUrl,
+          height: radius,
+          width: radius,
+          fit: BoxFit.fitWidth,
+          errorBuilder: (context, child, error) {
+            debugPrint('error: $error');
+            return Icon(
+              Icons.person_outline,
+              size: radius / 2,
+            );
+          },
+        ),
+      ),
     );
   }
 }

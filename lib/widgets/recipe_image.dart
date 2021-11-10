@@ -42,7 +42,7 @@ class RecipeImage extends StatelessWidget {
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (_) => AddReviews(),
+                        builder: (_) => const AddReviews(),
                       ),
                     );
                   },

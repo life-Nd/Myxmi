@@ -13,7 +13,7 @@ class RecipeModel {
   static const _difficulty = 'difficulty';
   static const _reference = 'reference';
   static const _made = 'made';
-  static const _reviewsCount = 'comments_count';
+  static const _commentsCount = 'comments_count';
   static const _portions = 'portions';
   static const _likes = 'likes';
   static const _username = 'username';
@@ -94,7 +94,7 @@ class RecipeModel {
       access: snapshot[_access] as String,
       difficulty: snapshot[_difficulty] as String,
       reference: snapshot[_reference] as String,
-      commentsCount: snapshot[_reviewsCount] as String,
+      commentsCount: snapshot[_commentsCount] as String,
       made: snapshot[_made] as String,
       portions: snapshot[_portions] as String,
       likes: snapshot[_likes] as Map,
@@ -125,7 +125,7 @@ class RecipeModel {
       _reference: reference,
       _made: made,
       _likes: likes,
-      _reviewsCount: commentsCount,
+      _commentsCount: commentsCount,
       _portions: portions,
       _username: username,
       _userphoto: userphoto,

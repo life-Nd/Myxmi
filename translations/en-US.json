@@ -263,5 +263,6 @@
    "okay": "Just okay",
    "bad": "Not that great",
    "tellMe": "Tell me",
-   "left": "Left"
+   "left": "left",
+   "expiryDate": "Expiry Date"
 }

@@ -8,7 +8,6 @@ class SimilarRecipes extends StatelessWidget {
   const SimilarRecipes({@required this.suggestedRecipes});
   @override
   Widget build(BuildContext context) {
-    debugPrint('suggestedRecipes: $suggestedRecipes');
     return Container(
       height: 400,
       width: 60.w,
@@ -20,7 +19,7 @@ class SimilarRecipes extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemCount: suggestedRecipes.length,
         itemBuilder: (_, int index) {
-          debugPrint('suggestedRecipes: ${suggestedRecipes[index]}');
+          debugPrint('suggestedRecipes: ${suggestedRecipes[index].title}');
           return SizedBox(
             width: 44.w,
             height: 44.h,

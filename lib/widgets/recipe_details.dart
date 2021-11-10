@@ -105,12 +105,17 @@ class _ViewsSelector extends StatelessWidget {
           viewIndex: 1,
           text: 'steps',
         ),
-        ViewSelectorText(
-          controller: pageCtrl,
-          length: reviewsLength ?? 0,
-          text: 'comments',
-          viewIndex: 2,
-        ),
+        Consumer(builder: (context, watch, child) {
+          final _recipe = watch(recipeDetailsProvider);
+          return ViewSelectorText(
+            controller: pageCtrl,
+            length: _recipe?.recipe?.commentsCount != null
+                ? int.parse(_recipe?.recipe?.commentsCount)
+                : 0,
+            text: 'comments',
+            viewIndex: 2,
+          );
+        }),
       ],
     );
   }

@@ -5,20 +5,13 @@ import 'package:myxmi/models/product.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../main.dart';
 
-String _expiration;
-
+// ignore: must_be_immutable
 class ProductDetails extends StatelessWidget {
   final ProductModel product;
   const ProductDetails({@required this.product});
 
   @override
   Widget build(BuildContext context) {
-    if (product?.expiration != null) {
-      _expiration = DateFormat('EEEE d MMM , ' 'yyyy')
-          .format(DateTime.fromMillisecondsSinceEpoch(
-        int.parse(product?.expiration?.toString()),
-      ));
-    }
     return Consumer(
       builder: (_, watch, child) {
         final String _name =
@@ -51,6 +44,7 @@ class ProductDetails extends StatelessWidget {
                 // Text('Quantity in stock: ${product.left} ${product.mesureType}'),
 
                 StatefulBuilder(builder: (_, StateSetter stateSetter) {
+                  debugPrint('product.left ${product.left}');
                   final String _productLeft =
                       product?.left != null ? product.left : '0';
                   return Row(
@@ -60,13 +54,14 @@ class ProductDetails extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        fillColor: Colors.red,
-                        onPressed: () async {
-                          product.left = '${int.parse(product.left) - 1}';
-                          changeProductDetails(
+                        fillColor: _productLeft != '0' ? Colors.red : null,
+                        onPressed: () {
+                          debugPrint('product.left TAPPED ${product.left}');
+                          product.left = '${int.parse(_productLeft) - 1}';
+                          changeStock(
                             expiration: product.expiration,
                             id: product.productId,
-                            quantity: int.parse(product.left) - 1,
+                            quantity: int.parse(_productLeft) - 1,
                           );
                           stateSetter(() {});
                         },
@@ -79,9 +74,14 @@ class ProductDetails extends StatelessWidget {
                         ),
                       ),
                       Card(
-                        child: Text(
-                          '$_productLeft ${product?.mesureType}',
-                          style: const TextStyle(fontSize: 20),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            '$_productLeft ${product?.mesureType}',
+                            style: const TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
                         ),
                       ),
                       RawMaterialButton(
@@ -91,7 +91,7 @@ class ProductDetails extends StatelessWidget {
                         fillColor: Colors.green,
                         onPressed: () async {
                           product.left = '${int.parse(_productLeft) + 1}';
-                          changeProductDetails(
+                          changeStock(
                               expiration: product.expiration,
                               id: product.productId,
                               quantity: int.parse(_productLeft) + 1);
@@ -109,7 +109,92 @@ class ProductDetails extends StatelessWidget {
                   );
                 }),
                 const Text(''),
-                Text('Expiry Date:  $_expiration'),
+                Text('${'expiryDate'.tr()} '),
+                StatefulBuilder(
+                  builder: (_, StateSetter stateSetter) {
+                    DateTime _expiration;
+                    String _expirationFormatted;
+                    final String _productLeft =
+                        product?.left != null ? product.left : '0';
+
+                    if (product?.expiration != null) {
+                      _expiration = DateTime.fromMillisecondsSinceEpoch(
+                          int.parse(product.expiration));
+                    } else {
+                      _expiration = DateTime.now();
+                    }
+                    _expirationFormatted =
+                        DateFormat('EEEE d MMM , ' 'yyyy').format(_expiration);
+
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            product.expiration =
+                                '${_expiration.subtract(const Duration(days: 1)).millisecondsSinceEpoch}';
+                            changeExpiry(
+                              id: product.productId,
+                              quantity: int.parse(_productLeft),
+                              expiration: product.expiration,
+                            );
+                            stateSetter(() {});
+                          },
+                          icon: const Icon(Icons.arrow_back_ios),
+                        ),
+                        InkWell(
+                          onTap: () async {
+                            final _date = await showDatePicker(
+                                context: context,
+                                currentDate: _expiration,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime.now()
+                                    .subtract(const Duration(days: 5)),
+                                lastDate: DateTime.now().add(
+                                  const Duration(days: 1200),
+                                ),
+                                builder: (_, child) {
+                                  return child;
+                                });
+                            if (_date != null && _date != _expiration) {
+                              _expiration = _date;
+                              product.expiration =
+                                  '${_date.millisecondsSinceEpoch}';
+                              changeExpiry(
+                                id: product.productId,
+                                quantity: int.parse(_productLeft),
+                                expiration: product.expiration,
+                              );
+                              stateSetter(() {});
+                            }
+                          },
+                          child: Card(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                '$_expirationFormatted ',
+                                style: const TextStyle(fontSize: 20),
+                              ),
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            product.expiration =
+                                '${_expiration.add(const Duration(days: 1)).millisecondsSinceEpoch}';
+                            changeExpiry(
+                              id: product.productId,
+                              quantity: int.parse(_productLeft),
+                              expiration: product.expiration,
+                            );
+                            stateSetter(() {});
+                          },
+                          icon: const Icon(Icons.arrow_forward_ios),
+                        ),
+                      ],
+                    );
+                  },
+                ),
               ],
             ),
           ),
@@ -118,8 +203,16 @@ class ProductDetails extends StatelessWidget {
     );
   }
 
-  Future changeProductDetails(
-      {int quantity, String expiration, String id}) async {
+  Future changeStock({int quantity, String expiration, String id}) async {
+    final SharedPreferences _prefs = await SharedPreferences.getInstance();
+    _prefs.setStringList(
+      id,
+      ['$quantity', expiration],
+    );
+  }
+
+  Future changeExpiry({int quantity, String expiration, String id}) async {
+    debugPrint('changeExpiry: expiration: $expiration');
     final SharedPreferences _prefs = await SharedPreferences.getInstance();
     _prefs.setStringList(
       id,

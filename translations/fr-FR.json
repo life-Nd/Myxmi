@@ -270,5 +270,6 @@
    "okay": "Juste okay",
    "bad": "Mauvaise",
    "tellMe": "Dites moi",
-   "left": "reste"
+   "left": "reste",
+   "expiryDate": "Date d'expiration"
 }
