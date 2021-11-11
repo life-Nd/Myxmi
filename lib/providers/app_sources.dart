@@ -6,17 +6,17 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/screens/home.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class AppSources {
+class AppSourcesProvider {
   Map _data = {};
   String googlePlayUrl;
   // android: https://play.google.com/store
   String appstoreUrl;
   // IOS : https://www.apple.com/ca/app-store/
-
   String appStoreIdentifier;
   String googlePlayIdentifier;
+  bool availableForDevice = false;
 
-  void getAppSourcesUrls() {
+  void readAppSourcesUrls() {
     final _db = FirebaseFirestore.instance;
     _db
         .collection('Sources')
@@ -31,12 +31,16 @@ class AppSources {
         appStoreIdentifier = _data['appStoreIdentifier'] as String;
       }
     });
+
+    availableForDevice = Device.get().isIos
+        ? appStoreIdentifier != null
+        : googlePlayIdentifier != null;
   }
 
   void downloadAppDialog(BuildContext context) {
     final _home = context.read(homeViewProvider);
     if (_home.showDownloadDialog) {
-      getAppSourcesUrls();
+      readAppSourcesUrls();
       if (_data != null) {
         showDialog(
           context: context,

@@ -19,7 +19,6 @@ class SimilarRecipes extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemCount: suggestedRecipes.length,
         itemBuilder: (_, int index) {
-          debugPrint('suggestedRecipes: ${suggestedRecipes[index].title}');
           return SizedBox(
             width: 44.w,
             height: 44.h,

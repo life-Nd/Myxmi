@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_device_type/flutter_device_type.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/main.dart';
+import 'package:myxmi/providers/app_sources.dart';
 import 'package:myxmi/providers/home_view.dart';
-import 'package:myxmi/utils/app_sources.dart';
 import 'package:myxmi/widgets/app_bottom_navigation.dart';
 import 'package:myxmi/widgets/body.dart';
 import 'package:myxmi/widgets/web_appbar.dart';
@@ -53,7 +53,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final AppSources _appSources = AppSources();
+  final AppSourcesProvider _appSources = AppSourcesProvider();
 
   @override
   void initState() {

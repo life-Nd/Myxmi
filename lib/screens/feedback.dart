@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/feedback.dart';
+import 'package:myxmi/widgets/format_time.dart';
 import '../main.dart';
 
 final TextEditingController _ctrl = TextEditingController();
@@ -26,6 +27,17 @@ class FeedbackScreen extends HookWidget {
                   .doc(_user?.account?.uid)
                   .snapshots(),
               builder: (_, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  debugPrint(
+                      '--FIREBASE-- READING: Feedback/${_user?.account?.uid}');
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('loading'.tr()),
+                      const CircularProgressIndicator(),
+                    ],
+                  );
+                }
                 if (snapshot.data != null) {
                   _snapshotData = snapshot.data.data() as Map<String, dynamic>;
                   final List _keys = _snapshotData.keys.toList();
@@ -44,14 +56,12 @@ class FeedbackScreen extends HookWidget {
                         int.parse(_feedback.messageId),
                       ).toString();
                       final String _formattedTime =
-                          DateFormat('yyyy-MM-dd hh:mm a')
-                              .format(DateTime.parse(_time));
+                          formatTime(DateTime.parse(_time));
                       return Consumer(
                         builder: (_, watch, child) {
                           final _user = watch(userProvider);
                           final bool _isSender =
                               _feedback.sender == _user?.account?.uid;
-                          debugPrint('isSender: $_isSender');
                           return Container(
                             padding: const EdgeInsets.only(
                                 left: 4, right: 14, top: 5, bottom: 5),

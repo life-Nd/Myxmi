@@ -50,7 +50,8 @@ class _ProductsState extends State<Products> {
                 child: Text('oups, ${'somethingWentWrong'.tr()}'));
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            // debugPrint('-------loading future-------');
+            debugPrint(
+                '--FIREBASE-- Reading: Products/${_user?.account?.uid} ');
             return Container(
               alignment: Alignment.center,
               child: Text('${'loading'.tr()}...'),

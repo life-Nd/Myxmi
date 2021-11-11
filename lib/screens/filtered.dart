@@ -97,21 +97,30 @@ class _ExpandedRecipesStream extends StatelessWidget {
       }
     }
 
-    return Expanded(
-      child: Recipes(
-        // recipesPath:
-        //     _equalTo != 'anyDiet' ? RECIPESBY.subCategory : RECIPESBY.timeStamp,
-        path: _equalTo != 'anyDiet'
-            ? FirebaseFirestore.instance
-                .collection('Recipes')
-                .where(_where, isEqualTo: value())
-                .snapshots()
-            : FirebaseFirestore.instance
-                .collection('Recipes')
-                .orderBy('made')
-                .snapshots(),
-        showAutoCompleteField: true,
-      ),
-    );
+    if (_equalTo != 'anyDiet') {
+      return Expanded(
+        child: Recipes(
+          // recipesPath:
+          //     _equalTo != 'anyDiet' ? RECIPESBY.subCategory : RECIPESBY.timeStamp,
+          path: FirebaseFirestore.instance
+              .collection('Recipes')
+              .where(_where, isEqualTo: value())
+              .snapshots(),
+          showAutoCompleteField: true,
+          searchFieldLabel: 'where: $_where == ${value().toString()}',
+        ),
+      );
+    } else {
+      return Expanded(
+        child: Recipes(
+          searchFieldLabel: 'made (chronologically)',
+          path: FirebaseFirestore.instance
+              .collection('Recipes')
+              .orderBy('made')
+              .snapshots(),
+          showAutoCompleteField: true,
+        ),
+      );
+    }
   }
 }

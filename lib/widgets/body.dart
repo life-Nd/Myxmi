@@ -72,6 +72,7 @@ class _HomePageBody extends HookWidget {
       return Recipes(
         showAutoCompleteField: false,
         path: _view.searchWithCtrl(searchKey: 'title'),
+        searchFieldLabel: 'title== ${_view.searchCtrl.text}',
       );
     } else {
       return SingleChildScrollView(
@@ -93,6 +94,7 @@ class _MyRecipes extends HookWidget {
     final String _uid = _user?.account?.uid;
     return Recipes(
       showAutoCompleteField: true,
+      searchFieldLabel: 'uid == $_uid',
       // recipesPath: RECIPESBY.creatorUid,
       path: FirebaseFirestore.instance
           .collection('Recipes')
@@ -112,6 +114,7 @@ class _Favorites extends HookWidget {
     final _user = useProvider(userProvider);
     final String _uid = _user?.account?.uid;
     return Recipes(
+      searchFieldLabel: 'likes/uid == $_uid',
         showAutoCompleteField: true,
         path: FirebaseFirestore.instance
             .collection('Recipes')

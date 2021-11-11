@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/recipes.dart';
 import 'package:myxmi/screens/home.dart';
 import '../main.dart';
+
 class AddFavoriteButton extends StatefulWidget {
   final RecipeModel recipe;
 
@@ -89,6 +90,8 @@ class _AddFavoriteButtonState extends State<AddFavoriteButton> {
                                 merge: true,
                               ),
                             );
+                            debugPrint(
+                                '--FIREBASE-- Writing: Recipes/${widget.recipe.recipeId}.likes: ${_user.account.uid}: false,  ');
                             if (widget.recipe.likes != {} ||
                                 widget.recipe.likes.isEmpty) {
                               widget.recipe.likes = {};
@@ -125,6 +128,8 @@ class _AddFavoriteButtonState extends State<AddFavoriteButton> {
                                 merge: true,
                               ),
                             );
+                            debugPrint(
+                                '--FIREBASE-- Writing: Recipes/${widget.recipe.recipeId}.likes: ${_user.account.uid}: false,  ');
                             widget.recipe.likes[_user.account.uid] = false;
                             setState(() {});
                           },

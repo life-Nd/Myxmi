@@ -115,27 +115,17 @@ class SaveButton extends HookWidget {
 }
 
 Future<String> saveRecipe(Map<String, dynamic> recipe) async {
+  debugPrint('--FIREBASE-- Writing: Recipes/ $recipe ');
   final DocumentReference _db =
       await FirebaseFirestore.instance.collection('Recipes').add(recipe);
   return _db.id;
 }
 
 Future saveInstructions({String id, Map<String, dynamic> instructions}) async {
+  debugPrint('--FIREBASE-- Writing: Instructions/$id.$instructions ');
   FirebaseFirestore.instance
       .collection('Instructions')
       .doc(id)
       .set(instructions);
 }
 
-Future substractUsedProducts({List ingredients}) {
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  for (var i = 0; i < ingredients.length; i++) {
-    // _prefs.then((prefs) {
-    //   prefs.setInt(ingredients[i]['name'],
-    //       prefs.getInt(ingredients[i]['name']) - ingredients[i]['quantity']);
-    // });
-  }
-  return _prefs.then((pref) {
-    pref.setInt('usedProducts', pref.getInt('usedProducts') - 1);
-  });
-}

@@ -58,7 +58,7 @@ class CreatorRecipes extends StatelessWidget {
       ),
       body: Recipes(
         showAutoCompleteField: true,
-        // recipesPath: RECIPESBY.creatorUid,
+        searchFieldLabel: 'uid',
         path: FirebaseFirestore.instance
             .collection('Recipes')
             .where('uid', isEqualTo: uid)

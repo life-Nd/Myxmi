@@ -4,11 +4,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_device_type/flutter_device_type.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/utils/auth.dart';
 import 'package:sizer/sizer.dart';
 import 'app.dart';
+import 'providers/app_sources.dart';
 import 'providers/cart.dart';
 import 'providers/prefs.dart';
 import 'providers/user.dart';
@@ -23,10 +25,8 @@ final prefProvider =
     ChangeNotifierProvider<PreferencesProvider>((ref) => PreferencesProvider());
 final cartProvider =
     ChangeNotifierProvider<CartProvider>((ref) => CartProvider());
-
-final firebaseAuth = Provider<FirebaseAuth>((ref) {
-  return FirebaseAuth.instance;
-});
+final firebaseAuth = Provider<FirebaseAuth>((ref) => FirebaseAuth.instance);
+final appSources = Provider<AppSourcesProvider>((ref) => AppSourcesProvider());
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,10 +37,6 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
   ]);
 // TODO change this after taking snapshots
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-  // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-  //   statusBarColor: Colors.transparent,
-  // ));
   kIsWeb ?? FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
 
   final ThemeData lightTheme = ThemeData(
@@ -109,6 +105,7 @@ Future<void> main() async {
           child: Consumer(
             builder: (context, watch, child) {
               final _pref = watch(prefProvider);
+              final _appSources = watch(appSources);
               return FutureBuilder(
                 future: _pref.readPrefs(),
                 builder: (context, snapshot) {
@@ -120,6 +117,15 @@ Future<void> main() async {
                             ? ThemeMode.light
                             : ThemeMode.dark;
                   }
+
+                  try {
+                    if (Device.get().isPhone || Device.get().isTablet) {
+                      _appSources.readAppSourcesUrls();
+                    }
+                  } catch (error) {
+                    debugPrint('error: $error');
+                  }
+
                   return MaterialApp(
                     title: 'Myxmi',
                     localizationsDelegates: context.localizationDelegates,

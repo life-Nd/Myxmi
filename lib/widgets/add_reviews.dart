@@ -13,24 +13,15 @@ class AddReviews extends StatelessWidget {
   const AddReviews({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    
     return Consumer(builder: (_, watch, child) {
       final _recipe = watch(recipeDetailsProvider);
       final _user = watch(userProvider);
       final String _title = _recipe.recipe.title;
       return Scaffold(
-        resizeToAvoidBottomInset: true,
         appBar: AppBar(
-          title: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  ' $_title',
-                  style: const TextStyle(
-                      fontSize: 22, fontWeight: FontWeight.w500),
-                ),
-              )
-            ],
+          title: Text(
+            ' $_title',
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
           ),
         ),
         body: SingleChildScrollView(
@@ -54,19 +45,16 @@ class AddReviews extends StatelessWidget {
                   },
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.all(10),
-                child: TextField(
-                  controller: _msgCtrl,
-                  decoration: InputDecoration(
-                    isDense: false,
-                    hintText: 'Message',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
+              TextField(
+                // controller: ,
+                decoration: InputDecoration(
+                  isDense: false,
+                  hintText: 'Message',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
                   ),
-                  maxLines: 10,
                 ),
+                maxLines: 10,
               ),
               RawMaterialButton(
                 fillColor: Colors.green,
@@ -74,6 +62,8 @@ class AddReviews extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 onPressed: () {
+                  final String _now =
+                      '${DateTime.now().millisecondsSinceEpoch}';
                   final String _dbStars = _recipe.recipe.stars ?? '0.0';
                   final _averageStars = (_stars + double.parse(_dbStars)) / 2;
                   final int _commentsCount =
@@ -81,14 +71,12 @@ class AddReviews extends StatelessWidget {
                           ? int.parse(_recipe?.recipe?.commentsCount) + 1
                           : 1;
                   debugPrint('$_stars + $_dbStars = $_averageStars');
-                  debugPrint(
-                      '_recipe.recipe.recipeId: ${_recipe.recipe.recipeId}');
                   final _db = FirebaseFirestore.instance
-                      .collection('Reviews')
+                      .collection('Comments')
                       .doc(_recipe.recipe.recipeId);
                   _db.set(
                     {
-                      '${DateTime.now().millisecondsSinceEpoch}': {
+                      _now: {
                         'message': _msgCtrl.text,
                         'name':
                             _user.account.displayName ?? _user.account.email,
@@ -99,6 +87,8 @@ class AddReviews extends StatelessWidget {
                     },
                     SetOptions(merge: true),
                   ).whenComplete(() {
+                    debugPrint(
+                        '--FIREBASE-- Writing: Comments/${_recipe.recipe.recipeId}/$_now ');
                     FirebaseFirestore.instance
                         .collection('Recipes')
                         .doc(_recipe.recipe.recipeId)
@@ -109,7 +99,8 @@ class AddReviews extends StatelessWidget {
                     _recipe.recipe.stars = '$_averageStars';
                     _msgCtrl.clear();
                     _stars = 0.0;
-
+                    debugPrint(
+                        '--FIREBASE-- Writing: Recipes/${_recipe.recipe.recipeId} stars & comments_count ');
                     Navigator.of(context).pop();
                   });
                 },

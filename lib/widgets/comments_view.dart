@@ -19,23 +19,25 @@ class CommentsView extends HookWidget {
     final _recipe = useProvider(recipeDetailsProvider);
     final _user = useProvider(userProvider);
     final _view = useProvider(homeViewProvider);
-    debugPrint('_recipe.recipe.recipeId: ${_recipe.recipe.recipeId}');
+
     return Stack(
       children: [
         StreamBuilder<DocumentSnapshot>(
           stream: FirebaseFirestore.instance
-              .collection('Reviews')
+              .collection('Comments')
               .doc(_recipe.recipe.recipeId)
               .snapshots(),
           builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              debugPrint('loading reviews snapshot');
+              debugPrint(
+                  '--FIREBASE-- READING: Comments/${_recipe.recipe.recipeId}');
             }
             if (snapshot.hasData && snapshot.data.data() != null) {
-              // debugPrint('snapshot: ${snapshot.data.data()}');
               final Map _data = snapshot.data.data() as Map<String, dynamic>;
               final List _keys =
                   _data?.keys != null ? _data?.keys?.toList() : [];
+              _keys.sort();
+              debugPrint('---Keys--$_keys');
               return ListView.builder(
                 itemCount: _keys.length,
                 itemBuilder: (_, int index) {
@@ -94,7 +96,6 @@ class CommentsView extends HookWidget {
                     );
                   }
                 : () {
-
                     _view.view = 4;
                     Navigator.of(context).push(
                       MaterialPageRoute(

@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:myxmi/widgets/format_time.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main.dart';
@@ -57,6 +58,8 @@ class AddNewProduct extends HookWidget {
                   return _now;
                 });
 
+                debugPrint(
+                    '--SHAREDPREFERENCES-- Writing: $_now:[${_quantityCtrl.text.trim()},${_expiration.millisecondsSinceEpoch.toString()}]');
                 await FirebaseFirestore.instance
                     .collection('Products')
                     .doc(_user.account.uid)
@@ -70,6 +73,8 @@ class AddNewProduct extends HookWidget {
                   },
                   SetOptions(merge: true),
                 );
+                debugPrint(
+                    '--FIREBASE-- Writing: Products/${_user.account.uid}/$_now');
                 _nameCtrl.clear();
                 _mesureType = null;
                 _product.type = null;
@@ -381,7 +386,7 @@ class AddNewProduct extends HookWidget {
                   children: [
                     if (_expiration != null)
                       Text(
-                        DateFormat.yMMMMEEEEd().format(_expiration),
+                        formatTime(_expiration),
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                         ),

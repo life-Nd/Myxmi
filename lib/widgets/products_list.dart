@@ -175,6 +175,7 @@ class _EditProductButton extends StatelessWidget {
   }
 
   Future _delete({@required String productId, @required String uid}) async {
+    debugPrint('--FIREBASE-- Deleting: Products/$uid.$productId ');
     await FirebaseFirestore.instance.collection('Products').doc(uid).update(
       {
         productId: FieldValue.delete(),
@@ -184,7 +185,7 @@ class _EditProductButton extends StatelessWidget {
 
   void _hide(
       {@required List<ProductModel> products, @required String productId}) {
-    debugPrint('products: $products $productId');
+    debugPrint('--SHAREDPREFERENCES-- Deleting: $products $productId');
     products.removeWhere((ProductModel element) {
       debugPrint(
           'element.productId == productId: ${element.productId == productId}');

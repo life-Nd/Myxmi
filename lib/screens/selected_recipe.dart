@@ -27,8 +27,6 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
   @override
   Widget build(BuildContext context) {
     final ScrollController _ctrl = ScrollController();
-    final Size _size = MediaQuery.of(context).size;
-
     return Consumer(
       builder: (_, watch, __) {
         final _recipe = watch(recipeDetailsProvider);
@@ -63,7 +61,7 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
                   child: _recipe.image,
                 ),
                 expandedHeight:
-                    kIsWeb ? _size.height / 1.3 : _size.height / 2.5,
+                    kIsWeb ? 80.h : 60.h,
               ),
               SliverList(
                 delegate: SliverChildListDelegate.fixed(
@@ -73,17 +71,15 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
                       height: 85.h,
                       child:
                           StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-                        stream: FirebaseFirestore.instance
-                            .collection('Instructions')
-                            .doc(_recipe.recipe.recipeId)
-                            .snapshots(),
+                        stream: getPath(_recipe.recipe.recipeId),
                         builder: (context,
                             AsyncSnapshot<
                                     DocumentSnapshot<Map<String, dynamic>>>
                                 snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
-                            debugPrint('Loading');
+                            debugPrint(
+                                '--FIREBASE-- READING: Instructions/${_recipe.recipe.recipeId}');
                             return Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -118,5 +114,12 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
         );
       },
     );
+  }
+
+  Stream<DocumentSnapshot<Map<String, dynamic>>> getPath(String recipeId) {
+    return FirebaseFirestore.instance
+        .collection('Instructions')
+        .doc(recipeId)
+        .snapshots();
   }
 }

@@ -33,7 +33,6 @@ class _RecipeDetailsState extends State<RecipeDetails> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('building RecipeDetails');
     return Consumer(builder: (context, watch, child) {
       final _selectedView = watch(selectedRecipeView);
       return Column(
@@ -42,7 +41,7 @@ class _RecipeDetailsState extends State<RecipeDetails> {
             pageCtrl: pageController,
             ingredientsLength: widget?.instructions?.ingredients?.length,
             stepsLength: widget?.instructions?.steps?.length,
-            reviewsLength: widget?.instructions?.reviews?.length,
+            reviewsLength: widget?.instructions?.comments?.length,
           ),
           SizedBox(
             height: 70.h,
@@ -89,7 +88,6 @@ class _ViewsSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('building _viewselector');
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [

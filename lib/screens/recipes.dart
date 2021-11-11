@@ -6,14 +6,15 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/recipes.dart';
 import 'recipes_view.dart';
 
-
 class Recipes extends StatelessWidget {
   final Stream<QuerySnapshot> path;
   final bool showAutoCompleteField;
+  final String searchFieldLabel;
   const Recipes({
     Key key,
     @required this.path,
     @required this.showAutoCompleteField,
+    @required this.searchFieldLabel,
   }) : super(key: key);
 
   @override
@@ -36,12 +37,16 @@ class Recipes extends StatelessWidget {
         stream: path,
         builder: (_, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
-            return Text(
-              'somethingWentWrong'.tr(),
-              style: const TextStyle(),
+            return Container(
+              alignment: Alignment.center,
+              child: Text(
+                'somethingWentWrong'.tr(),
+                style: const TextStyle(),
+              ),
             );
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
+            debugPrint('--FIREBASE-- Reading: Recipes/$searchFieldLabel ');
             return Container(
               alignment: Alignment.center,
               child: Text(

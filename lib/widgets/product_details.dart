@@ -44,7 +44,7 @@ class ProductDetails extends StatelessWidget {
                 // Text('Quantity in stock: ${product.left} ${product.mesureType}'),
 
                 StatefulBuilder(builder: (_, StateSetter stateSetter) {
-                  debugPrint('product.left ${product.left}');
+
                   final String _productLeft =
                       product?.left != null ? product.left : '0';
                   return Row(
