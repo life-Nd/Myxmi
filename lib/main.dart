@@ -37,6 +37,7 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
   ]);
 // TODO change this after taking snapshots
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
   kIsWeb ?? FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
 
   final ThemeData lightTheme = ThemeData(

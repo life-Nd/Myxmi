@@ -13,7 +13,6 @@ import 'settings.dart';
 
 // ignore: must_be_immutable
 class More extends HookWidget {
-  
   @override
   Widget build(BuildContext context) {
     final _auth = useProvider(authProvider);
@@ -60,7 +59,7 @@ class More extends HookWidget {
             );
           },
         ),
-        const Divider(),
+        const Divider(color: Colors.grey),
         ListTile(
             leading: const Icon(Icons.support),
             title: Text('support'.tr()),
@@ -89,7 +88,6 @@ class More extends HookWidget {
               rateMyApp.showRateDialog(context);
             },
           ),
-        const Divider(color: Colors.grey),
         ListTile(
           leading: const Icon(Icons.more_horiz),
           title: Text('about'.tr()),
