@@ -53,11 +53,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final AppSourcesProvider _appSources = AppSourcesProvider();
-
   @override
   void initState() {
     final _user = context.read(userProvider);
+    final AppSourcesProvider _appSources = context.read(appSources);
     if (kIsWeb) {
       try {
         if (Device.get().isPhone) {

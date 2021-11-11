@@ -40,7 +40,7 @@ class AppSourcesProvider {
   void downloadAppDialog(BuildContext context) {
     final _home = context.read(homeViewProvider);
     if (_home.showDownloadDialog) {
-      readAppSourcesUrls();
+      
       if (_data != null) {
         showDialog(
           context: context,
