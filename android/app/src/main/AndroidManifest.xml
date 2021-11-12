@@ -2,7 +2,7 @@
     package="com.lifen.myxmi">
    <application
         android:label="Myxmi"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

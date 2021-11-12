@@ -29,18 +29,15 @@ class AppSourcesProvider {
         appstoreUrl = _data['appStoreUrl'] as String;
         googlePlayIdentifier = _data['googlePlayIdentifier'] as String;
         appStoreIdentifier = _data['appStoreIdentifier'] as String;
+        availableForDevice =
+            Device.get().isIos ? appstoreUrl != null : googlePlayUrl != null;
       }
     });
-
-    availableForDevice = Device.get().isIos
-        ? appStoreIdentifier != null
-        : googlePlayIdentifier != null;
   }
 
   void downloadAppDialog(BuildContext context) {
     final _home = context.read(homeViewProvider);
     if (_home.showDownloadDialog) {
-      
       if (_data != null) {
         showDialog(
           context: context,

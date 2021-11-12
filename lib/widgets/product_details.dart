@@ -5,7 +5,8 @@ import 'package:myxmi/models/product.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../main.dart';
 
-// ignore: must_be_immutable
+final TextEditingController _stockCtrl = TextEditingController();
+
 class ProductDetails extends StatelessWidget {
   final ProductModel product;
   const ProductDetails({@required this.product});
@@ -44,7 +45,6 @@ class ProductDetails extends StatelessWidget {
                 // Text('Quantity in stock: ${product.left} ${product.mesureType}'),
 
                 StatefulBuilder(builder: (_, StateSetter stateSetter) {
-
                   final String _productLeft =
                       product?.left != null ? product.left : '0';
                   return Row(
@@ -73,13 +73,30 @@ class ProductDetails extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            '$_productLeft ${product?.mesureType}',
-                            style: const TextStyle(
-                              fontSize: 20,
+                      SizedBox(
+                        width: 77,
+                        // padding: const EdgeInsets.all(8.0),
+                        child: Card(
+                          child: TextField(
+                            controller: _stockCtrl,
+                            onEditingComplete: () {
+                              debugPrint(
+                                  'product.left TAPPED ${product.left}, ${_stockCtrl.text}');
+                              product.left = _stockCtrl.text;
+                              changeStock(
+                                  expiration: product.expiration,
+                                  id: product.productId,
+                                  quantity: int.parse(_productLeft));
+                              _stockCtrl.clear();
+                              FocusScope.of(context).requestFocus(FocusNode());
+                              stateSetter(() {});
+                            },
+                            decoration: InputDecoration(
+                              isDense: true,
+                              border: InputBorder.none,
+                              counterStyle: const TextStyle(fontSize: 27),
+                              hintStyle: const TextStyle(fontSize: 22),
+                              hintText: '$_productLeft ${product?.mesureType}',
                             ),
                           ),
                         ),

@@ -40,8 +40,11 @@ class Body extends StatelessWidget {
       case 4:
         // Show profile, settings, about,and sign out
         return child = isSignedIn ? More() : SignIn();
+      case 5:
+        // Show profile, settings, about,and sign out
+        return child = isSignedIn ? More() : SignIn();
       default:
-        return child = const Menu();
+        return child = SignIn();
 
         return child;
     }
@@ -114,7 +117,7 @@ class _Favorites extends HookWidget {
     final _user = useProvider(userProvider);
     final String _uid = _user?.account?.uid;
     return Recipes(
-      searchFieldLabel: 'likes/uid == $_uid',
+        searchFieldLabel: 'likes/uid == $_uid',
         showAutoCompleteField: true,
         path: FirebaseFirestore.instance
             .collection('Recipes')

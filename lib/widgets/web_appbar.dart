@@ -43,7 +43,7 @@ class WebAppBar extends StatelessWidget {
                   if (uid != null)
                     _PageViewButton(uid: uid, index: 4, text: 'more')
                   else
-                     _PageViewButton(uid: uid, index: 5, text: 'signIn'),
+                     _PageViewButton(uid: uid, index: 4, text: 'signIn'),
                   // if (uid == null)
                   //   _PageViewButton(uid: uid, index: 6, text: 'signUp'),
                   if (uid != null)
