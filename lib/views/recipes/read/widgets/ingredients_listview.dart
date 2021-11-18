@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/views/products/read/widgets/product_details.dart';
 import '../../../../main.dart';
 import 'recipe_details.dart';
 
