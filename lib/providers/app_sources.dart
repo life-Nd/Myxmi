@@ -3,7 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_device_type/flutter_device_type.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/screens/home.dart';
+import 'package:myxmi/views/home/home_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AppSourcesProvider {

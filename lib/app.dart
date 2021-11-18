@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'main.dart';
-import 'screens/home.dart';
+import 'views/home/home_view.dart';
 
 class App extends StatelessWidget {
   static const String route = '/';

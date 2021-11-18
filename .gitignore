@@ -25,7 +25,7 @@ Keys
 **/ios/Runner/Info.plist
 **/android/app/google-services.json
 **/android/app/AndroidManifest.xml
-
+lib/apis/
 # Flutter/Dart/Pub related
 **/doc/api/
 **/ios/Flutter/.last_build_id
@@ -40,7 +40,7 @@ Keys
 
 # Web related
 lib/generated_plugin_registrant.dart
-lib/apis/
+/web/index.html
 
 
 # Symbolication related
@@ -49,8 +49,7 @@ app.*.symbols
 # Obfuscation related
 app.*.map.json
 
-# Web 
-/web/index.html
+
 
 # Android Studio will place build artifacts here
 /android/app/debug

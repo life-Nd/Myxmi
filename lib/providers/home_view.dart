@@ -29,16 +29,14 @@ class HomeViewProvider extends ChangeNotifier {
     return _text;
   }
 
-  Stream<QuerySnapshot> streamRecipesWith(
-      {@required String key, @required String value}) {
+  Query streamRecipesWith({@required String key, @required String value}) {
     final _stream = FirebaseFirestore.instance
         .collection('Recipes')
-        .where(key, isEqualTo: value)
-        .snapshots();
+        .where(key, isEqualTo: value);
     return _stream;
   }
 
-  Stream<QuerySnapshot> searchWithCtrl({@required String searchKey}) {
+  Query searchWithCtrl({@required String searchKey}) {
     return streamRecipesWith(key: searchKey, value: textToSearchWith());
   }
 

@@ -71,6 +71,7 @@ class RecipeEntriesProvider extends ChangeNotifier {
       'type': type,
       'value': value,
     };
+
     recipe.ingredientsCount = '${composition.keys.toList().length}';
   }
 
@@ -80,7 +81,7 @@ class RecipeEntriesProvider extends ChangeNotifier {
       quantity[key] =
           value != null && value.isNotEmpty ? double.parse(value) : 0.0;
     }
-    if (type == 'Drops') {
+    if (type == 'drops') {
       quantity[key] =
           value != null && value.isNotEmpty ? double.parse(value) / 21.09 : 0.0;
     }
@@ -88,15 +89,15 @@ class RecipeEntriesProvider extends ChangeNotifier {
       quantity[key] =
           value != null && value.isNotEmpty ? double.parse(value) / 1.05 : 0.0;
     }
-    if (type == 'Teaspoons') {
+    if (type == 'teaspoons') {
       quantity[key] =
           value != null && value.isNotEmpty ? double.parse(value) * 5 : 0.0;
     }
-    if (type == 'Tablespoons') {
+    if (type == 'tablespoons') {
       quantity[key] =
           value != null && value.isNotEmpty ? double.parse(value) * 14.20 : 0.0;
     }
-    if (type == 'Cups') {
+    if (type == 'cups') {
       quantity[key] =
           value != null && value.isNotEmpty ? double.parse(value) * 340 : 0.0;
     }

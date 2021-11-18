@@ -79,10 +79,7 @@ class ImageProvider extends ChangeNotifier {
       task = kIsWeb
           ? firebaseStorageRef.putData(dataUint8)
           : firebaseStorageRef.putFile(imageFile);
-      await task.whenComplete(() {
-        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        // notifyListeners();
-      }).then((value) async {
+      await task.then((value) async {
         final downUrl = await value.ref.getDownloadURL();
         debugPrint('DOWNURL: $downUrl');
         imageLink = downUrl;
