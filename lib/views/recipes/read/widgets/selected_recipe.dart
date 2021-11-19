@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/instructions.dart';
-import 'package:sizer/sizer.dart';
 
 import 'creator_card.dart';
 import 'recipe_details.dart';
@@ -26,6 +25,8 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
   Map<String, dynamic> _data = {};
   @override
   Widget build(BuildContext context) {
+    final Size _size = MediaQuery.of(context).size;
+    final double _height = _size.height;
     final ScrollController _ctrl = ScrollController();
     return Consumer(
       builder: (_, watch, __) {
@@ -60,14 +61,14 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
                   opacity: 0.9,
                   child: _recipe.image,
                 ),
-                expandedHeight: kIsWeb ? 80.h : 60.h,
+                expandedHeight: kIsWeb ? _height * 0.6 : _height * 0.5,
               ),
               SliverList(
                 delegate: SliverChildListDelegate.fixed(
                   [
                     const CreatorCard(),
                     SizedBox(
-                      height: 85.h,
+                      height: _height * 0.80,
                       child:
                           StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
                         stream: getPath(_recipe.recipe.recipeId),

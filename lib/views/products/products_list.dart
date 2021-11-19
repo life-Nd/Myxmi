@@ -31,7 +31,6 @@ class _ProductsListState extends State<ProductsList> {
             itemBuilder: (_, index) {
               return Consumer(
                 builder: (_, watch, __) {
-                  final _user = watch(userProvider);
                   return Dismissible(
                     key: UniqueKey(),
                     dismissThresholds: const {
@@ -93,7 +92,7 @@ class _ProductsListState extends State<ProductsList> {
                             },
                           ),
                         ),
-                        if (!_user.onPhone)
+                        // if (!_user.onPhone)
                           _EditProductButton(
                             index: index,
                             color: Colors.red,

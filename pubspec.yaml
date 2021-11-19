@@ -53,7 +53,7 @@ dependencies:
   package_info: ^2.0.0
   paginate_firestore: ^1.0.2
   rate_my_app: ^1.1.0+1
-  sizer: ^2.0.13
+  responsive_framework: ^0.1.5
   sn_progress_dialog: ^1.0.2
   timeago: ^3.0.2
   timetable: 

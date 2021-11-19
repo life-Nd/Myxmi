@@ -3,7 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/recipes.dart';
 import 'package:myxmi/pages/add_comments.dart';
-import 'package:sizer/sizer.dart';
+
 import 'add_favorite.dart';
 import 'rating_stars.dart';
 
@@ -70,6 +70,9 @@ class _RecipeImageClip extends HookWidget {
   });
   @override
   Widget build(BuildContext context) {
+    final Size _size = MediaQuery.of(context).size;
+    final double _width = _size.width;
+    final double _height = _size.height;
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: imageUrl != null
@@ -79,8 +82,8 @@ class _RecipeImageClip extends HookWidget {
               fit: fitWidth ? BoxFit.fitWidth : BoxFit.values[4],
               cacheWidth: 1000,
               cacheHeight: 1000,
-              height: 100.h,
-              width: 100.w,
+              height: _height * 0.5,
+              width: _width,
             )
           : Stack(
               alignment: Alignment.center,

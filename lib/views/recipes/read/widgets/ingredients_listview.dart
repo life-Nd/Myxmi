@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import '../../../../main.dart';
+import 'package:myxmi/views/products/read/widgets/product_details.dart';
 import 'recipe_details.dart';
 
 class IngredientsInRecipeListView extends HookWidget {
@@ -13,7 +13,6 @@ class IngredientsInRecipeListView extends HookWidget {
     final List _keys = ingredients.keys.toList();
     final _change = useState<bool>(false);
     final _recipe = useProvider(recipeDetailsProvider);
-    final _user = useProvider(userProvider);
     final _checkedIngredients = _recipe.checkedIngredients;
     bool _isText;
     String _keyText;
@@ -64,16 +63,16 @@ class IngredientsInRecipeListView extends HookWidget {
                   ),
                 ],
               ),
-              // trailing: EditCartButton(
-              //     name: _isText
-              //         ? '${_keys[index]} ${ingredients[_keys[index]]}'
-              //         : ingredients[_keys[index]] as String),
+              trailing: EditCartButton(
+                  name: _isText
+                      ? '${_keys[index]} ${ingredients[_keys[index]]}'
+                      : ingredients[_keys[index]] as String),
             ),
-            if (_user.onPhone)
-              const Divider(
-                indent: 80,
-                color: Colors.grey,
-              )
+            // if (_user.onPhone)
+            //   const Divider(
+            //     indent: 80,
+            //     color: Colors.grey,
+            //   )
           ],
         );
       },

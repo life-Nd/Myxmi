@@ -102,7 +102,7 @@ class SaveButton extends HookWidget {
 
               Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(
-                    builder: (context) => Home(),
+                    builder: (context) => HomeView(),
                   ),
                   (route) => false);
             }

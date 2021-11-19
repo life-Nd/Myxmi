@@ -10,7 +10,7 @@ import 'package:myxmi/views/recipes/add/infos/portions_field.dart';
 import 'package:myxmi/views/recipes/add/infos/sub_categories/subcategory_selector.dart';
 import 'package:myxmi/views/recipes/add/infos/title_field.dart';
 import 'package:myxmi/views/recipes/add/next_button.dart';
-import 'package:sizer/sizer.dart';
+
 import '../views/home/home_view.dart';
 import 'add_products_to_recipes.dart';
 
@@ -22,6 +22,7 @@ List steps = [];
 class AddInfosToRecipe extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final Size _size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: CustomScrollView(
@@ -36,7 +37,7 @@ class AddInfosToRecipe extends StatelessWidget {
                   _recipe.reset();
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => Home(),
+                      builder: (_) => HomeView(),
                     ),
                   );
                 },
@@ -82,7 +83,7 @@ class AddInfosToRecipe extends StatelessWidget {
                 ),
               ],
             ),
-            expandedHeight: 45.h,
+            expandedHeight: _size.height * 0.5,
           ),
           SliverList(
             delegate: SliverChildListDelegate.fixed(
@@ -95,8 +96,8 @@ class AddInfosToRecipe extends StatelessWidget {
                 const PortionsField(),
                 const SizedBox(height: 4),
                 SizedBox(
-                  height: 10.h,
-                  width: 100.w,
+                  height: _size.height / 10,
+                  width: _size.width,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

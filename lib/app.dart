@@ -25,9 +25,13 @@ class _StreamAuthBuilder extends StatelessWidget {
     return StreamBuilder<User>(
       stream: FirebaseAuth.instance.userChanges(),
       builder: (context, AsyncSnapshot<User> snapUser) {
-        final _user = context.read(userProvider);
-        _user.account = snapUser.data;
-        return Home();
+        return Consumer(
+          builder: (context, watch, child) {
+            final _user = watch(userProvider);
+            _user.account = snapUser.data;
+            return HomeView();
+          },
+        );
       },
     );
   }
@@ -36,6 +40,7 @@ class _StreamAuthBuilder extends StatelessWidget {
 class _HotRestartByPassBuilder extends StatelessWidget {
   static final Future<SharedPreferences> prefs =
       SharedPreferences.getInstance();
+
   ///Check if isLoggedIn locally
   static Future<bool> isLoggedIn() async {
     final SharedPreferences _prefs = await prefs;
@@ -44,10 +49,10 @@ class _HotRestartByPassBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // final Size _size = MediaQuery.of(context).size;
     return Consumer(builder: (_, watch, __) {
       final _userProvider = watch(userProvider);
-      
-      
+
       return FutureBuilder<bool>(
         future: isLoggedIn(),
         builder: (context, AsyncSnapshot<bool> snapshot) {
@@ -55,7 +60,7 @@ class _HotRestartByPassBuilder extends StatelessWidget {
             if (snapshot.data) {
               // if locally saved on web that isLoggedIn get the user's infos from FirebaseAuth local storage
               _userProvider.account = FirebaseAuth?.instance?.currentUser;
-              return Home();
+              return HomeView();
             } else {
               // if not locally saved on web that isLoggedIn stream the user's infos from FirebaseAuth online
               return _StreamAuthBuilder();

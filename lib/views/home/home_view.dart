@@ -1,14 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_device_type/flutter_device_type.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/main.dart';
-import 'package:myxmi/providers/app_sources.dart';
 import 'package:myxmi/providers/home_view.dart';
 import 'package:myxmi/views/home/widgets/app_bottom_navigation.dart';
 import 'package:myxmi/views/home/widgets/body.dart';
 import 'package:myxmi/views/home/widgets/web_appbar.dart';
-import 'package:sizer/sizer.dart';
 import '../../pages/add_infos_to_recipe.dart';
 import '../products/add/add_product_view.dart';
 
@@ -46,33 +42,16 @@ final homeViewProvider = ChangeNotifierProvider<HomeViewProvider>(
   (ref) => HomeViewProvider(),
 );
 
-class Home extends StatefulWidget {
+class HomeView extends StatefulWidget {
   static const String route = '/home';
+
   @override
-  State<Home> createState() => _HomeState();
+  State<HomeView> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<HomeView> {
   @override
   void initState() {
-    final _user = context.read(userProvider);
-    final AppSourcesProvider _appSources = context.read(appSources);
-    if (kIsWeb) {
-      try {
-        if (Device.get().isPhone) {
-          _user.onPhone = true;
-          Future.delayed(Duration.zero, () {
-            _appSources.downloadAppDialog(context);
-          });
-        } else {
-          if (Device.get().isTablet && 100.w > 700) _user.onPhone = false;
-        }
-      } catch (error) {
-        _user.onPhone = false;
-      }
-    } else {
-      _user.onPhone = true;
-    }
     super.initState();
   }
 
@@ -91,7 +70,7 @@ class _HomeState extends State<Home> {
           appBar: _size.width >= 700
               ? AppBar(
                   automaticallyImplyLeading: false,
-                  title: WebAppBar(uid: _user?.account?.uid),
+                  flexibleSpace: WebAppBar(uid: _user?.account?.uid),
                 )
               : null,
           floatingActionButton: _viewIndex == 0 ||

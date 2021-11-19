@@ -99,7 +99,7 @@ class CommentsView extends HookWidget {
                     _view.view = 4;
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (_) => Home(),
+                        builder: (_) => HomeView(),
                       ),
                     );
                   },

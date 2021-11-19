@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myxmi/models/recipes.dart';
-import 'package:sizer/sizer.dart';
+
 import 'recipe_tile.dart';
 
 class SimilarRecipes extends StatelessWidget {
@@ -8,9 +8,12 @@ class SimilarRecipes extends StatelessWidget {
   const SimilarRecipes({@required this.suggestedRecipes});
   @override
   Widget build(BuildContext context) {
+    final Size _size = MediaQuery.of(context).size;
+    final double _width = _size.width;
+    final double _height = _size.height;
     return Container(
       height: 400,
-      width: 60.w,
+      width: _width * 0.25,
       margin: const EdgeInsets.only(left: 20),
       alignment: Alignment.bottomLeft,
       padding: const EdgeInsets.only(left: 10),
@@ -20,8 +23,8 @@ class SimilarRecipes extends StatelessWidget {
         itemCount: suggestedRecipes.length,
         itemBuilder: (_, int index) {
           return SizedBox(
-            width: 44.w,
-            height: 44.h,
+            width: _width * 0.25,
+            height: _height * 0.56,
             child: RecipeTile(
               recipes: suggestedRecipes,
               index: index,

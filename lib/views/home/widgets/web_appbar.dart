@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/main.dart';
 import 'package:myxmi/utils/user_avatar.dart';
 import 'package:myxmi/views/home/home_view.dart';
-import 'package:sizer/sizer.dart';
+//
 
 class WebAppBar extends StatelessWidget {
   final String uid;
@@ -17,10 +17,10 @@ class WebAppBar extends StatelessWidget {
       final _user = watch(userProvider);
       return SizedBox(
         width: _size.width,
-        child: SingleChildScrollView(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            if (_size.width >= 770)
               const Padding(
                 padding: EdgeInsets.only(left: 10.0),
                 child: Text(
@@ -28,7 +28,8 @@ class WebAppBar extends StatelessWidget {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
-              Row(
+            Expanded(
+              child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   _PageViewButton(uid: uid, index: 0, text: 'home'),
@@ -37,52 +38,51 @@ class WebAppBar extends StatelessWidget {
                   _PageViewButton(uid: uid, index: 3, text: 'products'),
                 ],
               ),
-              Row(
-                children: [
-                  if (uid != null)
-                    _PageViewButton(uid: uid, index: 4, text: 'more')
-                  else
-                    _PageViewButton(uid: uid, index: 4, text: 'signIn'),
-                  // if (uid == null)
-                  //   _PageViewButton(uid: uid, index: 6, text: 'signUp'),
-                  if (uid != null)
-                    Card(
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(100),
-                          bottomLeft: Radius.circular(100),
-                          topRight: Radius.circular(20),
-                          bottomRight: Radius.circular(20),
-                        ),
-                      ),
-                      elevation: 20,
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 10.0),
-                        child: Row(
-                          children: [
-                            if (_user.account.photoURL != null)
-                              UserAvatar(
-                                  photoUrl: _user?.account?.photoURL,
-                                  radius: 5.w)
-                            else
-                              const Center(
-                                child: Icon(
-                                  Icons.person,
-                                  size: 33 * 1.2,
-                                ),
-                              ),
-                            if (_user?.account?.displayName != null)
-                              Text(_user?.account?.displayName)
-                            else
-                              Text(_user?.account?.email),
-                          ],
-                        ),
+            ),
+            Row(
+              children: [
+                if (uid != null)
+                  _PageViewButton(uid: uid, index: 4, text: 'more')
+                else
+                  _PageViewButton(uid: uid, index: 4, text: 'signIn'),
+                // if (uid == null)
+                //   _PageViewButton(uid: uid, index: 6, text: 'signUp'),
+                if (uid != null && _size.width >= 750)
+                  Card(
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(100),
+                        bottomLeft: Radius.circular(100),
+                        topRight: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
                       ),
                     ),
-                ],
-              ),
-            ],
-          ),
+                    elevation: 20,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 10.0),
+                      child: Row(
+                        children: [
+                          if (_user.account.photoURL != null)
+                            UserAvatar(
+                                photoUrl: _user?.account?.photoURL, radius: 50)
+                          else
+                            const Center(
+                              child: Icon(
+                                Icons.person,
+                                size: 33 * 1.2,
+                              ),
+                            ),
+                          if (_user?.account?.displayName != null)
+                            Text(_user?.account?.displayName)
+                          else
+                            Text(_user?.account?.email),
+                        ],
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ],
         ),
       );
     });

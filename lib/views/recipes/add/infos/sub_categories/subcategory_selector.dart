@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/pages/add_infos_to_recipe.dart';
-import 'package:sizer/sizer.dart';
+
 import 'drinks_subcategories.dart';
 import 'food_subcategories.dart';
 import 'vape_subcategories.dart';
@@ -12,6 +12,9 @@ class SubCategorySelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Size _size = MediaQuery.of(context).size;
+    final double _width = _size.width;
+    final double _height = _size.height;
     return Consumer(builder: (_, watch, child) {
       final _recipe = watch(recipeEntriesProvider);
       return Column(
@@ -19,8 +22,8 @@ class SubCategorySelector extends StatelessWidget {
         children: [
           Text('subCategory'.tr()),
           SizedBox(
-            width: 100.w,
-            height: 7.h,
+            width: _width,
+            height: _height,
             child: Center(
               child: subCategory(
                 category: _recipe.recipe.category,

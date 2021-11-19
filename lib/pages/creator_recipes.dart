@@ -3,7 +3,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:myxmi/utils/user_avatar.dart';
 import 'package:myxmi/views/recipes/read/view.dart';
-import 'package:sizer/sizer.dart';
 
 class CreatorRecipes extends StatelessWidget {
   final String uid;
@@ -18,9 +17,10 @@ class CreatorRecipes extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final Size _size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size(100.w, 114),
+        preferredSize: Size(_size.width, 114),
         child: SafeArea(
           child: Row(
             children: [

@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
+
 import 'selectable_row.dart';
 
 class DietSelector extends StatelessWidget {
@@ -10,9 +10,11 @@ class DietSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Size _size = MediaQuery.of(context).size;
+    final double _width = _size.width;
     return SizedBox(
-      width: 100.w,
-      height: 7.h,
+      width: _width,
+      height: _size.height * 0.3,
       child: const Center(
         child: SelectableRow(
           textList: [

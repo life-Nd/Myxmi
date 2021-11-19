@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/instructions.dart';
 import 'package:myxmi/providers/recipe_details.dart';
 import 'package:myxmi/utils/no_data.dart';
-import 'package:sizer/sizer.dart';
+
 import 'comments_view.dart';
 import 'ingredients_listview.dart';
 import 'selected_recipe.dart';
@@ -33,6 +33,8 @@ class _RecipeDetailsState extends State<RecipeDetails> {
 
   @override
   Widget build(BuildContext context) {
+    final Size _size = MediaQuery.of(context).size;
+    final double _height = _size.height;
     return Consumer(builder: (context, watch, child) {
       final _selectedView = watch(selectedRecipeView);
       return Column(
@@ -44,7 +46,7 @@ class _RecipeDetailsState extends State<RecipeDetails> {
             reviewsLength: widget?.instructions?.comments?.length,
           ),
           SizedBox(
-            height: 70.h,
+            height: _height * 0.70,
             child: PageView(
               controller: pageController,
               onPageChanged: (index) {
