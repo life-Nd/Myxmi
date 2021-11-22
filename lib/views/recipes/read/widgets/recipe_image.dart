@@ -3,8 +3,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/recipes.dart';
 import 'package:myxmi/pages/add_comments.dart';
-
-import 'add_favorite.dart';
 import 'rating_stars.dart';
 
 class RecipeImage extends StatelessWidget {
@@ -20,7 +18,6 @@ class RecipeImage extends StatelessWidget {
     return Consumer(
       builder: (context, watch, child) {
         final _recipe = recipe;
-
         return Stack(
           alignment: Alignment.topRight,
           children: [
@@ -31,12 +28,11 @@ class RecipeImage extends StatelessWidget {
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Flexible(
-                  child: AddFavoriteButton(recipe: _recipe),
-                ),
-                const Spacer(),
+                // Flexible(
+                //   child: AddFavoriteButton(recipe: _recipe),
+                // ),
                 // const Spacer(),
                 InkWell(
                   onTap: () {

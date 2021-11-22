@@ -5,6 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/feedback.dart';
 import 'package:myxmi/utils/format_time.dart';
+import 'package:myxmi/utils/loading_column.dart';
 import '../main.dart';
 
 final TextEditingController _ctrl = TextEditingController();
@@ -30,13 +31,7 @@ class FeedbackScreen extends HookWidget {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   debugPrint(
                       '--FIREBASE-- READING: Feedback/${_user?.account?.uid}');
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('loading'.tr()),
-                      const CircularProgressIndicator(),
-                    ],
-                  );
+                  return const LoadingColumn();
                 }
                 if (snapshot.data != null) {
                   _snapshotData = snapshot.data.data() as Map<String, dynamic>;

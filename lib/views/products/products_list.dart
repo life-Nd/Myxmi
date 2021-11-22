@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_device_type/flutter_device_type.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/product.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,81 +30,74 @@ class _ProductsListState extends State<ProductsList> {
             controller: _ctrl,
             itemCount: widget.products.length,
             itemBuilder: (_, index) {
-              return Consumer(
-                builder: (_, watch, __) {
-                  return Dismissible(
-                    key: UniqueKey(),
-                    dismissThresholds: const {
-                      DismissDirection.startToEnd: 0.4,
-                    },
-                    confirmDismiss: (direction) async {
-                      return false;
-                    },
-                    movementDuration: const Duration(seconds: 7),
-                    background: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Card(
-                        color: Colors.red,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              widget.type == 'EditProducts'
-                                  ? 'delete'.tr()
-                                  : 'hide'.tr(),
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17,
-                                  color: Colors.white),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            _EditProductButton(
-                              index: index,
-                              color: Colors.white,
-                              type: widget.type,
-                              products: widget.products,
-                              setState: () => setState(() {}),
-                            ),
-                          ],
-                        ),
-                      ),
+              return Dismissible(
+                key: UniqueKey(),
+                dismissThresholds: const {
+                  DismissDirection.startToEnd: 0.4,
+                },
+                confirmDismiss: (direction) async {
+                  return false;
+                },
+                movementDuration: const Duration(seconds: 7),
+                background: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Card(
+                    color: Colors.red,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
                     ),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Expanded(
-                          child: FutureBuilder(
-                            future: getProductDetails(
-                                id: widget.products[index].productId),
-                            builder: (_, AsyncSnapshot<ProductModel> snapshot) {
-                              widget.products[index].left =
-                                  snapshot?.data?.left;
-                              widget.products[index].expiration =
-                                  snapshot?.data?.expiration;
-                              return widget.type == 'AddProcuctsToRecipe'
-                                  ? ProductField(
-                                      product: widget.products[index])
-                                  : ProductDetails(
-                                      product: widget.products[index]);
-                            },
-                          ),
+                        Text(
+                          widget.type == 'EditProducts'
+                              ? 'delete'.tr()
+                              : 'hide'.tr(),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17,
+                              color: Colors.white),
                         ),
-                        // if (!_user.onPhone)
-                          _EditProductButton(
-                            index: index,
-                            color: Colors.red,
-                            type: widget.type,
-                            products: widget.products,
-                            setState: () => setState(() {}),
-                          ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        _EditProductButton(
+                          index: index,
+                          color: Colors.white,
+                          type: widget.type,
+                          products: widget.products,
+                          setState: () => setState(() {}),
+                        ),
                       ],
                     ),
-                  );
-                },
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: FutureBuilder(
+                        future: getProductDetails(
+                            id: widget.products[index].productId),
+                        builder: (_, AsyncSnapshot<ProductModel> snapshot) {
+                          widget.products[index].left = snapshot?.data?.left;
+                          widget.products[index].expiration =
+                              snapshot?.data?.expiration;
+                          return widget.type == 'AddProcuctsToRecipe'
+                              ? ProductField(product: widget.products[index])
+                              : ProductDetails(product: widget.products[index]);
+                        },
+                      ),
+                    ),
+                    if (!Device.get().isPhone)
+                      _EditProductButton(
+                        index: index,
+                        color: Colors.red,
+                        type: widget.type,
+                        products: widget.products,
+                        setState: () => setState(() {}),
+                      ),
+                  ],
+                ),
               );
             },
           )
@@ -153,23 +147,23 @@ class _EditProductButton extends StatelessWidget {
             color: color,
             size: 30,
           ),
-          onPressed: type == 'EditProducts'
-              ? () {
-                  _delete(
-                      uid: _user?.account?.uid,
-                      productId: products[index].productId);
-                }
-              : () {
-                  _hide(
-                    productId: products[index].productId,
-                    products: products,
-                  );
-                  setState();
-                  // stateSetter(() {});
-                },
+          onPressed: () => editProducts(_user.account.uid),
         );
       },
     );
+  }
+
+  void editProducts(String uid) {
+    if (type == 'EditProducts') {
+      _delete(uid: uid, productId: products[index].productId);
+    } else {
+      _hide(
+        productId: products[index].productId,
+        products: products,
+      );
+    }
+
+    setState();
   }
 
   Future _delete({@required String productId, @required String uid}) async {

@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/product.dart';
+import 'package:myxmi/utils/loading_column.dart';
 import '../../main.dart';
 import 'add/add_product_view.dart';
 import 'auto_complete_products.dart';
@@ -57,10 +58,7 @@ class _ProductsState extends State<Products> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             debugPrint(
                 '--FIREBASE-- Reading: Products/${_user?.account?.uid} ');
-            return Container(
-              alignment: Alignment.center,
-              child: Text('${'loading'.tr()}...'),
-            );
+            return const LoadingColumn();
           }
           if (snapshot.data != null) {
             final DocumentSnapshot<Map<String, dynamic>> _data =
@@ -113,18 +111,22 @@ class ProductsView extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: AutoCompleteProducts(
-                      suggestions: products,
-                      controller: _searchProductsCtrl,
-                      onSubmit: () {
-                        // _filteredProducts.clear();
-                        stateSetter(() {});
-                      },
-                      onClear: () {
-                        _filterProducts().clear();
-                        _searchProductsCtrl.clear();
-                        stateSetter(() {});
-                      }),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 10.0, right: 10.0, top: 4, bottom: 8),
+                    child: AutoCompleteProducts(
+                        suggestions: products,
+                        controller: _searchProductsCtrl,
+                        onSubmit: () {
+                          // _filteredProducts.clear();
+                          stateSetter(() {});
+                        },
+                        onClear: () {
+                          _filterProducts().clear();
+                          _searchProductsCtrl.clear();
+                          stateSetter(() {});
+                        }),
+                  ),
                 ),
                 if (type == 'AddProcuctsToRecipe')
                   Center(

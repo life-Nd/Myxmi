@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_device_type/flutter_device_type.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/views/home/home_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class AppSourcesProvider {
+class AppNetworkProvider {
   Map _data = {};
   String googlePlayUrl;
   // android: https://play.google.com/store
@@ -16,7 +16,7 @@ class AppSourcesProvider {
   String googlePlayIdentifier;
   bool availableForDevice = false;
 
-  void readAppSourcesUrls() {
+  void getAppNetwork(BuildContext context) {
     final _db = FirebaseFirestore.instance;
     _db
         .collection('Sources')
@@ -33,11 +33,23 @@ class AppSourcesProvider {
             Device.get().isIos ? appstoreUrl != null : googlePlayUrl != null;
       }
     });
+    if (kIsWeb) {
+      try {
+        if (Device.get().isPhone) {
+          debugPrint('--Mobile Web started--');
+          downloadAppDialog(context);
+        } else {
+          debugPrint('--Browser Web started--');
+        }
+      } catch (error) {
+        debugPrint('--App started--');
+      }
+    }
   }
 
   void downloadAppDialog(BuildContext context) {
-    final _home = context.read(homeViewProvider);
-    if (_home.showDownloadDialog) {
+    // final _home = context.read(homeViewProvider);
+    if (1 == 1) {
       if (_data != null) {
         showDialog(
           context: context,
@@ -140,7 +152,7 @@ class AppSourcesProvider {
                   ),
                   fillColor: Colors.red,
                   onPressed: () {
-                    _home.showDownloadDialog = false;
+                    // _home.showDownloadDialog = false;
                     Navigator.of(context).pop();
                   },
                   child: Padding(

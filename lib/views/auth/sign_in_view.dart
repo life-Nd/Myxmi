@@ -17,8 +17,17 @@ final TextEditingController _passwordCtrl = TextEditingController();
 
 FocusNode _passwordNode = FocusNode();
 
-class SignIn extends StatelessWidget {
-  // final FocusNode _passwordNode = FocusNode();
+class SignIn extends StatefulWidget {
+  @override
+  State<SignIn> createState() => _SignInState();
+}
+
+class _SignInState extends State<SignIn> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer(
@@ -106,6 +115,7 @@ class SignIn extends StatelessWidget {
                                         _view.view = 0;
                                         _emailCtrl.clear();
                                         _passwordCtrl.clear();
+
                                         break;
                                       case 'user-not-found':
                                         dialogNoAccountFound(
@@ -171,7 +181,7 @@ class SignIn extends StatelessWidget {
                 const SizedBox(
                   height: 50,
                 ),
-                // if (!Platform.isAndroid && Platform.isIOS)
+                // if (Platform.isIOS)
                 //   Container(
                 //     decoration: BoxDecoration(
                 //       borderRadius: BorderRadius.circular(20),

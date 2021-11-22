@@ -8,9 +8,9 @@ import 'package:myxmi/views/home/home_view.dart';
 import 'package:myxmi/views/recipes/read/view.dart';
 import '../../../main.dart';
 import '../../menu/view.dart';
-import '../../menu/widgets/search.dart';
 import '../../more.dart';
 import '../../products/products.dart';
+import 'search_recipes_in_db.dart';
 
 class Body extends StatelessWidget {
   Widget _build(int _view, String _uid) {

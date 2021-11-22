@@ -17,7 +17,7 @@ class More extends HookWidget {
   Widget build(BuildContext context) {
     final _auth = useProvider(authProvider);
     final _user = useProvider(userProvider);
-    final _appSources = useProvider(appSources);
+    final _appSources = useProvider(appNetworkProvider);
     bool _isPhone = true;
     try {
       _isPhone = Device.get().isPhone;
@@ -79,6 +79,15 @@ class More extends HookWidget {
                 rateMyApp.showRateDialog(context);
               },
             ),
+          const Divider(color: Colors.grey),
+          ListTile(
+            leading: const Icon(Icons.rate_review),
+            title: Text('${'inviteFriendsTo'.tr()} Myxmi'),
+            trailing: const Icon(Icons.arrow_forward_ios),
+            onTap: () async {
+              //  TODO add sharing the app link to contacts
+            },
+          ),
           const Divider(color: Colors.grey),
           ListTile(
               leading: const Icon(Icons.support),

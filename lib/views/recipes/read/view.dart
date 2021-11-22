@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/recipes.dart';
+import 'package:myxmi/utils/loading_column.dart';
 import 'widgets/auto_complete_recipes.dart';
 import 'widgets/recipes_grid.dart';
 
@@ -50,12 +51,7 @@ class Recipes extends StatelessWidget {
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
             debugPrint('--FIREBASE-- Reading: Recipes/$searchFieldLabel ');
-            return Container(
-              alignment: Alignment.center,
-              child: Text(
-                "${'loading'.tr()}...",
-              ),
-            );
+            return const LoadingColumn();
           }
           if (snapshot.data != null) {
             return RecipesList(
@@ -127,18 +123,22 @@ class _RecipesListState extends State<RecipesList> {
               Row(
                 children: [
                   Expanded(
-                    child: AutoCompleteRecipes(
-                        suggestions: widget.list,
-                        controller: _searchMyRecipesCtrl,
-                        onSubmit: () {
-                          _filterRecipes().clear();
-                          stateSetter(() {});
-                        },
-                        onClear: () {
-                          _filterRecipes().clear();
-                          _searchMyRecipesCtrl.clear();
-                          stateSetter(() {});
-                        }),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 10.0, right: 10.0, top: 4, bottom: 8),
+                      child: AutoCompleteRecipes(
+                          suggestions: widget.list,
+                          controller: _searchMyRecipesCtrl,
+                          onSubmit: () {
+                            _filterRecipes().clear();
+                            stateSetter(() {});
+                          },
+                          onClear: () {
+                            _filterRecipes().clear();
+                            _searchMyRecipesCtrl.clear();
+                            stateSetter(() {});
+                          }),
+                    ),
                   ),
                 ],
               ),

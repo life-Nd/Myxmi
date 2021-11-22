@@ -3,7 +3,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:myxmi/models/recipes.dart';
 
-// ignore: must_be_immutable
+// This class filters (with the search bar) all the recipes already fetched from the API
+// NOTE: It does not fetch from the API again, it just filters the recipes already fetched
+
 class AutoCompleteRecipes extends StatefulWidget {
   final List<RecipeModel> suggestions;
   final TextEditingController controller;
@@ -74,17 +76,18 @@ class _AutoCompleteRecipesState extends State<AutoCompleteRecipes> {
       },
       suggestions: widget.suggestions,
       decoration: InputDecoration(
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-          contentPadding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
-          filled: true,
-          hintText: 'searchRecipe'.tr(),
-          prefixIcon: IconButton(
-            icon: const Icon(Icons.clear, color: Colors.red),
-            onPressed: () {
-              _searchTextField.clear();
-              widget.onClear();
-            },
-          )),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+        contentPadding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+        filled: true,
+        hintText: 'searchRecipe'.tr(),
+        prefixIcon: IconButton(
+          icon: const Icon(Icons.clear, color: Colors.red),
+          onPressed: () {
+            _searchTextField.clear();
+            widget.onClear();
+          },
+        ),
+      ),
     );
     return _searchTextField;
   }

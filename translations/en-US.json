@@ -264,5 +264,8 @@
    "bad": "Not that great",
    "tellMe": "Tell me",
    "left": "left",
-   "expiryDate": "Expiry Date"
+   "expiryDate": "Expiry Date",
+   "inviteFriendsTo": "Invite friends to",
+   "noInternet": "No internet connection",
+   "pleaseCheckYourInternet": "Please check your internet connection"
 }

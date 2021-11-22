@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'menu_item.dart';
 
-// TODO Add Burgers/Sandwiches
-
 class FoodOptions extends HookWidget {
   final ScrollController _ctrl = ScrollController();
   @override
@@ -27,29 +25,18 @@ class FoodOptions extends HookWidget {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: const [
-              // DIMENSIONS:
-              // Image good on all devices
-              // 700*878
-              // SIZE: 107 kb
-
               MenuItem(
                 filter: 'sub_category',
                 legend: 'breakfast',
                 url:
                     'https://unsplash.com/photos/SQ20tWzxXO0?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink',
               ),
-              // DIMENSIONS:
-              // Image good on all devices
-              // 700*1050
-              // SIZE:85 kb
-
               MenuItem(
                 filter: 'sub_category',
                 legend: 'appetizer',
                 url:
                     'https://unsplash.com/photos/n9xsu46NGaE?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink',
               ),
-
               MenuItem(
                 filter: 'sub_category',
                 legend: 'salad',

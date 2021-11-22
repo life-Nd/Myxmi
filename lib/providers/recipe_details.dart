@@ -12,11 +12,6 @@ class RecipeDetailsProvider extends ChangeNotifier {
     recipe.likes[uid] = value;
   }
 
-  // void changePageIndex(int index) {
-  //   pageIndex = index;
-  //   notifyListeners();
-  // }
-
   void toggleIngredient(dynamic key) {
     final bool _checked = checkedIngredients.contains(key);
     _checked ? checkedIngredients.remove(key) : checkedIngredients.add(key);

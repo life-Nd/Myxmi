@@ -2,11 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:myxmi/providers/app_sources.dart';
+import 'package:myxmi/providers/app_network.dart';
 import 'package:package_info/package_info.dart';
 
 class AboutView extends HookWidget {
-  final AppSourcesProvider _appSources = AppSourcesProvider();
+  final AppNetworkProvider _appNetwork = AppNetworkProvider();
   static const String _privacyUrl = 'https://myxmi.flycricket.io/privacy.html';
   static const String _termsUrl = 'https://myxmi.flycricket.io/terms.html';
   @override
@@ -21,7 +21,7 @@ class AboutView extends HookWidget {
           ListTile(
             leading: const Icon(Icons.privacy_tip),
             onTap: () {
-              _appSources.launchURL(url: _privacyUrl);
+              _appNetwork.launchURL(url: _privacyUrl);
             },
             title: Text(
               'privacy'.tr(),
@@ -32,7 +32,7 @@ class AboutView extends HookWidget {
           ListTile(
             leading: const Icon(Icons.book),
             onTap: () {
-                   _appSources.launchURL(url: _termsUrl);
+                   _appNetwork.launchURL(url: _termsUrl);
             },
             title: Text(
               'terms'.tr(),

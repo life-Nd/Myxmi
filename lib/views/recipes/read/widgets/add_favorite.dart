@@ -17,7 +17,6 @@ class AddFavoriteButton extends StatefulWidget {
   State<AddFavoriteButton> createState() => _AddFavoriteButtonState();
 }
 
-// TODO Use notifyListeners() instead of setState()
 class _AddFavoriteButtonState extends State<AddFavoriteButton> {
   @override
   Widget build(BuildContext context) {
@@ -33,124 +32,120 @@ class _AddFavoriteButtonState extends State<AddFavoriteButton> {
         }
         return StatefulBuilder(
           builder: (context, StateSetter stateSetter) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                if (_user.account?.uid == null)
-                  IconButton(
-                    icon: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.white,
-                      ),
-                      padding: const EdgeInsets.all(4),
-                      child: const Icon(
-                        Icons.favorite_border,
-                        color: Colors.black,
-                      ),
+            if (_user.account?.uid == null) {
+              return IconButton(
+                icon: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.white,
+                  ),
+                  padding: const EdgeInsets.all(4),
+                  child: const Icon(
+                    Icons.favorite_border,
+                    color: Colors.black,
+                  ),
+                ),
+                onPressed: () {
+                  // if the user not signed-in send him to sign-in page
+                  _view.view = 4;
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => HomeView(),
                     ),
-                    onPressed: () {
-                      // if the user not signed-in send him to sign-in page
-                      _view.view = 4;
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => HomeView(),
-                        ),
-                      );
-                    },
-                  )
-                else
-                  (!_recipe.isLiked)
-                      ? IconButton(
-                          icon: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Colors.white,
-                            ),
-                            padding: const EdgeInsets.all(4),
-                            child: const Icon(
-                              Icons.favorite_border,
-                              color: Colors.red,
-                            ),
-                          ),
-                          onPressed: () {
-                            debugPrint('Like tapped');
-                            // Like recipe and save it to DB
+                  );
+                },
+              );
+            } else if (!_recipe.isLiked) {
+              return IconButton(
+                icon: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.white,
+                  ),
+                  padding: const EdgeInsets.all(4),
+                  child: const Icon(
+                    Icons.favorite_border,
+                    color: Colors.red,
+                  ),
+                ),
+                onPressed: () {
+                  debugPrint('Like tapped');
+                  // Like recipe and save it to DB
 
-                            FirebaseFirestore.instance
-                                .collection('Recipes')
-                                .doc(widget.recipe.recipeId)
-                                .set(
-                              {
-                                'likes': {
-                                  _user.account.uid: true,
-                                }
-                              },
-                              SetOptions(
-                                merge: true,
-                              ),
-                            );
-                            debugPrint(
-                                '--FIREBASE-- Writing: Recipes/${widget.recipe.recipeId}.likes: ${_user.account.uid}: false,  ');
-                            if (widget.recipe.likes != {} ||
-                                widget.recipe.likes.isEmpty) {
-                              widget.recipe.likes = {};
-                            }
-                            widget.recipe.likes[_user.account.uid] = true;
-                            setState(() {});
-                          },
-                        )
-                      : IconButton(
-                          icon: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Colors.white,
-                            ),
-                            padding: const EdgeInsets.all(4),
-                            child: const Icon(
-                              Icons.favorite_outlined,
-                              color: Colors.red,
-                            ),
-                          ),
-                          onPressed: () {
-                            // Unlike this recipe and delete it from DB
-                            debugPrint('Unlike tapped');
-                            FirebaseFirestore.instance
-                                .collection('Recipes')
-                                .doc(widget.recipe.recipeId)
-                                .set(
-                              {
-                                'likes': {
-                                  _user.account.uid: false,
-                                },
-                              },
-                              SetOptions(
-                                merge: true,
-                              ),
-                            );
-                            debugPrint(
-                                '--FIREBASE-- Writing: Recipes/${widget.recipe.recipeId}.likes: ${_user.account.uid}: false,  ');
-                            widget.recipe.likes[_user.account.uid] = false;
-                            setState(() {});
-                          },
-                        ),
-                // IconButton(
-                //   icon: Container(
-                //     decoration: BoxDecoration(
-                //       borderRadius: BorderRadius.circular(20),
-                //       color: Colors.white,
-                //     ),
-                //     padding: const EdgeInsets.all(4),
-                //     child: Icon(
-                //         Platform.isIOS
-                //             ? Icons.ios_share_outlined
-                //             : Icons.share_outlined,
-                //         color: Colors.black),
-                //   ),
-                //   onPressed: () {},
-                // ),
-              ],
-            );
+                  FirebaseFirestore.instance
+                      .collection('Recipes')
+                      .doc(widget.recipe.recipeId)
+                      .set(
+                    {
+                      'likes': {
+                        _user.account.uid: true,
+                      }
+                    },
+                    SetOptions(
+                      merge: true,
+                    ),
+                  );
+                  debugPrint(
+                      '--FIREBASE-- Writing: Recipes/${widget.recipe.recipeId}.likes: ${_user.account.uid}: false,  ');
+                  if (widget.recipe.likes != {} ||
+                      widget.recipe.likes.isEmpty) {
+                    widget.recipe.likes = {};
+                  }
+                  widget.recipe.likes[_user.account.uid] = true;
+                  setState(() {});
+                },
+              );
+            } else {
+              return IconButton(
+                icon: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.white,
+                  ),
+                  padding: const EdgeInsets.all(4),
+                  child: const Icon(
+                    Icons.favorite_outlined,
+                    color: Colors.red,
+                  ),
+                ),
+                onPressed: () {
+                  // Unlike this recipe and delete it from DB
+                  debugPrint('Unlike tapped');
+                  FirebaseFirestore.instance
+                      .collection('Recipes')
+                      .doc(widget.recipe.recipeId)
+                      .set(
+                    {
+                      'likes': {
+                        _user.account.uid: false,
+                      },
+                    },
+                    SetOptions(
+                      merge: true,
+                    ),
+                  );
+                  debugPrint(
+                      '--FIREBASE-- Writing: Recipes/${widget.recipe.recipeId}.likes: ${_user.account.uid}: false,  ');
+                  widget.recipe.likes[_user.account.uid] = false;
+                  setState(() {});
+                },
+              );
+            }
+            // IconButton(
+            //   icon: Container(
+            //     decoration: BoxDecoration(
+            //       borderRadius: BorderRadius.circular(20),
+            //       color: Colors.white,
+            //     ),
+            //     padding: const EdgeInsets.all(4),
+            //     child: Icon(
+            //         Platform.isIOS
+            //             ? Icons.ios_share_outlined
+            //             : Icons.share_outlined,
+            //         color: Colors.black),
+            //   ),
+            //   onPressed: () {},
+            // ),
           },
         );
       },

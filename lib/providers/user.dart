@@ -6,7 +6,7 @@ class UserProvider extends ChangeNotifier {
   User account;
   String timeEmailSent;
   Map<String, dynamic> favorites = {};
-  bool onPhone;
+
 
   Future changeUsername({String newName}) async {
     await account.updateDisplayName(newName);

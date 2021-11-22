@@ -13,7 +13,7 @@ class SimilarRecipes extends StatelessWidget {
     final double _height = _size.height;
     return Container(
       height: 400,
-      width: _width * 0.25,
+      width: _width * 0.4,
       margin: const EdgeInsets.only(left: 20),
       alignment: Alignment.bottomLeft,
       padding: const EdgeInsets.only(left: 10),
@@ -23,8 +23,8 @@ class SimilarRecipes extends StatelessWidget {
         itemCount: suggestedRecipes.length,
         itemBuilder: (_, int index) {
           return SizedBox(
-            width: _width * 0.25,
-            height: _height * 0.56,
+            width: _width * 0.4,
+            height: _height * 0.7,
             child: RecipeTile(
               recipes: suggestedRecipes,
               index: index,

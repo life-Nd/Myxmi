@@ -3,6 +3,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:myxmi/models/product.dart';
 
+// This class filters (with the search bar) all the products already fetched from the API
+// NOTE: It does not fetch from the API again, it just filters the recipes already fetched
+
 class AutoCompleteProducts extends StatefulWidget {
   final List<ProductModel> suggestions;
   final TextEditingController controller;
@@ -35,7 +38,6 @@ class _AutoCompleteProductsState extends State<AutoCompleteProducts> {
         _searchTextField.textField.controller.text = submitted;
         widget.onSubmit();
       },
-      
       itemBuilder: (context, item) {
         return Card(
           elevation: 20,
@@ -80,14 +82,15 @@ class _AutoCompleteProductsState extends State<AutoCompleteProducts> {
         filled: true,
         hintText: 'searchInMyProducts'.tr(),
         prefixIcon: IconButton(
-            icon: const Icon(
-              Icons.clear,
-              color: Colors.red,
-            ),
-            onPressed: () {
-              widget.onClear();
-              _searchTextField.clear();
-            }),
+          icon: const Icon(
+            Icons.clear,
+            color: Colors.red,
+          ),
+          onPressed: () {
+            widget.onClear();
+            _searchTextField.clear();
+          },
+        ),
       ),
     );
     return _searchTextField;

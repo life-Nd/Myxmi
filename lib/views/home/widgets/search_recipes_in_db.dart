@@ -11,7 +11,8 @@ class SearchRecipesInDb extends HookWidget {
     return Consumer(builder: (_, watch, __) {
       final _view = watch(homeViewProvider);
       return Padding(
-        padding: const EdgeInsets.only(top: 4.0),
+        padding:
+            const EdgeInsets.only(left: 10.0, right: 10.0, top: 4, bottom: 8),
         child: TextField(
           controller: _view.searchCtrl,
           onSubmitted: (submitted) {

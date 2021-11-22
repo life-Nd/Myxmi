@@ -271,5 +271,8 @@
    "bad": "Mauvaise",
    "tellMe": "Dites moi",
    "left": "reste",
-   "expiryDate": "Date d'expiration"
+   "expiryDate": "Date d'expiration",
+   "inviteFriendsTo": "Inviter vos amis à",
+   "noInternet": "Pas d'internet",
+   "pleaseCheckYourInternet": "Verifiez votre connection internet"
 }
