@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/product.dart';
-import 'package:myxmi/pages/add_infos_to_recipe.dart';
+import 'package:myxmi/views/addRecipe/infos/add_infos_view.dart';
 
 TextEditingController textCtrl = TextEditingController();
 

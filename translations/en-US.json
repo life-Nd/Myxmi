@@ -116,7 +116,7 @@
    "camera": "Camera",
    "gallery": "Gallery",
    "reviews": "Reviews",
-   "noReviews": "No reviews",
+   "noComments": "No comments yet",
    "favorites": "Favorites",
    "recipe": "Recipe",
    "recipeName": "Recipe name",
@@ -267,5 +267,8 @@
    "expiryDate": "Expiry Date",
    "inviteFriendsTo": "Invite friends to",
    "noInternet": "No internet connection",
-   "pleaseCheckYourInternet": "Please check your internet connection"
+   "pleaseCheckYourInternet": "Please check your internet connection",
+   "mealPlanner": "Meal Planner",
+   "comingSoon": "Coming soon",
+   "featureNotAvailable": "This feature is not available yet"
 }

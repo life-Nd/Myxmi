@@ -29,14 +29,15 @@ class AppNetworkProvider {
         appstoreUrl = _data['appStoreUrl'] as String;
         googlePlayIdentifier = _data['googlePlayIdentifier'] as String;
         appStoreIdentifier = _data['appStoreIdentifier'] as String;
-        availableForDevice =
-            Device.get().isIos ? appstoreUrl != null : googlePlayUrl != null;
       }
     });
     if (kIsWeb) {
+      debugPrint('kIsWeb: $kIsWeb');
       try {
         if (Device.get().isPhone) {
           debugPrint('--Mobile Web started--');
+          availableForDevice =
+              Device.get().isIos ? appstoreUrl != null : googlePlayUrl != null;
           downloadAppDialog(context);
         } else {
           debugPrint('--Browser Web started--');
@@ -48,87 +49,55 @@ class AppNetworkProvider {
   }
 
   void downloadAppDialog(BuildContext context) {
-    // final _home = context.read(homeViewProvider);
-    if (1 == 1) {
-      if (_data != null) {
-        showDialog(
-          context: context,
-          builder: (_) {
-            return AlertDialog(
-              contentPadding: const EdgeInsets.all(20),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              title: Center(
-                child: Text(
-                  'tryOurApp'.tr(),
-                ),
+    if (_data != null) {
+      showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            contentPadding: const EdgeInsets.all(20),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            title: Center(
+              child: Text(
+                'tryOurApp'.tr(),
               ),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text('aBetterExperience'.tr()),
-                  Row(
-                    children: [
-                      Text('downloadAppOn'.tr()),
-                      if (Device.get().isAndroid)
-                        const Text('Playstore')
-                      else
-                        const Text('AppStore')
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Column(
-                    children: [
-                      RawMaterialButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        fillColor: Device.get().isAndroid
-                            ? Colors.green.shade400
-                            : Colors.grey,
-                        onPressed: () {
-                          if (Device.get().isAndroid) {
-                            launchURL(url: googlePlayUrl);
-                          }
-                        },
-                        child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Row(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: Image.asset(
-                                    'assets/playstore.png',
-                                    height: 40,
-                                    width: 40,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                Text('downloadAndroidApp'.tr())
-                              ],
-                            )),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('aBetterExperience'.tr()),
+                Row(
+                  children: [
+                    Text('downloadAppOn'.tr()),
+                    if (Device.get().isAndroid)
+                      const Text('Playstore')
+                    else
+                      const Text('AppStore')
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Column(
+                  children: [
+                    RawMaterialButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                      const SizedBox(height: 10),
-                      RawMaterialButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        fillColor: Device.get().isIos
-                            ? Colors.green.shade400
-                            : Colors.grey,
-                        onPressed: () {
-                          launchURL(url: appstoreUrl);
-                        },
-                        child: Padding(
+                      fillColor: Device.get().isAndroid
+                          ? Colors.green.shade400
+                          : Colors.grey,
+                      onPressed: () {
+                        if (Device.get().isAndroid) {
+                          launchURL(url: googlePlayUrl);
+                        }
+                      },
+                      child: Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: Row(
                             children: [
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(20),
                                 child: Image.asset(
-                                  'assets/appstore.png',
+                                  'assets/playstore.png',
                                   height: 40,
                                   width: 40,
                                 ),
@@ -136,35 +105,64 @@ class AppNetworkProvider {
                               const SizedBox(
                                 width: 4,
                               ),
-                              Text('downloadIosApp'.tr())
+                              Text('downloadAndroidApp'.tr())
                             ],
-                          ),
+                          )),
+                    ),
+                    const SizedBox(height: 10),
+                    RawMaterialButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      fillColor: Device.get().isIos
+                          ? Colors.green.shade400
+                          : Colors.grey,
+                      onPressed: () {
+                        launchURL(url: appstoreUrl);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Row(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: Image.asset(
+                                'assets/appstore.png',
+                                height: 40,
+                                width: 40,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 4,
+                            ),
+                            Text('downloadIosApp'.tr())
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ],
-              ),
-              actions: [
-                RawMaterialButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  fillColor: Colors.red,
-                  onPressed: () {
-                    // _home.showDownloadDialog = false;
-                    Navigator.of(context).pop();
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text('close'.tr()),
-                  ),
-                )
+                    ),
+                  ],
+                ),
               ],
-            );
-          },
-        );
-      }
+            ),
+            actions: [
+              RawMaterialButton(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                fillColor: Colors.red,
+                onPressed: () {
+                  // _home.showDownloadDialog = false;
+                  Navigator.of(context).pop();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text('close'.tr()),
+                ),
+              )
+            ],
+          );
+        },
+      );
     }
   }
 

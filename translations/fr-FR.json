@@ -124,7 +124,7 @@
    "camera": "Camera",
    "gallery": "Gallerie",
    "reviews": "Avis",
-   "noReviews": "Pas d'avis",
+   "noComments": "Pas encore de commentaires",
    "favorites": "Favoris",
    "recipe": "Recette",
    "myRecipes": "Mes recettes",
@@ -274,5 +274,8 @@
    "expiryDate": "Date d'expiration",
    "inviteFriendsTo": "Inviter vos amis à",
    "noInternet": "Pas d'internet",
-   "pleaseCheckYourInternet": "Verifiez votre connection internet"
+   "pleaseCheckYourInternet": "Verifiez votre connection internet",
+   "mealPlanner": "Plan de repas",
+   "comingSoon": "Bientot disponible",
+   "featureNotAvailable": "Cette fonctionnalité n'est pas encore disponible"
 }

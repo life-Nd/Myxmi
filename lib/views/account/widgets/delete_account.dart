@@ -45,7 +45,7 @@ class DeleteAccount extends HookWidget {
                               await _user.deleteAccount();
                               Navigator.of(context).pushAndRemoveUntil(
                                   MaterialPageRoute(
-                                    builder: (_) => App(),
+                                    builder: (_) => const App(),
                                   ),
                                   (route) => false);
                             },

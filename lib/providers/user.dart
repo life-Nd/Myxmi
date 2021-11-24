@@ -23,7 +23,7 @@ class UserProvider extends ChangeNotifier {
     await account.updatePhotoURL(photoUrl).whenComplete(
           () => Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => App(),
+              builder: (_) => const App(),
             ),
           ),
         );

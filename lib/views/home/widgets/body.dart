@@ -1,15 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/views/auth/sign_in_view.dart';
+import 'package:myxmi/streams/products.dart';
+import 'package:myxmi/streams/recipes.dart';
+import 'package:myxmi/views/auth/auth_view.dart';
 import 'package:myxmi/views/home/home_view.dart';
-import 'package:myxmi/views/recipes/read/view.dart';
 import '../../../main.dart';
-import '../../menu/view.dart';
-import '../../more.dart';
-import '../../products/products.dart';
+import '../../menu/menu_view.dart';
+import '../../more/more_view.dart';
 import 'search_recipes_in_db.dart';
 
 class Body extends StatelessWidget {
@@ -29,14 +28,16 @@ class Body extends StatelessWidget {
 
       case 1:
         // Show stream of recipes filtered with the user id
-        return child = isSignedIn ? const _MyRecipes() : SignIn();
+        return child = isSignedIn ? RecipesUidStream(uid: _uid) : SignIn();
       case 2:
         // Show stream of recipes liked by the user id
-        return child = isSignedIn ? const _Favorites() : SignIn();
+        return child = isSignedIn ? RecipesLikesStream(uid: _uid) : SignIn();
       case 3:
         // Show stream of products under the user id
         return child =
-            isSignedIn ? const Products(type: 'EditProducts') : SignIn();
+            isSignedIn
+            ? const ProductsStreamBuilder(type: 'EditProducts')
+            : SignIn();
       case 4:
         // Show profile, settings, about,and sign out
         return child = isSignedIn ? More() : SignIn();
@@ -72,7 +73,7 @@ class _HomePageBody extends HookWidget {
     final ScrollController _ctrl = useMemoized(() => ScrollController());
     final _view = useProvider(homeViewProvider);
     if (_view.searchCtrl.text.isNotEmpty) {
-      return Recipes(
+      return RecipesStreamBuilder(
         showAutoCompleteField: false,
         snapshots: _view.searchWithCtrl(searchKey: 'title').snapshots(),
         searchFieldLabel: 'title== ${_view.searchCtrl.text}',
@@ -83,46 +84,5 @@ class _HomePageBody extends HookWidget {
         child: const Menu(),
       );
     }
-  }
-}
-
-class _MyRecipes extends HookWidget {
-  const _MyRecipes({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final _user = useProvider(userProvider);
-    final String _uid = _user?.account?.uid;
-    return Recipes(
-      showAutoCompleteField: true,
-      searchFieldLabel: 'uid == $_uid',
-      // recipesPath: RECIPESBY.creatorUid,
-      snapshots: FirebaseFirestore.instance
-          .collection('Recipes')
-          .where('uid', isEqualTo: _uid)
-          .snapshots(),
-    );
-  }
-}
-
-class _Favorites extends HookWidget {
-  const _Favorites({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final _user = useProvider(userProvider);
-    final String _uid = _user?.account?.uid;
-    return Recipes(
-      searchFieldLabel: 'likes/uid == $_uid',
-      showAutoCompleteField: true,
-      snapshots: FirebaseFirestore.instance
-          .collection('Recipes')
-          .where('likes.$_uid', isEqualTo: true)
-          .snapshots(),
-    );
   }
 }

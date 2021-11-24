@@ -2,12 +2,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:myxmi/utils/loading_column.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'main.dart';
+import 'streams/auth.dart';
 import 'views/home/home_view.dart';
 
 class App extends StatelessWidget {
-  static const String route = '/';
+  const App({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     if (foundation.kDebugMode && foundation.kIsWeb) {
@@ -15,25 +18,7 @@ class App extends StatelessWidget {
       return _HotRestartByPassBuilder();
     }
     // If not web get data cached by FirebaseAuth or reload new data
-    return _StreamAuthBuilder();
-  }
-}
-
-class _StreamAuthBuilder extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<User>(
-      stream: FirebaseAuth.instance.userChanges(),
-      builder: (context, AsyncSnapshot<User> snapUser) {
-        return Consumer(
-          builder: (context, watch, child) {
-            final _user = watch(userProvider);
-            _user.account = snapUser.data;
-            return HomeView();
-          },
-        );
-      },
-    );
+    return const StreamAuthBuilder();
   }
 }
 
@@ -52,7 +37,6 @@ class _HotRestartByPassBuilder extends StatelessWidget {
     // final Size _size = MediaQuery.of(context).size;
     return Consumer(builder: (_, watch, __) {
       final _userProvider = watch(userProvider);
-
       return FutureBuilder<bool>(
         future: isLoggedIn(),
         builder: (context, AsyncSnapshot<bool> snapshot) {
@@ -63,13 +47,11 @@ class _HotRestartByPassBuilder extends StatelessWidget {
               return HomeView();
             } else {
               // if not locally saved on web that isLoggedIn stream the user's infos from FirebaseAuth online
-              return _StreamAuthBuilder();
+              return const StreamAuthBuilder();
             }
           } else {
             return const Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
-              ),
+              body: LoadingColumn(),
             );
           }
         },

@@ -51,7 +51,7 @@ class AuthProvider extends ChangeNotifier {
         () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => App(),
+              builder: (_) => const App(),
             ),
           );
         },

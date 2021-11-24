@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/pages/filtered.dart';
+import 'package:myxmi/views/recipes/filtered_view.dart';
 
 class MenuItem extends StatefulWidget {
   final String legend;
@@ -24,6 +24,7 @@ class _MenuItemState extends State<MenuItem> {
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
+    final Orientation _orientation = MediaQuery.of(context).orientation;
     return Consumer(builder: (_, watch, __) {
       return InkWell(
         onTap: () {
@@ -44,10 +45,12 @@ class _MenuItemState extends State<MenuItem> {
           child: Column(
             children: [
               SizedBox(
-                height: _kIsWeb && _size.width > 700
+                height: _kIsWeb && _size.width > 700 ||
+                        _orientation == Orientation.landscape
                     ? _size.height / 2.4
                     : _size.height / 3.7,
-                width: _kIsWeb && _size.width > 700
+                width: _kIsWeb && _size.width > 700 ||
+                        _orientation == Orientation.landscape
                     ? _size.width / 3.2
                     : _size.width / 1.8,
                 child: ClipRRect(
@@ -65,7 +68,8 @@ class _MenuItemState extends State<MenuItem> {
               ),
               Container(
                 padding: const EdgeInsets.only(left: 10, right: 10, bottom: 4),
-                width: _kIsWeb && _size.width > 700
+                width: _kIsWeb && _size.width > 700 ||
+                        _orientation == Orientation.landscape
                     ? _size.width / 3.2
                     : _size.width / 1.8,
                 child: SingleChildScrollView(

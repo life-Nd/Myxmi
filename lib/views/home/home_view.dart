@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/main.dart';
 import 'package:myxmi/providers/home_view.dart';
+import 'package:myxmi/views/addRecipe/infos/add_infos_view.dart';
 import 'package:myxmi/views/home/widgets/app_bottom_navigation.dart';
 import 'package:myxmi/views/home/widgets/body.dart';
 import 'package:myxmi/views/home/widgets/web_appbar.dart';
-import '../../pages/add_infos_to_recipe.dart';
-import '../products/add/add_product_view.dart';
+import '../products/add/add_new_product_view.dart';
+
 
 // ADDRECIPE <a href="https://storyset.com/work">Work illustrations by Storyset</a>
 // APPETIZERS https://unsplash.com/photos/n9xsu46NGaE?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
 // BASE
 // BREAKFAST https://unsplash.com/photos/SQ20tWzxXO0?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
-// COCKTAIL https://unsplash.com/photos/J5wrhsSPN9o?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
+// COCKTAIL https://unsplash.com/photos/1hKZ0A182Bk?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
 // DAIRY
 // DATA_NOT_FOUND // <a href="https://storyset.com/work">Work illustrations by Storyset</a>
 // DESSERT https://unsplash.com/photos/6iqpLKqeaE0?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
@@ -33,10 +34,11 @@ import '../products/add/add_product_view.dart';
 // SOUP https://unsplash.com/photos/8mVLMZ0WW98?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
 // VEGAN https://unsplash.com/photos/zOlQ7lF-3vs?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
 // VEGAN2 https://unsplash.com/photos/-ftWfohtjNw?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
-// VEGAN3 https://unsplash.com/photos/4Q_xlBOaCso?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
+// VEGAN https://unsplash.com/photos/HCZUMu843MQ?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
 // VEGETERIAN https://unsplash.com/photos/IGfIGP5ONV0?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
 // VEGETARIAN2 https://unsplash.com/photos/nou2DipA4uM?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
 // VEGETARIAN3 https://unsplash.com/photos/12eHC6FxPyg?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
+
 
 final homeViewProvider = ChangeNotifierProvider<HomeViewProvider>(
   (ref) => HomeViewProvider(),
@@ -58,7 +60,6 @@ class _HomeState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
-
     return Consumer(
       builder: (_, watch, __) {
         final _view = watch(homeViewProvider);

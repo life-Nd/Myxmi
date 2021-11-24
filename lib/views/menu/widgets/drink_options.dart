@@ -26,7 +26,7 @@ class DrinkItems extends HookWidget {
                 filter: 'sub_category',
                 legend: 'cocktail',
                 url:
-                    'https://unsplash.com/photos/J5wrhsSPN9o?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink',
+                    'https://unsplash.com/photos/SQ20tWzxXO0?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink',
               ),
               // DIMENSIONS:
               // Image good on all devices

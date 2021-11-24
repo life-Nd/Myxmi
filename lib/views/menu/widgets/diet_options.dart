@@ -33,7 +33,7 @@ class DietOptions extends HookWidget {
                   filter: 'diet',
                   legend: 'vegetarian',
                   url:
-                      'https://unsplash.com/photos/IGfIGP5ONV0?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink'),
+                      'https://unsplash.com/photos/HCZUMu843MQ?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink'),
               MenuItem(
                   filter: 'diet',
                   legend: 'keto',

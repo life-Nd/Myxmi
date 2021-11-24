@@ -1,4 +1,4 @@
-class ReviewsModel {
+class CommentsModel {
   static const _message = 'message';
   static const _sent = 'sent';
   static const _uid = 'uid';
@@ -11,14 +11,14 @@ class ReviewsModel {
   String uid;
   String avatar;
   String tried;
-  ReviewsModel(
+  CommentsModel(
       {this.message,
       this.messageId,
       this.sent,
       this.uid,
       this.avatar,
       this.tried});
-  ReviewsModel.fromSnapshot({
+  CommentsModel.fromSnapshot({
     Map<String, String> snapshot,
   }) {
     message = snapshot[_message];

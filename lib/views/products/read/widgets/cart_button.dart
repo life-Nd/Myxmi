@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/pages/cart.dart';
+import 'package:myxmi/views/cart/cart_view.dart';
 import '../../../../main.dart';
 
 class CartButton extends StatelessWidget {
@@ -19,7 +19,7 @@ class CartButton extends StatelessWidget {
               return InkWell(
                 onTap: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => CartScreen()),
+                    MaterialPageRoute(builder: (_) => CartView()),
                   );
                 },
                 child: Container(

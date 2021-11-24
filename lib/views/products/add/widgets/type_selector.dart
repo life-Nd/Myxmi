@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../add_product_view.dart';
+import '../add_new_product_view.dart';
 
 class ProductsTypeSelector extends StatelessWidget {
   const ProductsTypeSelector({
