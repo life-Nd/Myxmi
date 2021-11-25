@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/models/feedback.dart';
+import 'package:myxmi/models/tickets.dart';
 import 'package:myxmi/utils/format_time.dart';
 
 import '../../../main.dart';
@@ -19,19 +19,19 @@ class FeedbackList extends StatelessWidget {
       shrinkWrap: true,
       itemCount: _keys.length,
       itemBuilder: (_, int index) {
-        FeedbackModel _feedback = const FeedbackModel();
-        _feedback = FeedbackModel.fromSnapshot(
+        SupportTicketsModel _support = const SupportTicketsModel();
+        _support = SupportTicketsModel.fromSnapshot(
           keyIndex: _keys[index] as String,
           snapshot: snapshotData[_keys[index]] as Map<String, dynamic>,
         );
         final String _time = DateTime.fromMillisecondsSinceEpoch(
-          int.parse(_feedback.messageId),
+          int.parse(_support.messageId),
         ).toString();
         final String _formattedTime = formatTime(DateTime.parse(_time));
         return Consumer(
           builder: (_, watch, child) {
             final _user = watch(userProvider);
-            final bool _isSender = _feedback.sender == _user?.account?.uid;
+            final bool _isSender = _support.sender == _user?.account?.uid;
             return Container(
               padding:
                   const EdgeInsets.only(left: 4, right: 14, top: 5, bottom: 5),
@@ -45,15 +45,15 @@ class FeedbackList extends StatelessWidget {
                           ? MainAxisAlignment.start
                           : MainAxisAlignment.end,
                       children: [
-                        if (_feedback.experience != null)
-                          if (_feedback.experience == 'amazing')
+                        if (_support.experience != null)
+                          if (_support.experience == 'amazing')
                             const Text(
                               '😀',
                               style: TextStyle(
                                 fontSize: 24,
                               ),
                             )
-                          else if (_feedback.experience == 'okay')
+                          else if (_support.experience == 'okay')
                             const Text(
                               '🙂',
                               style: TextStyle(
@@ -77,7 +77,7 @@ class FeedbackList extends StatelessWidget {
                             padding: const EdgeInsets.only(
                                 left: 50, right: 50, top: 10, bottom: 10),
                             child: Text(
-                              _feedback.message,
+                              _support.message,
                               style: const TextStyle(fontSize: 15),
                             ),
                           ),

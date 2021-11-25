@@ -78,7 +78,7 @@ class _MenuItemState extends State<MenuItem> {
                     widget.url,
                     style: TextStyle(
                       fontSize: 10,
-                      color: Colors.grey.shade400,
+                      color: Colors.grey.shade500,
                     ),
                   ),
                 ),

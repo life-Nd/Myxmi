@@ -27,6 +27,7 @@ class RecipeImage extends StatelessWidget {
               subCategory: _recipe.subCategory,
             ),
             Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -78,12 +79,14 @@ class _RecipeImageClip extends HookWidget {
       child: imageUrl != null
           ? Image.network(
               imageUrl,
-              // fit: BoxFit.fitWidth,
               fit: fitWidth ? BoxFit.fitWidth : BoxFit.values[4],
               cacheWidth: 1000,
               cacheHeight: 1000,
-              height: _height * 0.5,
+              height: _height,
               width: _width,
+              errorBuilder: (context, child, error) {
+                return const Center(child: CircularProgressIndicator());
+              },
             )
           : Stack(
               alignment: Alignment.center,
@@ -94,6 +97,7 @@ class _RecipeImageClip extends HookWidget {
                       ? Image.asset(
                           'assets/$subCategory.jpg',
                           fit: BoxFit.fitWidth,
+                          height: _height,
                           cacheWidth: 1000,
                           cacheHeight: 1000,
                           colorBlendMode: BlendMode.color,

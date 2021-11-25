@@ -1,4 +1,4 @@
-class FeedbackModel {
+class SupportTicketsModel {
   static const _message = 'message';
   static const _sender = 'sender';
   static const _name = 'name';
@@ -14,7 +14,7 @@ class FeedbackModel {
   final String receiver;
   final String email;
   final String messageId;
-  const FeedbackModel(
+  const SupportTicketsModel(
       {this.message,
       this.name,
       this.experience,
@@ -22,9 +22,9 @@ class FeedbackModel {
       this.receiver,
       this.email,
       this.messageId});
-  factory FeedbackModel.fromSnapshot(
+  factory SupportTicketsModel.fromSnapshot(
       {Map<String, dynamic> snapshot, String keyIndex}) {
-    return FeedbackModel(
+    return SupportTicketsModel(
       messageId: keyIndex,
       message: snapshot[_message] as String,
       name: snapshot[_name] as String,

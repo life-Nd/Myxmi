@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:myxmi/utils/selectable_row.dart';
 import '../add_infos_view.dart';
-import '../utils/selectable_row.dart';
 
 class SubCategorySelector extends StatelessWidget {
   const SubCategorySelector({Key key}) : super(key: key);

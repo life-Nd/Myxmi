@@ -8,7 +8,6 @@ import 'package:myxmi/views/home/widgets/body.dart';
 import 'package:myxmi/views/home/widgets/web_appbar.dart';
 import '../products/add/add_new_product_view.dart';
 
-
 // ADDRECIPE <a href="https://storyset.com/work">Work illustrations by Storyset</a>
 // APPETIZERS https://unsplash.com/photos/n9xsu46NGaE?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
 // BASE
@@ -39,24 +38,11 @@ import '../products/add/add_new_product_view.dart';
 // VEGETARIAN2 https://unsplash.com/photos/nou2DipA4uM?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
 // VEGETARIAN3 https://unsplash.com/photos/12eHC6FxPyg?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
 
-
 final homeViewProvider = ChangeNotifierProvider<HomeViewProvider>(
   (ref) => HomeViewProvider(),
 );
 
-class HomeView extends StatefulWidget {
-  static const String route = '/home';
-
-  @override
-  State<HomeView> createState() => _HomeState();
-}
-
-class _HomeState extends State<HomeView> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
+class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
@@ -68,6 +54,7 @@ class _HomeState extends State<HomeView> {
         return Scaffold(
           extendBodyBehindAppBar: true,
           resizeToAvoidBottomInset: true,
+
           appBar: _size.width >= 700
               ? AppBar(
                   automaticallyImplyLeading: false,

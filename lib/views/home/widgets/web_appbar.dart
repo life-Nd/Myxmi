@@ -22,12 +22,13 @@ class WebAppBar extends StatelessWidget {
           children: [
             if (_size.width >= 770)
               const Padding(
-                padding: EdgeInsets.only(left: 10.0),
+                padding: EdgeInsets.only(left: 5.0),
                 child: Text(
                   'Myxmi',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
+            const SizedBox(width: 40),
             Expanded(
               child: Row(
                 mainAxisSize: MainAxisSize.min,

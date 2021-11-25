@@ -36,6 +36,10 @@ class SaveButton extends HookWidget {
               _recipe.instructions.uid = _user.account.uid;
               _recipe.recipe.username = _user.account.displayName;
               _recipe.recipe.userphoto = _user.account.photoURL;
+              _recipe.recipe.tags = [
+                _recipe.recipe.category,
+                _recipe.recipe.subCategory
+              ];
               final SharedPreferences _prefs =
                   await SharedPreferences.getInstance();
               final Map _composition = _recipe.composition;

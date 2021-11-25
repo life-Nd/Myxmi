@@ -3,11 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/utils/auth.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-
+import 'package:url_strategy/url_strategy.dart';
 import 'app.dart';
 import 'providers/app_network.dart';
 import 'providers/cart.dart';
@@ -15,8 +14,6 @@ import 'providers/prefs.dart';
 import 'providers/user.dart';
 import 'utils/dark_theme.dart';
 import 'utils/light_theme.dart';
-
-// TODO https://myxmi.app/more/about/privacy
 
 final userProvider =
     ChangeNotifierProvider<UserProvider>((ref) => UserProvider());
@@ -35,7 +32,9 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await EasyLocalization.ensureInitialized();
-  !kIsWeb ?? MobileAds.instance.initialize();
+  // !kIsWeb ?? MobileAds.instance.initialize();
+  setPathUrlStrategy();
+
   kIsWeb ?? FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
 
   runApp(
@@ -58,10 +57,8 @@ Future<void> main() async {
                           : ThemeMode.dark;
                 }
                 return MaterialApp(
-          
                   builder: (context, widget) => ResponsiveWrapper.builder(
                     BouncingScrollWrapper.builder(context, widget),
-                    maxWidth: 1200,
                     minWidth: 450,
                     defaultScale: true,
                     breakpoints: const [
@@ -75,7 +72,7 @@ Future<void> main() async {
                   title: 'Myxmi',
                   localizationsDelegates: context.localizationDelegates,
                   supportedLocales: context.supportedLocales,
-                  locale: context.locale,
+                  // locale: context.locale,
                   theme: lightTheme,
                   darkTheme: darkTheme,
                   themeMode: _storedTheme,

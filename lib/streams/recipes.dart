@@ -2,9 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:myxmi/utils/loading_column.dart';
-import 'package:myxmi/views/recipes/widgets/recipes_list.dart';
+import 'package:myxmi/views/recipes/widgets/recipes_view.dart';
 
 class RecipesStreamBuilder extends StatelessWidget {
   const RecipesStreamBuilder({
@@ -18,8 +17,10 @@ class RecipesStreamBuilder extends StatelessWidget {
   final String searchFieldLabel;
   final bool showAutoCompleteField;
 
+ 
   @override
   Widget build(BuildContext context) {
+    debugPrint('building RecipesStreamBuilder');
     return StreamBuilder<QuerySnapshot>(
       stream: snapshots,
       builder: (_, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -37,9 +38,10 @@ class RecipesStreamBuilder extends StatelessWidget {
           return const LoadingColumn();
         }
         if (snapshot.data != null) {
-          return RecipesList(
+          final _data = snapshot.data;
+          return RecipesView(
             showAutoCompleteField: showAutoCompleteField,
-            querySnapshot: snapshot.data,
+            querySnapshot: _data,
           );
         } else {
           return Column(
@@ -63,7 +65,7 @@ class RecipesStreamBuilder extends StatelessWidget {
   }
 }
 
-class RecipesLikesStream extends HookWidget {
+class RecipesLikesStream extends StatelessWidget {
   const RecipesLikesStream({
     Key key,
     @required this.uid,
@@ -82,7 +84,7 @@ class RecipesLikesStream extends HookWidget {
   }
 }
 
-class RecipesUidStream extends HookWidget {
+class RecipesUidStream extends StatelessWidget {
   const RecipesUidStream({
     Key key,
     @required this.uid,

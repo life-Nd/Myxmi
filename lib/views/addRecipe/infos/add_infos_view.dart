@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/providers/recipe_entries.dart';
-import 'package:myxmi/views/addRecipe/utils/next_button.dart';
+import 'package:myxmi/utils/next_button.dart';
 import 'package:myxmi/views/home/home_view.dart';
 import '../products/add_product_to_recipe_view.dart';
 import 'widgets/category_selector.dart';

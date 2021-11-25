@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/utils/loading_column.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'main.dart';
 import 'streams/auth.dart';
@@ -40,19 +39,14 @@ class _HotRestartByPassBuilder extends StatelessWidget {
       return FutureBuilder<bool>(
         future: isLoggedIn(),
         builder: (context, AsyncSnapshot<bool> snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.data) {
-              // if locally saved on web that isLoggedIn get the user's infos from FirebaseAuth local storage
-              _userProvider.account = FirebaseAuth?.instance?.currentUser;
-              return HomeView();
-            } else {
-              // if not locally saved on web that isLoggedIn stream the user's infos from FirebaseAuth online
-              return const StreamAuthBuilder();
-            }
+          if (snapshot.connectionState == ConnectionState.done &&
+              !snapshot.data) {
+            // if not locally saved on web that isLoggedIn stream the user's infos from FirebaseAuth online
+            return const StreamAuthBuilder();
           } else {
-            return const Scaffold(
-              body: LoadingColumn(),
-            );
+            // if locally saved on web that isLoggedIn get the user's infos from FirebaseAuth local storage
+            _userProvider.account = FirebaseAuth?.instance?.currentUser;
+            return HomeView();
           }
         },
       );

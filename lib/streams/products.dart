@@ -13,6 +13,7 @@ class ProductsStreamBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('building ProductsStreamBuilder');
     return Consumer(builder: (_, watch, child) {
       final _user = watch(userProvider);
       return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
@@ -21,6 +22,7 @@ class ProductsStreamBuilder extends StatelessWidget {
             .doc(_user.account.uid)
             .snapshots(),
         builder: (_, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          debugPrint('snapshotProduct: ${snapshot?.error}');
           if (snapshot.hasError) {
             return Container(
                 alignment: Alignment.center,

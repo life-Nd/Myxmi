@@ -7,29 +7,18 @@ import 'recipes_grid.dart';
 
 TextEditingController _searchMyRecipesCtrl = TextEditingController();
 
-class RecipesList extends StatefulWidget {
+class RecipesView extends StatelessWidget {
   final QuerySnapshot querySnapshot;
   final bool showAutoCompleteField;
 
-  const RecipesList(
+  const RecipesView(
       {Key key,
       @required this.querySnapshot,
       @required this.showAutoCompleteField})
       : super(key: key);
-  @override
-  State<StatefulWidget> createState() => _RecipesListState();
-}
-
-class _RecipesListState extends State<RecipesList> {
-  @override
-  void initState() {
-    _searchMyRecipesCtrl = TextEditingController();
-    super.initState();
-  }
-
   List<RecipeModel> _recipes() {
-    if (widget.querySnapshot.docs.isNotEmpty) {
-      return widget.querySnapshot.docs.map((QueryDocumentSnapshot data) {
+    if (querySnapshot.docs.isNotEmpty) {
+      return querySnapshot.docs.map((QueryDocumentSnapshot data) {
         return RecipeModel.fromSnapshot(
           snapshot: data.data() as Map<String, dynamic>,
           keyIndex: data.id,
@@ -56,11 +45,13 @@ class _RecipesListState extends State<RecipesList> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('building RecipesView');
+
     return StatefulBuilder(
       builder: (context, StateSetter stateSetter) {
         return Column(
           children: [
-            if (widget.showAutoCompleteField)
+            if (showAutoCompleteField)
               Row(
                 children: [
                   Expanded(

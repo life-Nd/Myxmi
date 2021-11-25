@@ -2,9 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/streams/products.dart';
+import 'package:myxmi/utils/next_button.dart';
 import 'package:myxmi/views/addRecipe/infos/add_infos_view.dart';
 import 'package:myxmi/views/addRecipe/instructions/view.dart';
-import 'package:myxmi/views/addRecipe/utils/next_button.dart';
 
 class AddProductsToRecipe extends StatelessWidget {
   @override

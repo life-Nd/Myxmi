@@ -35,9 +35,15 @@ class RecipeTile extends StatelessWidget {
           );
           _recipeProvider.suggestedRecipes = recipes;
           // Navigator.of(context).pushNamed(SelectedRecipe.route);
+
           Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => const SelectedRecipe()),
+            MaterialPageRoute(
+              builder: (_) => const SelectedRecipe(),
+            ),
           );
+          // context.vxNav.push(Uri.parse(Routes.recipe));
+          // FirebaseFirestore.instance.doc('Recipes').collection('');
+          debugPrint('_recipeId: ${_recipe.recipeId}');
         },
         child: Container(
           margin: const EdgeInsets.all(4),
@@ -45,9 +51,8 @@ class RecipeTile extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             gradient: LinearGradient(
               colors: [
-                Colors.grey.shade600,
-                Theme.of(context).cardColor,
                 Theme.of(context).scaffoldBackgroundColor,
+                Theme.of(context).cardColor,
               ],
             ),
           ),

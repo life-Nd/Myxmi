@@ -13,7 +13,7 @@ class LoadingColumn extends StatelessWidget {
           Text('loading'.tr()),
           const SizedBox(height: 10),
           const CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+            color: Colors.grey,
           ),
         ],
       ),

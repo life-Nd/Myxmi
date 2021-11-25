@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '../utils/selectable_row.dart';
+import 'package:myxmi/utils/selectable_row.dart';
+
 
 class CategorySelector extends StatelessWidget {
   const CategorySelector({

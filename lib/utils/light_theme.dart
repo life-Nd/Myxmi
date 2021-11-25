@@ -21,7 +21,7 @@ final ThemeData lightTheme = ThemeData(
     elevation: 1,
     titleTextStyle: TextStyle(color: Colors.black),
   ),
-  cardColor: const Color(0xFFF5F5F5),
+  cardColor: const Color(0xFFD6D6D6),
   dividerColor: const Color(0x1f6D42CE),
   highlightColor: Colors.white,
   focusColor: Colors.grey.shade800,

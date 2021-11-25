@@ -128,14 +128,39 @@ class SharedRecipe extends StatelessWidget {
   const SharedRecipe({Key key, @required this.recipeId}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: RecipesStreamBuilder(
-        searchFieldLabel: 'sharedRecipe',
-        snapshots: FirebaseFirestore.instance
-            .collection('Recipes')
-            .orderBy(recipeId)
-            .snapshots(),
-        showAutoCompleteField: true,
+    return MaterialApp(
+      home: Navigator(
+        pages: [
+          MaterialPage(
+            key: const ValueKey('recipe'),
+            child: Scaffold(
+              appBar: AppBar(
+                title: Text('${'recipe'.tr()}: '),
+              ),
+              body: RecipesStreamBuilder(
+                searchFieldLabel: 'sharedRecipe',
+                snapshots: FirebaseFirestore.instance
+                    .collection('Recipes')
+                    .orderBy(recipeId)
+                    .snapshots(),
+                showAutoCompleteField: true,
+              ),
+            ),
+          ),
+        ],
+        // child: Scaffold(
+        //   appBar: AppBar(
+        //     title: Text('${'recipe'.tr()}: '),
+        //   ),
+        //   body: RecipesStreamBuilder(
+        //     searchFieldLabel: 'sharedRecipe',
+        //     snapshots: FirebaseFirestore.instance
+        //         .collection('Recipes')
+        //         .orderBy(recipeId)
+        //         .snapshots(),
+        //     showAutoCompleteField: true,
+        //   ),
+        // ),
       ),
     );
   }

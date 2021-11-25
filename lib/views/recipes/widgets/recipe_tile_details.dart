@@ -28,6 +28,7 @@ class RecipeTileDetails extends HookWidget {
             color: Theme.of(context).appBarTheme.titleTextStyle.color,
             endIndent: 40,
           ),
+          // TODO UI ERROR WHEN SQUEEZED
           Row(
             children: [
               Text('${'ingredients'.tr()}: '),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:myxmi/streams/recipes.dart';
 import 'package:myxmi/utils/user_avatar.dart';
 
-class CreatorRecipes extends StatelessWidget {
+class CreatorRecipes extends StatefulWidget {
   final String uid;
   final String name;
   final String avatar;
@@ -14,16 +14,22 @@ class CreatorRecipes extends StatelessWidget {
     @required this.name,
     @required this.avatar,
   }) : super(key: key);
+
+  @override
+  State<CreatorRecipes> createState() => _CreatorRecipesState();
+}
+
+class _CreatorRecipesState extends State<CreatorRecipes> {
   @override
   Widget build(BuildContext context) {
-    final Size _size = MediaQuery.of(context).size;
+    // final Size _size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size(_size.width, 114),
+        preferredSize: const Size(double.infinity, 114),
         child: SafeArea(
           child: Row(
             children: [
-              if (avatar != null)
+              if (widget.avatar != null)
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -37,7 +43,7 @@ class CreatorRecipes extends StatelessWidget {
                     ),
                     UserAvatar(
                       radius: 77,
-                      photoUrl: avatar,
+                      photoUrl: widget.avatar,
                     ),
                   ],
                 )
@@ -46,8 +52,8 @@ class CreatorRecipes extends StatelessWidget {
               const SizedBox(
                 width: 20,
               ),
-              if (name != null)
-                Text('$name recipes')
+              if (widget.name != null)
+                Text('${widget.name} recipes')
               else
                 Text('${'noName'.tr()} recipes'),
               // subtitle: Text('$followersCount ${'followers'.tr()}'),
@@ -55,7 +61,7 @@ class CreatorRecipes extends StatelessWidget {
           ),
         ),
       ),
-      body: RecipesUidStream(uid: uid),
+      body: RecipesUidStream(uid: widget.uid),
     );
   }
 }

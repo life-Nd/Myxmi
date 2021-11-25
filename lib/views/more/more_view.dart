@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_device_type/flutter_device_type.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/views/feedback/feedback_view.dart';
+import 'package:myxmi/views/support/support_view.dart';
 import 'package:rate_my_app/rate_my_app.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../main.dart';
@@ -25,8 +25,7 @@ class More extends HookWidget {
     } catch (error) {
       _isPhone = MediaQuery.of(context).size.width <= 500;
     }
-    debugPrint(
-        '_appSources.availableForDevice:${_appSources.availableForDevice}, kIsWeb: $kIsWeb,_isPhone: $_isPhone');
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -63,22 +62,26 @@ class More extends HookWidget {
               );
             },
           ),
-          const Divider(color: Colors.grey),
-          if (_appSources.availableForDevice && !kIsWeb && _isPhone)
-            ListTile(
-              leading: const Icon(Icons.rate_review),
-              title: Text('rateMyxmi'.tr()),
-              trailing: const Icon(Icons.arrow_forward_ios),
-              onTap: () async {
-                final RateMyApp rateMyApp = RateMyApp(
-                  minDays: 1,
-                  minLaunches: 1,
-                  googlePlayIdentifier: _appSources.googlePlayIdentifier,
-                  appStoreIdentifier: _appSources.appStoreIdentifier,
-                );
-                rateMyApp.init();
-                rateMyApp.showRateDialog(context);
-              },
+          if (!kIsWeb)
+            Column(
+              children: [
+                const Divider(color: Colors.grey),
+                ListTile(
+                  leading: const Icon(Icons.rate_review),
+                  title: Text('rateMyxmi'.tr()),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                  onTap: () async {
+                    final RateMyApp rateMyApp = RateMyApp(
+                      minDays: 1,
+                      minLaunches: 1,
+                      googlePlayIdentifier: _appSources.googlePlayIdentifier,
+                      appStoreIdentifier: _appSources.appStoreIdentifier,
+                    );
+                    rateMyApp.init();
+                    rateMyApp.showRateDialog(context);
+                  },
+                ),
+              ],
             ),
           const Divider(color: Colors.grey),
           ListTile(
@@ -87,7 +90,7 @@ class More extends HookWidget {
             trailing: const Icon(Icons.arrow_forward_ios),
             onTap: () {
               Share.share(
-                  'Check out this amazing app: \n https://Myxmi.app \n 🍸  🥗  🥘  🌯  🌮  🍰',
+                  '${'checkOutThisApp'.tr()}: \n https://Myxmi.app \n 🍸  🥗  🥘  🌯  🌮  🍰',
                   subject: 'Myxmi');
             },
           ),
@@ -99,7 +102,7 @@ class More extends HookWidget {
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => FeedbackView(),
+                  builder: (_) => SupportTicketsView(),
                 ),
               );
             },

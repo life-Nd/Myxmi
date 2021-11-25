@@ -14,7 +14,7 @@ class AppNetworkProvider {
   // IOS : https://www.apple.com/ca/app-store/
   String appStoreIdentifier;
   String googlePlayIdentifier;
-  bool availableForDevice = false;
+  // bool availableForDevice = false;
 
   void getAppNetwork(BuildContext context) {
     final _db = FirebaseFirestore.instance;
@@ -31,20 +31,17 @@ class AppNetworkProvider {
         appStoreIdentifier = _data['appStoreIdentifier'] as String;
       }
     });
-    if (kIsWeb) {
-      debugPrint('kIsWeb: $kIsWeb');
-      try {
-        if (Device.get().isPhone) {
-          debugPrint('--Mobile Web started--');
-          availableForDevice =
-              Device.get().isIos ? appstoreUrl != null : googlePlayUrl != null;
-          downloadAppDialog(context);
-        } else {
-          debugPrint('--Browser Web started--');
-        }
-      } catch (error) {
-        debugPrint('--App started--');
+
+    try {
+      if (Device.get().isPhone && kIsWeb) {
+        debugPrint('--Web-App started--');
+
+        downloadAppDialog(context);
+      } else {
+        debugPrint('--App Started--');
       }
+    } catch (error) {
+      debugPrint('--Web started--');
     }
   }
 

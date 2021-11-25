@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:myxmi/views/addRecipe/infos/utils/selectable_row.dart';
+import 'package:myxmi/utils/selectable_row.dart';
 
 class DietSelector extends StatelessWidget {
   const DietSelector({

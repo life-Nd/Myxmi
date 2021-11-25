@@ -5,12 +5,17 @@ import 'package:myxmi/app.dart';
 class UserProvider extends ChangeNotifier {
   User account;
   String timeEmailSent;
+  bool isConnected = true;
   Map<String, dynamic> favorites = {};
 
 
   Future changeUsername({String newName}) async {
     await account.updateDisplayName(newName);
     account.reload();
+    notifyListeners();
+  }
+  void connected() {
+    isConnected = !isConnected;
     notifyListeners();
   }
 

@@ -25,6 +25,7 @@ class _ProductsListState extends State<ProductsList> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('building ProductsList');
     return widget.products.isNotEmpty
         ? ListView.builder(
             controller: _ctrl,
@@ -88,14 +89,13 @@ class _ProductsListState extends State<ProductsList> {
                         },
                       ),
                     ),
-                    if (!Device.get().isPhone)
-                      _EditProductButton(
-                        index: index,
-                        color: Colors.red,
-                        type: widget.type,
-                        products: widget.products,
-                        setState: () => setState(() {}),
-                      ),
+                    _EditProductButton(
+                      index: index,
+                      color: Colors.red,
+                      type: widget.type,
+                      products: widget.products,
+                      setState: () => setState(() {}),
+                    ),
                   ],
                 ),
               );
@@ -135,22 +135,30 @@ class _EditProductButton extends StatelessWidget {
     @required this.products,
     @required this.setState,
   }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Consumer(
-      builder: (_, watch, child) {
-        final _user = watch(userProvider);
-        return IconButton(
-          padding: const EdgeInsets.all(1),
-          icon: Icon(
-            type == 'EditProducts' ? Icons.delete : Icons.visibility_off,
-            color: color,
-            size: 30,
-          ),
-          onPressed: () => editProducts(_user.account.uid),
-        );
-      },
-    );
+    try {
+      if (Device.get().isPhone) {
+        return Container();
+      }
+    } catch (error) {
+      return Consumer(
+        builder: (_, watch, child) {
+          final _user = watch(userProvider);
+          return IconButton(
+            padding: const EdgeInsets.all(1),
+            icon: Icon(
+              type == 'EditProducts' ? Icons.delete : Icons.visibility_off,
+              color: color,
+              size: 30,
+            ),
+            onPressed: () => editProducts(_user.account.uid),
+          );
+        },
+      );
+    }
+    return Container();
   }
 
   void editProducts(String uid) {

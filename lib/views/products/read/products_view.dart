@@ -51,6 +51,7 @@ class ProductsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('building ProductsView');
     return StatefulBuilder(
       builder: (context, StateSetter stateSetter) {
         return Column(

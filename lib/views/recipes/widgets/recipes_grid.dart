@@ -12,14 +12,17 @@ class RecipesGrid extends StatefulWidget {
 }
 
 class _RecipesGridState extends State<RecipesGrid> {
-  final ScrollController _controller = ScrollController();
+  final ScrollController _ctrl = ScrollController();
   @override
   Widget build(BuildContext context) {
+    // debugPrint('building RecipesGrid');
     final Size _size = MediaQuery.of(context).size;
     final Orientation _orientation = MediaQuery.of(context).orientation;
+    // debugPrint('_size.width: ${_size.width}');
+    // debugPrint('_orientation: $_orientation');
     return widget.recipes.isNotEmpty
         ? GridView.builder(
-            controller: _controller,
+            controller: _ctrl,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               childAspectRatio: 0.6,
               crossAxisCount: kIsWeb && _size.width > 500 ||
