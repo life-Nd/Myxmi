@@ -32,32 +32,40 @@ class RecipeTileDetails extends HookWidget {
           Row(
             children: [
               Text('${'ingredients'.tr()}: '),
-              Text(
-                recipe?.ingredientsCount ?? '0',
-                style: const TextStyle(fontWeight: FontWeight.w700),
+              Expanded(
+                child: Text(
+                  recipe?.ingredientsCount ?? '0',
+                  style: const TextStyle(fontWeight: FontWeight.w700),
+                ),
               ),
             ],
           ),
           Row(
             children: [
               Text('${'steps'.tr()}: '),
-              Text(
-                recipe?.stepsCount ?? '0',
-                style: const TextStyle(fontWeight: FontWeight.w700),
+              Expanded(
+                child: Text(
+                  recipe?.stepsCount ?? '0',
+                  style: const TextStyle(fontWeight: FontWeight.w700),
+                ),
               ),
               const Spacer(),
-              Row(
-                children: [
-                  const Icon(
-                    Icons.comment,
-                    color: Colors.blue,
-                    size: 15,
-                  ),
-                  Text(
-                    recipe?.commentsCount ?? '0',
-                    style: const TextStyle(fontSize: 17),
-                  )
-                ],
+              Expanded(
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.comment,
+                      color: Colors.blue,
+                      size: 15,
+                    ),
+                    Expanded(
+                      child: Text(
+                        recipe?.commentsCount ?? '0',
+                        style: const TextStyle(fontSize: 17),
+                      ),
+                    )
+                  ],
+                ),
               )
             ],
           ),

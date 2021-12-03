@@ -14,10 +14,10 @@ class SelectorButton extends StatelessWidget {
     return Consumer(builder: (_, watch, child) {
       final _recipe = watch(recipeEntriesProvider);
       final String _key = type == 'category'
-          ? _recipe.recipe.category
+          ? _recipe.category
           : type == 'subcategory'
-              ? _recipe.recipe.subCategory
-              : _recipe.recipe.diet;
+              ? _recipe.subCategory
+              : _recipe.diet;
       final bool _selected = _key == value;
       return RawMaterialButton(
         // padding: const EdgeInsets.only(left: 8, right: 8),

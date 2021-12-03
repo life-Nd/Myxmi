@@ -16,16 +16,17 @@ class StreamInstructionsBuilder extends StatelessWidget {
     return Consumer(
       builder: (_, watch, child) {
         final _recipe = watch(recipeDetailsProvider);
+        final _recipeDetails = _recipe.details;
         return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
           stream: FirebaseFirestore.instance
               .collection('Instructions')
-              .doc(_recipe.recipe.recipeId)
+              .doc(_recipeDetails.recipeId)
               .snapshots(),
           builder: (context,
               AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               debugPrint(
-                  '--FIREBASE-- READING: Instructions/${_recipe.recipe.recipeId}');
+                  '--FIREBASE-- READING: Instructions/${_recipeDetails.recipeId}');
               return const LoadingColumn();
             }
             if (snapshot.hasData && snapshot.data.data() != null) {

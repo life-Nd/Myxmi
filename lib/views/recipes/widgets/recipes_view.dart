@@ -46,7 +46,6 @@ class RecipesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     debugPrint('building RecipesView');
-
     return StatefulBuilder(
       builder: (context, StateSetter stateSetter) {
         return Column(
@@ -62,7 +61,7 @@ class RecipesView extends StatelessWidget {
                           suggestions: _recipes(),
                           controller: _searchMyRecipesCtrl,
                           onSubmit: () {
-                            _filterRecipes().clear();
+                            // _filterRecipes().clear();
                             stateSetter(() {});
                           },
                           onClear: () {

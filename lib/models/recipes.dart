@@ -7,8 +7,6 @@ class RecipeModel {
   static const _imageUrl = 'image_url';
   static const _uid = 'uid';
   static const _duration = 'duration';
-  static const _category = 'category';
-  static const _subCategory = 'sub_category';
   static const _access = 'access';
   static const _difficulty = 'difficulty';
   static const _reference = 'reference';
@@ -18,7 +16,6 @@ class RecipeModel {
   static const _likes = 'likes';
   static const _username = 'username';
   static const _userphoto = 'userphoto';
-  static const _diet = 'diet';
   static const _tags = 'tags';
   static const _lang = 'lang';
   static const _area = 'area';
@@ -32,8 +29,7 @@ class RecipeModel {
   String imageUrl;
   String uid;
   String duration;
-  String category;
-  String subCategory;
+
   String access;
   String difficulty;
   String reference;
@@ -44,8 +40,8 @@ class RecipeModel {
   bool isLiked;
   String username;
   String userphoto;
-  String diet;
-  List tags = [];
+
+  Map tags = {};
   String lang;
   String area;
   String youtube;
@@ -60,8 +56,6 @@ class RecipeModel {
       this.imageUrl,
       this.uid,
       this.duration,
-      this.category,
-      this.subCategory,
       this.access,
       this.difficulty,
       this.reference,
@@ -72,7 +66,6 @@ class RecipeModel {
       this.isLiked,
       this.userphoto,
       this.username,
-      this.diet,
       this.tags,
       this.lang,
       this.area,
@@ -89,8 +82,6 @@ class RecipeModel {
       imageUrl: snapshot[_imageUrl] as String,
       uid: snapshot[_uid] as String,
       duration: snapshot[_duration] as String,
-      category: snapshot[_category] as String,
-      subCategory: snapshot[_subCategory] as String,
       access: snapshot[_access] as String,
       difficulty: snapshot[_difficulty] as String,
       reference: snapshot[_reference] as String,
@@ -100,8 +91,7 @@ class RecipeModel {
       likes: snapshot[_likes] as Map,
       username: snapshot[_username] as String,
       userphoto: snapshot[_userphoto] as String,
-      diet: snapshot[_diet] as String,
-      tags: snapshot[_tags] as List,
+      tags: snapshot[_tags] as Map,
       lang: snapshot[_lang] as String,
       area: snapshot[_area] as String,
       youtube: snapshot[_youtube] as String,
@@ -118,8 +108,6 @@ class RecipeModel {
       _imageUrl: imageUrl,
       _uid: uid,
       _duration: duration,
-      // _category: category?.toLowerCase(),
-      // _subCategory: subCategory?.toLowerCase(),
       _access: access?.toLowerCase(),
       _difficulty: difficulty,
       _reference: reference,
@@ -129,7 +117,6 @@ class RecipeModel {
       _portions: portions,
       _username: username,
       _userphoto: userphoto,
-      _diet: diet,
       _tags: tags,
       _lang: lang,
       _area: area,

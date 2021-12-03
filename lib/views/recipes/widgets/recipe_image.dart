@@ -24,7 +24,9 @@ class RecipeImage extends StatelessWidget {
             _RecipeImageClip(
               fitWidth: fitWidth,
               imageUrl: _recipe.imageUrl,
-              subCategory: _recipe.subCategory,
+              // TODO Get the subcategory to show an asset image
+              // in case the photoUrl wasnt uploaded
+              subCategory: 'dinner',
             ),
             Column(
               mainAxisSize: MainAxisSize.min,

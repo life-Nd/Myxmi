@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/recipes.dart';
-import 'package:myxmi/views/selectedRecipe/selected_recipe_view.dart';
 import 'package:myxmi/views/selectedRecipe/widgets/recipe_details.dart';
 import '../../main.dart';
 import '../views/recipes/widgets/recipe_image.dart';
@@ -20,6 +19,7 @@ class RecipeTile extends StatelessWidget {
       final _user = watch(userProvider);
       final _recipeProvider = watch(recipeDetailsProvider);
       final _recipe = recipes[index];
+      final _router = watch(routerProvider);
       _recipe.isLiked = false;
       if (_user?.account?.uid != null && _recipe.likes != null) {
         final _uid = _user?.account?.uid;
@@ -28,22 +28,21 @@ class RecipeTile extends StatelessWidget {
       }
       return InkWell(
         onTap: () {
-          _recipeProvider.recipe = _recipe;
+          _recipeProvider.details = _recipe;
           _recipeProvider.image = RecipeImage(
             recipe: _recipe,
             fitWidth: true,
           );
           _recipeProvider.suggestedRecipes = recipes;
-          // Navigator.of(context).pushNamed(SelectedRecipe.route);
+          // TODO error with the implementation for this method
+          //  in case the user changed the url from the SelectedRecipe
+          //  it will not work because
+          //  it would have two instances of the same page in the stack
 
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => const SelectedRecipe(),
-            ),
+          _router.pushPage(
+            name: '/recipe',
+            arguments: {'id': _recipe.recipeId},
           );
-          // context.vxNav.push(Uri.parse(Routes.recipe));
-          // FirebaseFirestore.instance.doc('Recipes').collection('');
-          debugPrint('_recipeId: ${_recipe.recipeId}');
         },
         child: Container(
           margin: const EdgeInsets.all(4),

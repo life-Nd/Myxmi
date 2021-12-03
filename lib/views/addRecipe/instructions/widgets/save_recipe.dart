@@ -36,10 +36,10 @@ class SaveButton extends HookWidget {
               _recipe.instructions.uid = _user.account.uid;
               _recipe.recipe.username = _user.account.displayName;
               _recipe.recipe.userphoto = _user.account.photoURL;
-              _recipe.recipe.tags = [
-                _recipe.recipe.category,
-                _recipe.recipe.subCategory
-              ];
+              _recipe.recipe.tags = {
+                _recipe.category: true,
+                _recipe.subCategory: true,
+              };
               final SharedPreferences _prefs =
                   await SharedPreferences.getInstance();
               final Map _composition = _recipe.composition;
@@ -69,8 +69,8 @@ class SaveButton extends HookWidget {
               }
 
               _recipe.recipe.made = '${DateTime.now().millisecondsSinceEpoch}';
-              if (_recipe.recipe.category == 'other') {
-                _recipe.recipe.subCategory = null;
+              if (_recipe.category == 'other') {
+                _recipe.subCategory = null;
               }
               debugPrint('_image.imageFile: ${_image.imageFile} ');
               debugPrint('_recipe.recipe.imageUrl: ${_recipe.recipe.imageUrl}');

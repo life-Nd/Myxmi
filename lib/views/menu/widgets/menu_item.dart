@@ -3,7 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/views/recipes/filtered_view.dart';
+
+import '../../../main.dart';
 
 class MenuItem extends StatefulWidget {
   final String legend;
@@ -25,17 +26,17 @@ class _MenuItemState extends State<MenuItem> {
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
     final Orientation _orientation = MediaQuery.of(context).orientation;
+
     return Consumer(builder: (_, watch, __) {
+      final _router = watch(routerProvider);
       return InkWell(
         onTap: () {
           debugPrint('key: category ,value: ${widget.legend}');
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => Filtered(
-                legend: widget.legend,
-                filter: widget.filter,
-              ),
-            ),
+          _router.pushPage(
+            name: '/filter',
+            arguments: {
+              'type': widget.legend,
+            },
           );
         },
         child: Card(

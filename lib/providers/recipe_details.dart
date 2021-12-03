@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:myxmi/models/recipes.dart';
 
 class RecipeDetailsProvider extends ChangeNotifier {
+  RecipeModel details = RecipeModel();
   final List checkedIngredients = [];
   final List checkedSteps = [];
-  RecipeModel recipe = RecipeModel();
+
   List<RecipeModel> suggestedRecipes = [];
   Widget image;
 
   void like({bool value, String uid}) {
-    recipe.likes[uid] = value;
+    details.likes[uid] = value;
   }
 
   void toggleIngredient(dynamic key) {

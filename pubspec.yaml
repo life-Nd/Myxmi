@@ -44,6 +44,7 @@ dependencies:
   flutter_html: ^2.1.0
   flutter_native_splash: ^1.1.8
   flutter_rating_bar: ^4.0.0
+  get: ^4.5.1
   google_mobile_ads: ^0.13.3
   google_sign_in: ^5.0.1
   hooks_riverpod: ^0.14.0+4
@@ -60,6 +61,7 @@ dependencies:
   timeago: ^3.0.2
   timetable: 
   transparent_image: ^2.0.0
+  uni_links: ^0.5.1
   url_launcher: ^6.0.12
   url_strategy: ^0.2.0
   velocity_x: ^3.3.0

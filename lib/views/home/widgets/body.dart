@@ -82,7 +82,7 @@ class _HomePageBody extends StatelessWidget {
           return RecipesStreamBuilder(
             showAutoCompleteField: false,
             snapshots: _view.searchWithCtrl(searchKey: 'title').snapshots(),
-            searchFieldLabel: 'title== ${_view.searchCtrl.text}',
+
           );
         } else {
           return SingleChildScrollView(

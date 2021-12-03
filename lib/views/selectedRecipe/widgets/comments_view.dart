@@ -16,6 +16,7 @@ class CommentsView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final _recipe = useProvider(recipeDetailsProvider);
+    final _recipeDetails = _recipe?.details;
     final _user = useProvider(userProvider);
     final _view = useProvider(homeViewProvider);
 
@@ -24,12 +25,12 @@ class CommentsView extends HookWidget {
         StreamBuilder<DocumentSnapshot>(
           stream: FirebaseFirestore.instance
               .collection('Comments')
-              .doc(_recipe.recipe.recipeId)
+              .doc(_recipeDetails.recipeId)
               .snapshots(),
           builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               debugPrint(
-                  '--FIREBASE-- READING: Comments/${_recipe.recipe.recipeId}');
+                  '--FIREBASE-- READING: Comments/${_recipeDetails.recipeId}');
             }
             if (snapshot.hasData && snapshot.data.data() != null) {
               final Map _data = snapshot.data.data() as Map<String, dynamic>;

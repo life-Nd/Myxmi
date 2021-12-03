@@ -6,13 +6,10 @@ import 'package:myxmi/streams/recipes.dart';
 // import 'package:google_mobile_ads/google_mobile_ads.dart';
 // import 'package:myxmi/apis/ads.dart';
 
-String _equalTo = '';
-String _where = '';
-
 class Filtered extends StatefulWidget {
-  final String legend;
-  final String filter;
-  const Filtered({@required this.legend, @required this.filter});
+  final String type;
+
+  const Filtered({@required this.type});
   @override
   State<StatefulWidget> createState() => _FilteredState();
 }
@@ -24,8 +21,8 @@ class _FilteredState extends State<Filtered> {
 
   @override
   void initState() {
-    _equalTo = widget.legend;
-    _where = widget.filter;
+    // _equalTo = widget.legend;
+    // _where = widget.filter;
     // if (!kIsWeb) {
     //   _bannerAd = BannerAd(
     //     adUnitId: _ads.filteredBannerAdUnitId(),
@@ -54,11 +51,11 @@ class _FilteredState extends State<Filtered> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.legend.tr()),
+        title: Text(widget.type.tr()),
       ),
       body: Column(
-        children: const [
-          _ExpandedRecipesStream(),
+        children: [
+          _ExpandedRecipesStream(type: widget.type),
           // if (!kIsWeb && _isBannerAdReady)
           // Align(
           //   alignment: Alignment.bottomCenter,
@@ -75,43 +72,26 @@ class _FilteredState extends State<Filtered> {
 }
 
 class _ExpandedRecipesStream extends StatelessWidget {
-  const _ExpandedRecipesStream({Key key}) : super(key: key);
+  final String type;
+  const _ExpandedRecipesStream({Key key, @required this.type})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String value() {
-      String _value;
-      switch (_equalTo) {
-        case 'anyFood':
-          _value = 'food';
-          return _value;
-        case 'anyDrink':
-          _value = 'drink';
-          return _value;
-        case 'anyDiet':
-          _value = 'diet';
-          return _value;
-        default:
-          _value = _equalTo;
-          return _value;
-      }
-    }
-
-    if (_equalTo != 'anyDiet') {
+    if (type != 'anyDiet') {
+      debugPrint('type: $type');
       return Expanded(
         child: RecipesStreamBuilder(
+          showAutoCompleteField: true,
           snapshots: FirebaseFirestore.instance
               .collection('Recipes')
-              .where(_where, isEqualTo: value())
+              .where('tags.$type', isEqualTo: true)
               .snapshots(),
-          showAutoCompleteField: true,
-          searchFieldLabel: 'where: $_where == ${value().toString()}',
         ),
       );
     } else {
       return Expanded(
         child: RecipesStreamBuilder(
-          searchFieldLabel: 'made (chronologically)',
           snapshots: FirebaseFirestore.instance
               .collection('Recipes')
               .orderBy('made')
@@ -120,48 +100,5 @@ class _ExpandedRecipesStream extends StatelessWidget {
         ),
       );
     }
-  }
-}
-
-class SharedRecipe extends StatelessWidget {
-  final String recipeId;
-  const SharedRecipe({Key key, @required this.recipeId}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Navigator(
-        pages: [
-          MaterialPage(
-            key: const ValueKey('recipe'),
-            child: Scaffold(
-              appBar: AppBar(
-                title: Text('${'recipe'.tr()}: '),
-              ),
-              body: RecipesStreamBuilder(
-                searchFieldLabel: 'sharedRecipe',
-                snapshots: FirebaseFirestore.instance
-                    .collection('Recipes')
-                    .orderBy(recipeId)
-                    .snapshots(),
-                showAutoCompleteField: true,
-              ),
-            ),
-          ),
-        ],
-        // child: Scaffold(
-        //   appBar: AppBar(
-        //     title: Text('${'recipe'.tr()}: '),
-        //   ),
-        //   body: RecipesStreamBuilder(
-        //     searchFieldLabel: 'sharedRecipe',
-        //     snapshots: FirebaseFirestore.instance
-        //         .collection('Recipes')
-        //         .orderBy(recipeId)
-        //         .snapshots(),
-        //     showAutoCompleteField: true,
-        //   ),
-        // ),
-      ),
-    );
   }
 }

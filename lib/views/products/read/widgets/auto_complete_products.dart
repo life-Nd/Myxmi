@@ -25,7 +25,6 @@ class AutoCompleteProducts extends StatefulWidget {
 class _AutoCompleteProductsState extends State<AutoCompleteProducts> {
   GlobalKey<AutoCompleteTextFieldState<ProductModel>> key = GlobalKey();
   AutoCompleteTextField _searchTextField;
-
   _AutoCompleteProductsState();
   @override
   Widget build(BuildContext context) {
@@ -97,19 +96,3 @@ class _AutoCompleteProductsState extends State<AutoCompleteProducts> {
   }
 }
 
-// class ProductSuggestionsProvider extends ChangeNotifier {
-//   String text;
-//   bool doSearch;
-//   List<ProductModel> suggestions;
-
-//   void searchText(String _text) {
-//     text = _text;
-//     doSearch = true;
-//     notifyListeners();
-//   }
-
-//   void stopSearch() {
-//     doSearch = false;
-//     notifyListeners();
-//   }
-// }

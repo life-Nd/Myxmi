@@ -15,8 +15,9 @@ class AddComments extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer(builder: (_, watch, child) {
       final _recipe = watch(recipeDetailsProvider);
+      final _recipeDetails = _recipe?.details;
       final _user = watch(userProvider);
-      final String _title = _recipe.recipe.title;
+      final String _title = _recipeDetails.title;
       return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -64,16 +65,16 @@ class AddComments extends StatelessWidget {
                 onPressed: () {
                   final String _now =
                       '${DateTime.now().millisecondsSinceEpoch}';
-                  final String _dbStars = _recipe.recipe.stars ?? '0.0';
+                  final String _dbStars = _recipeDetails.stars ?? '0.0';
                   final _averageStars = (_stars + double.parse(_dbStars)) / 2;
                   final int _commentsCount =
-                      _recipe?.recipe?.commentsCount != null
-                          ? int.parse(_recipe?.recipe?.commentsCount) + 1
+                      _recipeDetails?.commentsCount != null
+                          ? int.parse(_recipeDetails.commentsCount) + 1
                           : 1;
                   debugPrint('$_stars + $_dbStars = $_averageStars');
                   final _db = FirebaseFirestore.instance
                       .collection('Comments')
-                      .doc(_recipe.recipe.recipeId);
+                      .doc(_recipeDetails.recipeId);
                   _db.set(
                     {
                       _now: {
@@ -88,19 +89,19 @@ class AddComments extends StatelessWidget {
                     SetOptions(merge: true),
                   ).whenComplete(() {
                     debugPrint(
-                        '--FIREBASE-- Writing: Comments/${_recipe.recipe.recipeId}/$_now ');
+                        '--FIREBASE-- Writing: Comments/${_recipeDetails.recipeId}/$_now ');
                     FirebaseFirestore.instance
                         .collection('Recipes')
-                        .doc(_recipe.recipe.recipeId)
+                        .doc(_recipeDetails.recipeId)
                         .update({
                       'stars': '$_averageStars',
                       'comments_count': '$_commentsCount',
                     });
-                    _recipe.recipe.stars = '$_averageStars';
+                    _recipeDetails.stars = '$_averageStars';
                     _msgCtrl.clear();
                     _stars = 0.0;
                     debugPrint(
-                        '--FIREBASE-- Writing: Recipes/${_recipe.recipe.recipeId} stars & comments_count ');
+                        '--FIREBASE-- Writing: Recipes/${_recipeDetails.recipeId} stars & comments_count ');
                     Navigator.of(context).pop();
                   });
                 },

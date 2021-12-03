@@ -47,6 +47,15 @@ class ProductDetails extends StatelessWidget {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
+                      SizedBox(
+                        width: 77,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.asset(
+                            'assets/rice.jpg',
+                          ),
+                        ),
+                      ),
                       RawMaterialButton(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),

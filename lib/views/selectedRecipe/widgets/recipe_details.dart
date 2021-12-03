@@ -10,8 +10,8 @@ import '../selected_recipe_view.dart';
 import 'comments_view.dart';
 import 'ingredients_listview.dart';
 
-final recipeDetailsProvider = ChangeNotifierProvider<RecipeDetailsProvider>(
-    (_) => RecipeDetailsProvider());
+final recipeDetailsProvider =
+    Provider<RecipeDetailsProvider>((_) => RecipeDetailsProvider());
 
 class RecipeDetails extends StatefulWidget {
   final InstructionsModel instructions;
@@ -106,10 +106,11 @@ class _ViewsSelector extends StatelessWidget {
         ),
         Consumer(builder: (context, watch, child) {
           final _recipe = watch(recipeDetailsProvider);
+          final _recipeDetails = _recipe?.details;
           return ViewSelectorText(
             controller: pageCtrl,
-            length: _recipe?.recipe?.commentsCount != null
-                ? int.parse(_recipe?.recipe?.commentsCount)
+            length: _recipeDetails?.commentsCount != null
+                ? int.parse(_recipeDetails?.commentsCount)
                 : 0,
             text: 'comments',
             viewIndex: 2,

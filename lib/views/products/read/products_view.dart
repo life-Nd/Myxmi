@@ -36,7 +36,6 @@ class ProductsView extends StatelessWidget {
 
   List<ProductModel> _filterProducts() {
     final List<ProductModel> _filteredProducts = [];
-
     final Iterable _filter = _products().asMap().entries.where((entry) {
       return entry.value.toMap().containsValue(
             _searchProductsCtrl.text.trim().toLowerCase(),

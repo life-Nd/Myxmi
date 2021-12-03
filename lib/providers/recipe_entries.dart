@@ -12,7 +12,9 @@ class RecipeEntriesProvider extends ChangeNotifier {
   double estimatedWeight = 0.0;
   String actualWeight = '';
   double difficultyValue = 0.0;
-
+  String category = '';
+  String subCategory = '';
+  String diet = '';
   final TextEditingController titleCtrl = TextEditingController();
   final TextEditingController durationCtrl = TextEditingController();
   final TextEditingController portionsCtrl = TextEditingController();
@@ -46,18 +48,18 @@ class RecipeEntriesProvider extends ChangeNotifier {
   }
 
   void changeCategory({String newCategory}) {
-    recipe.category = newCategory;
-    recipe.subCategory = null;
+    category = newCategory;
+    subCategory = null;
     notifyListeners();
   }
 
   void changeSubCategory({String newSubCategory}) {
-    recipe.subCategory = newSubCategory;
+    subCategory = newSubCategory;
     notifyListeners();
   }
 
   void changeDiet({String newDiet}) {
-    recipe.diet = newDiet;
+    diet = newDiet;
     notifyListeners();
   }
 

@@ -15,11 +15,8 @@ class _RecipesGridState extends State<RecipesGrid> {
   final ScrollController _ctrl = ScrollController();
   @override
   Widget build(BuildContext context) {
-    // debugPrint('building RecipesGrid');
     final Size _size = MediaQuery.of(context).size;
     final Orientation _orientation = MediaQuery.of(context).orientation;
-    // debugPrint('_size.width: ${_size.width}');
-    // debugPrint('_orientation: $_orientation');
     return widget.recipes.isNotEmpty
         ? GridView.builder(
             controller: _ctrl,
@@ -34,7 +31,6 @@ class _RecipesGridState extends State<RecipesGrid> {
             itemCount: widget.recipes.length,
             itemBuilder: (_, int index) {
               return RecipeTile(
-                // recipe: widget.recipes[index],
                 index: index,
                 recipes: widget.recipes,
               );

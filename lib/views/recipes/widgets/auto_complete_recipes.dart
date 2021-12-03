@@ -18,14 +18,14 @@ class AutoCompleteRecipes extends StatefulWidget {
     @required this.onSubmit,
     @required this.onClear,
   }) : super(key: key);
-
   @override
   State<StatefulWidget> createState() => _AutoCompleteRecipesState();
 }
 
 class _AutoCompleteRecipesState extends State<AutoCompleteRecipes> {
-  AutoCompleteTextField _searchTextField;
   GlobalKey<AutoCompleteTextFieldState<RecipeModel>> key = GlobalKey();
+  AutoCompleteTextField _searchTextField;
+  _AutoCompleteRecipesState();
   @override
   Widget build(BuildContext context) {
     // ignore: join_return_with_assignment
@@ -54,10 +54,10 @@ class _AutoCompleteRecipesState extends State<AutoCompleteRecipes> {
                 const Padding(
                   padding: EdgeInsets.all(15.0),
                 ),
-                Text(
-                  '${item.category[0].toUpperCase()}${item.category.substring(1, item.category.length)}',
-                  style: const TextStyle(fontSize: 17.0),
-                )
+                // Text(
+                //   '${item.category[0].toUpperCase()}${item.category.substring(1, item.category.length)}',
+                //   style: const TextStyle(fontSize: 17.0),
+                // )
               ],
             ),
           ),
@@ -70,6 +70,7 @@ class _AutoCompleteRecipesState extends State<AutoCompleteRecipes> {
         return a.title.compareTo(b.title);
       },
       itemSubmitted: (item) {
+        debugPrint('item: $item');
         _searchTextField.textField.controller.text =
             '${item.title[0].toUpperCase()}${item.title.substring(1, item.title.length)}';
         widget.onSubmit();
@@ -83,8 +84,8 @@ class _AutoCompleteRecipesState extends State<AutoCompleteRecipes> {
         prefixIcon: IconButton(
           icon: const Icon(Icons.clear, color: Colors.red),
           onPressed: () {
-            _searchTextField.clear();
             widget.onClear();
+            _searchTextField.clear();
           },
         ),
       ),

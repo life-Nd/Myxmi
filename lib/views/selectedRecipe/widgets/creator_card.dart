@@ -15,15 +15,22 @@ class _CreatorCardState extends State<CreatorCard> {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (_, watch, __) {
-      final _recipe = watch(recipeDetailsProvider).recipe;
-      return GestureDetector(
+      final _recipeDetails = watch(recipeDetailsProvider)?.details;
+      return InkWell(
         onTap: () {
-          Navigator.of(context).push(
+          // _router.pushPage(
+          //   name: '/creator',
+          //   arguments: {
+          //     'uid': _recipeDetails?.uid,
+          //     'name': _recipeDetails?.username,
+          //     'avatar': _recipeDetails?.userphoto,
+          //   },
+            Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => CreatorRecipes(
-                uid: _recipe.uid,
-                name: _recipe?.username,
-                avatar: _recipe?.userphoto,
+                  uid: _recipeDetails?.uid,
+                name: _recipeDetails?.username,
+                avatar: _recipeDetails?.userphoto,
               ),
             ),
           );
@@ -38,9 +45,9 @@ class _CreatorCardState extends State<CreatorCard> {
             ),
           ),
           child: Row(children: [
-            if (_recipe?.userphoto != null)
+            if (_recipeDetails?.userphoto != null)
               UserAvatar(
-                photoUrl: _recipe?.userphoto,
+                photoUrl: _recipeDetails?.userphoto,
                 radius: 77,
               )
             else
@@ -48,8 +55,8 @@ class _CreatorCardState extends State<CreatorCard> {
             const SizedBox(
               width: 20,
             ),
-            if (_recipe?.username != null)
-              Text(_recipe?.username)
+            if (_recipeDetails?.username != null)
+              Text(_recipeDetails?.username)
             else
               Text('noName'.tr()),
           ]),

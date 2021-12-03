@@ -45,7 +45,6 @@ class UserAvatar extends StatelessWidget {
           height: radius,
           width: radius,
           fit: BoxFit.fitWidth,
-          
           errorBuilder: (context, child, error) {
             debugPrint('error: $error');
             return Icon(
@@ -57,4 +56,10 @@ class UserAvatar extends StatelessWidget {
       ),
     );
   }
+}
+
+class UserProfileProvider extends ChangeNotifier {
+  String photoUrl;
+  String name;
+  String uid;
 }

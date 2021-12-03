@@ -16,7 +16,7 @@ class SubCategorySelector extends StatelessWidget {
         children: [
           Text('subCategory'.tr()),
           subCategory(
-            category: _recipe.recipe.category,
+            category: _recipe.category,
           ),
         ],
       );

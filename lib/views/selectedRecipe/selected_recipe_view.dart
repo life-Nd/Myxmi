@@ -10,7 +10,7 @@ import 'widgets/calendar_button.dart';
 import 'widgets/creator_card.dart';
 import 'widgets/share_button.dart';
 
-final selectedRecipeView = ChangeNotifierProvider(
+final selectedRecipeView = ChangeNotifierProvider<_SelectedRecipeViewNotifier>(
   (ref) => _SelectedRecipeViewNotifier(),
 );
 
@@ -31,6 +31,7 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
     return Consumer(
       builder: (_, watch, __) {
         final _recipe = watch(recipeDetailsProvider);
+        final _recipeDetails = _recipe?.details;
         return Scaffold(
           body: SafeArea(
             child: CustomScrollView(
@@ -39,7 +40,7 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
                 SliverAppBar(
                   actions: [
                     const CalendarButton(),
-                    AddFavoriteButton(recipe: _recipe.recipe),
+                    AddFavoriteButton(recipe: _recipeDetails),
                     const ShareButton(),
                   ],
                   leadingWidth: 30,
@@ -54,7 +55,7 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
                   title: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Text(
-                      '${_recipe.recipe.title[0].toUpperCase()}${_recipe.recipe.title.substring(1, _recipe.recipe.title.length).toLowerCase()} ',
+                      '${_recipeDetails?.title[0].toUpperCase()}${_recipeDetails.title.substring(1, _recipeDetails.title.length).toLowerCase()} ',
                       style: const TextStyle(
                           fontSize: 19, fontWeight: FontWeight.w700),
                     ),
@@ -64,20 +65,21 @@ class _SelectionRecipeState extends State<SelectedRecipe> {
                     child: _recipe.image,
                   ),
                   expandedHeight: _height / 1.3,
-
                 ),
                 SliverList(
                   delegate: SliverChildListDelegate.fixed(
                     [
                       const CreatorCard(),
                       const StreamInstructionsBuilder(),
-                      ListTile(
-                        title: Text('similarRecipes'.tr(),
-                            style: const TextStyle(fontSize: 20)),
-                      ),
-                      SimilarRecipes(
-                        suggestedRecipes: _recipe.suggestedRecipes,
-                      ),
+                      if (_recipe.suggestedRecipes != null) ...[
+                        ListTile(
+                          title: Text('similarRecipes'.tr(),
+                              style: const TextStyle(fontSize: 20)),
+                        ),
+                        SimilarRecipes(
+                          suggestedRecipes: _recipe.suggestedRecipes,
+                        ),
+                      ],
                     ],
                   ),
                 ),

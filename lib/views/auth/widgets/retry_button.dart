@@ -8,18 +8,16 @@ class RetryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return RawMaterialButton(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(20),
         ),
       ),
-      child: RawMaterialButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        child: Text('retry'.tr()),
-      ),
+      child: Text('retry'.tr()),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
     );
   }
 }

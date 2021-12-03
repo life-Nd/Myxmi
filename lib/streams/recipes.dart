@@ -9,15 +9,12 @@ class RecipesStreamBuilder extends StatelessWidget {
   const RecipesStreamBuilder({
     Key key,
     @required this.snapshots,
-    @required this.searchFieldLabel,
     @required this.showAutoCompleteField,
   }) : super(key: key);
 
   final Stream<QuerySnapshot<Object>> snapshots;
-  final String searchFieldLabel;
   final bool showAutoCompleteField;
 
- 
   @override
   Widget build(BuildContext context) {
     debugPrint('building RecipesStreamBuilder');
@@ -34,7 +31,7 @@ class RecipesStreamBuilder extends StatelessWidget {
           );
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
-          debugPrint('--FIREBASE-- Reading: Recipes/$searchFieldLabel ');
+          debugPrint('--FIREBASE-- Reading: Recipes/ ');
           return const LoadingColumn();
         }
         if (snapshot.data != null) {
@@ -74,7 +71,6 @@ class RecipesLikesStream extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RecipesStreamBuilder(
-      searchFieldLabel: 'likes/uid == $uid',
       showAutoCompleteField: true,
       snapshots: FirebaseFirestore.instance
           .collection('Recipes')
@@ -94,7 +90,6 @@ class RecipesUidStream extends StatelessWidget {
   Widget build(BuildContext context) {
     return RecipesStreamBuilder(
       showAutoCompleteField: true,
-      searchFieldLabel: 'uid == $uid',
       snapshots: FirebaseFirestore.instance
           .collection('Recipes')
           .where('uid', isEqualTo: uid)

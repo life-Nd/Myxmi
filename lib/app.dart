@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' as foundation;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,7 +35,7 @@ class _HotRestartByPassBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final Size _size = MediaQuery.of(context).size;
+    debugPrint('building APP');
     return Consumer(builder: (_, watch, __) {
       final _userProvider = watch(userProvider);
       return FutureBuilder<bool>(

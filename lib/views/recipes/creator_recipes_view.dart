@@ -24,39 +24,46 @@ class _CreatorRecipesState extends State<CreatorRecipes> {
   Widget build(BuildContext context) {
     // final Size _size = MediaQuery.of(context).size;
     return Scaffold(
+      
       appBar: PreferredSize(
-        preferredSize: const Size(double.infinity, 114),
+        preferredSize: const Size(double.infinity, 200),
         child: SafeArea(
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back_ios,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  if (widget.name != null)
+                    Text('${widget.name} recipes',
+                        style: const TextStyle(fontSize: 20))
+                  else
+                    Text('${'noName'.tr()} recipes',
+                        style: const TextStyle(fontSize: 20)),
+                  const SizedBox(
+                    width: 50,
+                  ),
+                ],
+              ),
               if (widget.avatar != null)
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: const Icon(
-                        Icons.arrow_back_ios,
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    UserAvatar(
-                      radius: 77,
-                      photoUrl: widget.avatar,
-                    ),
-                  ],
+                UserAvatar(
+                  radius: 200,
+                  photoUrl: widget.avatar,
                 )
               else
-                const Icon(Icons.person),
-              const SizedBox(
-                width: 20,
-              ),
-              if (widget.name != null)
-                Text('${widget.name} recipes')
-              else
-                Text('${'noName'.tr()} recipes'),
-              // subtitle: Text('$followersCount ${'followers'.tr()}'),
+                const Icon(Icons.person, size: 100),
+              const Spacer(),
             ],
           ),
         ),
