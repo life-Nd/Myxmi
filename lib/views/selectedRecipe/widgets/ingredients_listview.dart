@@ -68,11 +68,6 @@ class IngredientsInRecipeListView extends HookWidget {
                       ? '${_keys[index]} ${ingredients[_keys[index]]}'
                       : ingredients[_keys[index]] as String),
             ),
-            // if (_user.onPhone)
-            //   const Divider(
-            //     indent: 80,
-            //     color: Colors.grey,
-            //   )
           ],
         );
       },

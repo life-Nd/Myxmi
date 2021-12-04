@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/main.dart';
+import 'package:myxmi/models/comment.dart';
+
 import 'package:myxmi/views/selectedRecipe/widgets/recipe_details.dart';
 
 double _stars = 0;
@@ -47,7 +49,7 @@ class AddComments extends StatelessWidget {
                 ),
               ),
               TextField(
-                // controller: ,
+                controller: _msgCtrl,
                 decoration: InputDecoration(
                   isDense: false,
                   hintText: 'Message',
@@ -65,29 +67,31 @@ class AddComments extends StatelessWidget {
                 onPressed: () {
                   final String _now =
                       '${DateTime.now().millisecondsSinceEpoch}';
+                  final CommentModel _comment = CommentModel(
+                    message: _msgCtrl.text,
+                    name: _user.account.displayName ?? _user.account.email,
+                    stars: '$_stars',
+                    uid: _user.account.uid,
+                    photoUrl: _user.account.photoURL,
+                  );
+
                   final String _dbStars = _recipeDetails.stars ?? '0.0';
-                  final _averageStars = (_stars + double.parse(_dbStars)) / 2;
+                  final _averageStars = _recipeDetails.stars != null
+                      ? (_stars + double.parse(_dbStars)) / 2
+                      : _stars;
                   final int _commentsCount =
                       _recipeDetails?.commentsCount != null
                           ? int.parse(_recipeDetails.commentsCount) + 1
                           : 1;
                   debugPrint('$_stars + $_dbStars = $_averageStars');
+
                   final _db = FirebaseFirestore.instance
-                      .collection('Comments')
+                      .collection('Instructions')
                       .doc(_recipeDetails.recipeId);
-                  _db.set(
-                    {
-                      _now: {
-                        'message': _msgCtrl.text,
-                        'name':
-                            _user.account.displayName ?? _user.account.email,
-                        'stars': '$_stars',
-                        'uid': _user.account.uid,
-                        'photo_url': _user.account.photoURL
-                      },
-                    },
-                    SetOptions(merge: true),
-                  ).whenComplete(() {
+
+                  _db.update({
+                    'comments.$_now': _comment.toMap(),
+                  }).whenComplete(() {
                     debugPrint(
                         '--FIREBASE-- Writing: Comments/${_recipeDetails.recipeId}/$_now ');
                     FirebaseFirestore.instance

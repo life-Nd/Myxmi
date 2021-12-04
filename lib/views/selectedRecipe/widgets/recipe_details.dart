@@ -63,7 +63,9 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                   )
                 else
                   const NoData(type: 'Steps'),
-                const CommentsView()
+                CommentsView(
+                  data: widget.instructions.comments,
+                )
               ],
             ),
           ),

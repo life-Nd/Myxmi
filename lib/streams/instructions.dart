@@ -5,10 +5,6 @@ import 'package:myxmi/models/instructions.dart';
 import 'package:myxmi/utils/loading_column.dart';
 import 'package:myxmi/views/selectedRecipe/widgets/recipe_details.dart';
 
-final InstructionsModel _instructions =
-    InstructionsModel(ingredients: {}, steps: []);
-Map<String, dynamic> _data = {};
-
 class StreamInstructionsBuilder extends StatelessWidget {
   const StreamInstructionsBuilder({Key key}) : super(key: key);
   @override
@@ -30,12 +26,16 @@ class StreamInstructionsBuilder extends StatelessWidget {
               return const LoadingColumn();
             }
             if (snapshot.hasData && snapshot.data.data() != null) {
+              Map<String, dynamic> _data = {};
               final DocumentSnapshot<Map<String, dynamic>> _snapshot =
                   snapshot.data;
               _data = _snapshot.data();
-              _instructions.fromSnapshot(snapshot: _data);
+              debugPrint('_data12:$_data');
+              final InstructionsModel _instructions =
+                  InstructionsModel.fromSnapshot(snapshot: _data);
+              return RecipeDetails(instructions: _instructions);
             }
-            return RecipeDetails(instructions: _instructions);
+            return const LoadingColumn();
           },
         );
       },

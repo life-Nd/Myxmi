@@ -29,7 +29,6 @@ class RecipeModel {
   String imageUrl;
   String uid;
   String duration;
-
   String access;
   String difficulty;
   String reference;
@@ -40,7 +39,6 @@ class RecipeModel {
   bool isLiked;
   String username;
   String userphoto;
-
   Map tags = {};
   String lang;
   String area;
