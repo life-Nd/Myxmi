@@ -9,7 +9,7 @@ class AdLoader extends StatefulWidget {
 }
 
 class _AdLoaderState extends State<AdLoader> {
-  BannerAd _bannerAd;
+  late BannerAd _bannerAd;
   bool _isBannerAdReady = false;
   final AdsApis _ads = AdsApis();
   @override
@@ -21,9 +21,11 @@ class _AdLoaderState extends State<AdLoader> {
         size: AdSize.banner,
         listener: BannerAdListener(
           onAdLoaded: (_) {
-            setState(() {
-              _isBannerAdReady = true;
-            });
+            setState(
+              () {
+                _isBannerAdReady = true;
+              },
+            );
           },
           onAdFailedToLoad: (ad, err) {
             debugPrint('Failed to load a banner ad: ${err.message}');
@@ -45,7 +47,8 @@ class _AdLoaderState extends State<AdLoader> {
           ? SizedBox(
               width: _bannerAd.size.width.toDouble(),
               height: _bannerAd.size.height.toDouble(),
-              child: AdWidget(ad: _bannerAd))
+              child: AdWidget(ad: _bannerAd),
+            )
           : const CircularProgressIndicator(),
     );
   }

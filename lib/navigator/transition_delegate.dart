@@ -6,16 +6,16 @@ class MyTransitionDelegate extends TransitionDelegate {
 
   @override
   Iterable<RouteTransitionRecord> resolve({
-    @required List<RouteTransitionRecord> newPageRouteHistory,
-    @required
-        Map<RouteTransitionRecord, RouteTransitionRecord>
+    required List<RouteTransitionRecord> newPageRouteHistory,
+    required
+        Map<RouteTransitionRecord?, RouteTransitionRecord>
             locationToExitingPageRoute,
-    @required
-        Map<RouteTransitionRecord, List<RouteTransitionRecord>>
+    required
+        Map<RouteTransitionRecord?, List<RouteTransitionRecord>>
             pageRouteToPagelessRoutes,
   }) {
     final List<RouteTransitionRecord> results = <RouteTransitionRecord>[];
-    debugPrint('building MyTransitionDelegateANIMATION');
+
     final bool showAnimation = locationToExitingPageRoute.isEmpty ||
         newPageRouteHistory.last.route.settings.name !=
             locationToExitingPageRoute.values.last.route.settings.name;
@@ -23,15 +23,15 @@ class MyTransitionDelegate extends TransitionDelegate {
     // This method will handle the exiting route and its corresponding pageless
     // route at this location. It will also recursively check if there is any
     // other exiting routes above it and handle them accordingly.
-    void handleExitingRoute(RouteTransitionRecord location, {bool isLast}) {
-      final RouteTransitionRecord exitingPageRoute =
+    void handleExitingRoute(RouteTransitionRecord? location, {bool? isLast}) {
+      final RouteTransitionRecord? exitingPageRoute =
           locationToExitingPageRoute[location];
       if (exitingPageRoute == null) return;
       if (exitingPageRoute.isWaitingForExitingDecision) {
         final bool hasPagelessRoute =
             pageRouteToPagelessRoutes.containsKey(exitingPageRoute);
         final bool isLastExitingPageRoute =
-            isLast && !locationToExitingPageRoute.containsKey(exitingPageRoute);
+            isLast! && !locationToExitingPageRoute.containsKey(exitingPageRoute);
         if (isLastExitingPageRoute && !hasPagelessRoute && showAnimation) {
           exitingPageRoute.markForPop(exitingPageRoute.route.currentResult);
         } else {
@@ -40,7 +40,7 @@ class MyTransitionDelegate extends TransitionDelegate {
         }
         if (hasPagelessRoute) {
           final List<RouteTransitionRecord> pagelessRoutes =
-              pageRouteToPagelessRoutes[exitingPageRoute];
+              pageRouteToPagelessRoutes[exitingPageRoute]!;
           for (final RouteTransitionRecord pagelessRoute in pagelessRoutes) {
             // It is possible that a pageless route that belongs to an exiting
             // page-based route does not require exiting decision. This can

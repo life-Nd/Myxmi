@@ -11,7 +11,9 @@ final ThemeData lightTheme = ThemeData(
   canvasColor: Colors.grey.shade400,
   fontFamily: 'Georgia',
   scaffoldBackgroundColor: Colors.white,
-  textTheme: const TextTheme(),
+  textTheme: const TextTheme(
+    bodyText1: TextStyle(color: Colors.black),
+  ),
   iconTheme: const IconThemeData(color: Colors.black),
   appBarTheme: const AppBarTheme(
     shadowColor: Colors.white,

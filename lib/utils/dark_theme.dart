@@ -11,8 +11,10 @@ final ThemeData darkTheme = ThemeData(
   canvasColor: Colors.black,
   fontFamily: 'Georgia',
   scaffoldBackgroundColor: Colors.black,
-  textTheme: const TextTheme(),
   iconTheme: const IconThemeData(color: Colors.white),
+  textTheme: const TextTheme(
+    bodyText1: TextStyle(color: Colors.white),
+  ),
   appBarTheme: const AppBarTheme(
     shadowColor: Colors.black,
     color: Colors.black,
@@ -22,6 +24,10 @@ final ThemeData darkTheme = ThemeData(
     elevation: 1,
   ),
   bottomAppBarColor: const Color(0xff6D42CE),
+  timePickerTheme: const TimePickerThemeData(
+    backgroundColor: Colors.black,
+    // selectedItemStyle: TextStyle(color: Colors.white),
+  ),
   cardColor: const Color(0xFF303030),
   dividerColor: const Color(0x1f6D42CE),
   focusColor: Colors.grey.shade800,

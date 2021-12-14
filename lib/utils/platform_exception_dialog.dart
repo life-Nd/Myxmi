@@ -2,20 +2,20 @@ import 'package:flutter/services.dart';
 import 'package:myxmi/utils/platform_dialog.dart';
 
 class PlatformExceptionAlertDialog extends PlatformAlertDialog {
-  PlatformExceptionAlertDialog({String title, PlatformException exception})
+  PlatformExceptionAlertDialog({required String title, required PlatformException exception})
       : super(
           title: title,
-          content: message(exception),
+          content: message(exception)!,
           defaultActionText: 'OK',
         );
 
-  static String message(PlatformException exception) {
+  static String? message(PlatformException exception) {
     if (exception.message == 'FIRFirestoreErrorDomain') {
       if (exception.code == 'Code 7') {
         // This happens when we get a 'Missing or insufficient permissions' error
         return 'This operation could not be completed due to a server error';
       }
-      return exception.details as String;
+      return exception.details as String?;
     }
     return errors[exception.code] ?? exception.message;
   }

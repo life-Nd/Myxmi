@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 String language = 'en';
@@ -6,38 +7,47 @@ const String constLanguageCode = 'languageCode';
 const String constEnglish = 'en';
 const String constFrench = 'fr';
 
+final prefProvider =
+    ChangeNotifierProvider<PreferencesProvider>((ref) => PreferencesProvider());
+
 class PreferencesProvider extends ChangeNotifier {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  String theme = 'Light';
-  String language = 'English';
-  bool opaque = false;
+  String? theme = 'Light';
+  String? language = 'English';
+  bool? opaque = false;
 
-  Future changeOpaque({bool newOpaque}) async {
+  Future changeOpaque({bool? newOpaque}) async {
     final SharedPreferences prefs = await _prefs;
     opaque = newOpaque;
-    prefs.setBool('Opaque', opaque).then((bool success) {
-      return opaque;
-    });
+    prefs.setBool('Opaque', opaque!).then(
+      (bool success) {
+        return opaque;
+      },
+    );
 
     notifyListeners();
   }
 
-  Future changeLanguage({String newLanguage}) async {
+  Future changeLanguage({String? newLanguage}) async {
     final SharedPreferences prefs = await _prefs;
     language = newLanguage;
-    prefs.setString('Language', language).then((bool success) {
-      return language;
-    });
+    prefs.setString('Language', language!).then(
+      (bool success) {
+        return language;
+      },
+    );
 
     notifyListeners();
   }
 
-  Future changeTheme({String newTheme}) async {
+  Future changeTheme({String? newTheme}) async {
     final SharedPreferences prefs = await _prefs;
     theme = newTheme;
-    prefs.setString('Theme', theme).then((bool success) {
-      return theme;
-    });
+    prefs.setString('Theme', theme!).then(
+      (bool success) {
+        return theme;
+      },
+    );
     notifyListeners();
   }
 
@@ -51,8 +61,8 @@ class PreferencesProvider extends ChangeNotifier {
     return language = prefs.getString('Language');
   }
 
-  Future readPrefs() {
-    final Future _data = Future.wait([
+  Future<List> readPrefs() {
+    final Future<List> _data = Future.wait([
       _readTheme(),
       _readLanguage(),
     ]);
@@ -82,12 +92,12 @@ class PreferencesProvider extends ChangeNotifier {
     return _locale(languageCode);
   }
 
-  String getTranslated(BuildContext context, String key) {
-    return translate(key);
-  }
+  // String? getTranslated(BuildContext context, String key) {
+  //   return translate(key);
+  // }
 
-  String translate(String key) {
-    Map<String, String> _localizedValues;
-    return _localizedValues[key];
-  }
+  // String? translate(String key) {
+  //   late Map<String, String> _localizedValues;
+  //   return _localizedValues[key];
+  // }
 }

@@ -156,6 +156,7 @@
    "appetizer": "Apperitif",
    "salad": "Salade",
    "dinner": "Dîner",
+   "supper": "Souper",
    "breakfast": "Déjeuner",
    "soup": "Soupe",
    "dessert": "Dessert",
@@ -250,8 +251,7 @@
    "noName": "Sans nom",
    "followers": "Abonnés",
    "follow": "S'abonner",
-   "tryOurApp": "Essayer l'appli",
-   "aBetterExperience": "Pour une meilleure experience sur mobile",
+   "bestExperience": "Essayer l'appli, pour la meilleure experience sur mobile",
    "downloadAppOn": "Télécharger l'app avec",
    "downloadAndroidApp": "Télécharger l'appli Android",
    "downloadIosApp": "Télécharger l'appli IOS",
@@ -279,5 +279,17 @@
    "comingSoon": "Bientot disponible",
    "featureNotAvailable": "Cette fonctionnalité n'est pas encore disponible",
    "recipeShared": "Recette partagée",
-   "checkOutThisApp": "Essaye cette super appli: "
+   "checkOutThisApp": "Essaye cette super appli",
+   "checkOutThisRecipe": "Essaye cette recette",
+   "expire": "Expire",
+   "loadAll": "Voir tous les",
+   "writeComment": "Write your comment",
+   "planFor": "Plannifier pour",
+   "load": "load",
+   "comment": "comment",
+   "chooseRecipeType": "Choisissez le type de recette",
+   "getInstructions":"Accès aux instructions",
+   "check":"Cocher",
+   "uncheck":"Décocher"
+
 }

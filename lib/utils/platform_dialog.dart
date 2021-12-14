@@ -1,22 +1,19 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PlatformAlertDialog extends StatelessWidget {
   const PlatformAlertDialog({
-    @required this.title,
-    @required this.content,
+    required this.title,
+    required this.content,
     this.cancelActionText,
-    @required this.defaultActionText,
-  })  : assert(title != null),
-        assert(content != null),
-        assert(defaultActionText != null);
+    required this.defaultActionText,
+  });
 
   final String title;
   final String content;
-  final String cancelActionText;
+  final String? cancelActionText;
   final String defaultActionText;
 
-  Future<bool> show(BuildContext context) async {
+  Future<bool?> show(BuildContext context) async {
     return showDialog<bool>(
       context: context,
       barrierDismissible: false,
@@ -44,7 +41,7 @@ class PlatformAlertDialog extends StatelessWidget {
           color: Colors.white,
           onPressed: () => Navigator.of(context).pop(false),
           child: Text(
-            cancelActionText,
+            cancelActionText!,
             style: const TextStyle(color: Colors.black),
           ),
         ),
@@ -67,9 +64,9 @@ class PlatformAlertDialog extends StatelessWidget {
 
 class PlatformAlertDialogAction extends StatelessWidget {
   const PlatformAlertDialogAction({this.child, this.onPressed, this.color});
-  final Color color;
-  final Widget child;
-  final VoidCallback onPressed;
+  final Color? color;
+  final Widget? child;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {

@@ -6,23 +6,27 @@ import 'package:image_picker/image_picker.dart';
 import 'package:myxmi/providers/image.dart';
 
 class ImageSelector extends HookWidget {
-  final Function onComplete;
-  const ImageSelector({@required this.onComplete});
+  final VoidCallback onComplete;
+  const ImageSelector({required this.onComplete});
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
-        padding: const EdgeInsets.all(2),
-        icon: const Icon(Icons.add_a_photo),
-        onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              elevation: 20,
-              duration: const Duration(seconds: 777),
-              content: SizedBox(
-                height: 110,
-                child: Consumer(builder: (_, watch, __) {
-                  final _image = watch(imageProvider);
+      padding: const EdgeInsets.all(2),
+      icon: const Icon(
+        Icons.add_a_photo,
+        size: 25,
+      ),
+      onPressed: () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            elevation: 20,
+            duration: const Duration(seconds: 777),
+            content: SizedBox(
+              height: 110,
+              child: Consumer(
+                builder: (_, ref, __) {
+                  final _image = ref.watch(imageProvider);
                   return Stack(
                     alignment: Alignment.topRight,
                     children: [
@@ -40,17 +44,19 @@ class ImageSelector extends HookWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Center(
-                              child: Text(
-                            'chooseSource'.tr(),
-                            style: const TextStyle(fontSize: 17),
-                          )),
+                            child: Text(
+                              'chooseSource'.tr(),
+                              style: const TextStyle(fontSize: 17),
+                            ),
+                          ),
                           Expanded(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
                                 Card(
                                   shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
                                   elevation: 20,
                                   child: InkWell(
                                     onTap: () async {
@@ -61,7 +67,8 @@ class ImageSelector extends HookWidget {
                                           .then(
                                         (picked) {
                                           debugPrint(
-                                              'picked: ${picked.toString()} ${_image.state}');
+                                            'picked: ${picked.toString()} ${_image.state}',
+                                          );
                                           if (_image.state == AppState.picked) {
                                             _image.cropImage().then(
                                               (cropped) {
@@ -70,10 +77,11 @@ class ImageSelector extends HookWidget {
                                                     _image.state ==
                                                         AppState.cropped) {
                                                   debugPrint(
-                                                      'cropped: ${cropped.toString()}');
-                                                  onComplete().then(() async {
-                                                    _image.reset();
-                                                  });
+                                                    'cropped: ${cropped.toString()}',
+                                                  );
+                                                  onComplete();
+
+                                                  _image.reset();
                                                 }
                                               },
                                             );
@@ -106,28 +114,29 @@ class ImageSelector extends HookWidget {
                                 ),
                                 Card(
                                   shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
                                   elevation: 20,
                                   child: InkWell(
                                     onTap: () {
                                       ScaffoldMessenger.of(context)
                                           .hideCurrentSnackBar();
-                                      _image
-                                          .pickImage(ImageSource.camera)
-                                          .then((a) {
-                                        _image.cropImage().then(
-                                          (value) {
-                                            if (value != null) {
-                                              if (_image.state ==
-                                                  AppState.cropped) {
-                                                onComplete();
-                                              } else {
-                                                debugPrint('nothing cropped');
+                                      _image.pickImage(ImageSource.camera).then(
+                                        (a) {
+                                          _image.cropImage().then(
+                                            (value) {
+                                              if (value != null) {
+                                                if (_image.state ==
+                                                    AppState.cropped) {
+                                                  onComplete();
+                                                } else {
+                                                  debugPrint('nothing cropped');
+                                                }
                                               }
-                                            }
-                                          },
-                                        );
-                                      });
+                                            },
+                                          );
+                                        },
+                                      );
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.all(13),
@@ -159,10 +168,12 @@ class ImageSelector extends HookWidget {
                       ),
                     ],
                   );
-                }),
+                },
               ),
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 }

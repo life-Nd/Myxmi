@@ -2,12 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/views/home/home_view.dart';
-import '../main.dart';
+import 'package:myxmi/providers/user.dart';
+import 'package:myxmi/screens/home/home_screen.dart';
 
 class StreamAuthBuilder extends StatefulWidget {
   const StreamAuthBuilder({
-    foundation.Key key,
+    foundation.Key? key,
   }) : super(key: key);
 
   @override
@@ -24,16 +24,14 @@ class _StreamAuthBuilderState extends State<StreamAuthBuilder> {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (_, watch, child) {
-        final _appSources = watch(appNetworkProvider);
-        _appSources.getAppNetwork(context);
-        return StreamBuilder<User>(
+        return StreamBuilder<User?>(
           stream: FirebaseAuth.instance.userChanges(),
-          builder: (context, AsyncSnapshot<User> snapUser) {
+          builder: (context, AsyncSnapshot<User?> snapUser) {
             return Consumer(
-              builder: (context, watch, child) {
-                final _user = watch(userProvider);
+              builder: (_, ref, child) {
+                final _user = ref.watch(userProvider);
                 _user.account = snapUser.data;
-                return HomeView();
+                return HomeScreen();
               },
             );
           },

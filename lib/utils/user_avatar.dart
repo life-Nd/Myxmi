@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class UserAvatar extends StatelessWidget {
-  final String photoUrl;
+  final String? photoUrl;
   final double radius;
 
-  const UserAvatar({Key key, @required this.photoUrl, @required this.radius})
+  const UserAvatar({Key? key, required this.photoUrl, required this.radius})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -15,23 +15,13 @@ class UserAvatar extends StatelessWidget {
           context: context,
           builder: (_) {
             return AlertDialog(
-              contentPadding: const EdgeInsets.all(0),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
               content: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: InteractiveViewer(
-                  child: Image.network(
-                    photoUrl,
-                    cacheHeight: 1000,
-                    errorBuilder: (context, child, error) {
-                      return const Icon(
-                        Icons.person_outline,
-                        size: 40,
-                      );
-                    },
-                  ),
+                  child: _image(fullSize: true),
                 ),
               ),
             );
@@ -40,26 +30,26 @@ class UserAvatar extends StatelessWidget {
       },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(44),
-        child: Image.network(
-          photoUrl,
-          height: radius,
-          width: radius,
-          fit: BoxFit.fitWidth,
-          errorBuilder: (context, child, error) {
-            debugPrint('error: $error');
-            return Icon(
-              Icons.person_outline,
-              size: radius / 2,
-            );
-          },
-        ),
+        child: _image(fullSize: false),
       ),
     );
   }
-}
 
-class UserProfileProvider extends ChangeNotifier {
-  String photoUrl;
-  String name;
-  String uid;
+  Widget _image({required bool fullSize}) {
+    return Image.network(
+      photoUrl!,
+      height: fullSize ? null : radius,
+      width: fullSize ? null : radius,
+      fit: BoxFit.fitWidth,
+      cacheHeight: 1000,
+      cacheWidth: 1000,
+      errorBuilder: (context, child, error) {
+        debugPrint('error: $error');
+        return Icon(
+          Icons.person_outline,
+          size: radius / 2,
+        );
+      },
+    );
+  }
 }

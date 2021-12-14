@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class NoData extends StatelessWidget {
   final String type;
 
-  const NoData({Key key, @required this.type}) : super(key: key);
+  const NoData({Key? key, required this.type}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -12,11 +12,9 @@ class NoData extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(child: Image.asset('assets/data_not_found.png')),
-          Expanded(
-            child: Text(
-              'no$type'.tr(),
-            ),
+          Image.asset('assets/data_not_found.png'),
+          Text(
+            'no$type'.tr(),
           ),
         ],
       ),

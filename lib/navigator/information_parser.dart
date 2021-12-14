@@ -4,8 +4,9 @@ class MyRouteInformationParser
     extends RouteInformationParser<List<RouteSettings>> {
   @override
   Future<List<RouteSettings>> parseRouteInformation(
-      RouteInformation routeInformation) async {
-    final uri = Uri.parse(routeInformation.location);
+    RouteInformation routeInformation,
+  ) async {
+    final uri = Uri.parse(routeInformation.location!);
     if (uri.pathSegments.isEmpty) {
       return Future.value([const RouteSettings(name: '/')]);
     }
@@ -16,7 +17,6 @@ class MyRouteInformationParser
             pathSegment == uri.pathSegments.last ? uri.queryParameters : null,
       );
     }).toList();
-    debugPrint('-----routeSettings: $routeSettings');
     return Future.value(routeSettings);
   }
 
@@ -32,16 +32,13 @@ class MyRouteInformationParser
       case '/':
         return '';
       case '/recipe':
-        return '?id=${(routeSettings?.arguments as Map)['id'].toString()}';
+        return '?id=${(routeSettings.arguments! as Map)['id'].toString()}';
       case '/filter':
-        debugPrint('routeSettings?.arguments: ${routeSettings?.arguments}');
-        return '?type=${(routeSettings?.arguments as Map)['type'].toString()}';
-      case '/creator':
-        return '?uid=${(routeSettings?.arguments as Map)['uid'].toString()}';
+        return '?type=${(routeSettings.arguments! as Map)['type'].toString()}';
       case '/favorites':
-        return '?uid=${(routeSettings?.arguments as Map)['uid'].toString()}';
+        return '?uid=${(routeSettings.arguments! as Map)['uid'].toString()}';
       case '/products':
-        return '?uid=${(routeSettings?.arguments as Map)['uid'].toString()}';
+        return '?uid=${(routeSettings.arguments! as Map)['uid'].toString()}';
       default:
         return '';
     }

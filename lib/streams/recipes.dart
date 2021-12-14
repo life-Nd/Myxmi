@@ -1,23 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:myxmi/screens/recipes/list/widgets/recipes_view.dart';
 import 'package:myxmi/utils/loading_column.dart';
-import 'package:myxmi/views/recipes/widgets/recipes_view.dart';
 
 class RecipesStreamBuilder extends StatelessWidget {
   const RecipesStreamBuilder({
-    Key key,
-    @required this.snapshots,
-    @required this.showAutoCompleteField,
+    Key? key,
+    required this.snapshots,
+    required this.showAutoCompleteField,
   }) : super(key: key);
 
-  final Stream<QuerySnapshot<Object>> snapshots;
+  final Stream<QuerySnapshot<Object?>> snapshots;
   final bool showAutoCompleteField;
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('building RecipesStreamBuilder');
     return StreamBuilder<QuerySnapshot>(
       stream: snapshots,
       builder: (_, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -36,6 +34,7 @@ class RecipesStreamBuilder extends StatelessWidget {
         }
         if (snapshot.data != null) {
           final _data = snapshot.data;
+
           return RecipesView(
             showAutoCompleteField: showAutoCompleteField,
             querySnapshot: _data,
@@ -64,8 +63,8 @@ class RecipesStreamBuilder extends StatelessWidget {
 
 class RecipesLikesStream extends StatelessWidget {
   const RecipesLikesStream({
-    Key key,
-    @required this.uid,
+    Key? key,
+    required this.uid,
   }) : super(key: key);
   final String uid;
   @override
@@ -82,10 +81,10 @@ class RecipesLikesStream extends StatelessWidget {
 
 class RecipesUidStream extends StatelessWidget {
   const RecipesUidStream({
-    Key key,
-    @required this.uid,
+    Key? key,
+    required this.uid,
   }) : super(key: key);
-  final String uid;
+  final String? uid;
   @override
   Widget build(BuildContext context) {
     return RecipesStreamBuilder(
