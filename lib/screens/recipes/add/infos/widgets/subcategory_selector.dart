@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/screens/recipes/add/infos/add_infos_screen.dart';
+import 'package:myxmi/providers/recipe_entries.dart';
 import 'package:myxmi/utils/selectable_row.dart';
 
 class SubCategorySelector extends StatelessWidget {

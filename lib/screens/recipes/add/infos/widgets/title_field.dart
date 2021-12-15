@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/screens/recipes/add/infos/add_infos_screen.dart';
+import 'package:myxmi/providers/recipe_entries.dart';
 
 class TitleField extends StatelessWidget {
   const TitleField({Key? key}) : super(key: key);
@@ -23,7 +23,7 @@ class TitleField extends StatelessWidget {
                   _recipe.recipe.title == null ? 'titleCantBeEmpty'.tr() : null,
             ),
             onChanged: (value) {
-              _recipe.changeTitle();
+              _recipe.setTitle();
             },
             onSubmitted: (submitted) {
               if (!kIsWeb) {

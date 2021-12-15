@@ -4,8 +4,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/providers/image.dart';
+import 'package:myxmi/providers/recipe_entries.dart';
 import 'package:myxmi/providers/router.dart';
-import 'package:myxmi/screens/recipes/add/infos/add_infos_screen.dart';
+
 import 'package:myxmi/screens/recipes/add/instructions/widgets/save_recipe.dart';
 
 import 'package:myxmi/utils/image_selector.dart';
@@ -67,6 +68,11 @@ class AddRecipeInstructionsScreen extends StatelessWidget {
                     ),
                   ),
                   Expanded(
+                    // TODO FIX ALL THIS MESS
+                    // USE A MODEL TO STORE THE INGREDIENTS
+                    // THE RECIPE
+                    // THE INSTRUCTIONS
+
                     child: _recipe.recipe.ingredientsCount != null
                         ? ListView.builder(
                             itemCount: _recipe.composition.length,
@@ -76,7 +82,6 @@ class AddRecipeInstructionsScreen extends StatelessWidget {
                               final String _keyIndex = '${_keys[index]}';
                               final Map _compositionIndex =
                                   _composition[_keyIndex] as Map;
-
                               final String _nameKey =
                                   '${_compositionIndex['name']}';
                               final String _name =

@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/screens/recipes/add/infos/add_infos_screen.dart';
+import 'package:myxmi/providers/recipe_entries.dart';
 
 class SelectorButton extends StatelessWidget {
   final String? value;
@@ -14,24 +14,28 @@ class SelectorButton extends StatelessWidget {
     return Consumer(
       builder: (_, ref, child) {
         final _recipe = ref.watch(recipeEntriesProvider);
-        final String? _key = type == 'category'
-            ? _recipe.category
-            : type == 'subcategory'
-                ? _recipe.subCategory
-                : _recipe.diet;
+        String? _key;
+        if (type == 'category') {
+          _key = _recipe.category;
+        } else if (type == 'subcategory') {
+          _key = _recipe.subCategory;
+        } else {
+          _key = _recipe.diet;
+        }
         final bool _selected = _key == value;
         return RawMaterialButton(
-          // padding: const EdgeInsets.only(left: 8, right: 8),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           fillColor: _selected ? Colors.green : Theme.of(context).cardColor,
           onPressed: () {
             debugPrint('$type: $value');
-            type == 'category'
-                ? _recipe.changeCategory(newCategory: value)
-                : type == 'subcategory'
-                    ? _recipe.changeSubCategory(newSubCategory: value)
-                    : _recipe.changeDiet(newDiet: value);
+            if (type == 'category') {
+              _recipe.setCategory(newCategory: value);
+            } else if (type == 'subcategory') {
+              _recipe.setSubCategory(newSubCategory: value);
+            } else {
+              _recipe.setDiet(newDiet: value);
+            }
           },
           child: Text(value!.tr()),
         );

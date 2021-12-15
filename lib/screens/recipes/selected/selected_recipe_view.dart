@@ -14,10 +14,10 @@ final selectedRecipeView = ChangeNotifierProvider<_SelectedRecipeViewNotifier>(
 class SelectedRecipe extends StatefulWidget {
   const SelectedRecipe({Key? key}) : super(key: key);
   @override
-  State<StatefulWidget> createState() => _SelectionRecipeState();
+  State<StatefulWidget> createState() => _SelectedRecipeState();
 }
 
-class _SelectionRecipeState extends State<SelectedRecipe> {
+class _SelectedRecipeState extends State<SelectedRecipe> {
   final ScrollController _ctrl = ScrollController();
   @override
   Widget build(BuildContext context) {

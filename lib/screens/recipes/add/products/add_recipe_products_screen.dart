@@ -1,9 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:myxmi/providers/recipe_entries.dart';
 import 'package:myxmi/providers/router.dart';
-import 'package:myxmi/screens/recipes/add/infos/add_infos_screen.dart';
-
 import 'package:myxmi/streams/products.dart';
 import 'package:myxmi/utils/next_button.dart';
 
@@ -21,11 +20,6 @@ class AddRecipeProductsScreen extends StatelessWidget {
               icon: const Icon(Icons.arrow_back_ios),
               onPressed: () {
                 _router.pushPage(name: '/add-recipe-infos');
-                // Navigator.of(context).push(
-                //   MaterialPageRoute(
-                //     builder: (_) => AddRecipeInfosScreen(),
-                //   ),
-                // );
               },
             ),
             title: Consumer(
@@ -74,11 +68,6 @@ class AddRecipeProductsScreen extends StatelessWidget {
               NextButton(
                 tapNext: () =>
                     _router.pushPage(name: '/add-recipe-instructions'),
-                // Navigator.of(context).push(
-                //   MaterialPageRoute(
-                //     builder: (_) => AddRecipeInstructionsScreen(),
-                //   ),
-                // ),
               ),
             ],
           ),

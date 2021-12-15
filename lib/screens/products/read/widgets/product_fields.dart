@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/product.dart';
-import 'package:myxmi/screens/recipes/add/infos/add_infos_screen.dart';
+import 'package:myxmi/providers/recipe_entries.dart';
 
 TextEditingController textCtrl = TextEditingController();
 
@@ -18,9 +18,14 @@ class ProductField extends StatelessWidget {
     return Consumer(
       builder: (_, ref, __) {
         final _recipe = ref.watch(recipeEntriesProvider);
-        final _isNotEmpty = _recipe.composition.isNotEmpty &&
+        bool _isNotEmpty;
+        if (_recipe.composition.isNotEmpty &&
             product!.productId!.isNotEmpty &&
-            _recipe.composition[product!.productId] != null;
+            _recipe.composition[product!.productId] != null) {
+          _isNotEmpty = true;
+        } else {
+          _isNotEmpty = false;
+        }
         final Map? _composition =
             _recipe.composition[product!.productId] as Map?;
         textCtrl = TextEditingController(
@@ -45,23 +50,20 @@ class ProductField extends StatelessWidget {
                 width: 100,
                 child: TextField(
                   controller: textCtrl,
-                  // inputFormatters: <TextInputFormatter>[
-                  //   FilteringTextInputFormatter.digitsOnly
-                  // ],
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
                   onSubmitted: (submitted) {
-                    _recipe.changeEstimatedWeight();
+                    _recipe.setEstimatedWeight();
                     FocusScope.of(context).unfocus();
                   },
                   onChanged: (value) {
-                    _recipe.changeComposition(
+                    _recipe.setComposition(
                       name: product!.name,
                       key: product!.productId,
                       value: value,
                       type: product!.mesureType,
                     );
-                    _recipe.changeQuantity(
+                    _recipe.setQuantity(
                       key: product!.name,
                       value: value,
                       type: product!.mesureType,

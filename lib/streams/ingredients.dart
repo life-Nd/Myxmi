@@ -32,12 +32,27 @@ class StreamIngredientsBuilder extends StatelessWidget {
             }
             if (snapshot.hasData && snapshot.data!.data() != null) {
               Map<String, dynamic>? _data = {};
-              final DocumentSnapshot<Map<String, dynamic>> _snapshot =
+              final DocumentSnapshot<Map<String, dynamic>?> _snapshot =
                   snapshot.data!;
               _data = _snapshot.data();
+              Map<String, dynamic> _ingredients = {};
+              Map<String, dynamic> _comments = {};
+              if (_data!.isNotEmpty) {
+                if (_data['ingredients'] != null) {
+                  _ingredients = _data['ingredients'] as Map<String, dynamic>;
+                } else {
+                  _ingredients = {};
+                }
+                if (_data['comments'] != null) {
+                  _comments = _data['comments'] as Map<String, dynamic>;
+                } else {
+                  _comments = {};
+                }
+              }
+
               return RecipeDetails(
-                ingredients: _data!['ingredients'] as Map<String, dynamic>,
-                comments: _data['comments'] as Map<String, dynamic>,
+                ingredients: _ingredients,
+                comments: _comments,
               );
             }
             return const SizedBox(

@@ -12,12 +12,6 @@ import 'package:myxmi/screens/recipes/add/infos/widgets/subcategory_selector.dar
 import 'package:myxmi/screens/recipes/add/infos/widgets/title_field.dart';
 import 'package:myxmi/utils/next_button.dart';
 
-final recipeEntriesProvider = ChangeNotifierProvider<RecipeEntriesProvider>(
-  (ref) => RecipeEntriesProvider(),
-);
-
-List steps = [];
-
 class AddRecipeInfosScreen extends StatelessWidget {
   const AddRecipeInfosScreen({Key? key}) : super(key: key);
   @override
@@ -132,11 +126,6 @@ class AddRecipeInfosScreen extends StatelessWidget {
           bottomNavigationBar: NextButton(
             tapNext: () {
               _router.pushPage(name: '/add-recipe-products');
-              // Navigator.of(context).push(
-              //   MaterialPageRoute(
-              //     builder: (_) => AddRecipeProductsScreen(),
-              //   ),
-              // );
             },
           ),
         );

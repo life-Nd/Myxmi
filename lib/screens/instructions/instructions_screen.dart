@@ -8,47 +8,48 @@ import 'package:myxmi/screens/recipes/selected/widgets/recipe_details.dart';
 import 'package:myxmi/utils/loading_column.dart';
 import 'package:myxmi/utils/no_data.dart';
 
-late String _view = 'List';
+final _instructionsViewProvider =
+    ChangeNotifierProvider<InstructionsViewProvider>(
+  (ref) => InstructionsViewProvider(),
+);
 
-class InstructionsScreen extends StatefulWidget {
+class InstructionsScreen extends StatelessWidget {
   const InstructionsScreen({Key? key}) : super(key: key);
 
   @override
-  State<InstructionsScreen> createState() => _InstructionsScreenState();
-}
-
-class _InstructionsScreenState extends State<InstructionsScreen> {
-  @override
   Widget build(BuildContext context) {
-    return Consumer(
-      builder: (_, ref, child) {
-        final _recipe = ref.watch(recipeDetailsProvider);
-
-        return Scaffold(
-          appBar: AppBar(
-            title: Text('instructions'.tr()),
-            actions: [
-              if (_view == 'List')
-                IconButton(
-                  icon: const Icon(Icons.view_agenda_rounded),
-                  onPressed: () {
-                    setState(() {
-                      _view = 'List';
-                    });
-                  },
-                )
-              else
-                IconButton(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('instructions'.tr()),
+        actions: [
+          Consumer(
+            builder: (_, ref, child) {
+              final _instructionsView = ref.watch(_instructionsViewProvider);
+              if (_instructionsView.view == 'List') {
+                return IconButton(
                   icon: const Icon(Icons.view_week_rounded),
                   onPressed: () {
-                    setState(() {
-                      _view = 'Page';
-                    });
+                    debugPrint('Page');
+                    _instructionsView.setView('Page');
                   },
-                )
-            ],
+                );
+              } else {
+                return IconButton(
+                  icon: const Icon(Icons.view_agenda_rounded),
+                  onPressed: () {
+                    debugPrint('List');
+                    _instructionsView.setView('List');
+                  },
+                );
+              }
+            },
           ),
-          body: StreamBuilder(
+        ],
+      ),
+      body: Consumer(
+        builder: (_, ref, watch) {
+          final _recipe = ref.watch(recipeDetailsProvider);
+          return StreamBuilder(
             stream: FirebaseFirestore.instance
                 .collection('Instructions')
                 .doc('${_recipe.details.recipeId}')
@@ -68,22 +69,45 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
               final _doc = snapshot.data!.data();
               debugPrint('_doc: $_doc');
               if (snapshot.hasData) {
-                if (_view == 'List') {
-                  return InstructionsListView(
-                    instructions: _doc!['steps'] as List,
-                  );
-                } else {
-                  return InstructionsPageView(
-                    instructions: _doc!['steps'] as List,
-                  );
-                }
+                return InstructionsSelected(steps: _doc!['steps'] as List);
               } else {
                 return NoData(type: 'no_instructions'.tr());
               }
             },
-          ),
-        );
+          );
+        },
+      ),
+    );
+  }
+}
+
+class InstructionsSelected extends StatelessWidget {
+  final List steps;
+  const InstructionsSelected({Key? key, required this.steps}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Consumer(
+      builder: (_, ref, watch) {
+        final _instructionsView = ref.watch(_instructionsViewProvider);
+        if (_instructionsView._view == 'List') {
+          return InstructionsListView(
+            instructions: steps,
+          );
+        } else {
+          return InstructionsPageView(
+            instructions: steps,
+          );
+        }
       },
     );
+  }
+}
+
+class InstructionsViewProvider extends ChangeNotifier {
+  String _view = 'List';
+  String get view => _view;
+  void setView(String value) {
+    _view = value;
+    notifyListeners();
   }
 }

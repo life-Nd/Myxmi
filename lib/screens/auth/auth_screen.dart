@@ -3,11 +3,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/providers/auth.dart';
+import 'package:myxmi/providers/home_screen.dart';
 import 'package:myxmi/screens/auth/widgets/dialog_no_account_found.dart';
 import 'package:myxmi/screens/auth/widgets/dialog_reset_password.dart';
 import 'package:myxmi/screens/auth/widgets/dialog_unknown_error.dart';
 import 'package:myxmi/screens/auth/widgets/dialog_wrong_password.dart';
-import 'package:myxmi/screens/home/home_screen.dart';
 
 final _fieldsProvider =
     ChangeNotifierProvider<_FieldsNotifier>((ref) => _FieldsNotifier());

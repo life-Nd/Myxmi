@@ -15,6 +15,7 @@ class UserAvatar extends StatelessWidget {
           context: context,
           builder: (_) {
             return AlertDialog(
+              contentPadding: const EdgeInsets.all(1),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),

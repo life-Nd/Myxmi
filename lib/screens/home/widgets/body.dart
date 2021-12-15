@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:myxmi/providers/home_screen.dart';
 import 'package:myxmi/providers/user.dart';
 import 'package:myxmi/screens/auth/auth_screen.dart';
 import 'package:myxmi/screens/calendar/calendar_screen.dart';
-import 'package:myxmi/screens/home/home_screen.dart';
 import 'package:myxmi/screens/home/widgets/search_recipes_in_db.dart';
 import 'package:myxmi/screens/landing/landing_screen.dart';
 import 'package:myxmi/screens/menu/menu_view.dart';

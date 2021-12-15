@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/screens/recipes/add/infos/add_infos_screen.dart';
+import 'package:myxmi/providers/recipe_entries.dart';
 
 class PortionsField extends StatelessWidget {
   const PortionsField({Key? key}) : super(key: key);
@@ -21,7 +21,7 @@ class PortionsField extends StatelessWidget {
                   controller: _recipe.portionsCtrl,
                   keyboardType: TextInputType.number,
                   onChanged: (value) {
-                    _recipe.changePortions();
+                    _recipe.setPortions();
                   },
                   onSubmitted: (submitted) {
                     if (!kIsWeb) {

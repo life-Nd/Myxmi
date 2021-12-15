@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-late String? _experience;
+String _experience = 'amazing';
 
 class ExperiencesSelector extends StatelessWidget {
   const ExperiencesSelector({Key? key}) : super(key: key);

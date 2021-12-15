@@ -60,16 +60,24 @@ class InstructionsPageView extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(
-                          _checked
-                              ? Icons.check_box
-                              : Icons.check_box_outline_blank,
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(
+                            _checked
+                                ? Icons.check_box
+                                : Icons.check_box_outline_blank,
+                            color: Colors.white,
+                          ),
                         ),
-                        Text(
-                          _checked ? '${'uncheck'} ' : '${'check'.tr()} ',
-                          style: const TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.w400,
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            _checked ? '${'uncheck'} ' : '${'check'.tr()} ',
+                            style: const TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ],

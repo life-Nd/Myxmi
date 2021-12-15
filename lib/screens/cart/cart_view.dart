@@ -7,6 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/providers/cart.dart';
 
 class CartView extends StatefulWidget {
+  const CartView({Key? key}) : super(key: key);
   @override
   State<CartView> createState() => _CartViewState();
 }

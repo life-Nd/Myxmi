@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:myxmi/providers/home_screen.dart';
 import 'package:myxmi/providers/user.dart';
-import 'package:myxmi/screens/home/home_screen.dart';
 
 class AppBottomNavigation extends StatelessWidget {
   @override
@@ -47,10 +47,6 @@ class AppBottomNavigation extends StatelessWidget {
                 label: 'signIn'.tr(),
                 icon: const Icon(Icons.person_outlined),
               ),
-            BottomNavigationBarItem(
-              label: 'planner'.tr(),
-              icon: const Icon(Icons.calendar_today_outlined),
-            ),
           ],
           currentIndex: _viewIndex,
           onTap: (index) {

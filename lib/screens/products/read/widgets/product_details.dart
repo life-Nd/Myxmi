@@ -77,7 +77,7 @@ class ProductDetails extends StatelessWidget {
                                 'product.left TAPPED ${product!.left}, ${_stockCtrl.text}',
                               );
                               product!.left = _stockCtrl.text;
-                              changeStock(
+                              setStock(
                                 expiration: product!.expiration!,
                                 id: product!.productId!,
                                 quantity: double.parse(product!.left!),
@@ -108,6 +108,7 @@ class ProductDetails extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
+                    const EditCartButton()
                   ],
                 ),
                 StatefulBuilder(
@@ -116,7 +117,6 @@ class ProductDetails extends StatelessWidget {
                     String _expirationFormatted;
                     final String? _productLeft =
                         product?.left != null ? product!.left : '0';
-
                     if (product?.expiration != null) {
                       _expiration = DateTime.fromMillisecondsSinceEpoch(
                         int.parse(product!.expiration!),
@@ -126,7 +126,6 @@ class ProductDetails extends StatelessWidget {
                     }
                     _expirationFormatted =
                         DateFormat('EEEE d MMM , ' 'yyyy').format(_expiration);
-
                     return Row(
                       children: [
                         Text('${'expire'.tr()}:'),
@@ -134,7 +133,7 @@ class ProductDetails extends StatelessWidget {
                           onPressed: () {
                             product!.expiration =
                                 '${_expiration.subtract(const Duration(days: 1)).millisecondsSinceEpoch}';
-                            changeExpiry(
+                            setExpiry(
                               id: product!.productId!,
                               quantity: int.parse(_productLeft!),
                               expiration: product!.expiration!,
@@ -164,7 +163,7 @@ class ProductDetails extends StatelessWidget {
                               _expiration = _date;
                               product!.expiration =
                                   '${_date.millisecondsSinceEpoch}';
-                              changeExpiry(
+                              setExpiry(
                                 id: product!.productId!,
                                 quantity: int.parse(_productLeft!),
                                 expiration: product!.expiration!,
@@ -188,7 +187,7 @@ class ProductDetails extends StatelessWidget {
                           onPressed: () {
                             product!.expiration =
                                 '${_expiration.add(const Duration(days: 1)).millisecondsSinceEpoch}';
-                            changeExpiry(
+                            setExpiry(
                               id: product!.productId!,
                               quantity: int.parse(_productLeft!),
                               expiration: product!.expiration!,
@@ -211,7 +210,7 @@ class ProductDetails extends StatelessWidget {
     );
   }
 
-  Future changeStock({
+  Future setStock({
     double? quantity,
     required String expiration,
     required String id,
@@ -223,12 +222,12 @@ class ProductDetails extends StatelessWidget {
     );
   }
 
-  Future changeExpiry({
+  Future setExpiry({
     int? quantity,
     required String expiration,
     required String id,
   }) async {
-    debugPrint('changeExpiry: expiration: $expiration');
+    debugPrint('setExpiry: expiration: $expiration');
     final SharedPreferences _prefs = await SharedPreferences.getInstance();
     _prefs.setStringList(
       id,

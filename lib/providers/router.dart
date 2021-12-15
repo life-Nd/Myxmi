@@ -5,6 +5,7 @@ import 'package:myxmi/app.dart';
 import 'package:myxmi/models/recipe.dart';
 import 'package:myxmi/navigator/transition_delegate.dart';
 import 'package:myxmi/screens/calendar/calendar_screen.dart';
+import 'package:myxmi/screens/cart/cart_view.dart';
 import 'package:myxmi/screens/home/home_screen.dart';
 import 'package:myxmi/screens/instructions/instructions_screen.dart';
 import 'package:myxmi/screens/more/about/view.dart';
@@ -189,6 +190,9 @@ class RouterProvider extends RouterDelegate<List<RouteSettings>>
         break;
       case '/instructions':
         child = const InstructionsScreen();
+        break;
+      case '/cart':
+        child = const CartView();
         break;
 
       case '/support':

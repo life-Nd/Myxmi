@@ -1,10 +1,17 @@
+import 'dart:math';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/recipe.dart';
+import 'package:myxmi/providers/user.dart';
+
+final recipeEntriesProvider = ChangeNotifierProvider<RecipeEntriesProvider>(
+  (ref) => RecipeEntriesProvider(),
+);
 
 class RecipeEntriesProvider extends ChangeNotifier {
   RecipeModel recipe = RecipeModel();
-  // InstructionModel instructions = InstructionModel(ingredients: {}, steps: []);
   Map ingredients = {};
   List instructions = [];
   Map steps = {};
@@ -20,20 +27,20 @@ class RecipeEntriesProvider extends ChangeNotifier {
   final TextEditingController durationCtrl = TextEditingController();
   final TextEditingController portionsCtrl = TextEditingController();
 
-  void changeTitle() {
+  void setTitle() {
     recipe.title = titleCtrl.text;
     notifyListeners();
   }
 
-  void changeDuration() {
+  void setDuration() {
     recipe.duration = durationCtrl.text;
   }
 
-  void changePortions() {
+  void setPortions() {
     recipe.portions = portionsCtrl.text;
   }
 
-  void changeDifficulty(double newDifficultyValue) {
+  void setDifficulty(double newDifficultyValue) {
     difficultyValue = newDifficultyValue;
     notifyListeners();
   }
@@ -48,23 +55,23 @@ class RecipeEntriesProvider extends ChangeNotifier {
                 : '-';
   }
 
-  void changeCategory({String? newCategory}) {
+  void setCategory({String? newCategory}) {
     category = newCategory;
     subCategory = '';
     notifyListeners();
   }
 
-  void changeSubCategory({String? newSubCategory}) {
+  void setSubCategory({String? newSubCategory}) {
     subCategory = newSubCategory;
     notifyListeners();
   }
 
-  void changeDiet({String? newDiet}) {
+  void setDiet({String? newDiet}) {
     diet = newDiet;
     notifyListeners();
   }
 
-  void changeComposition({
+  void setComposition({
     required String? key,
     required String? name,
     required String? type,
@@ -82,7 +89,7 @@ class RecipeEntriesProvider extends ChangeNotifier {
     debugPrint('quantity: $quantity');
   }
 
-  void changeQuantity({
+  void setQuantity({
     required String? key,
     required String? type,
     required String value,
@@ -125,11 +132,31 @@ class RecipeEntriesProvider extends ChangeNotifier {
   //   notifyListeners();
   // }
 
-  void saveRecipeToDb() {
+  void saveRecipeToDb({UserProvider? user}) {
+    final rng = Random();
+    final _random = rng.nextInt(9000) + 1000;
+    recipe.reference = '$_random';
+    recipe.uid = user!.account!.uid;
+    recipe.access = 'Public';
+    recipe.usedCount = '1';
+    recipe.instructionsCount = '${instructions.length}';
+    recipe.username = user.account!.displayName;
+    recipe.userphoto = user.account!.photoURL;
+    recipe.made = '${DateTime.now().millisecondsSinceEpoch}';
+    recipe.tags = {
+      category: true,
+      subCategory: true,
+      diet: true,
+    };
+    final List _keys = composition.keys.toList();
+    for (int i = 0; i < _keys.length; i++) {}
+    if (category == 'other') {
+      subCategory = null;
+    }
     recipe.toMap();
   }
 
-  void changeEstimatedWeight() {
+  void setEstimatedWeight() {
     estimatedWeight = quantity.isNotEmpty
         ? quantity.values.reduce(
             (sum, element) => sum + element,

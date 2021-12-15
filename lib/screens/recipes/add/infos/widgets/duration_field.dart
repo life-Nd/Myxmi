@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/screens/recipes/add/infos/add_infos_screen.dart';
+import 'package:myxmi/providers/recipe_entries.dart';
 
 class DurationField extends StatelessWidget {
   const DurationField({Key? key}) : super(key: key);
@@ -21,10 +21,10 @@ class DurationField extends StatelessWidget {
                   controller: _recipe.durationCtrl,
                   keyboardType: TextInputType.number,
                   onChanged: (value) {
-                    _recipe.changeDuration();
+                    _recipe.setDuration();
                   },
                   onSubmitted: (submitted) {
-                    _recipe.changeDuration();
+                    _recipe.setDuration();
                     if (!kIsWeb) {
                       FocusScope.of(context).requestFocus(FocusNode());
                     }

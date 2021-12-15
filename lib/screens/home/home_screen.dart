@@ -8,10 +8,6 @@ import 'package:myxmi/screens/home/widgets/app_bottom_navigation.dart';
 import 'package:myxmi/screens/home/widgets/body.dart';
 import 'package:myxmi/screens/home/widgets/web_appbar.dart';
 
-final homeScreenProvider = ChangeNotifierProvider<HomeScreenProvider>(
-  (ref) => HomeScreenProvider(),
-);
-
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -45,18 +41,9 @@ class HomeScreen extends StatelessWidget {
                       onPressed: () {
                         _viewIndex != 4
                             ? _router.pushPage(name: '/add-recipe-infos')
-                            // Navigator.of(context).push(
-                            //     MaterialPageRoute(
-                            //       builder: (_) => AddRecipeInfosScreen(),
-                            //     ),
-                            //   )
                             : _router.pushPage(
                                 name: '/add-product',
-                              ); //  Navigator.of(context).push(
-                        //     MaterialPageRoute(
-                        //       builder: (_) => AddProductScreen(),
-                        //     ),
-                        //   );
+                              );
                       },
                       child: const Icon(
                         Icons.add,
