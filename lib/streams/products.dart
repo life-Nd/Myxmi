@@ -28,6 +28,7 @@ class ProductsStreamBuilder extends StatelessWidget {
               );
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
+              // TODO rebuilds from here when reloading the addInstructionsPage
               debugPrint(
                 '--FIREBASE-- Reading: ProductsStream/${_user.account?.uid} ',
               );

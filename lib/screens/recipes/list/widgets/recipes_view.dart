@@ -14,32 +14,6 @@ class RecipesView extends StatelessWidget {
     required this.querySnapshot,
     required this.showAutoCompleteField,
   }) : super(key: key);
-  // List<RecipeModel> _recipes() {
-  //   if (querySnapshot.docs.isNotEmpty) {
-  //     return querySnapshot.docs.map((QueryDocumentSnapshot data) {
-  //       return RecipeModel.fromSnapshot(
-  //         snapshot: data.data() as Map<String, dynamic>,
-  //         keyIndex: data.id,
-  //       );
-  //     }).toList();
-  //   } else {
-  //     return [];
-  //   }
-  // }
-
-  // List<RecipeModel> _filterRecipes() {
-  //   final List<RecipeModel> _filteredRecipes = [];
-  //   final Iterable _filter = _recipes().asMap().entries.where((entry) {
-  //     return entry.value.toMap().containsValue(
-  //           _searchMyRecipesCtrl.text.trim().toLowerCase(),
-  //         );
-  //   },);
-  //   final _filtered = Map.fromEntries(_filter as Iterable<MapEntry>);
-  //   _filtered.forEach((key, value) {
-  //     _filteredRecipes.add(value as RecipeModel);
-  //   },);
-  //   return _filteredRecipes;
-  // }
 
   @override
   Widget build(BuildContext context) {

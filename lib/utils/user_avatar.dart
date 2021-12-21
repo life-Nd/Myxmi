@@ -46,9 +46,19 @@ class UserAvatar extends StatelessWidget {
       cacheWidth: 1000,
       errorBuilder: (context, child, error) {
         debugPrint('error: $error');
-        return Icon(
-          Icons.person_outline,
-          size: radius / 2,
+        return Container(
+          height: radius,
+          width: radius,
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+          ),
+          child: CircleAvatar(
+            backgroundColor: Colors.red,
+            child: Icon(
+              Icons.person_outline,
+              size: radius,
+            ),
+          ),
         );
       },
     );

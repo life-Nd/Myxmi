@@ -25,8 +25,11 @@ final ThemeData darkTheme = ThemeData(
   ),
   bottomAppBarColor: const Color(0xff6D42CE),
   timePickerTheme: const TimePickerThemeData(
+    entryModeIconColor: Colors.orange,
     backgroundColor: Colors.black,
-    // selectedItemStyle: TextStyle(color: Colors.white),
+    dayPeriodColor: Colors.red,
+    dayPeriodTextColor: Colors.blue,
+    dialBackgroundColor: Colors.yellow,
   ),
   cardColor: const Color(0xFF303030),
   dividerColor: const Color(0x1f6D42CE),

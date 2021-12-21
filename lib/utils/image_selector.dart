@@ -64,8 +64,8 @@ class ImageSelector extends HookWidget {
                                           .hideCurrentSnackBar();
                                       _image
                                           .pickImage(ImageSource.gallery)
-                                          .then(
-                                        (a) {
+                                          .whenComplete(
+                                        () {
                                           _image.cropImage().then(
                                             (value) {
                                               if (value != null) {
@@ -80,34 +80,6 @@ class ImageSelector extends HookWidget {
                                           );
                                         },
                                       );
-                                      // ScaffoldMessenger.of(context)
-                                      //     .hideCurrentSnackBar();
-                                      // _image
-                                      //     .pickImage(ImageSource.gallery)
-                                      //     .then(
-                                      //   (picked) {
-                                      //     debugPrint(
-                                      //       'picked: ${picked.toString()} ${_image.state}',
-                                      //     );
-                                      //     if (_image.state == AppState.picked) {
-                                      //       _image.cropImage().then(
-                                      //         (cropped) {
-                                      //           if (_image.state ==
-                                      //                   AppState.picked ||
-                                      //               _image.state ==
-                                      //                   AppState.cropped) {
-                                      //             debugPrint(
-                                      //               'cropped: ${cropped.toString()}',
-                                      //             );
-                                      //             onComplete();
-
-                                      //             _image.reset();
-                                      //           }
-                                      //         },
-                                      //       );
-                                      //     }
-                                      //   },
-                                      // );
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.all(13),

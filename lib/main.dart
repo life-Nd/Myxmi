@@ -70,20 +70,17 @@ class Root extends StatelessWidget {
 class MyApp extends ConsumerStatefulWidget {
   final ThemeMode? storedTheme;
   const MyApp({Key? key, required this.storedTheme}) : super(key: key);
-
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends ConsumerState<MyApp> {
   StreamSubscription? _linkSubscription;
-
   @override
   void initState() {
     final _router = ref.read(routerProvider);
     super.initState();
     _router.pushPage(name: '/');
-
     if (!kIsWeb) initialize();
   }
 

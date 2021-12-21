@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/providers/calendar.dart';
+import 'package:myxmi/providers/calendar_recipe_type.dart';
 
 class RecipeTypeSelector extends StatelessWidget {
   const RecipeTypeSelector({Key? key}) : super(key: key);
@@ -10,8 +10,8 @@ class RecipeTypeSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (_, ref, child) {
-        final _calendar = ref.watch(calendarProvider);
-        final String? _type = _calendar.recipeType;
+        final _recipeTypeSelector = ref.watch(calendarRecipeTypeSelector);
+        final String? _type = _recipeTypeSelector.type;
         return Card(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -26,11 +26,18 @@ class RecipeTypeSelector extends StatelessWidget {
                     borderRadius: BorderRadius.circular(18.0),
                   ),
                   onPressed: () {
-                    _calendar.changeRecipeType('breakfast');
+                    _recipeTypeSelector.changeType('breakfast');
                   },
                   elevation: 20.0,
                   padding: const EdgeInsets.all(15.0),
-                  child: Text('breakfast'.tr()),
+                  child: Text(
+                    'breakfast'.tr(),
+                    style: TextStyle(
+                      color: _type == 'breakfast'
+                          ? Colors.white
+                          : Theme.of(context).textTheme.bodyText1!.color,
+                    ),
+                  ),
                 ),
                 RawMaterialButton(
                   fillColor: _type == 'supper'
@@ -40,11 +47,18 @@ class RecipeTypeSelector extends StatelessWidget {
                     borderRadius: BorderRadius.circular(18.0),
                   ),
                   onPressed: () {
-                    _calendar.changeRecipeType('supper');
+                    _recipeTypeSelector.changeType('supper');
                   },
                   elevation: 20.0,
                   padding: const EdgeInsets.all(15.0),
-                  child: Text('supper'.tr()),
+                  child: Text(
+                    'supper'.tr(),
+                    style: TextStyle(
+                      color: _type == 'supper'
+                          ? Colors.white
+                          : Theme.of(context).textTheme.bodyText1!.color,
+                    ),
+                  ),
                 ),
                 RawMaterialButton(
                   fillColor: _type == 'dinner'
@@ -54,11 +68,18 @@ class RecipeTypeSelector extends StatelessWidget {
                     borderRadius: BorderRadius.circular(18.0),
                   ),
                   onPressed: () {
-                    _calendar.changeRecipeType('dinner');
+                    _recipeTypeSelector.changeType('dinner');
                   },
                   elevation: 20.0,
                   padding: const EdgeInsets.all(15.0),
-                  child: Text('dinner'.tr()),
+                  child: Text(
+                    'dinner'.tr(),
+                    style: TextStyle(
+                      color: _type == 'dinner'
+                          ? Colors.white
+                          : Theme.of(context).textTheme.bodyText1!.color,
+                    ),
+                  ),
                 ),
               ],
             ),

@@ -108,7 +108,9 @@ class ProductDetails extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    const EditCartButton()
+                    EditCartButton(
+                      name: '${product?.name}',
+                    )
                   ],
                 ),
                 StatefulBuilder(
@@ -237,7 +239,7 @@ class ProductDetails extends StatelessWidget {
 }
 
 class EditCartButton extends StatelessWidget {
-  const EditCartButton({Key? key, this.name}) : super(key: key);
+  const EditCartButton({Key? key, required this.name}) : super(key: key);
 
   final String? name;
 
@@ -247,7 +249,7 @@ class EditCartButton extends StatelessWidget {
       builder: (_, ref, child) {
         final _prefs = ref.watch(cartProvider);
         return IconButton(
-          icon: _prefs.cart != null && _prefs.cart!.contains(name)
+          icon: _prefs.cart.isNotEmpty && _prefs.cart.contains(name)
               ? const Icon(
                   Icons.shopping_cart,
                   color: Colors.green,

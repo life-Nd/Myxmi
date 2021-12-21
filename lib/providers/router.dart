@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/app.dart';
@@ -164,7 +165,9 @@ class RouterProvider extends RouterDelegate<List<RouteSettings>>
         break;
 
       case '/calendar':
-        child = const CalendarScreen();
+        child = const CalendarScreen(
+          isEditing: true,
+        );
         break;
 
       case '/add-recipe-infos':
@@ -206,7 +209,12 @@ class RouterProvider extends RouterDelegate<List<RouteSettings>>
       default:
         child = Scaffold(
           appBar: AppBar(title: const Text('404')),
-          body: const Center(child: Text('Page not found')),
+          body: Column(
+            children: [
+              Image.asset('assets/data_not_found.png'),
+              Center(child: Text('404'.tr())),
+            ],
+          ),
         );
     }
 

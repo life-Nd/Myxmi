@@ -68,20 +68,15 @@ class AddRecipeInstructionsScreen extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                    // TODO FIX ALL THIS MESS
-                    // USE A MODEL TO STORE THE INGREDIENTS
-                    // THE RECIPE
-                    // THE INSTRUCTIONS
-
-                    child: _recipe.recipe.ingredientsCount != null
+                    child: _recipe.ingredients.isNotEmpty
                         ? ListView.builder(
-                            itemCount: _recipe.composition.length,
+                            itemCount: _recipe.ingredients.length,
                             itemBuilder: (_, int index) {
-                              final Map _composition = _recipe.composition;
-                              final List _keys = _composition.keys.toList();
+                              final Map _ingredients = _recipe.ingredients;
+                              final List _keys = _ingredients.keys.toList();
                               final String _keyIndex = '${_keys[index]}';
                               final Map _compositionIndex =
-                                  _composition[_keyIndex] as Map;
+                                  _ingredients[_keyIndex] as Map;
                               final String _nameKey =
                                   '${_compositionIndex['name']}';
                               final String _name =

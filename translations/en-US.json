@@ -284,5 +284,10 @@
    "chooseRecipeType": "Choose the recipe type",
    "getInstructions":"Access instructions",
    "check":"Check",
-   "uncheck":"Uncheck"
+   "uncheck":"Uncheck",
+   "uploading":"Uploading",
+   "uploaded":"Uploaded",
+   "selectRange":"Select range",
+   "recipes":"Recipes",
+   "favoritesRecipes":"Favorites Recipes"
 }

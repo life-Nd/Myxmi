@@ -66,10 +66,10 @@ class InstructionsScreen extends StatelessWidget {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const LoadingColumn();
               }
-              final _doc = snapshot.data!.data();
-              debugPrint('_doc: $_doc');
+              final _data = snapshot.data!.data();
+              debugPrint('_doc: $_data');
               if (snapshot.hasData) {
-                return InstructionsSelected(steps: _doc!['steps'] as List);
+                return InstructionsSelected(steps: _data!['steps'] as List);
               } else {
                 return NoData(type: 'no_instructions'.tr());
               }

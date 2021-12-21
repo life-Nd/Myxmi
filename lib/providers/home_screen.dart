@@ -9,6 +9,7 @@ final homeScreenProvider = ChangeNotifierProvider<HomeScreenProvider>(
 
 class HomeScreenProvider extends ChangeNotifier {
   bool showDownloadDialog = true;
+  bool showCalendarBottom = false;
   int? _view;
 
   TextEditingController searchCtrl = TextEditingController();
@@ -25,6 +26,11 @@ class HomeScreenProvider extends ChangeNotifier {
   // ignore: use_setters_to_change_properties
   void changeView({required int index}) {
     _view = index;
+  }
+
+  void changeBottom({bool? show}) {
+    showCalendarBottom = show!;
+    notifyListeners();
   }
 
   void loadingEntry({required bool isLoading}) {

@@ -19,15 +19,15 @@ class ProductField extends StatelessWidget {
       builder: (_, ref, __) {
         final _recipe = ref.watch(recipeEntriesProvider);
         bool _isNotEmpty;
-        if (_recipe.composition.isNotEmpty &&
+        if (_recipe.ingredients.isNotEmpty &&
             product!.productId!.isNotEmpty &&
-            _recipe.composition[product!.productId] != null) {
+            _recipe.ingredients[product!.productId] != null) {
           _isNotEmpty = true;
         } else {
           _isNotEmpty = false;
         }
         final Map? _composition =
-            _recipe.composition[product!.productId] as Map?;
+            _recipe.ingredients[product!.productId] as Map?;
         textCtrl = TextEditingController(
           text: _isNotEmpty
               ? _composition!['value'].toString().split(' ').toList()[0]
@@ -57,7 +57,7 @@ class ProductField extends StatelessWidget {
                     FocusScope.of(context).unfocus();
                   },
                   onChanged: (value) {
-                    _recipe.setComposition(
+                    _recipe.addIngredient(
                       name: product!.name,
                       key: product!.productId,
                       value: value,

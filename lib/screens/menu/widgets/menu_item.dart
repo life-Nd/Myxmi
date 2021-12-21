@@ -8,11 +8,13 @@ class MenuItem extends StatefulWidget {
   final String legend;
   final String filter;
   final String url;
+  final bool fullWidth;
   const MenuItem({
     Key? key,
     required this.legend,
     required this.url,
     required this.filter,
+    this.fullWidth = false,
   }) : super(key: key);
   @override
   State<StatefulWidget> createState() => _MenuItemState();
@@ -49,10 +51,12 @@ class _MenuItemState extends State<MenuItem> {
                           _orientation == Orientation.landscape
                       ? _size.height / 2.4
                       : _size.height / 3.7,
-                  width: _kIsWeb && _size.width > 700 ||
-                          _orientation == Orientation.landscape
-                      ? _size.width / 3.2
-                      : _size.width / 1.8,
+                  width: widget.fullWidth
+                      ? double.infinity
+                      : _kIsWeb && _size.width > 700 ||
+                              _orientation == Orientation.landscape
+                          ? _size.width / 3.2
+                          : _size.width / 1.8,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Image.asset(
@@ -71,10 +75,12 @@ class _MenuItemState extends State<MenuItem> {
                 Container(
                   padding:
                       const EdgeInsets.only(left: 10, right: 10, bottom: 4),
-                  width: _kIsWeb && _size.width > 700 ||
-                          _orientation == Orientation.landscape
-                      ? _size.width / 3.2
-                      : _size.width / 1.8,
+                  width: widget.fullWidth
+                      ? double.infinity
+                      : _kIsWeb && _size.width > 700 ||
+                              _orientation == Orientation.landscape
+                          ? _size.width / 3.2
+                          : _size.width / 1.8,
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Text(

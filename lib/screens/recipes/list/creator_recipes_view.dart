@@ -22,9 +22,7 @@ class CreatorRecipes extends StatefulWidget {
 class _CreatorRecipesState extends State<CreatorRecipes> {
   @override
   Widget build(BuildContext context) {
-    // final Size _size = MediaQuery.of(context).size;
     return Scaffold(
-      
       appBar: PreferredSize(
         preferredSize: const Size(double.infinity, 200),
         child: SafeArea(
@@ -46,23 +44,24 @@ class _CreatorRecipesState extends State<CreatorRecipes> {
                     width: 20,
                   ),
                   if (widget.name != null)
-                    Text('${widget.name} recipes',
-                        style: const TextStyle(fontSize: 20),)
+                    Text(
+                      '${widget.name} recipes',
+                      style: const TextStyle(fontSize: 20),
+                    )
                   else
-                    Text('${'noName'.tr()} recipes',
-                        style: const TextStyle(fontSize: 20),),
+                    Text(
+                      '${'noName'.tr()} recipes',
+                      style: const TextStyle(fontSize: 20),
+                    ),
                   const SizedBox(
                     width: 50,
                   ),
                 ],
               ),
-              if (widget.avatar != null)
-                UserAvatar(
-                  radius: 200,
-                  photoUrl: widget.avatar,
-                )
-              else
-                const Icon(Icons.person, size: 100),
+              UserAvatar(
+                radius: 200,
+                photoUrl: widget.avatar,
+              ),
               const Spacer(),
             ],
           ),

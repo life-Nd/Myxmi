@@ -24,12 +24,12 @@ class AppBottomNavigation extends StatelessWidget {
               icon: const Icon(Icons.home_outlined),
             ),
             BottomNavigationBarItem(
-              label: 'myRecipes'.tr(),
+              label: 'recipes'.tr(),
               icon: const Icon(Icons.menu_book_outlined),
             ),
             BottomNavigationBarItem(
-              label: 'favorites'.tr(),
-              icon: const Icon(Icons.favorite_border),
+              label: 'planner'.tr(),
+              icon: const Icon(Icons.calendar_today_rounded),
             ),
             BottomNavigationBarItem(
               label: 'products'.tr(),

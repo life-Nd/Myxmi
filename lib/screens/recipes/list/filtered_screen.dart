@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:myxmi/screens/home/widgets/body.dart';
 import 'package:myxmi/streams/recipes.dart';
 // import 'package:google_mobile_ads/google_mobile_ads.dart';
 // import 'package:myxmi/apis/ads.dart';
@@ -77,6 +78,17 @@ class _ExpandedRecipesStream extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('ty[e: $type');
+    if (type == 'myRecipes') {
+      return const Expanded(
+        child: RecipesByUid(),
+      );
+    }
+    if (type == 'favoritesRecipes') {
+      return const Expanded(
+        child: RecipesUidLiked(),
+      );
+    }
     if (type != 'anyDiet') {
       debugPrint('type: $type');
       return Expanded(

@@ -52,7 +52,13 @@ class _CreatorCardState extends State<CreatorCard> {
                     radius: 77,
                   )
                 else
-                  const Icon(Icons.person, size: 35),
+                  const CircleAvatar(
+                    backgroundColor: Colors.red,
+                    child: Icon(
+                      Icons.person,
+                      size: 77,
+                    ),
+                  ),
                 const SizedBox(
                   width: 20,
                 ),

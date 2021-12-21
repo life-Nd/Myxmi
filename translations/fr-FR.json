@@ -165,6 +165,7 @@
    "products": "Produits",
    "images": "Images",
    "step": "Étape",
+   "other": "Autre",
    "instructions": "Instructions",
    "smoothie": "Smoothie",
    "hotBeverage": "Breuvage chaud",
@@ -288,8 +289,12 @@
    "load": "load",
    "comment": "comment",
    "chooseRecipeType": "Choisissez le type de recette",
-   "getInstructions":"Accès aux instructions",
-   "check":"Cocher",
-   "uncheck":"Décocher"
-
+   "getInstructions": "Accès aux instructions",
+   "check": "Cocher",
+   "uncheck": "Décocher",
+   "uploading": "Téléchargement de",
+   "uploaded": "Téléchargée",
+   "selectRange": "Sélectionner la période",
+   "recipes":"Recettes",
+   "favoritesRecipes":"Recettes favorites"
 }

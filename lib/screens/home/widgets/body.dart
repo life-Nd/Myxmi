@@ -7,6 +7,7 @@ import 'package:myxmi/screens/calendar/calendar_screen.dart';
 import 'package:myxmi/screens/home/widgets/search_recipes_in_db.dart';
 import 'package:myxmi/screens/landing/landing_screen.dart';
 import 'package:myxmi/screens/menu/menu_view.dart';
+import 'package:myxmi/screens/menu/widgets/menu_item.dart';
 import 'package:myxmi/screens/more/more_screen.dart';
 import 'package:myxmi/streams/products.dart';
 import 'package:myxmi/streams/recipes.dart';
@@ -32,10 +33,13 @@ class _BodyState extends State<Body> {
 
       case 1:
         // Show stream of recipes filtered with the user id
-        return isSignedIn ? const _RecipesByUid() : const SignInScreen();
+        // return isSignedIn ? const _RecipesByUid() : const SignInScreen();
+        return isSignedIn ? const _RecipesTypesView() : const SignInScreen();
       case 2:
         // Show stream of recipes liked by the user id
-        return isSignedIn ? const _RecipesUidLiked() : const SignInScreen();
+        return isSignedIn
+            ? const CalendarScreen(isEditing: false)
+            : const SignInScreen();
       case 3:
         // Show stream of products under the user id
         return isSignedIn
@@ -45,7 +49,11 @@ class _BodyState extends State<Body> {
         // Show profile, settings, about,and sign out
         return isSignedIn ? const MoreScreen() : const SignInScreen();
       case 5:
-        return isSignedIn ? const CalendarScreen() : const SignInScreen();
+        return isSignedIn
+            ? const CalendarScreen(
+                isEditing: true,
+              )
+            : const SignInScreen();
       default:
         return const LandingScreen();
     }
@@ -63,6 +71,50 @@ class _BodyState extends State<Body> {
             return _build(_view.view, _user.account?.uid);
           },
         ),
+      ),
+    );
+  }
+}
+
+class _RecipesTypesView extends StatefulWidget {
+  const _RecipesTypesView({Key? key}) : super(key: key);
+  @override
+  State<_RecipesTypesView> createState() => _RecipesTypesViewState();
+}
+
+class _RecipesTypesViewState extends State<_RecipesTypesView> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: ListBody(
+        children: const [
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'What type of recipes do you want to see?',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ),
+          MenuItem(
+            fullWidth: true,
+            filter: 'sub_category',
+            legend: 'myRecipes',
+            url:
+                'Photo by <a href="https://unsplash.com/@andyc?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Andy Chilton</a> on <a href="https://unsplash.com/s/photos/cooking?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>',
+          ),
+          MenuItem(
+            fullWidth: true,
+            filter: 'sub_category',
+            legend: 'favoritesRecipes',
+            url:
+                'Photo by <a href="https://unsplash.com/@therachelstory?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Rachel Park</a> on <a href="https://unsplash.com/s/photos/food?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>',
+          ),
+        ],
       ),
     );
   }
@@ -94,8 +146,8 @@ class _HomePageBody extends StatelessWidget {
   }
 }
 
-class _RecipesByUid extends StatelessWidget {
-  const _RecipesByUid({Key? key}) : super(key: key);
+class RecipesByUid extends StatelessWidget {
+  const RecipesByUid({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Consumer(
@@ -107,8 +159,8 @@ class _RecipesByUid extends StatelessWidget {
   }
 }
 
-class _RecipesUidLiked extends StatelessWidget {
-  const _RecipesUidLiked({Key? key}) : super(key: key);
+class RecipesUidLiked extends StatelessWidget {
+  const RecipesUidLiked({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

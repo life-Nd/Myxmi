@@ -52,8 +52,8 @@ class CartButton extends StatelessWidget {
                         ),
                         alignment: Alignment.center,
                         child: Text(
-                          _prefs.cart?.length != null
-                              ? '${_prefs.cart!.length}'
+                          _prefs.cart.isNotEmpty
+                              ? '${_prefs.cart.length}'
                               : '0',
                           style: const TextStyle(color: Colors.white),
                         ),

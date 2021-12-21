@@ -1,10 +1,10 @@
 import 'dart:math';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/recipe.dart';
-import 'package:myxmi/providers/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final recipeEntriesProvider = ChangeNotifierProvider<RecipeEntriesProvider>(
   (ref) => RecipeEntriesProvider(),
@@ -16,7 +16,6 @@ class RecipeEntriesProvider extends ChangeNotifier {
   List instructions = [];
   Map steps = {};
   Map<String?, double> quantity = {};
-  Map composition = {};
   double estimatedWeight = 0.0;
   String actualWeight = '';
   double difficultyValue = 0.0;
@@ -71,21 +70,21 @@ class RecipeEntriesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setComposition({
+  void addIngredient({
     required String? key,
     required String? name,
     required String? type,
-    required String value,
+    required String? value,
   }) {
-    composition[key] = {
+    ingredients[key] = {
       'name': name,
       'type': type,
       'value': value,
     };
 
-    recipe.ingredientsCount = '${composition.keys.toList().length}';
+    recipe.ingredientsCount = '${ingredients.keys.toList().length}';
     debugPrint('recipe.ingredientsCount: ${recipe.ingredientsCount}');
-    debugPrint('composition: $composition');
+    debugPrint('composition: $ingredients');
     debugPrint('quantity: $quantity');
   }
 
@@ -114,7 +113,16 @@ class RecipeEntriesProvider extends ChangeNotifier {
     }
     debugPrint('quantity: $quantity');
     debugPrint('recipe.ingredientsCount: ${recipe.ingredientsCount}');
-    debugPrint('composition: $composition');
+    debugPrint('ingredients: $ingredients');
+  }
+
+  void setEstimatedWeight() {
+    estimatedWeight = quantity.isNotEmpty
+        ? quantity.values.reduce(
+            (sum, element) => sum + element,
+          )
+        : 0.0;
+    notifyListeners();
   }
 
   void addInstruction({required String instruction}) {
@@ -127,46 +135,86 @@ class RecipeEntriesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // void addProduct({@required Map ingredient}) {
-  //   instructions.ingredients = ingredient;
-  //   notifyListeners();
-  // }
-
-  void saveRecipeToDb({UserProvider? user}) {
+  Future saveRecipeToDb() async {
     final rng = Random();
     final _random = rng.nextInt(9000) + 1000;
     recipe.reference = '$_random';
-    recipe.uid = user!.account!.uid;
     recipe.access = 'Public';
     recipe.usedCount = '1';
     recipe.instructionsCount = '${instructions.length}';
-    recipe.username = user.account!.displayName;
-    recipe.userphoto = user.account!.photoURL;
     recipe.made = '${DateTime.now().millisecondsSinceEpoch}';
     recipe.tags = {
       category: true,
       subCategory: true,
       diet: true,
     };
-    final List _keys = composition.keys.toList();
-    for (int i = 0; i < _keys.length; i++) {}
-    if (category == 'other') {
-      subCategory = null;
-    }
-    recipe.toMap();
+    final DocumentReference _db = await FirebaseFirestore.instance
+        .collection('Recipes')
+        .add(recipe.toMap());
+    recipe.recipeId = _db.id;
+    return;
   }
 
-  void setEstimatedWeight() {
-    estimatedWeight = quantity.isNotEmpty
-        ? quantity.values.reduce(
-            (sum, element) => sum + element,
-          )
-        : 0.0;
-    debugPrint('quantity: $quantity');
-    debugPrint('recipe.ingredientsCount: ${recipe.ingredientsCount}');
-    debugPrint('composition: $composition');
-    debugPrint('estimatedWeight: $estimatedWeight');
-    notifyListeners();
+  Future saveDetailsToDb() async {
+    debugPrint('ingredients:--${ingredients.runtimeType}-- $ingredients');
+    final SharedPreferences _prefs = await SharedPreferences.getInstance();
+    final String _now = '${DateTime.now().millisecondsSinceEpoch}';
+    final List _keys = ingredients.keys.toList();
+    for (int i = 0; i < ingredients.keys.length; i++) {
+      debugPrint('ingredient: $i');
+      debugPrint('_keys[i]: ${_keys[i]}');
+      final String _key = _keys[i] as String;
+      final Map _ingredient = ingredients[_keys[i]] as Map;
+      final String _ingredientValue = _ingredient['value'] as String;
+      final double _quantityUsed = double.parse(_ingredientValue);
+      final List? _storedIngredient = _prefs.getStringList(_key);
+      debugPrint('_storedIngredient: $_storedIngredient');
+      final String _initialStock =
+          _storedIngredient != null ? '${_storedIngredient[0]}' : '0';
+      final String _finalStock = _initialStock != '0'
+          ? '${int.parse(_initialStock) - _quantityUsed.toInt()}'
+          : '0';
+
+      final String _expiryDate =
+          _storedIngredient?[1] != null ? '${_storedIngredient![1]}' : _now;
+      debugPrint('_initialStock: $_initialStock');
+      debugPrint('_quantityUsed: $_quantityUsed');
+      _prefs.setStringList(
+        _key,
+        [
+          _finalStock,
+          _expiryDate,
+          _now,
+        ],
+      );
+    }
+    final Map<String, dynamic> _ingredientsMapped =
+        ingredients.map((key, value) {
+      final Map _value = value as Map;
+      return MapEntry<String, String>(
+        '${_value['name']}',
+        '${_value['value']} ${_value['type']}',
+      );
+    });
+
+    if (recipe.recipeId != null) {
+      return FirebaseFirestore.instance
+          .collection('Ingredients')
+          .doc(recipe.recipeId)
+          .set({'list': _ingredientsMapped});
+    }
+    return;
+  }
+
+  Future savePrivateInstructionsToDb() async {
+    if (recipe.recipeId != null) {
+      await FirebaseFirestore.instance
+          .collection('Instructions')
+          .doc(recipe.recipeId)
+          .set({'list': '${instructions.asMap()}'});
+    }
+    debugPrint('instructions:--${instructions.runtimeType}-- $instructions');
+    return;
   }
 
   void reset() {
@@ -180,6 +228,6 @@ class RecipeEntriesProvider extends ChangeNotifier {
     durationCtrl.clear();
     portionsCtrl.clear();
     quantity.clear();
-    composition.clear();
+    ingredients.clear();
   }
 }

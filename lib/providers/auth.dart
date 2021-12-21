@@ -255,11 +255,6 @@ class AuthProvider extends ChangeNotifier {
           pr.close();
           final SharedPreferences prefs = await _prefs;
           await prefs.setBool('is_logged_in', false);
-          // Navigator.of(context).pushAndRemoveUntil(
-          //     MaterialPageRoute(
-          //       builder: (_) => App(),
-          //     ),
-          //     (route) => false);
         },
       );
     } on PlatformException catch (e) {
@@ -275,7 +270,6 @@ class AuthProvider extends ChangeNotifier {
     final GoogleSignIn googleSignIn = GoogleSignIn();
     final bool _google = googleSignIn.currentUser?.email != null;
     if (_google) {
-      // await googleSignIn.currentUser.clearAuthCache();
       await googleSignIn.signOut().then(
         (google) async {
           await google!.clearAuthCache();

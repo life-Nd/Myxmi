@@ -39,7 +39,7 @@ class HomeScreen extends StatelessWidget {
                   ? FloatingActionButton(
                       backgroundColor: Colors.green.shade400,
                       onPressed: () {
-                        _viewIndex != 4
+                        _viewIndex != 3
                             ? _router.pushPage(name: '/add-recipe-infos')
                             : _router.pushPage(
                                 name: '/add-product',
