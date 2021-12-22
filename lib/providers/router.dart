@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/app.dart';
 import 'package:myxmi/models/recipe.dart';
 import 'package:myxmi/navigator/transition_delegate.dart';
-import 'package:myxmi/screens/calendar/calendar_screen.dart';
+import 'package:myxmi/screens/calendar/calendar_page.dart';
 import 'package:myxmi/screens/cart/cart_view.dart';
 import 'package:myxmi/screens/home/home_screen.dart';
 import 'package:myxmi/screens/instructions/instructions_screen.dart';
@@ -165,9 +165,7 @@ class RouterProvider extends RouterDelegate<List<RouteSettings>>
         break;
 
       case '/calendar':
-        child = const CalendarScreen(
-          isEditing: true,
-        );
+        child = const CalendarScreenPage();
         break;
 
       case '/add-recipe-infos':
@@ -247,5 +245,18 @@ class RouterProvider extends RouterDelegate<List<RouteSettings>>
     );
 
     return result ?? true;
+  }
+}
+
+class CalendarScreenPage extends StatelessWidget {
+  const CalendarScreenPage({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Calendar'),
+      ),
+      body: const CalendarPage(),
+    );
   }
 }

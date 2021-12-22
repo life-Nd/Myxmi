@@ -326,9 +326,15 @@ class _CalendarButtonState extends State<CalendarButton> {
                                                       final DateTime _date =
                                                           _selectedDays[i];
                                                       _selectedDaysMapped[
-                                                              '${_date.day}'] =
+                                                              '$_date'] =
                                                           '${_date.year}-${_date.month}';
                                                     }
+                                                    debugPrint(
+                                                      '_selectedDaysMapped: $_selectedDaysMapped',
+                                                    );
+                                                    debugPrint(
+                                                      '_monthlySelections: $_monthlySelections',
+                                                    );
                                                     _selectedDaysMapped.forEach(
                                                       (key, value) {
                                                         _monthlySelections[
@@ -350,39 +356,37 @@ class _CalendarButtonState extends State<CalendarButton> {
                                                     debugPrint(
                                                       '_monthlySelections: $_monthlySelections',
                                                     );
-                                                    for (final _month
-                                                        in _monthlySelections
-                                                            .keys) {
-                                                      final Map _monthMap =
-                                                          _monthlySelections[
-                                                              _month] as Map;
-                                                      FirebaseFirestore.instance
-                                                          .collection(
-                                                            'Calendar',
-                                                          )
-                                                          .doc(
-                                                            '${_user.account!.uid}-$_month',
-                                                          )
-                                                          .set(
-                                                        {
-                                                          'days': _monthMap,
+
+                                                    FirebaseFirestore.instance
+                                                        .collection(
+                                                          'Calendar',
+                                                        )
+                                                        .doc(
+                                                          _user.account!.uid,
+                                                        )
+                                                        .set(
+                                                      {
+                                                        '${DateTime.now().millisecondsSinceEpoch}':
+                                                            {
+                                                          'days':
+                                                              _monthlySelections,
                                                           'created': _now,
                                                           'imageUrl': widget
                                                               .recipe?.imageUrl,
+                                                          'recipeId':
+                                                              '${widget.recipe!.recipeId}',
                                                           'title': widget
                                                               .recipe?.title,
-                                                          'recipeId': widget
-                                                              .recipe?.recipeId,
                                                           'type':
                                                               _recipeTypeSelector
                                                                   .type,
-                                                        },
-                                                      );
-                                                    }
-                                                    _router.pushPage(
-                                                      name: '/calendar',
+                                                        }
+                                                      },
                                                     );
                                                   }
+                                                  _router.pushPage(
+                                                    name: '/calendar',
+                                                  );
                                                 },
                                                 child: Text(
                                                   'save'.tr(),

@@ -1,9 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/providers/home_screen.dart';
 import 'package:myxmi/providers/user.dart';
 import 'package:myxmi/screens/auth/auth_screen.dart';
-import 'package:myxmi/screens/calendar/calendar_screen.dart';
+import 'package:myxmi/screens/calendar/calendar_page.dart';
 import 'package:myxmi/screens/home/widgets/search_recipes_in_db.dart';
 import 'package:myxmi/screens/landing/landing_screen.dart';
 import 'package:myxmi/screens/menu/menu_view.dart';
@@ -37,9 +38,7 @@ class _BodyState extends State<Body> {
         return isSignedIn ? const _RecipesTypesView() : const SignInScreen();
       case 2:
         // Show stream of recipes liked by the user id
-        return isSignedIn
-            ? const CalendarScreen(isEditing: false)
-            : const SignInScreen();
+        return isSignedIn ? const CalendarPage() : const SignInScreen();
       case 3:
         // Show stream of products under the user id
         return isSignedIn
@@ -48,12 +47,8 @@ class _BodyState extends State<Body> {
       case 4:
         // Show profile, settings, about,and sign out
         return isSignedIn ? const MoreScreen() : const SignInScreen();
-      case 5:
-        return isSignedIn
-            ? const CalendarScreen(
-                isEditing: true,
-              )
-            : const SignInScreen();
+      // case 5:
+      //   return isSignedIn ?  CalendarPage() : const SignInScreen();
       default:
         return const LandingScreen();
     }
@@ -92,22 +87,22 @@ class _RecipesTypesViewState extends State<_RecipesTypesView> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: ListBody(
-        children: const [
+        children: [
           Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: Text(
-              'What type of recipes do you want to see?',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              '${'whatTypeOfRecipe'.tr()} ?',
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
-          MenuItem(
+          const MenuItem(
             fullWidth: true,
             filter: 'sub_category',
             legend: 'myRecipes',
             url:
                 'Photo by <a href="https://unsplash.com/@andyc?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Andy Chilton</a> on <a href="https://unsplash.com/s/photos/cooking?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>',
           ),
-          MenuItem(
+          const MenuItem(
             fullWidth: true,
             filter: 'sub_category',
             legend: 'favoritesRecipes',

@@ -30,10 +30,11 @@ class CartProvider extends ChangeNotifier {
 
   Future editItems({required String? item}) async {
     final SharedPreferences prefs = await _prefs;
-    checkedItem = [];
     checkedItem.contains(item)
         ? checkedItem.remove(item)
         : checkedItem.add(item!);
+    debugPrint('item: $item');
+    debugPrint('checkedItem: $checkedItem');
     prefs.setStringList('Items', checkedItem).then(
       (bool success) {
         return checkedItem;

@@ -296,5 +296,6 @@
    "uploaded": "Téléchargée",
    "selectRange": "Sélectionner la période",
    "recipes":"Recettes",
-   "favoritesRecipes":"Recettes favorites"
+   "favoritesRecipes":"Recettes favorites",
+   "whatTypeOfRecipe":"Quelles recettes voulez-vous voir?"
 }

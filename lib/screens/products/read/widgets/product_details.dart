@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductDetails extends StatelessWidget {
   final ProductModel? product;
+
   const ProductDetails({required this.product});
 
   @override
@@ -39,7 +40,7 @@ class ProductDetails extends StatelessWidget {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(20),
                         child: Image.asset(
-                          'assets/rice.jpg',
+                          'assets/${product!.name}.png',
                         ),
                       ),
                     ),

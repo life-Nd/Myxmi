@@ -55,7 +55,6 @@ class _CartViewState extends State<CartView> {
             child: Consumer(
               builder: (_, ref, child) {
                 final _prefs = ref.watch(cartProvider);
-
                 if (_prefs.cart.isNotEmpty) {
                   return ListView.builder(
                     itemCount: _prefs.cart.length,
