@@ -297,5 +297,7 @@
    "selectRange": "Sélectionner la période",
    "recipes":"Recettes",
    "favoritesRecipes":"Recettes favorites",
-   "whatTypeOfRecipe":"Quelles recettes voulez-vous voir?"
+   "whatTypeOfRecipe":"Quelles recettes voulez-vous voir?",
+   "skip":"Sauter",
+   "chooseTime":"Choisissez le temps"
 }

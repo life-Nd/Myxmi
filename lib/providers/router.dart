@@ -5,12 +5,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/app.dart';
 import 'package:myxmi/models/recipe.dart';
 import 'package:myxmi/navigator/transition_delegate.dart';
-import 'package:myxmi/screens/calendar/calendar_page.dart';
 import 'package:myxmi/screens/cart/cart_view.dart';
 import 'package:myxmi/screens/home/home_screen.dart';
 import 'package:myxmi/screens/instructions/instructions_screen.dart';
 import 'package:myxmi/screens/more/about/view.dart';
 import 'package:myxmi/screens/more/settings/view.dart';
+import 'package:myxmi/screens/planner/planner_page.dart';
 import 'package:myxmi/screens/products/add/add_new_product_view.dart';
 import 'package:myxmi/screens/profile/profile_screen.dart';
 import 'package:myxmi/screens/recipes/add/infos/add_infos_screen.dart';
@@ -164,8 +164,8 @@ class RouterProvider extends RouterDelegate<List<RouteSettings>>
         );
         break;
 
-      case '/calendar':
-        child = const CalendarScreenPage();
+      case '/planner':
+        child = const PlannerScreenPage();
         break;
 
       case '/add-recipe-infos':
@@ -248,15 +248,15 @@ class RouterProvider extends RouterDelegate<List<RouteSettings>>
   }
 }
 
-class CalendarScreenPage extends StatelessWidget {
-  const CalendarScreenPage({Key? key}) : super(key: key);
+class PlannerScreenPage extends StatelessWidget {
+  const PlannerScreenPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Calendar'),
+        title: const Text('Planner'),
       ),
-      body: const CalendarPage(),
+      body: const PlannerPage(),
     );
   }
 }

@@ -1,9 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:myxmi/models/product.dart';
-import 'package:myxmi/screens/products/read/widgets/edit_cart_button.dart';
 import 'package:myxmi/screens/products/read/widgets/product_details.dart';
 import 'package:myxmi/screens/products/read/widgets/product_fields.dart';
+import 'package:myxmi/utils/edit_cart_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductsList extends StatefulWidget {

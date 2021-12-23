@@ -4,12 +4,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/providers/home_screen.dart';
 import 'package:myxmi/providers/user.dart';
 import 'package:myxmi/screens/auth/auth_screen.dart';
-import 'package:myxmi/screens/calendar/calendar_page.dart';
 import 'package:myxmi/screens/home/widgets/search_recipes_in_db.dart';
 import 'package:myxmi/screens/landing/landing_screen.dart';
 import 'package:myxmi/screens/menu/menu_view.dart';
 import 'package:myxmi/screens/menu/widgets/menu_item.dart';
 import 'package:myxmi/screens/more/more_screen.dart';
+import 'package:myxmi/screens/planner/planner_page.dart';
 import 'package:myxmi/streams/products.dart';
 import 'package:myxmi/streams/recipes.dart';
 
@@ -38,7 +38,7 @@ class _BodyState extends State<Body> {
         return isSignedIn ? const _RecipesTypesView() : const SignInScreen();
       case 2:
         // Show stream of recipes liked by the user id
-        return isSignedIn ? const CalendarPage() : const SignInScreen();
+        return isSignedIn ? const PlannerPage() : const SignInScreen();
       case 3:
         // Show stream of products under the user id
         return isSignedIn
@@ -48,7 +48,7 @@ class _BodyState extends State<Body> {
         // Show profile, settings, about,and sign out
         return isSignedIn ? const MoreScreen() : const SignInScreen();
       // case 5:
-      //   return isSignedIn ?  CalendarPage() : const SignInScreen();
+      //   return isSignedIn ?  PlannerPage() : const SignInScreen();
       default:
         return const LandingScreen();
     }

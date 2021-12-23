@@ -290,5 +290,7 @@
    "selectRange":"Select range",
    "recipes":"Recipes",
    "favoritesRecipes":"Favorites Recipes",
-   "whatTypeOfRecipe":"What type of recipes do you want to see"
+   "whatTypeOfRecipe":"What type of recipes do you want to see",
+   "skip":"Skip",
+   "chooseTime":"Choose the time"
 }

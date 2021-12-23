@@ -3,10 +3,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/providers/router.dart';
-import 'package:myxmi/screens/products/read/widgets/cart_button.dart';
 import 'package:myxmi/screens/products/read/widgets/products_list.dart';
 import 'package:myxmi/screens/products/read/widgets/search_products.dart';
 import 'package:myxmi/screens/products/read/widgets/suggestions.dart';
+import 'package:myxmi/utils/cart_button.dart';
 
 class ProductsView extends StatelessWidget {
   final DocumentSnapshot<Map<String, dynamic>>? snapshot;
