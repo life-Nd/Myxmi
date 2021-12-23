@@ -277,7 +277,6 @@ class _SelectedRecipeCardState extends State<_SelectedRecipeCard> {
                                 },
                               );
 
-                              setState(() {});
                               _router.pushPage(name: '/home');
                             },
                             child: Padding(
@@ -367,7 +366,7 @@ class _SelectedRecipeCardState extends State<_SelectedRecipeCard> {
                                   '${widget.eventId}.days.$_dateString': true,
                                 },
                               );
-                              setState(() {});
+
                               _router.pushPage(name: '/home');
                             },
                             child: Padding(
