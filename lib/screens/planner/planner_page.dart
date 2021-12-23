@@ -195,52 +195,59 @@ class _SelectedRecipeCardState extends State<_SelectedRecipeCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ListTile(
-                title: Text(widget.title),
-                leading: widget.done == 'true'
-                    ? const Icon(Icons.check_circle_outline_outlined)
-                    : FutureBuilder(
-                        future: SharedPreferences.getInstance().then(
-                          (value) => value.getStringList(
-                            'skippedRecipes',
-                          ),
-                        ),
-                        builder: (_, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            debugPrint('🔎 📱 loading skipped recipes');
-                          }
-                          if (snapshot.data != null) {
-                            final List<String> _skippedRecipes =
-                                snapshot.data! as List<String>;
-                            if (_skippedRecipes.contains(widget.eventId)) {
-                              return const Icon(
-                                Icons.no_meals_ouline,
-                                color: Colors.orange,
-                              );
-                            }
-                          }
-                          return const Icon(
-                            Icons.radio_button_unchecked_outlined,
-                            color: Colors.green,
-                          );
-                        },
-                      ),
-                subtitle: Text(type()),
-                trailing: IconButton(
-                  onPressed: () {
-                    setState(
-                      () {
-                        _showOptions = !_showOptions;
-                      },
-                    );
-                  },
-                  icon: Icon(
-                    Icons.edit,
-                    size: _showOptions ? 30 : 20,
+              Consumer(builder: (_, ref, child) {
+                final _router = ref.watch(routerProvider);
+                return ListTile(
+                  onTap: () => _router.pushPage(
+                    name: '/recipe',
+                    arguments: {'id': widget.eventId},
                   ),
-                ),
-              ),
+                  title: Text(widget.title),
+                  leading: widget.done == 'true'
+                      ? const Icon(Icons.check_circle_outline_outlined)
+                      : FutureBuilder(
+                          future: SharedPreferences.getInstance().then(
+                            (value) => value.getStringList(
+                              'skippedRecipes',
+                            ),
+                          ),
+                          builder: (_, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              debugPrint('🔎 📱 loading skipped recipes');
+                            }
+                            if (snapshot.data != null) {
+                              final List<String> _skippedRecipes =
+                                  snapshot.data! as List<String>;
+                              if (_skippedRecipes.contains(widget.eventId)) {
+                                return const Icon(
+                                  Icons.no_meals_ouline,
+                                  color: Colors.orange,
+                                );
+                              }
+                            }
+                            return const Icon(
+                              Icons.radio_button_unchecked_outlined,
+                              color: Colors.green,
+                            );
+                          },
+                        ),
+                  subtitle: Text(type()),
+                  trailing: IconButton(
+                    onPressed: () {
+                      setState(
+                        () {
+                          _showOptions = !_showOptions;
+                        },
+                      );
+                    },
+                    icon: Icon(
+                      Icons.edit,
+                      size: _showOptions ? 30 : 20,
+                    ),
+                  ),
+                );
+              }),
               if (_showOptions)
                 Consumer(
                   builder: (_, ref, child) {
