@@ -14,13 +14,12 @@ class InstructionsPageView extends StatelessWidget {
       builder: (_, ref, child) {
         final _instructions = ref.watch(instructionsProvider);
         _instructions.instructions = instructions!;
-        final _checkedInstructions = _instructions.checked;
+        // final _checkedInstructions = _instructions.checked;
         final List _keys = _instructions.instructions.toList();
         return PageView.builder(
           itemCount: _keys.length,
           itemBuilder: (_, int index) {
-            final _checked = _checkedInstructions.contains(_keys[index]);
-
+            // final _checked = _checkedInstructions.contains(_keys[index]);
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -45,45 +44,45 @@ class InstructionsPageView extends StatelessWidget {
                     ),
                   ),
                 const Spacer(),
-                RawMaterialButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  fillColor: Colors.green,
-                  onPressed: () {
-                    _instructions.toggleInstruction(
-                      _instructions.instructions[index].toString(),
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(
-                            _checked
-                                ? Icons.check_box
-                                : Icons.check_box_outline_blank,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            _checked ? '${'uncheck'} ' : '${'check'.tr()} ',
-                            style: const TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                // RawMaterialButton(
+                //   shape: RoundedRectangleBorder(
+                //     borderRadius: BorderRadius.circular(10),
+                //   ),
+                //   fillColor: Colors.green,
+                //   onPressed: () {
+                //     _instructions.toggleInstruction(
+                //       _instructions.instructions[index].toString(),
+                //     );
+                //   },
+                //   child: Padding(
+                //     padding: const EdgeInsets.all(8.0),
+                //     child: Row(
+                //       mainAxisSize: MainAxisSize.min,
+                //       children: [
+                //         Padding(
+                //           padding: const EdgeInsets.all(8.0),
+                //           child: Icon(
+                //             _checked
+                //                 ? Icons.check_box
+                //                 : Icons.check_box_outline_blank,
+                //             color: Colors.white,
+                //           ),
+                //         ),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Text(
+                //     _checked ? '${'uncheck'} ' : '${'check'.tr()} ',
+                //     style: const TextStyle(
+                //       fontSize: 30,
+                //       fontWeight: FontWeight.w400,
+                //       color: Colors.white,
+                //     ),
+                //   ),
+                // ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
                 const Spacer(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,

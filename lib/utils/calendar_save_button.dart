@@ -59,14 +59,36 @@ class SaveButton extends StatelessWidget {
                     FirebaseFirestore.instance
                         .collection('Planner')
                         .doc(_uid)
-                        .set(
-                      {
-                        recipeId!: {
-                          'days': _selectedDaysMapped,
-                          'created': _now,
-                          'imageUrl': imageUrl,
-                          'title': title,
-                          'type': type,
+                        .snapshots()
+                        .listen(
+                      (event) {
+                        final Map _eventsData = event.data()!;
+
+                        if (_eventsData['$recipeId'] != null) {
+                          FirebaseFirestore.instance
+                              .collection('Planner')
+                              .doc(_uid)
+                              .update(
+                            {
+                              '$recipeId!.days': _selectedDaysMapped,
+                            },
+                          );
+                        } else {
+                          FirebaseFirestore.instance
+                              .collection('Planner')
+                              .doc(_uid)
+                              .set(
+                            {
+                              recipeId!: {
+                                'days': _selectedDaysMapped,
+                                'created': _now,
+                                'imageUrl': imageUrl,
+                                'title': title,
+                                'type': type,
+                              }
+                            },
+                            SetOptions(merge: true),
+                          );
                         }
                       },
                     );

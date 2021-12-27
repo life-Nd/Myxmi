@@ -106,6 +106,7 @@ class _SignInState extends State<SignInScreen> {
                                   _view.loadingEntry(isLoading: true);
                                   await _auth
                                       .signInWithEmailPassword(
+                                    context: context,
                                     email: _emailCtrl.text,
                                     password: _passwordCtrl.text,
                                   )

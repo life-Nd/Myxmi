@@ -35,8 +35,8 @@ class _AddFavoriteButtonState extends State<AddFavoriteButton> {
         return StatefulBuilder(
           builder: (context, StateSetter stateSetter) {
             if (_user.account?.uid == null) {
-              return IconButton(
-                icon: Container(
+              return InkWell(
+                child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     color: Colors.white,
@@ -48,7 +48,7 @@ class _AddFavoriteButtonState extends State<AddFavoriteButton> {
                     size: 25,
                   ),
                 ),
-                onPressed: () {
+                onTap: () {
                   // if the user not signed-in send him to sign-in page
                   _view.changeView(index: 5);
                   _router.pushPage(name: '/home');

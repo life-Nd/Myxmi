@@ -90,9 +90,10 @@ class _RecipeDetailsState extends ConsumerState<RecipeDetails> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      '${'load'.tr()} ${widget.comments!.length} ${'more'} ${'comment'.tr()}',
-                    ),
+                    if (widget.comments!.isNotEmpty)
+                      Text(
+                        '${'load'.tr()} ${widget.comments!.length} ${'more'} ${'comment'.tr()}',
+                      ),
                     if (widget.comments!.length > 1) const Text('s'),
                   ],
                 ),

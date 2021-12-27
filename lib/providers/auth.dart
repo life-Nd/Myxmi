@@ -50,8 +50,11 @@ class AuthProvider extends ChangeNotifier {
         .createUserWithEmailAndPassword(email: _email, password: _password)
         .whenComplete(
       () async {
-        signInWithEmailPassword(email: _email, password: _password)
-            .whenComplete(
+        signInWithEmailPassword(
+          context: context,
+          email: _email,
+          password: _password,
+        ).whenComplete(
           () {
             Navigator.of(context).push(
               MaterialPageRoute(
@@ -70,6 +73,7 @@ class AuthProvider extends ChangeNotifier {
   Future<dynamic> signInWithEmailPassword({
     required String email,
     required String password,
+    required BuildContext context,
   }) async {
     final String _email = email.trim();
     final String _password = password.trim();
@@ -86,6 +90,31 @@ class AuthProvider extends ChangeNotifier {
       debugPrint('errorCode:$_error');
       error = _error;
       debugPrint('----Error-----: $error----');
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          title: Center(
+            child: Text(
+              'error'.tr(),
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.red,
+              ),
+            ),
+          ),
+          content: Text(_error.code),
+          actions: <Widget>[
+            RawMaterialButton(
+              child: const Text('Ok'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        ),
+      );
       if (error?.code != null) status = error!.code;
       return status;
     }

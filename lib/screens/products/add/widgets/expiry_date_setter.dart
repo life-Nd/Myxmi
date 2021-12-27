@@ -18,13 +18,19 @@ class ExpiryDateSetter extends HookWidget {
             children: [
               if (_product.expiration != null)
                 Text(
-                  formatTime(_product.expiration!),
+                  formatTime(
+                    _product.expiration!,
+                  ),
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
                 )
               else
-                const Text(''),
+                Text(
+                  formatTime(
+                    DateTime.now(),
+                  ),
+                ),
               IconButton(
                 onPressed: () async {
                   final _date = await showDatePicker(
