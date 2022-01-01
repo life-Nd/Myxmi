@@ -295,6 +295,12 @@
    "chooseTime": "Choose the time",
    "requestPermission": "Request permission",
    "manualInput": "Manual input",
-   "scanning": "Scanning"
+   "scanning": "Scanning",
+   "nutritionFacts": "Nutrition facts",
+   "energyInCalories": "Energy in calories",
+   "fat": "Fat",
+   "saturatedFat": "Saturated Fat",
+   "sugars": "Sugars",
+   "proteins": "Proteins"
 
 }
