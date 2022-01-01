@@ -26,6 +26,8 @@ Future<void> main() async {
     FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
   }
 
+
+
   runApp(
     EasyLocalization(
       path: 'translations',
