@@ -56,12 +56,14 @@ class _CalendarPageState extends State<PlannerPage> {
                                 '${_event['title'].toString().toUpperCase()},${_event['imageUrl']},$_done',
                             eventDate: DateTime.parse(_day),
                             eventID: _eventId,
-                            eventTextColor: Colors.black,
+                            eventTextColor: _event['type'] == 'dinner'
+                                ? Colors.white
+                                : Colors.black,
                             eventBackgroundColor: _event['type'] == 'breakfast'
                                 ? const Color(0xff81d4fA)
                                 : _event['type'] == 'supper'
                                     ? const Color(0xffffff00)
-                                    : const Color(0xff263238),
+                                    : Colors.indigo.shade900,
                           ),
                         );
                       }
@@ -99,10 +101,11 @@ class _CalendarPageState extends State<PlannerPage> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
+                              contentPadding: const EdgeInsets.all(1),
                               insetPadding: const EdgeInsets.all(10),
                               content: SizedBox(
                                 height: 400,
-                                width: 400,
+                                width: double.infinity,
                                 child: ListView.builder(
                                   itemCount: eventsOnTheDate.length,
                                   itemBuilder: (_, int index) {
@@ -178,240 +181,253 @@ class _SelectedRecipeCardState extends State<_SelectedRecipeCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          margin: const EdgeInsets.all(4),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            gradient: LinearGradient(
-              colors: [
-                Theme.of(context).cardColor,
-                widget.color,
-              ],
-            ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Consumer(
-                builder: (_, ref, child) {
-                  final _router = ref.watch(routerProvider);
-                  return ListTile(
-                    onTap: () => _router.pushPage(
-                      name: '/recipe',
-                      arguments: {'id': widget.eventId},
-                    ),
-                    title: Text(widget.title),
-                    leading: widget.done == 'true'
-                        ? const Icon(Icons.check_circle_outline_outlined)
-                        : FutureBuilder(
-                            future: SharedPreferences.getInstance().then(
-                              (value) => value.getStringList(
-                                'skippedRecipes',
-                              ),
-                            ),
-                            builder: (_, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                debugPrint('🔎 📱 loading skipped recipes');
-                              }
-                              if (snapshot.data != null) {
-                                final List<String> _skippedRecipes =
-                                    snapshot.data! as List<String>;
-                                if (_skippedRecipes.contains(widget.eventId)) {
-                                  return const Icon(
-                                    Icons.no_meals_ouline,
-                                    color: Colors.orange,
-                                  );
-                                }
-                              }
-                              return const Icon(
-                                Icons.radio_button_unchecked_outlined,
-                                color: Colors.green,
-                              );
-                            },
-                          ),
-                    subtitle: Text(
-                      type(),
-                      style: TextStyle(
-                        color: type() == 'Dinner' ? Colors.white : Colors.black,
-                      ),
-                    ),
-                    trailing: IconButton(
-                      onPressed: () {
-                        setState(
-                          () {
-                            _showOptions = !_showOptions;
-                          },
-                        );
-                      },
-                      icon: Icon(
-                        Icons.edit,
-                        size: _showOptions ? 30 : 20,
-                      ),
-                    ),
-                  );
-                },
-              ),
-              if (_showOptions)
-                Consumer(
-                  builder: (_, ref, child) {
-                    final _user = ref.watch(userProvider);
-                    final _router = ref.watch(routerProvider);
-                    final _uid = _user.account!.uid;
-                    final _month = '${widget.date.month}';
-                    final _year = '${widget.date.year}';
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          RawMaterialButton(
-                            fillColor:
-                                Theme.of(context).scaffoldBackgroundColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            onPressed: () {
-                              debugPrint(
-                                '${widget.eventId}.days.$_year-$_month.${widget.date}',
-                              );
-                              final String _dateString =
-                                  DateFormat('yyy-MM-dd hh:mm')
-                                      .format(widget.date);
-                              FirebaseFirestore.instance
-                                  .collection('Planner')
-                                  .doc(_uid)
-                                  .update(
-                                {
-                                  '${widget.eventId}.days.$_dateString':
-                                      FieldValue.delete(),
-                                },
-                              );
-                              _router.pushPage(name: '/home');
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.delete,
-                                    color: Colors.red,
-                                  ),
-                                  const SizedBox(
-                                    width: 7,
-                                  ),
-                                  Text(
-                                    'delete'.tr(),
-                                    style: const TextStyle(
-                                      color: Colors.red,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          // RawMaterialButton(
-                          //   fillColor:
-                          //       Theme.of(context).scaffoldBackgroundColor,
-                          //   shape: RoundedRectangleBorder(
-                          //     borderRadius: BorderRadius.circular(20),
-                          //   ),
-                          //   onPressed: () {
-                          //     debugPrint(
-                          //       '${widget.eventId}.days.$_year-$_month.${widget.date}',
-                          //     );
-                          //     final String _dateString =
-                          //         DateFormat('yyy-MM-dd hh:mm')
-                          //             .format(widget.date);
-                          //     FirebaseFirestore.instance
-                          //         .collection('Planner')
-                          //         .doc(_uid)
-                          //         .update(
-                          //       {
-                          //         '${widget.eventId}.days.$_dateString':
-                          //             FieldValue.delete(),
-                          //       },
-                          //     );
-                          //     setState(() {});
-                          //     Navigator.of(context).pop();
-                          //   },
-                          //   child: Padding(
-                          //     padding: const EdgeInsets.all(8.0),
-                          //     child: Row(
-                          //       children: [
-                          //         const Icon(
-                          //           Icons.no_meals_ouline,
-                          //           color: Colors.orange,
-                          //         ),
-                          //         const SizedBox(
-                          //           width: 7,
-                          //         ),
-                          //         Text(
-                          //           'skip'.tr(),
-                          //           style: const TextStyle(
-                          //             color: Colors.orange,
-                          //             fontSize: 18,
-                          //           ),
-                          //         ),
-                          //       ],
-                          //     ),
-                          //   ),
-                          // ),
-                          RawMaterialButton(
-                            fillColor:
-                                Theme.of(context).scaffoldBackgroundColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            onPressed: () {
-                              final String _dateString =
-                                  DateFormat('yyy-MM-dd hh:mm')
-                                      .format(widget.date);
-                              FirebaseFirestore.instance
-                                  .collection('Planner')
-                                  .doc(_uid)
-                                  .update(
-                                {
-                                  '${widget.eventId}.days.$_dateString': true,
-                                },
-                              );
-
-                              _router.pushPage(name: '/home');
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.check_circle,
-                                    color: Colors.green,
-                                  ),
-                                  const SizedBox(
-                                    width: 7,
-                                  ),
-                                  Text(
-                                    'done'.tr(),
-                                    style: const TextStyle(
-                                      color: Colors.green,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-            ],
-          ),
+    return Container(
+      margin: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        gradient: LinearGradient(
+          colors: [
+            Theme.of(context).cardColor,
+            widget.color,
+          ],
         ),
-      ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Consumer(
+            builder: (_, ref, child) {
+              final _router = ref.watch(routerProvider);
+              return ListTile(
+                onTap: () => _router.pushPage(
+                  name: '/recipe',
+                  arguments: {'id': widget.eventId},
+                ),
+                title: Text(widget.title),
+                contentPadding: const EdgeInsets.all(1),
+                minLeadingWidth: 50,
+                leading: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.network(widget.imageUrl),
+                ),
+                trailing: widget.done != 'true'
+                    ? IconButton(
+                        onPressed: () {
+                          setState(
+                            () {
+                              _showOptions = !_showOptions;
+                            },
+                          );
+                        },
+                        icon: Icon(
+                          Icons.edit,
+                          size: _showOptions ? 30 : 20,
+                        ),
+                      )
+                    : FutureBuilder(
+                        future: SharedPreferences.getInstance().then(
+                          (value) => value.getStringList(
+                            'skippedRecipes',
+                          ),
+                        ),
+                        builder: (_, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            debugPrint('🔎 📱 loading skipped recipes');
+                          }
+                          if (snapshot.data != null) {
+                            final List<String> _skippedRecipes =
+                                snapshot.data! as List<String>;
+                            if (_skippedRecipes.contains(widget.eventId)) {
+                              return const Icon(
+                                Icons.no_meals_ouline,
+                                size: 24,
+                                color: Colors.orange,
+                              );
+                            }
+                          }
+                          return const Icon(
+                            Icons.check_circle_outline,
+                            size: 24,
+                            color: Colors.green,
+                          );
+                        },
+                      ),
+                subtitle: Text(
+                  type(),
+                  style: TextStyle(
+                    color: type() == 'Dinner' ? Colors.white : Colors.black,
+                  ),
+                ),
+                // trailing: IconButton(
+                //   onPressed: () {
+                //     setState(
+                //       () {
+                //         _showOptions = !_showOptions;
+                //       },
+                //     );
+                //   },
+                //   icon: Icon(
+                //     Icons.edit,
+                //     size: _showOptions ? 30 : 20,
+                //   ),
+                // ),
+              );
+            },
+          ),
+          if (_showOptions)
+            Consumer(
+              builder: (_, ref, child) {
+                final _user = ref.watch(userProvider);
+                final _router = ref.watch(routerProvider);
+                final _uid = _user.account!.uid;
+                final _month = '${widget.date.month}';
+                final _year = '${widget.date.year}';
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      RawMaterialButton(
+                        fillColor: Theme.of(context).scaffoldBackgroundColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        onPressed: () {
+                          debugPrint(
+                            '${widget.eventId}.days.$_year-$_month.${widget.date}',
+                          );
+                          final String _dateString =
+                              DateFormat('yyy-MM-dd hh:mm').format(widget.date);
+                          FirebaseFirestore.instance
+                              .collection('Planner')
+                              .doc(_uid)
+                              .update(
+                            {
+                              '${widget.eventId}.days.$_dateString':
+                                  FieldValue.delete(),
+                            },
+                          );
+                          _router.pushPage(name: '/home');
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.delete,
+                                color: Colors.red,
+                              ),
+                              const SizedBox(
+                                width: 7,
+                              ),
+                              Text(
+                                'delete'.tr(),
+                                style: const TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      // RawMaterialButton(
+                      //   fillColor:
+                      //       Theme.of(context).scaffoldBackgroundColor,
+                      //   shape: RoundedRectangleBorder(
+                      //     borderRadius: BorderRadius.circular(20),
+                      //   ),
+                      //   onPressed: () {
+                      //     debugPrint(
+                      //       '${widget.eventId}.days.$_year-$_month.${widget.date}',
+                      //     );
+                      //     final String _dateString =
+                      //         DateFormat('yyy-MM-dd hh:mm')
+                      //             .format(widget.date);
+                      //     FirebaseFirestore.instance
+                      //         .collection('Planner')
+                      //         .doc(_uid)
+                      //         .update(
+                      //       {
+                      //         '${widget.eventId}.days.$_dateString':
+                      //             FieldValue.delete(),
+                      //       },
+                      //     );
+                      //     setState(() {});
+                      //     Navigator.of(context).pop();
+                      //   },
+                      //   child: Padding(
+                      //     padding: const EdgeInsets.all(8.0),
+                      //     child: Row(
+                      //       children: [
+                      //         const Icon(
+                      //           Icons.no_meals_ouline,
+                      //           color: Colors.orange,
+                      //         ),
+                      //         const SizedBox(
+                      //           width: 7,
+                      //         ),
+                      //         Text(
+                      //           'skip'.tr(),
+                      //           style: const TextStyle(
+                      //             color: Colors.orange,
+                      //             fontSize: 18,
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
+                      RawMaterialButton(
+                        fillColor: Theme.of(context).scaffoldBackgroundColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        onPressed: () {
+                          final String _dateString =
+                              DateFormat('yyy-MM-dd hh:mm').format(widget.date);
+                          FirebaseFirestore.instance
+                              .collection('Planner')
+                              .doc(_uid)
+                              .update(
+                            {
+                              '${widget.eventId}.days.$_dateString': true,
+                            },
+                          );
+
+                          _router.pushPage(name: '/home');
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.check_circle,
+                                color: Colors.green,
+                              ),
+                              const SizedBox(
+                                width: 7,
+                              ),
+                              Text(
+                                'done'.tr(),
+                                style: const TextStyle(
+                                  color: Colors.green,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+        ],
+      ),
     );
   }
 }

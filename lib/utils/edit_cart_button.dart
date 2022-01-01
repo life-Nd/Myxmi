@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_device_type/flutter_device_type.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/product.dart';
 import 'package:myxmi/providers/user.dart';
@@ -22,8 +21,10 @@ class EditProductButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TargetPlatform _platform = Theme.of(context).platform;
     try {
-      if (Device.get().isPhone) {
+      if (TargetPlatform.iOS == _platform ||
+          TargetPlatform.android == _platform) {
         return Container();
       }
     } catch (error) {

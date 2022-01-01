@@ -47,6 +47,7 @@ class _CalendarButtonState extends State<CalendarButton> {
     return Consumer(
       builder: (_, ref, child) {
         final _router = ref.watch(routerProvider);
+        final _color = ref.watch(colorProvider);
         return InkWell(
           child: Container(
             decoration: BoxDecoration(
@@ -178,6 +179,10 @@ class _CalendarButtonState extends State<CalendarButton> {
                                                         _period = 'am';
                                                       },
                                                     );
+                                                    _color.changeColor(
+                                                      Colors.amber.shade200,
+                                                      Colors.black,
+                                                    );
                                                   },
                                                   elevation: 20.0,
                                                   padding: const EdgeInsets.all(
@@ -218,7 +223,11 @@ class _CalendarButtonState extends State<CalendarButton> {
                                                         _period = 'pm';
                                                       },
                                                     );
-                                                    setState(() {});
+
+                                                    _color.changeColor(
+                                                      Colors.amber,
+                                                      Colors.white,
+                                                    );
                                                   },
                                                   elevation: 20.0,
                                                   padding: const EdgeInsets.all(
@@ -257,6 +266,10 @@ class _CalendarButtonState extends State<CalendarButton> {
                                                         _minuteCtrl.text = '00';
                                                         _period = 'pm';
                                                       },
+                                                    );
+                                                    _color.changeColor(
+                                                      Colors.indigo.shade400,
+                                                      Colors.white,
                                                     );
                                                   },
                                                   elevation: 20.0,
@@ -434,8 +447,16 @@ class _CalendarButtonState extends State<CalendarButton> {
                                                         const EdgeInsets.all(
                                                       15.0,
                                                     ),
-                                                    child: const Text(
+                                                    child: Text(
                                                       'PM',
+                                                      style: TextStyle(
+                                                        color: _type == 'dinner'
+                                                            ? Colors.white
+                                                            : Theme.of(context)
+                                                                .textTheme
+                                                                .bodyText1!
+                                                                .color,
+                                                      ),
                                                     ),
                                                   ),
                                                 ],
@@ -510,40 +531,27 @@ class _CalendarButtonState extends State<CalendarButton> {
                                   height:
                                       MediaQuery.of(context).size.height / 3,
                                   width: double.infinity,
-                                  child: Theme(
-                                    data: ThemeData(
-                                      colorScheme: Theme.of(context)
-                                                  .brightness ==
-                                              Brightness.light
-                                          ? ColorScheme.highContrastLight(
-                                              primary: Colors.green.shade500,
-                                            )
-                                          : const ColorScheme
-                                              .highContrastDark(),
-                                    ),
-                                    child: AwesomeCalendar(
-                                      key: calendarStateKey,
-                                      startDate: _now,
-                                      dayTileBuilder: CustomDayTileBuilder(),
-                                      endDate:
-                                          _now.add(const Duration(days: 90)),
-                                      selectedSingleDate: DateTime.now(),
-                                      selectedDates: selectedDates,
-                                      selectionMode: selectionMode,
-                                      onPageSelected:
-                                          (DateTime? start, DateTime? end) {
-                                        stateSetter(() {
-                                          currentMonth = start;
-                                          calendarStateKey.currentState!
-                                              .setCurrentDate(
-                                            DateTime(
-                                              start!.year,
-                                              start.month,
-                                            ),
-                                          );
-                                        });
-                                      },
-                                    ),
+                                  child: AwesomeCalendar(
+                                    key: calendarStateKey,
+                                    startDate: _now,
+                                    dayTileBuilder: CustomDayTileBuilder(),
+                                    endDate: _now.add(const Duration(days: 90)),
+                                    selectedSingleDate: DateTime.now(),
+                                    selectedDates: selectedDates,
+                                    selectionMode: selectionMode,
+                                    onPageSelected:
+                                        (DateTime? start, DateTime? end) {
+                                      stateSetter(() {
+                                        currentMonth = start;
+                                        calendarStateKey.currentState!
+                                            .setCurrentDate(
+                                          DateTime(
+                                            start!.year,
+                                            start.month,
+                                          ),
+                                        );
+                                      });
+                                    },
                                   ),
                                 ),
                                 Material(

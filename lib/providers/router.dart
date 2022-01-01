@@ -11,7 +11,8 @@ import 'package:myxmi/screens/instructions/instructions_screen.dart';
 import 'package:myxmi/screens/more/about/view.dart';
 import 'package:myxmi/screens/more/settings/view.dart';
 import 'package:myxmi/screens/planner/planner_page.dart';
-import 'package:myxmi/screens/products/add/add_new_product_view.dart';
+// import 'package:myxmi/screens/products/add/add_new_product_view.dart';
+import 'package:myxmi/screens/products/add/widgets/custom_size_scanner.dart';
 import 'package:myxmi/screens/profile/profile_screen.dart';
 import 'package:myxmi/screens/recipes/add/infos/add_infos_screen.dart';
 import 'package:myxmi/screens/recipes/add/instructions/add_instructions_screen.dart';
@@ -181,7 +182,7 @@ class RouterProvider extends RouterDelegate<List<RouteSettings>>
         break;
 
       case '/add-product':
-        child = const AddProductScreen();
+        child = const CustomSizeScannerPage();
         break;
       case '/account':
         child = const ProfileScreen();

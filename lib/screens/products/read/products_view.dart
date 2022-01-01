@@ -25,7 +25,9 @@ class ProductsView extends StatelessWidget {
           builder: (_, ref, child) {
             final _productsSearch = ref.watch(productsSearchProvider);
             final _router = ref.watch(routerProvider);
-            _productsSearch.allProducts(snapshot!.data()!);
+            final _data = snapshot!.data();
+
+            _productsSearch.allProducts(_data!);
             return Column(
               children: [
                 Row(

@@ -123,11 +123,31 @@ class CustomDayTileBuilder extends DayTileBuilder {
     DateTime date,
     void Function(DateTime datetime)? onTap,
   ) {
-    return DefaultDayTile(
-      date: date,
-      onTap: onTap,
-      selectedDayColor: Colors.green.shade500,
-      currentDayBorderColor: Colors.green.shade400,
+    return Consumer(
+      builder: (_, ref, child) {
+        final _color = ref.watch(colorProvider);
+        return DefaultDayTile(
+          date: date,
+          onTap: onTap,
+          selectedDayColor: _color.tileColor,
+          currentDayBorderColor: Colors.green.shade400,
+        );
+      },
     );
+  }
+}
+
+final colorProvider = ChangeNotifierProvider<_ColorProvider>((ref) {
+  return _ColorProvider();
+});
+
+class _ColorProvider extends ChangeNotifier {
+  Color? tileColor;
+  Color? textColor;
+
+  Color? changeColor(Color _tileColor, Color _textColor) {
+    tileColor = _tileColor;
+    textColor = _textColor;
+    notifyListeners();
   }
 }

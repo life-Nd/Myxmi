@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">660865086897-f9hocccrabv30tpsvgp2676ml2899dgl.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">660865086897</string>
+    <string name="google_api_key" translatable="false">AIzaSyAZ2uyeWcQjjlGlg9PKdkN9AeIRdhkJudI</string>
+    <string name="google_app_id" translatable="false">1:660865086897:android:65407e87af5d8194ffb990</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyAZ2uyeWcQjjlGlg9PKdkN9AeIRdhkJudI</string>
+    <string name="google_storage_bucket" translatable="false">myxmi-94982.appspot.com</string>
+    <string name="project_id" translatable="false">myxmi-94982</string>
+</resources>

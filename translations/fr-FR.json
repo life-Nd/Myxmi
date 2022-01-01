@@ -295,9 +295,18 @@
    "uploading": "Téléchargement de",
    "uploaded": "Téléchargée",
    "selectRange": "Sélectionner la période",
-   "recipes":"Recettes",
-   "favoritesRecipes":"Recettes favorites",
-   "whatTypeOfRecipe":"Quelles recettes voulez-vous voir?",
-   "skip":"Sauter",
-   "chooseTime":"Choisissez le temps"
+   "recipes": "Recettes",
+   "favoritesRecipes": "Recettes favorites",
+   "whatTypeOfRecipe": "Quelles recettes voulez-vous voir?",
+   "skip": "Sauter",
+   "chooseTime": "Choisissez le temps",
+   "requestPermission": "Demander la permission",
+   "manualInput": "Entrer manuellement",
+   "scanning": "En cours de scan",
+   "nutritionFacts": "Valeur nutritive",
+   "energyInCalories": "Energie par calories",
+   "fat": "Gras",
+   "saturatedFat": "Gras Saturé",
+   "sugars": "Sucres",
+   "proteins": "Proteines"
 }
