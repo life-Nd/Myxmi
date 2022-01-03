@@ -301,6 +301,11 @@
    "fat": "Fat",
    "saturatedFat": "Saturated Fat",
    "sugars": "Sugars",
-   "proteins": "Proteins"
+   "proteins": "Proteins",
+   "salt":"Salt",
+   "sodium": "Sodium",
+   "alcohol": "Alcohol",
+   "perServing":"Per serving"
+
 
 }

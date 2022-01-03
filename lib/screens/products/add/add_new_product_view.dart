@@ -144,85 +144,11 @@ class _AddProductState extends State<AddProductScreen> {
                     ),
                   ),
                   const MesureTypeSetter(),
-                  ListTile(
-                    dense: true,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    title: SingleChildScrollView(
-                      child: Text(
-                        '${'quantityOnHand'.tr()} (${'optional'.tr()})',
-                        style: const TextStyle(
-                          fontSize: 17,
-                        ),
-                      ),
-                    ),
-                    trailing: IconButton(
-                      icon: Icon(
-                        _product.explainQuantity ? Icons.close : Icons.help,
-                        color:
-                            _product.explainQuantity ? Colors.red : Colors.grey,
-                        size: 30,
-                      ),
-                      onPressed: () {
-                        _product.changeExplainQuantity();
-                      },
-                    ),
-                    subtitle: _product.explainQuantity
-                        ? Text('enterTotalQuantity'.tr())
-                        : null,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 60, right: 60),
-                    child: TextField(
-                      keyboardType: TextInputType.number,
-                      controller: _quantityCtrl,
-                      decoration: InputDecoration(
-                        isDense: true,
-                        hintText: _product.mesureType,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                    ),
-                  ),
+                  const QuantityEntry(),
                   const SizedBox(
                     width: 4,
                   ),
-                  ListTile(
-                    dense: true,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    title: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            '${'selectExpirationDate'.tr()} (${'optional'.tr()})',
-                            style: const TextStyle(
-                              fontSize: 17,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    trailing: IconButton(
-                      icon: Icon(
-                        _product.explainExpiration ? Icons.close : Icons.help,
-                        color: _product.explainExpiration
-                            ? Colors.red
-                            : Colors.grey,
-                        size: 30,
-                      ),
-                      onPressed: () {
-                        _product.changeExplainExpiration();
-                      },
-                    ),
-                    subtitle: _product.explainExpiration
-                        ? Text('expirationDate'.tr())
-                        : null,
-                  ),
-                  const ExpiryDateSetter(),
+                  const ExpirationEntry(),
                   const SizedBox(
                     width: 4,
                   ),
@@ -230,6 +156,117 @@ class _AddProductState extends State<AddProductScreen> {
               ),
             ),
           ),
+        );
+      },
+    );
+  }
+}
+
+class QuantityEntry extends StatelessWidget {
+  const QuantityEntry({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer(
+      builder: (_, ref, child) {
+        final _product = ref.watch(productEntryProvider);
+        return Column(
+          children: [
+            ListTile(
+              dense: true,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              title: SingleChildScrollView(
+                child: Text(
+                  '${'quantityOnHand'.tr()} (${'optional'.tr()})',
+                  style: const TextStyle(
+                    fontSize: 17,
+                  ),
+                ),
+              ),
+              trailing: IconButton(
+                icon: Icon(
+                  _product.explainQuantity ? Icons.close : Icons.help,
+                  color: _product.explainQuantity ? Colors.red : Colors.grey,
+                  size: 30,
+                ),
+                onPressed: () {
+                  _product.changeExplainQuantity();
+                },
+              ),
+              subtitle: _product.explainQuantity
+                  ? Text('enterTotalQuantity'.tr())
+                  : null,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 60, right: 60),
+              child: TextField(
+                keyboardType: TextInputType.number,
+                controller: _quantityCtrl,
+                decoration: InputDecoration(
+                  isDense: true,
+                  hintText: _product.mesureType,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class ExpirationEntry extends StatelessWidget {
+  const ExpirationEntry({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer(
+      builder: (_, ref, child) {
+        final _product = ref.watch(productEntryProvider);
+        return Column(
+          children: [
+            ListTile(
+              dense: true,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              title: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      '${'selectExpirationDate'.tr()} (${'optional'.tr()})',
+                      style: const TextStyle(
+                        fontSize: 17,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              trailing: IconButton(
+                icon: Icon(
+                  _product.explainExpiration ? Icons.close : Icons.help,
+                  color: _product.explainExpiration ? Colors.red : Colors.grey,
+                  size: 30,
+                ),
+                onPressed: () {
+                  _product.changeExplainExpiration();
+                },
+              ),
+              subtitle: _product.explainExpiration
+                  ? Text('expirationDate'.tr())
+                  : null,
+            ),
+            const ExpiryDateSetter(),
+          ],
         );
       },
     );

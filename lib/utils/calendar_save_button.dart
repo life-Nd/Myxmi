@@ -34,6 +34,7 @@ class SaveButton extends StatelessWidget {
       builder: (_, ref, child) {
         final _router = ref.watch(routerProvider);
         final _user = ref.watch(userProvider);
+        final _calendar = ref.watch(calendarEntriesProvider);
         final _uid = _user.account!.uid;
         return RawMaterialButton(
           fillColor: type != null ? color : Colors.grey,
@@ -104,8 +105,8 @@ class SaveButton extends StatelessWidget {
                 },
           child: Text(
             'save'.tr(),
-            style: const TextStyle(
-              color: Colors.white,
+            style: TextStyle(
+              color: _calendar.textColor,
             ),
           ),
         );
@@ -125,29 +126,45 @@ class CustomDayTileBuilder extends DayTileBuilder {
   ) {
     return Consumer(
       builder: (_, ref, child) {
-        final _color = ref.watch(colorProvider);
+        final _calendar = ref.watch(calendarEntriesProvider);
         return DefaultDayTile(
           date: date,
           onTap: onTap,
-          selectedDayColor: _color.tileColor,
-          currentDayBorderColor: Colors.green.shade400,
+          selectedDayColor: _calendar.tileColor,
+          currentDayBorderColor: _calendar.tileColor,
         );
       },
     );
   }
 }
 
-final colorProvider = ChangeNotifierProvider<_ColorProvider>((ref) {
-  return _ColorProvider();
+final calendarEntriesProvider =
+    ChangeNotifierProvider<CalendarEntriesProvider>((ref) {
+  return CalendarEntriesProvider();
 });
 
-class _ColorProvider extends ChangeNotifier {
-  Color? tileColor;
+class CalendarEntriesProvider extends ChangeNotifier {
+  Color? tileColor = Colors.grey;
   Color? textColor;
+  String? type;
+  DateTime? date = DateTime.now();
+  TimeOfDay time = TimeOfDay.now();
+  bool showTimeSelector = false;
 
-  Color? changeColor(Color _tileColor, Color _textColor) {
+  void showTimeSelectorChanged() {
+    showTimeSelector = !showTimeSelector;
+    notifyListeners();
+  }
+
+  void changeTime(TimeOfDay newTime) {
+    time = newTime;
+    notifyListeners();
+  }
+
+  void changeColor(Color _tileColor, Color _textColor) {
     tileColor = _tileColor;
     textColor = _textColor;
+
     notifyListeners();
   }
 }

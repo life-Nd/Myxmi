@@ -4,13 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/recipe.dart';
 import 'package:myxmi/providers/router.dart';
+import 'package:myxmi/utils/calendar_recipe_type_selector.dart';
 import 'package:myxmi/utils/calendar_save_button.dart';
-
-final TextEditingController _hourCtrl = TextEditingController();
-final TextEditingController _minuteCtrl = TextEditingController();
-String? _type;
-String? _period;
-Color? _selectedColor = Colors.grey;
 
 class CalendarButton extends StatefulWidget {
   final RecipeModel? recipe;
@@ -47,7 +42,7 @@ class _CalendarButtonState extends State<CalendarButton> {
     return Consumer(
       builder: (_, ref, child) {
         final _router = ref.watch(routerProvider);
-        final _color = ref.watch(colorProvider);
+        final _calendar = ref.watch(calendarEntriesProvider);
         return InkWell(
           child: Container(
             decoration: BoxDecoration(
@@ -130,343 +125,8 @@ class _CalendarButtonState extends State<CalendarButton> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 20.0,
-                                    right: 20,
-                                    top: 5,
-                                    bottom: 5,
-                                  ),
-                                  child: Card(
-                                    child: Column(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            '${'chooseRecipeType'.tr()} ',
-                                            style: const TextStyle(
-                                              fontSize: 17,
-                                            ),
-                                          ),
-                                        ),
-                                        Card(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                RawMaterialButton(
-                                                  fillColor: _type ==
-                                                          'breakfast'
-                                                      ? Colors.amber.shade200
-                                                      : Theme.of(context)
-                                                          .scaffoldBackgroundColor,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                      20.0,
-                                                    ),
-                                                  ),
-                                                  onPressed: () {
-                                                    stateSetter(
-                                                      () {
-                                                        _type = 'breakfast';
-                                                        _selectedColor = Colors
-                                                            .amber.shade200;
-                                                        _hourCtrl.text = '07';
-                                                        _minuteCtrl.text = '00';
-                                                        _period = 'am';
-                                                      },
-                                                    );
-                                                    _color.changeColor(
-                                                      Colors.amber.shade200,
-                                                      Colors.black,
-                                                    );
-                                                  },
-                                                  elevation: 20.0,
-                                                  padding: const EdgeInsets.all(
-                                                    15.0,
-                                                  ),
-                                                  child: Text(
-                                                    'breakfast'.tr(),
-                                                    style: TextStyle(
-                                                      color: _type ==
-                                                              'breakfast'
-                                                          ? Colors.black
-                                                          : Theme.of(context)
-                                                              .textTheme
-                                                              .bodyText1!
-                                                              .color,
-                                                    ),
-                                                  ),
-                                                ),
-                                                RawMaterialButton(
-                                                  fillColor: _type == 'supper'
-                                                      ? Colors.amber
-                                                      : Theme.of(context)
-                                                          .scaffoldBackgroundColor,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                      20.0,
-                                                    ),
-                                                  ),
-                                                  onPressed: () {
-                                                    stateSetter(
-                                                      () {
-                                                        _type = 'supper';
-                                                        _selectedColor =
-                                                            Colors.amber;
-                                                        _hourCtrl.text = '1';
-                                                        _minuteCtrl.text = '00';
-                                                        _period = 'pm';
-                                                      },
-                                                    );
-
-                                                    _color.changeColor(
-                                                      Colors.amber,
-                                                      Colors.white,
-                                                    );
-                                                  },
-                                                  elevation: 20.0,
-                                                  padding: const EdgeInsets.all(
-                                                    15.0,
-                                                  ),
-                                                  child: Text(
-                                                    'supper'.tr(),
-                                                    style: TextStyle(
-                                                      color: _type == 'supper'
-                                                          ? Colors.white
-                                                          : Theme.of(context)
-                                                              .textTheme
-                                                              .bodyText1!
-                                                              .color,
-                                                    ),
-                                                  ),
-                                                ),
-                                                RawMaterialButton(
-                                                  fillColor: _type == 'dinner'
-                                                      ? Colors.indigo.shade900
-                                                      : Theme.of(context)
-                                                          .scaffoldBackgroundColor,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                      20.0,
-                                                    ),
-                                                  ),
-                                                  onPressed: () {
-                                                    stateSetter(
-                                                      () {
-                                                        _type = 'dinner';
-                                                        _selectedColor = Colors
-                                                            .indigo.shade900;
-                                                        _hourCtrl.text = '07';
-                                                        _minuteCtrl.text = '00';
-                                                        _period = 'pm';
-                                                      },
-                                                    );
-                                                    _color.changeColor(
-                                                      Colors.indigo.shade400,
-                                                      Colors.white,
-                                                    );
-                                                  },
-                                                  elevation: 20.0,
-                                                  padding: const EdgeInsets.all(
-                                                    15.0,
-                                                  ),
-                                                  child: Text(
-                                                    'dinner'.tr(),
-                                                    style: TextStyle(
-                                                      color: _type == 'dinner'
-                                                          ? Colors.white
-                                                          : Theme.of(context)
-                                                              .textTheme
-                                                              .bodyText1!
-                                                              .color,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 20.0,
-                                    right: 20,
-                                    top: 5,
-                                    bottom: 5,
-                                  ),
-                                  child: Card(
-                                    elevation: 20.0,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                        20.0,
-                                      ),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            '${'chooseTime'.tr()} ',
-                                            style: const TextStyle(
-                                              fontSize: 17,
-                                            ),
-                                          ),
-                                        ),
-                                        Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            const SizedBox(
-                                              width: 40,
-                                            ),
-                                            SizedBox(
-                                              width: 44,
-                                              child: TextField(
-                                                textAlign: TextAlign.center,
-                                                controller: _hourCtrl,
-                                                maxLength: 2,
-                                                keyboardType:
-                                                    TextInputType.number,
-                                                decoration: InputDecoration(
-                                                  contentPadding:
-                                                      const EdgeInsets.all(1),
-                                                  border: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                      20,
-                                                    ),
-                                                  ),
-                                                  hintText: '07',
-                                                ),
-                                              ),
-                                            ),
-                                            Text(
-                                              ' : ',
-                                              style: TextStyle(
-                                                fontSize: 25,
-                                                color: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyText1!
-                                                    .color,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: 44,
-                                              child: TextField(
-                                                maxLength: 2,
-                                                textAlign: TextAlign.center,
-                                                controller: _minuteCtrl,
-                                                decoration: InputDecoration(
-                                                  contentPadding:
-                                                      const EdgeInsets.all(1),
-                                                  border: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                      20,
-                                                    ),
-                                                  ),
-                                                  hintText: '00',
-                                                  alignLabelWithHint: true,
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              width: 40,
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                right: 7,
-                                              ),
-                                              child: Column(
-                                                children: [
-                                                  RawMaterialButton(
-                                                    fillColor: _period == 'am'
-                                                        ? Colors.amber.shade200
-                                                        : Theme.of(context)
-                                                            .scaffoldBackgroundColor,
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                        20.0,
-                                                      ),
-                                                    ),
-                                                    onPressed: () {
-                                                      stateSetter(
-                                                        () {
-                                                          _period = 'am';
-                                                        },
-                                                      );
-                                                    },
-                                                    elevation: 20.0,
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                      15.0,
-                                                    ),
-                                                    child: const Text(
-                                                      'AM',
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  RawMaterialButton(
-                                                    fillColor: _period == 'pm'
-                                                        ? _type == 'supper'
-                                                            ? Colors.amber
-                                                            : Colors
-                                                                .indigo.shade900
-                                                        : Theme.of(context)
-                                                            .scaffoldBackgroundColor,
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                        20.0,
-                                                      ),
-                                                    ),
-                                                    onPressed: () {
-                                                      stateSetter(
-                                                        () {
-                                                          _period = 'pm';
-                                                        },
-                                                      );
-                                                    },
-                                                    elevation: 20.0,
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                      15.0,
-                                                    ),
-                                                    child: Text(
-                                                      'PM',
-                                                      style: TextStyle(
-                                                        color: _type == 'dinner'
-                                                            ? Colors.white
-                                                            : Theme.of(context)
-                                                                .textTheme
-                                                                .bodyText1!
-                                                                .color,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                CalendarRecipeTypeSelector(
+                                  stateSetter: stateSetter,
                                 ),
                                 Material(
                                   child: Padding(
@@ -563,7 +223,7 @@ class _CalendarButtonState extends State<CalendarButton> {
                                           style: const TextStyle(fontSize: 13),
                                         ),
                                         leading: Switch(
-                                          activeColor: _selectedColor,
+                                          activeColor: _calendar.tileColor,
                                           value: selectionMode ==
                                               SelectionMode.range,
                                           onChanged: (bool value) {
@@ -607,7 +267,7 @@ class _CalendarButtonState extends State<CalendarButton> {
                                             ),
                                             const Spacer(),
                                             SaveButton(
-                                              color: _selectedColor,
+                                              color: _calendar.tileColor,
                                               selectedDates: calendarStateKey
                                                           .currentState !=
                                                       null
@@ -616,11 +276,12 @@ class _CalendarButtonState extends State<CalendarButton> {
                                                       .selectedDates
                                                   : [],
                                               title: widget.recipe!.title,
-                                              hour: _hourCtrl.text,
-                                              minute: _minuteCtrl.text,
+                                              hour: '${_calendar.time.hour}',
+                                              minute:
+                                                  '${_calendar.time.minute}',
                                               recipeId: widget.recipe!.recipeId,
                                               imageUrl: widget.recipe!.imageUrl,
-                                              type: _type,
+                                              type: _calendar.type,
                                             ),
                                           ],
                                         ),

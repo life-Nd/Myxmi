@@ -59,11 +59,17 @@ class _CalendarPageState extends State<PlannerPage> {
                             eventTextColor: _event['type'] == 'dinner'
                                 ? Colors.white
                                 : Colors.black,
-                            eventBackgroundColor: _event['type'] == 'breakfast'
-                                ? const Color(0xff81d4fA)
-                                : _event['type'] == 'supper'
-                                    ? const Color(0xffffff00)
-                                    : Colors.indigo.shade900,
+                            eventBackgroundColor: _done
+                                ? Colors.green
+                                : !DateTime.now()
+                                        .compareTo(DateTime.parse(_day))
+                                        .isNegative
+                                    ? Colors.red
+                                    : _event['type'] == 'breakfast'
+                                        ? const Color(0xff81d4fA)
+                                        : _event['type'] == 'supper'
+                                            ? const Color(0xffffff00)
+                                            : Colors.indigo.shade900,
                           ),
                         );
                       }
@@ -105,7 +111,7 @@ class _CalendarPageState extends State<PlannerPage> {
                               insetPadding: const EdgeInsets.all(10),
                               content: SizedBox(
                                 height: 400,
-                                width: double.infinity,
+                                width: 400,
                                 child: ListView.builder(
                                   itemCount: eventsOnTheDate.length,
                                   itemBuilder: (_, int index) {

@@ -51,15 +51,15 @@ class ExpiryDateSetter extends HookWidget {
                 },
                 icon: const Icon(Icons.calendar_today),
               ),
-              IconButton(
-                onPressed: () {
-                  _product.changeExpiration(null);
-                },
-                icon: Icon(
-                  Icons.clear,
-                  color: _product.expiration != null ? Colors.red : Colors.grey,
-                ),
-              )
+              // IconButton(
+              //   onPressed: () {
+              //     _product.changeExpiration(null);
+              //   },
+              //   icon: Icon(
+              //     Icons.clear,
+              //     color: _product.expiration != null ? Colors.red : Colors.grey,
+              //   ),
+              // )
             ],
           ),
         );

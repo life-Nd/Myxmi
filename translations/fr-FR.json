@@ -308,5 +308,9 @@
    "fat": "Gras",
    "saturatedFat": "Gras Saturé",
    "sugars": "Sucres",
-   "proteins": "Proteines"
+   "proteins": "Proteines",
+   "salt":"Sel",
+   "sodium": "Sodium",
+   "alcohol": "Alcool",
+   "perServing":"Par portion"
 }
