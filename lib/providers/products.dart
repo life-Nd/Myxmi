@@ -48,6 +48,7 @@ class ProductEntryProvider extends ChangeNotifier {
   Future saveToDb({
     required String? uid,
     required String quantity,
+    required String barcode,
     required String name,
   }) async {
     final String _now = '${DateTime.now().millisecondsSinceEpoch}';
@@ -66,10 +67,11 @@ class ProductEntryProvider extends ChangeNotifier {
     );
     await FirebaseFirestore.instance.collection('Products').doc(uid).set(
       {
-        _now: {
+        barcode: {
           'name': name.toLowerCase().trim(),
           'mesureType': mesureType.trim(),
           'ingredientType': type!.trim(),
+          'time': _now
         },
       },
       SetOptions(merge: true),

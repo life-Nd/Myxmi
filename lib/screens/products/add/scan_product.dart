@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/providers/home_screen.dart';
 import 'package:myxmi/providers/router.dart';
+import 'package:myxmi/providers/user.dart';
+import 'package:myxmi/screens/products/add/add_product_manually.dart';
 import 'package:myxmi/screens/products/add/app_scanner.dart';
 import 'package:openfoodfacts/model/Nutriments.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
 
 bool enterProductDetails = false;
+bool _dataFoundWithCode = false;
+final TextEditingController _quantityCtrl = TextEditingController();
 
 class ScanProductScreen extends StatefulWidget {
   const ScanProductScreen({Key? key}) : super(key: key);
@@ -17,7 +21,8 @@ class ScanProductScreen extends StatefulWidget {
 
 class _ScanProductScreenState extends State<ScanProductScreen> {
   String _code = '';
-  bool _dataFoundWithCode = false;
+  String _productName = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,6 +39,44 @@ class _ScanProductScreenState extends State<ScanProductScreen> {
                   child: const Icon(Icons.check),
                 )
               : null
+          : null,
+      bottomSheet: enterProductDetails
+          ? Consumer(
+              builder: (_, ref, child) {
+                final _product = ref.watch(productEntryProvider);
+                final _user = ref.watch(userProvider);
+                return Column(
+                  children: [
+                    const QuantityEntry(),
+                    const SizedBox(
+                      width: 4,
+                    ),
+                    const ExpirationEntry(),
+                    const SizedBox(
+                      width: 4,
+                    ),
+                    RawMaterialButton(
+                      onPressed: () async {
+                        await _product.saveToDb(
+                          uid: _user.account?.uid,
+                          name: _productName,
+                          quantity: _quantityCtrl.text,
+                          barcode: _code,
+                          // url: _imageUrl
+                        );
+                      },
+                      fillColor: Colors.green,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                      ),
+                      child: Text('save'.tr()),
+                    ),
+                  ],
+                );
+              },
+            )
           : null,
       body: CustomScrollView(
         slivers: [
@@ -89,6 +132,7 @@ class _ScanProductScreenState extends State<ScanProductScreen> {
                         final Nutriments _nutriments = _product.nutriments!;
                         final String _ingredientsText =
                             _product.ingredientsText ?? '';
+                        _productName = _product.productName!;
                         return Consumer(
                           builder: (_, ref, child) {
                             final _router = ref.watch(routerProvider);

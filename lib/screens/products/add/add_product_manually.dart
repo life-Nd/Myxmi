@@ -34,42 +34,43 @@ class _AddProductState extends State<AddProductManuallyScreen> {
           appBar: AppBar(
             title: Text('newProduct'.tr()),
           ),
-          bottomNavigationBar:
-              _nameCtrl.text.isNotEmpty && _product.mesureType.isNotEmpty
-                  ? RawMaterialButton(
-                      padding: const EdgeInsets.all(8),
-                      visualDensity: VisualDensity.compact,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      fillColor: Colors.green,
-                      onPressed: _nameCtrl.text.isNotEmpty &&
-                              _product.mesureType.isNotEmpty
-                          ? () async {
-                              await _product.saveToDb(
-                                uid: _user.account?.uid,
-                                name: _nameCtrl.text,
-                                quantity: _quantityCtrl.text,
-                              );
-                              _nameCtrl.clear();
-                              _quantityCtrl.clear();
+          bottomNavigationBar: _nameCtrl.text.isNotEmpty &&
+                  _product.mesureType.isNotEmpty
+              ? RawMaterialButton(
+                  padding: const EdgeInsets.all(8),
+                  visualDensity: VisualDensity.compact,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  fillColor: Colors.green,
+                  onPressed: _nameCtrl.text.isNotEmpty &&
+                          _product.mesureType.isNotEmpty
+                      ? () async {
+                          await _product.saveToDb(
+                            uid: _user.account?.uid,
+                            name: _nameCtrl.text,
+                            quantity: _quantityCtrl.text,
+                            barcode: '${DateTime.now().millisecondsSinceEpoch}',
+                          );
+                          _nameCtrl.clear();
+                          _quantityCtrl.clear();
 
-                              if (!mounted) return;
-                              Navigator.of(context).pop();
-                            }
-                          : () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  backgroundColor: Colors.red,
-                                  content: Text(
-                                    'fieldsEmpty'.tr(),
-                                  ),
-                                ),
-                              );
-                            },
-                      child: Text('save'.tr()),
-                    )
-                  : const Text(''),
+                          if (!mounted) return;
+                          Navigator.of(context).pop();
+                        }
+                      : () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: Colors.red,
+                              content: Text(
+                                'fieldsEmpty'.tr(),
+                              ),
+                            ),
+                          );
+                        },
+                  child: Text('save'.tr()),
+                )
+              : const Text(''),
           body: SizedBox(
             height: _size.height,
             child: SingleChildScrollView(
