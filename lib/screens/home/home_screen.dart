@@ -41,9 +41,7 @@ class HomeScreen extends StatelessWidget {
                       onPressed: () {
                         _viewIndex != 3
                             ? _router.pushPage(name: '/add-recipe-infos')
-                            : _router.pushPage(
-                                name: '/add-product',
-                              );
+                            : _router.pushPage(name: '/scan-product');
                       },
                       child: const Icon(
                         Icons.add,

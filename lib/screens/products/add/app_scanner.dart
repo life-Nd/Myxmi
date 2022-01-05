@@ -2,18 +2,20 @@ import 'package:ai_barcode/ai_barcode.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:myxmi/providers/router.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-late String _label;
+// late String _label;
 late Function(String result) _resultCallback;
 
 class AppBarcodeScannerWidget extends StatefulWidget {
   AppBarcodeScannerWidget.defaultStyle({
     Function(String result)? resultCallback,
-    String label = 'Single number(单号)',
+    // String label = 'Reload',
   }) {
     _resultCallback = resultCallback ?? (String result) {};
-    _label = label;
+    // _label = label;
   }
 
   @override
@@ -39,7 +41,7 @@ class _BarcodePermissionWidgetState extends State<_BarcodePermissionWidget> {
 
   bool _useCameraScan = true;
 
-  String _inputValue = "";
+  final String _inputValue = "";
 
   @override
   void initState() {
@@ -77,12 +79,28 @@ class _BarcodePermissionWidgetState extends State<_BarcodePermissionWidget> {
         Expanded(
           child: _isGranted
               ? _useCameraScan
-                  ? _BarcodeScannerWidget()
-                  : _BarcodeInputWidget.defaultStyle(
-                      changed: (String value) {
-                        _inputValue = value;
-                      },
+                  ? Stack(
+                      alignment: Alignment.topRight,
+                      children: [
+                        _BarcodeScannerWidget(),
+                        Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _useCameraScan = false;
+                              });
+                              debugPrint('_useCameraScan: $_useCameraScan');
+                            },
+                            icon: const Icon(
+                              Icons.restart_alt,
+                              size: 30,
+                            ),
+                          ),
+                        ),
+                      ],
                     )
+                  : Container()
               : Center(
                   child: RawMaterialButton(
                     onPressed: () {
@@ -92,31 +110,39 @@ class _BarcodePermissionWidgetState extends State<_BarcodePermissionWidget> {
                   ),
                 ),
         ),
-        if (_useCameraScan)
-          RawMaterialButton(
-            onPressed: () {
-              setState(() {
-                _useCameraScan = false;
-              });
+        if (_useCameraScan) ...[
+          Consumer(
+            builder: (_, ref, child) {
+              final _router = ref.watch(routerProvider);
+              return RawMaterialButton(
+                onPressed: () {
+                  _router.pushPage(
+                    name: '/add-product',
+                  );
+                },
+                child: Text('manualInput'.tr()),
+              );
             },
-            child: Text('manualInput'.tr()),
-          )
-        else
+          ),
+        ] else
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               RawMaterialButton(
+                fillColor: Colors.green,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
                 onPressed: () {
                   setState(() {
                     _useCameraScan = true;
                   });
+                  debugPrint('_inputValue: $_inputValue');
                 },
-                child: Text('${'scanning'.tr()} $_label'),
-              ),
-              RawMaterialButton(
-                onPressed: () {
-                  _resultCallback(_inputValue);
-                },
-                child: Text('yes'.tr()),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('${'reloadScanner'.tr()} '),
+                ),
               ),
             ],
           ),
@@ -125,67 +151,6 @@ class _BarcodePermissionWidgetState extends State<_BarcodePermissionWidget> {
   }
 }
 
-// ignore: must_be_immutable
-class _BarcodeInputWidget extends StatefulWidget {
-  late ValueChanged<String> _changed;
-
-  _BarcodeInputWidget.defaultStyle({
-    required ValueChanged<String> changed,
-  }) {
-    _changed = changed;
-  }
-
-  @override
-  State<StatefulWidget> createState() {
-    return _BarcodeInputState();
-  }
-}
-
-class _BarcodeInputState extends State<_BarcodeInputWidget> {
-  final _controller = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _controller.addListener(() {
-      final text = _controller.text.toLowerCase();
-      _controller.value = _controller.value.copyWith(
-        text: text,
-        selection:
-            TextSelection(baseOffset: text.length, extentOffset: text.length),
-        composing: TextRange.empty,
-      );
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        const Padding(padding: EdgeInsets.all(8)),
-        Row(
-          children: <Widget>[
-            const Padding(padding: EdgeInsets.all(8)),
-            Text(
-              "$_label:",
-            ),
-            Expanded(
-              child: TextFormField(
-                controller: _controller,
-                onChanged: widget._changed,
-                decoration: const InputDecoration(border: OutlineInputBorder()),
-              ),
-            ),
-            const Padding(padding: EdgeInsets.all(8)),
-          ],
-        ),
-        const Padding(padding: EdgeInsets.all(8)),
-      ],
-    );
-  }
-}
-
-///ScannerWidget
 class _BarcodeScannerWidget extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -229,13 +194,7 @@ class _AppBarcodeScannerWidgetState extends State<_BarcodeScannerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: _getScanWidgetByPlatform(),
-        )
-      ],
-    );
+    return _getScanWidgetByPlatform();
   }
 
   Widget _getScanWidgetByPlatform() {

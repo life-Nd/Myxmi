@@ -251,7 +251,6 @@ class _TimeSelectorState extends State<TimeSelector> {
                     children: [
                       Expanded(
                         child: CupertinoDatePicker(
-                          backgroundColor: Colors.white,
                           mode: CupertinoDatePickerMode.time,
                           initialDateTime: _calendar.date,
                           onDateTimeChanged: (DateTime newDateTime) {

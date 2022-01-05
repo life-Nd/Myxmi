@@ -305,7 +305,10 @@
    "salt":"Salt",
    "sodium": "Sodium",
    "alcohol": "Alcohol",
-   "perServing":"Per serving"
+   "perServing":"Per serving",
+   "cantScanProduct": "Can't scan product",
+   "enterManually":"Enter manually",
+   "reloadScanner": "Reload scanner"
 
 
 }

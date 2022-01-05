@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/screens/products/add/add_new_product_view.dart';
+import 'package:myxmi/screens/products/add/add_product_manually.dart';
 import 'package:myxmi/utils/format_time.dart';
 
 class ExpiryDateSetter extends HookWidget {

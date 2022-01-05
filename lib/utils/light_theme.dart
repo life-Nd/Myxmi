@@ -25,13 +25,6 @@ final ThemeData lightTheme = ThemeData(
   ),
   cardColor: const Color(0xFFD6D6D6),
   dividerColor: const Color(0x1f6D42CE),
-  timePickerTheme: const TimePickerThemeData(
-    entryModeIconColor: Colors.orange,
-    backgroundColor: Colors.black,
-    dayPeriodColor: Colors.red,
-    dayPeriodTextColor: Colors.blue,
-    dialBackgroundColor: Colors.yellow,
-  ),
   highlightColor: Colors.white,
   focusColor: Colors.grey.shade800,
   cardTheme: const CardTheme(margin: EdgeInsets.all(2)),

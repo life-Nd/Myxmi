@@ -78,7 +78,6 @@ class _ExpandedRecipesStream extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('ty[e: $type');
     if (type == 'myRecipes') {
       return const Expanded(
         child: RecipesByUid(),

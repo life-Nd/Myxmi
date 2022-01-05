@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/app.dart';
@@ -11,8 +10,8 @@ import 'package:myxmi/screens/instructions/instructions_screen.dart';
 import 'package:myxmi/screens/more/about/view.dart';
 import 'package:myxmi/screens/more/settings/view.dart';
 import 'package:myxmi/screens/planner/planner_page.dart';
-// import 'package:myxmi/screens/products/add/add_new_product_view.dart';
-import 'package:myxmi/screens/products/add/widgets/custom_size_scanner.dart';
+import 'package:myxmi/screens/products/add/add_product_manually.dart';
+import 'package:myxmi/screens/products/add/scan_product.dart';
 import 'package:myxmi/screens/profile/profile_screen.dart';
 import 'package:myxmi/screens/recipes/add/infos/add_infos_screen.dart';
 import 'package:myxmi/screens/recipes/add/instructions/add_instructions_screen.dart';
@@ -181,8 +180,11 @@ class RouterProvider extends RouterDelegate<List<RouteSettings>>
         child = AddRecipeInstructionsScreen();
         break;
 
-      case '/add-product':
-        child = const CustomSizeScannerPage();
+      case '/scan-product':
+        child = const ScanProductScreen();
+        break;
+      case '/add-product-manually':
+        child = const AddProductManuallyScreen();
         break;
       case '/account':
         child = const ProfileScreen();
@@ -211,7 +213,7 @@ class RouterProvider extends RouterDelegate<List<RouteSettings>>
           body: Column(
             children: [
               Image.asset('assets/data_not_found.png'),
-              Center(child: Text('404'.tr())),
+              const Center(child: Text('404')),
             ],
           ),
         );
