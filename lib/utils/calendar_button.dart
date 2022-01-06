@@ -3,8 +3,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/models/recipe.dart';
+import 'package:myxmi/providers/calendar_entries.dart';
 import 'package:myxmi/providers/router.dart';
-import 'package:myxmi/utils/calendar_recipe_type_selector.dart';
+import 'package:myxmi/utils/calendar_recipe_metadata.dart';
 import 'package:myxmi/utils/calendar_save_button.dart';
 
 class CalendarButton extends StatefulWidget {
@@ -125,7 +126,7 @@ class _CalendarButtonState extends State<CalendarButton> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                CalendarRecipeTypeSelector(
+                                CalendarRecipeMetaData(
                                   stateSetter: stateSetter,
                                 ),
                                 Material(

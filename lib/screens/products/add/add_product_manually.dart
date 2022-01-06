@@ -51,6 +51,8 @@ class _AddProductState extends State<AddProductManuallyScreen> {
                             name: _nameCtrl.text,
                             quantity: _quantityCtrl.text,
                             barcode: '${DateTime.now().millisecondsSinceEpoch}',
+                            photoUrl:
+                                'https://firebasestorage.googleapis.com/v0/b/myxmi-94982.appspot.com/o/apples.png?alt=media&token=abfd857e-9812-4083-ae1e-514c515ca774',
                           );
                           _nameCtrl.clear();
                           _quantityCtrl.clear();

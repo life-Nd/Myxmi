@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:myxmi/providers/calendar_entries.dart';
 import 'package:myxmi/providers/router.dart';
 import 'package:myxmi/providers/user.dart';
 
@@ -53,8 +54,10 @@ class SaveButton extends StatelessWidget {
                     selectedDates!.sort();
                     for (int i = 0; i <= selectedDates!.length - 1; i++) {
                       final DateTime _date = selectedDates![i];
-                      final String _dateString =
-                          DateFormat('yyy-MM-dd $hour:$minute').format(_date);
+                      final String _dateString = DateFormat(
+                        'yyy-MM-dd ${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}',
+                      ).format(_date);
+
                       _selectedDaysMapped[_dateString] = false;
                     }
                     FirebaseFirestore.instance
@@ -63,15 +66,17 @@ class SaveButton extends StatelessWidget {
                         .snapshots()
                         .listen(
                       (event) {
-                        final Map _eventsData = event.data()!;
-
+                        final Map _eventsData = event.data() ?? {};
                         if (_eventsData['$recipeId'] != null) {
+                          final Map _recipe = _eventsData['$recipeId'] as Map;
+                          final Map _days = _recipe['days'] as Map;
+                          _selectedDaysMapped.addAll(_days);
                           FirebaseFirestore.instance
                               .collection('Planner')
                               .doc(_uid)
                               .update(
                             {
-                              '$recipeId!.days': _selectedDaysMapped,
+                              '$recipeId.days': _selectedDaysMapped,
                             },
                           );
                         } else {
@@ -80,7 +85,7 @@ class SaveButton extends StatelessWidget {
                               .doc(_uid)
                               .set(
                             {
-                              recipeId!: {
+                              '$recipeId': {
                                 'days': _selectedDaysMapped,
                                 'created': _now,
                                 'imageUrl': imageUrl,
@@ -135,36 +140,5 @@ class CustomDayTileBuilder extends DayTileBuilder {
         );
       },
     );
-  }
-}
-
-final calendarEntriesProvider =
-    ChangeNotifierProvider<CalendarEntriesProvider>((ref) {
-  return CalendarEntriesProvider();
-});
-
-class CalendarEntriesProvider extends ChangeNotifier {
-  Color? tileColor = Colors.grey;
-  Color? textColor;
-  String? type;
-  DateTime? date = DateTime.now();
-  TimeOfDay time = TimeOfDay.now();
-  bool showTimeSelector = false;
-
-  void showTimeSelectorChanged() {
-    showTimeSelector = !showTimeSelector;
-    notifyListeners();
-  }
-
-  void changeTime(TimeOfDay newTime) {
-    time = newTime;
-    notifyListeners();
-  }
-
-  void changeColor(Color _tileColor, Color _textColor) {
-    tileColor = _tileColor;
-    textColor = _textColor;
-
-    notifyListeners();
   }
 }

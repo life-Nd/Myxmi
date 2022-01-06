@@ -79,27 +79,7 @@ class _BarcodePermissionWidgetState extends State<_BarcodePermissionWidget> {
         Expanded(
           child: _isGranted
               ? _useCameraScan
-                  ? Stack(
-                      alignment: Alignment.topRight,
-                      children: [
-                        _BarcodeScannerWidget(),
-                        Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                _useCameraScan = false;
-                              });
-                              debugPrint('_useCameraScan: $_useCameraScan');
-                            },
-                            icon: const Icon(
-                              Icons.restart_alt,
-                              size: 30,
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
+                  ? _BarcodeScannerWidget()
                   : Container()
               : Center(
                   child: RawMaterialButton(
@@ -194,7 +174,22 @@ class _AppBarcodeScannerWidgetState extends State<_BarcodeScannerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return _getScanWidgetByPlatform();
+    return Stack(
+      alignment: Alignment.topRight,
+      children: [
+        _getScanWidgetByPlatform(),
+        Padding(
+          padding: const EdgeInsets.all(40.0),
+          child: IconButton(
+            onPressed: () {
+              _scannerController.startCameraPreview();
+            },
+            icon: const Icon(Icons.refresh_rounded),
+            color: Colors.red,
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _getScanWidgetByPlatform() {

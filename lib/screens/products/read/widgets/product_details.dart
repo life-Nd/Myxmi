@@ -39,30 +39,32 @@ class ProductDetails extends StatelessWidget {
                       width: 77,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(20),
-                        child: Image.asset(
-                          'assets/${product!.name}.png',
+                        child: Image.network(
+                          '${product!.imageUrl}',
                         ),
                       ),
                     ),
                     const SizedBox(
                       width: 7,
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          _name,
-                          style: const TextStyle(
-                            fontSize: 20,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            _name,
+                            style: const TextStyle(
+                              fontSize: 20,
+                            ),
                           ),
-                        ),
-                        Text(
-                          '${product!.ingredientType!.tr()} ',
-                          style: const TextStyle(
-                            fontSize: 15,
+                          Text(
+                            '${product!.ingredientType!.tr()} ',
+                            style: const TextStyle(
+                              fontSize: 15,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     const Spacer(),
                     StatefulBuilder(

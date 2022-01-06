@@ -4,19 +4,21 @@ class ProductModel {
   static const _mesureType = 'mesureType';
   static const _name = 'name';
   static const _left = 'left';
+  static const _imageUrl = 'imageUrl';
   String? productId;
   String? expiration;
   String? ingredientType;
   String? mesureType;
   String? name;
   String? left;
-
+  String? imageUrl;
   ProductModel({
     this.productId,
     this.expiration,
     this.ingredientType,
     this.mesureType,
     this.name,
+    this.imageUrl,
     this.left = '0.0',
   });
 
@@ -31,6 +33,7 @@ class ProductModel {
       mesureType: snapshot[_mesureType] as String?,
       name: snapshot[_name] as String?,
       left: snapshot[_left] as String?,
+      imageUrl: snapshot[_imageUrl] as String?,
     );
   }
 
@@ -41,6 +44,7 @@ class ProductModel {
       _mesureType: mesureType,
       _name: name,
       _left: left,
+      _imageUrl: imageUrl,
     };
   }
 }

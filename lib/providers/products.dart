@@ -50,6 +50,7 @@ class ProductEntryProvider extends ChangeNotifier {
     required String quantity,
     required String barcode,
     required String name,
+    required String photoUrl,
   }) async {
     final String _now = '${DateTime.now().millisecondsSinceEpoch}';
     final SharedPreferences _prefs = await SharedPreferences.getInstance();
@@ -71,7 +72,9 @@ class ProductEntryProvider extends ChangeNotifier {
           'name': name.toLowerCase().trim(),
           'mesureType': mesureType.trim(),
           'ingredientType': type!.trim(),
-          'time': _now
+          'photoUrl': photoUrl.trim(),
+          'quantity': quantity.trim(),
+          'time': _now,
         },
       },
       SetOptions(merge: true),
