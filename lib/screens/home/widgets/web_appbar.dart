@@ -24,7 +24,7 @@ class WebAppBar extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    if (_size.width >= 770)
+                    if (_size.width > 770)
                       Padding(
                         padding: const EdgeInsets.only(left: 5.0),
                         child:
@@ -46,7 +46,7 @@ class WebAppBar extends StatelessWidget {
                     _PageViewButton(uid: uid, index: 4, text: 'signIn'.tr()),
                   // if (uid == null)
                   //   _PageViewButton(uid: uid, index: 6, text: 'signUp'),
-                  if (uid != null && _size.width >= 750)
+                  if (uid != null && _size.width > 750)
                     Card(
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.only(
@@ -113,7 +113,7 @@ class _PageViewButton extends StatelessWidget {
             _view.doSearch(value: false);
           },
           child: _SelectableContainer(
-            selected: _view.view == index,
+            selected: _view.webIndex == index,
             text: text,
           ),
         );

@@ -17,7 +17,7 @@ class SearchRecipesInDb extends HookWidget {
           child: TextField(
             controller: _view.searchCtrl,
             onSubmitted: (submitted) {
-              _view.search();
+              _view.search(context);
               if (!kIsWeb) {
                 FocusScope.of(context).requestFocus(FocusNode());
               }

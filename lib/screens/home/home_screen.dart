@@ -8,25 +8,29 @@ import 'package:myxmi/screens/home/widgets/app_bottom_navigation.dart';
 import 'package:myxmi/screens/home/widgets/body.dart';
 import 'package:myxmi/screens/home/widgets/web_appbar.dart';
 
+// "saveAllRecipes": "Save all your recipes in one place",
+//  "saveAllRecipesDetails": "Easily save recipes from any site or app to a digital recipe box, making it easy to create, organize, and share your cooking inspiration.",
+
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
     return Consumer(
       builder: (_, ref, __) {
-        final _view = ref.watch(homeScreenProvider);
+        final _home = ref.watch(homeScreenProvider);
         final _user = ref.watch(userProvider);
         final _router = ref.watch(routerProvider);
-        int? _viewIndex;
-        if (_view.view == null) {
-          _viewIndex = kIsWeb ? 0 : 1;
-        } else {
-          _viewIndex = _view.view;
-        }
+        final int _viewIndex =
+            kIsWeb && _size.width > 700 ? _home.webIndex : _home.bottomNavIndex;
+        // if (_home.view == null) {
+        //   _viewIndex = kIsWeb ? 0 : 1;
+        // } else {
+        //   _viewIndex = _home.view;
+        // }
         return Scaffold(
           extendBodyBehindAppBar: true,
           resizeToAvoidBottomInset: true,
-          appBar: _size.width >= 700
+          appBar: _size.width > 700
               ? AppBar(
                   automaticallyImplyLeading: false,
                   flexibleSpace: WebAppBar(uid: _user.account?.uid),
@@ -51,7 +55,7 @@ class HomeScreen extends StatelessWidget {
                   : FloatingActionButton(
                       backgroundColor: Colors.red,
                       onPressed: () {
-                        _view.changeViewIndex(
+                        _home.changeViewIndex(
                           index: 4,
                           uid: _user.account?.uid,
                         );

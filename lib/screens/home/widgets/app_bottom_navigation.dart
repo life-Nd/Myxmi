@@ -9,9 +9,9 @@ class AppBottomNavigation extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (_, ref, __) {
-        final _view = ref.watch(homeScreenProvider);
+        final _home = ref.watch(homeScreenProvider);
         final _user = ref.watch(userProvider);
-        final int _viewIndex = _view.view!;
+        final int _viewIndex = _home.bottomNavIndex;
         return BottomNavigationBar(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           selectedItemColor:
@@ -50,8 +50,11 @@ class AppBottomNavigation extends StatelessWidget {
           ],
           currentIndex: _viewIndex,
           onTap: (index) {
-            _view.searchRecipesInDb = false;
-            _view.changeViewIndex(index: index, uid: _user.account?.uid);
+            _home.searchRecipesInDb = false;
+            _home.changeViewIndex(
+              index: index,
+              uid: _user.account?.uid,
+            );
           },
         );
       },

@@ -56,6 +56,8 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
+    final Size _size = MediaQuery.of(context).size;
+    final bool _isLandscape = _size.width > 700;
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.only(top: 8.0),
@@ -63,7 +65,10 @@ class _BodyState extends State<Body> {
           builder: (_, ref, child) {
             final _view = ref.watch(homeScreenProvider);
             final _user = ref.watch(userProvider);
-            return _build(_view.view, _user.account?.uid);
+            return _build(
+              _isLandscape ? _view.webIndex : _view.bottomNavIndex,
+              _user.account?.uid,
+            );
           },
         ),
       ),

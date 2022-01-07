@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -10,22 +10,26 @@ final homeScreenProvider = ChangeNotifierProvider<HomeScreenProvider>(
 class HomeScreenProvider extends ChangeNotifier {
   bool showDownloadDialog = true;
   bool showCalendarBottom = false;
-  int? _view;
-
+  // int? view;
   TextEditingController searchCtrl = TextEditingController();
   bool? searchRecipesInDb = false;
   bool loading = false;
-  int? get view {
-    if (_view == null) {
-      return _view = kIsWeb ? 9 : 0;
-    } else {
-      return _view;
-    }
-  }
+  int webIndex = -1;
+  int bottomNavIndex = 0;
+  // int? getView(BuildContext context) {
+  //   if (_view == null) {
+  //     debugPrint('view is null');
+  //     return _view = kIsWeb ? 9 : 0;
+  //   } else {
+  //     debugPrint('view is $_view');
+  //     return _view;
+  //   }
+  // }
 
   // ignore: use_setters_to_change_properties
   void changeView({required int index}) {
-    _view = index;
+    webIndex = -index;
+    bottomNavIndex = index;
   }
 
   void changeBottom({bool? show}) {
@@ -38,13 +42,15 @@ class HomeScreenProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeViewIndex({required int index, required String? uid}) {
+  void changeViewIndex({
+    required int index,
+    required String? uid,
+  }) {
     changeView(index: index);
     searchCtrl.clear();
     searchRecipesInDb = false;
-    switch (view) {
-      case 2:
-        streamRecipesWith(key: 'uid', value: uid);
+    if (webIndex == 2 || bottomNavIndex == 2) {
+      streamRecipesWith(key: 'uid', value: uid);
     }
     notifyListeners();
   }
@@ -65,9 +71,9 @@ class HomeScreenProvider extends ChangeNotifier {
     return streamRecipesWith(key: searchKey, value: textToSearchWith());
   }
 
-  void search() {
+  void search(BuildContext context) {
     if (searchCtrl.text.isNotEmpty) {
-      if (view == 1) {
+      if (webIndex == 1 || bottomNavIndex == 1) {
         searchRecipesInDb = true;
       } else {
         searchWithCtrl(searchKey: 'title');
