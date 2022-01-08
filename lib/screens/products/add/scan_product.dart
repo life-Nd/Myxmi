@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/providers/home_screen.dart';
+import 'package:myxmi/providers/image.dart';
 import 'package:myxmi/providers/router.dart';
 import 'package:myxmi/providers/user.dart';
 import 'package:myxmi/screens/products/add/add_product_manually.dart';
@@ -9,6 +10,7 @@ import 'package:myxmi/screens/products/add/app_scanner.dart';
 import 'package:myxmi/screens/products/add/widgets/nutrition_details.dart';
 
 final TextEditingController _quantityCtrl = TextEditingController();
+String _code = '';
 
 class ScanProductScreen extends StatefulWidget {
   const ScanProductScreen({Key? key}) : super(key: key);
@@ -17,8 +19,6 @@ class ScanProductScreen extends StatefulWidget {
 }
 
 class _ScanProductScreenState extends State<ScanProductScreen> {
-  String _code = '';
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,6 +31,9 @@ class _ScanProductScreenState extends State<ScanProductScreen> {
                   return FloatingActionButton(
                     backgroundColor: Colors.green,
                     onPressed: () {
+                      // TODO This Reloads the data from the API
+                      // WHEN THE EXPIRATION DIALOG CLOSES the data is fetched again
+
                       setState(() {
                         _productScanned.enterProductDetails = true;
                       });
@@ -48,6 +51,7 @@ class _ScanProductScreenState extends State<ScanProductScreen> {
           final _router = ref.watch(routerProvider);
           final _product = ref.watch(productEntryProvider);
           final _productScannedProvider = ref.watch(productScannedProvider);
+          final _image = ref.watch(imageProvider);
           final _productName = _productScannedProvider.productName;
           final _photoUrl = _productScannedProvider.photoUrl;
           final _user = ref.watch(userProvider);
@@ -55,7 +59,9 @@ class _ScanProductScreenState extends State<ScanProductScreen> {
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const QuantityEntry(),
+                QuantityEntry(
+                  ctrl: _quantityCtrl,
+                ),
                 const SizedBox(
                   width: 4,
                 ),
@@ -65,19 +71,24 @@ class _ScanProductScreenState extends State<ScanProductScreen> {
                 ),
                 RawMaterialButton(
                   onPressed: () async {
-                    // TODO add product image to database before uploading the product
                     debugPrint(_user.account?.uid);
                     debugPrint(_productName);
                     debugPrint(_quantityCtrl.text);
                     debugPrint(_code);
                     debugPrint(_photoUrl);
-
+                    await _image.fileFromImageUrl(
+                      imageName: _productName!,
+                      imageUrl: _photoUrl!,
+                    );
+                    final String? _firestoreUrl =
+                        await _image.addImageToDb(context: context);
                     await _product.saveToDb(
                       uid: _user.account?.uid,
-                      name: _productName!,
+                      name: _productName,
                       quantity: _quantityCtrl.text,
+                      ingredientType: 'other',
                       barcode: _code,
-                      photoUrl: _photoUrl!,
+                      photoUrl: _firestoreUrl!,
                     );
                     _router.pushPage(name: '/home');
                   },

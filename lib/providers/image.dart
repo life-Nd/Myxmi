@@ -1,10 +1,12 @@
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
+
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -33,7 +35,7 @@ class ImageProvider extends ChangeNotifier {
     final pickedFile = await picker.pickImage(source: source, imageQuality: 77);
     if (pickedFile != null) {
       pickedFile.readAsBytes();
-      kIsWeb ? await getImageWeb(pickedFile) : getImageFile(pickedFile);
+      kIsWeb ? await getImageBrowser(pickedFile) : getImageFile(pickedFile);
       notifyListeners();
     } else {
       debugPrint('source is empty');
@@ -48,7 +50,7 @@ class ImageProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future getImageWeb(XFile file) async {
+  Future getImageBrowser(XFile file) async {
     debugPrint('file: ${file.path}');
     dataUint8 = await file.readAsBytes();
     imageWidget = Image.memory(dataUint8!);
@@ -101,6 +103,18 @@ class ImageProvider extends ChangeNotifier {
       }
     }
     notifyListeners();
+  }
+
+  Future<File> fileFromImageUrl({
+    required String imageUrl,
+    required String imageName,
+  }) async {
+    final response = await http.get(Uri.parse(imageUrl));
+    final documentDirectory = Directory.systemTemp;
+    final file = File('${documentDirectory.path}/$imageName.jpg');
+    file.writeAsBytesSync(response.bodyBytes);
+    imageFile = file;
+    return file;
   }
 
   Future<String?> addImageToDb({required BuildContext context}) async {

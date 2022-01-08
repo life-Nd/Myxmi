@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -5,10 +6,39 @@ import 'package:myxmi/screens/products/add/add_product_manually.dart';
 import 'package:openfoodfacts/model/Nutriments.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
 
-class NutritionDetails extends StatelessWidget {
+class NutritionDetails extends StatefulWidget {
   final String? code;
 
   const NutritionDetails({Key? key, this.code}) : super(key: key);
+
+  @override
+  State<NutritionDetails> createState() => _NutritionDetailsState();
+}
+
+class _NutritionDetailsState extends State<NutritionDetails> {
+  Future<Product?>? getProduct;
+  @override
+  void initState() {
+    getProduct = _getProduct(widget.code!);
+    super.initState();
+  }
+
+  Future<Product?> _getProduct(String code) async {
+    final ProductQueryConfiguration _configuration = ProductQueryConfiguration(
+      code,
+      language: OpenFoodFactsLanguage.ENGLISH,
+      fields: [ProductField.ALL],
+    );
+    final ProductResult _result =
+        await OpenFoodAPIClient.getProduct(_configuration);
+
+    if (_result.status == 1) {
+      return _result.product;
+    } else {
+      throw Exception('product not found, please insert data for $code');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer(
@@ -16,19 +46,28 @@ class NutritionDetails extends StatelessWidget {
         final _productScannedProvider = ref.watch(productScannedProvider);
         final _productEntryProvider = ref.watch(productEntryProvider);
         return FutureBuilder<Product?>(
-          future: _getProduct(code!),
+          future: getProduct,
           builder: (_, AsyncSnapshot<Product?> snapshot) {
             if (snapshot.hasData) {
               final _data = snapshot.data!;
               final Product _product = _data;
-
-              debugPrint('Product: ${_product.toJson()}');
+              debugPrint('🍅 Product: ${_product.toJson()}');
               final Nutriments _nutriments = _product.nutriments!;
+              debugPrint('🧨 Nutriments: ${_nutriments.toJson()}}');
+              // debugPrint('🙂  Details: ${_product.}');
               final String _ingredientsText = _product.ingredientsText ?? '';
-              _productScannedProvider.code = code;
+              final String _imageUrl = _product.images![0].url!;
+              // TODO Show Environemental facts
+              _productScannedProvider.code = widget.code;
               _productScannedProvider.productName = _product.productName;
-              _productScannedProvider.photoUrl = _product.images![0].url;
+              _productScannedProvider.photoUrl = _imageUrl;
               _productEntryProvider.type = _product.brands;
+              final CachedNetworkImage _image = CachedNetworkImage(
+                imageUrl: _imageUrl,
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    CircularProgressIndicator(value: downloadProgress.progress),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+              );
               return Card(
                 child: Stack(
                   alignment: Alignment.bottomCenter,
@@ -40,11 +79,7 @@ class NutritionDetails extends StatelessWidget {
                           child: Card(
                             child: ListTile(
                               contentPadding: const EdgeInsets.all(1),
-                              leading: Image.network(
-                                _product.images![0].url!,
-                                width: 77,
-                                height: 77,
-                              ),
+                              leading: _image,
                               title: Text(
                                 '${_product.productName}',
                               ),
@@ -282,22 +317,6 @@ class NutritionDetails extends StatelessWidget {
         );
       },
     );
-  }
-
-  Future<Product?> _getProduct(String code) async {
-    final ProductQueryConfiguration _configuration = ProductQueryConfiguration(
-      code,
-      language: OpenFoodFactsLanguage.ENGLISH,
-      fields: [ProductField.ALL],
-    );
-    final ProductResult _result =
-        await OpenFoodAPIClient.getProduct(_configuration);
-
-    if (_result.status == 1) {
-      return _result.product;
-    } else {
-      throw Exception('product not found, please insert data for $code');
-    }
   }
 }
 

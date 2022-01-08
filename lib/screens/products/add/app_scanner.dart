@@ -97,7 +97,7 @@ class _BarcodePermissionWidgetState extends State<_BarcodePermissionWidget> {
               return RawMaterialButton(
                 onPressed: () {
                   _router.pushPage(
-                    name: '/add-product',
+                    name: '/add-product-manually',
                   );
                 },
                 child: Text('manualInput'.tr()),

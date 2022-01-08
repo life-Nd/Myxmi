@@ -16,6 +16,7 @@ class ExpiryDateSetter extends HookWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              const Spacer(),
               if (_product.expiration != null)
                 Text(
                   formatTime(
@@ -31,6 +32,7 @@ class ExpiryDateSetter extends HookWidget {
                     DateTime.now(),
                   ),
                 ),
+              const Spacer(),
               IconButton(
                 onPressed: () async {
                   final _date = await showDatePicker(

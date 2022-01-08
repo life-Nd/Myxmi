@@ -6,6 +6,7 @@ import 'package:myxmi/providers/user.dart';
 import 'package:myxmi/screens/products/add/widgets/expiry_date_setter.dart';
 import 'package:myxmi/screens/products/add/widgets/mesure_selector.dart';
 import 'package:myxmi/screens/products/add/widgets/type_selector.dart';
+import 'package:myxmi/utils/image_selector.dart';
 
 final productEntryProvider = ChangeNotifierProvider<ProductEntryProvider>(
   (ref) => ProductEntryProvider(),
@@ -33,7 +34,13 @@ class _AddProductState extends State<AddProductManuallyScreen> {
           resizeToAvoidBottomInset: true,
           appBar: AppBar(
             title: Text('newProduct'.tr()),
+            actions: [
+              ImageSelector(
+                onComplete: () {},
+              ),
+            ],
           ),
+          // TOOD Add Iconbutton to add image of the product
           bottomNavigationBar: _nameCtrl.text.isNotEmpty &&
                   _product.mesureType.isNotEmpty
               ? RawMaterialButton(
@@ -50,13 +57,14 @@ class _AddProductState extends State<AddProductManuallyScreen> {
                             uid: _user.account?.uid,
                             name: _nameCtrl.text,
                             quantity: _quantityCtrl.text,
+                            ingredientType: _product.type!,
                             barcode: '${DateTime.now().millisecondsSinceEpoch}',
+                            // TODO Add Unknown product image if image is null
                             photoUrl:
                                 'https://firebasestorage.googleapis.com/v0/b/myxmi-94982.appspot.com/o/apples.png?alt=media&token=abfd857e-9812-4083-ae1e-514c515ca774',
                           );
                           _nameCtrl.clear();
                           _quantityCtrl.clear();
-
                           if (!mounted) return;
                           Navigator.of(context).pop();
                         }
@@ -147,7 +155,9 @@ class _AddProductState extends State<AddProductManuallyScreen> {
                     ),
                   ),
                   const MesureTypeSetter(),
-                  const QuantityEntry(),
+                  QuantityEntry(
+                    ctrl: _quantityCtrl,
+                  ),
                   const SizedBox(
                     width: 4,
                   ),
@@ -168,7 +178,9 @@ class _AddProductState extends State<AddProductManuallyScreen> {
 class QuantityEntry extends StatelessWidget {
   const QuantityEntry({
     Key? key,
+    required this.ctrl,
   }) : super(key: key);
+  final TextEditingController ctrl;
 
   @override
   Widget build(BuildContext context) {
@@ -208,7 +220,7 @@ class QuantityEntry extends StatelessWidget {
               padding: const EdgeInsets.only(left: 60, right: 60),
               child: TextField(
                 keyboardType: TextInputType.number,
-                controller: _quantityCtrl,
+                controller: ctrl,
                 decoration: InputDecoration(
                   isDense: true,
                   hintText: _product.mesureType,

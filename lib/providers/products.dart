@@ -51,11 +51,12 @@ class ProductEntryProvider extends ChangeNotifier {
     required String barcode,
     required String name,
     required String photoUrl,
+    required String ingredientType,
   }) async {
     final String _now = '${DateTime.now().millisecondsSinceEpoch}';
     final SharedPreferences _prefs = await SharedPreferences.getInstance();
     await _prefs.setStringList(
-      _now,
+      barcode,
       [quantity.trim(), expiration!.millisecondsSinceEpoch.toString()],
     ).then(
       (bool success) {
@@ -66,14 +67,13 @@ class ProductEntryProvider extends ChangeNotifier {
     debugPrint(
       '--SHAREDPREFERENCES-- Writing: $_now:[${quantity.trim()},${expiration!.millisecondsSinceEpoch.toString()}]',
     );
+
     await FirebaseFirestore.instance.collection('Products').doc(uid).set(
       {
         barcode: {
           'name': name.toLowerCase().trim(),
           'mesureType': mesureType.trim(),
-          'ingredientType': type!.trim(),
-          'photoUrl': photoUrl.trim(),
-          'quantity': quantity.trim(),
+          'imageUrl': photoUrl.trim(),
           'time': _now,
         },
       },

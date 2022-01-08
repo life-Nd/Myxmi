@@ -57,16 +57,17 @@ class ProductDetails extends StatelessWidget {
                               fontSize: 20,
                             ),
                           ),
-                          Text(
-                            '${product!.ingredientType!.tr()} ',
-                            style: const TextStyle(
-                              fontSize: 15,
-                            ),
-                          ),
+                          // Text(
+                          //   '${product!.ingredientType!.tr()} ',
+                          //   style: const TextStyle(
+                          //     fontSize: 15,
+                          //     color: Colors.grey,
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
-                    const Spacer(),
+
                     StatefulBuilder(
                       builder: (context, StateSetter setState) {
                         final String _productLeft = product?.left ?? '0';
@@ -183,7 +184,10 @@ class ProductDetails extends StatelessWidget {
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
                                 '$_expirationFormatted ',
-                                style: const TextStyle(fontSize: 20),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.grey.shade700,
+                                ),
                               ),
                             ),
                           ),
