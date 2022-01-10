@@ -45,14 +45,20 @@ class _ProductsListState extends State<ProductsList> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text(
-                          widget.type == 'EditProducts'
-                              ? 'delete'.tr()
-                              : 'hide'.tr(),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 17,
-                            color: Colors.white,
+                        RawMaterialButton(
+                          onPressed: () {
+                            // editProducts(_user.account!.uid);
+                            debugPrint('💎 DELETE');
+                          },
+                          child: Text(
+                            widget.type == 'EditProducts'
+                                ? 'delete'.tr()
+                                : 'hide'.tr(),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                         const SizedBox(
@@ -63,7 +69,9 @@ class _ProductsListState extends State<ProductsList> {
                           color: Colors.white,
                           type: widget.type,
                           products: widget.products,
-                          setState: () => setState(() {}),
+                          setState: () => setState(() {
+                            debugPrint('Delete tapped');
+                          }),
                         ),
                       ],
                     ),

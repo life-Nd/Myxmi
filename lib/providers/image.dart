@@ -60,7 +60,7 @@ class ImageProvider extends ChangeNotifier {
   }
 
   Future cropImage() async {
-    if (!kIsWeb) {
+    if (imageFile != null && !kIsWeb) {
       final File? croppedFile = await ImageCropper.cropImage(
         sourcePath: imageFile!.path,
         aspectRatioPresets: Platform.isAndroid
@@ -95,14 +95,15 @@ class ImageProvider extends ChangeNotifier {
 
       if (croppedFile != null) {
         imageFile = croppedFile;
+        debugPrint('imageFile: ${imageFile!.path}');
         state = AppState.cropped;
-        notifyListeners();
+        debugPrint('state: $state');
       } else {
         state = AppState.empty;
-        notifyListeners();
+        imageFile = null;
       }
     }
-    notifyListeners();
+    return imageFile;
   }
 
   Future<File> fileFromImageUrl({
@@ -123,6 +124,7 @@ class ImageProvider extends ChangeNotifier {
     final rng = Random();
     final _random = rng.nextInt(90000) + 10000;
     imageId = '$timeStamp-$_random}';
+    debugPrint('imageId: $imageId');
     final firebaseStorageRef = firebase_storage.FirebaseStorage.instance
         .ref()
         .child("$timeStamp-$_random.jpg");

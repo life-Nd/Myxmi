@@ -62,6 +62,7 @@ class ImageSelector extends HookWidget {
                                     onTap: () {
                                       ScaffoldMessenger.of(context)
                                           .hideCurrentSnackBar();
+                                      debugPrint('image from gallery');
                                       _image
                                           .pickImage(ImageSource.gallery)
                                           .whenComplete(
@@ -71,6 +72,9 @@ class ImageSelector extends HookWidget {
                                               if (value != null) {
                                                 if (_image.state ==
                                                     AppState.cropped) {
+                                                  debugPrint(
+                                                    '✅  📷 imageCropped: $value',
+                                                  );
                                                   onComplete();
                                                 } else {
                                                   debugPrint('nothing cropped');

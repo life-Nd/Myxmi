@@ -25,7 +25,20 @@ class EditProductButton extends StatelessWidget {
     try {
       if (TargetPlatform.iOS == _platform ||
           TargetPlatform.android == _platform) {
-        return Container();
+        return Consumer(
+          builder: (_, ref, child) {
+            final _user = ref.watch(userProvider);
+            return IconButton(
+              padding: const EdgeInsets.all(1),
+              icon: Icon(
+                type == 'EditProducts' ? Icons.delete : Icons.visibility_off,
+                color: color,
+                size: 30,
+              ),
+              onPressed: () => editProducts(_user.account!.uid),
+            );
+          },
+        );
       }
     } catch (error) {
       return Consumer(
