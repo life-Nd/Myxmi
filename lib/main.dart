@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/configure_nonweb.dart'
     if (dart.library.html) 'package:myxmi/configure_nonweb.dart';
@@ -25,6 +26,7 @@ Future<void> main() async {
   if (kIsWeb) {
     FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
   }
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
 
   runApp(
     EasyLocalization(

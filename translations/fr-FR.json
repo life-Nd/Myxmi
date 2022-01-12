@@ -327,5 +327,6 @@
    "organizePantry": "Organisez votre garde-manger",
    "organizePantryDetails": "Gardez un oeil sur les quantités en stock et les dates d'expirations des produits dans votre garde-manger et les ajouter à votre panier.",
    "createGroceryList": "Créez une liste de courses",
-   "createGroceryListDetails": "Avec juste un tap ajouter un produit à votre liste de courses et modifier votre liste comme vous voulez."
+   "createGroceryListDetails": "Avec juste un tap ajouter un produit à votre liste de courses et modifier votre liste comme vous voulez.",
+   "poweredBy":"Alimenté par"
 }

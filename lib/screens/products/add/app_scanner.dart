@@ -4,10 +4,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/providers/router.dart';
+import 'package:myxmi/screens/products/add/widgets/nutrition_details.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 // late String _label;
 late Function(String result) _resultCallback;
+bool _isFlashOn = false;
 
 class AppBarcodeScannerWidget extends StatefulWidget {
   AppBarcodeScannerWidget.defaultStyle({
@@ -155,6 +157,9 @@ class _AppBarcodeScannerWidgetState extends State<_BarcodeScannerWidget> {
           Future.delayed(const Duration(seconds: 2), () {
             _scannerController.startCamera();
             _scannerController.startCameraPreview();
+            if (_scannerController.isOpenFlash) {
+              _isFlashOn = _scannerController.isOpenFlash;
+            }
           });
         } else {
           _scannerController.startCamera();
@@ -174,21 +179,111 @@ class _AppBarcodeScannerWidgetState extends State<_BarcodeScannerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.topRight,
-      children: [
-        _getScanWidgetByPlatform(),
-        Padding(
-          padding: const EdgeInsets.all(40.0),
-          child: IconButton(
-            onPressed: () {
-              _scannerController.startCameraPreview();
-            },
-            icon: const Icon(Icons.refresh_rounded),
-            color: Colors.red,
-          ),
-        ),
-      ],
+    return Consumer(
+      builder: (_, ref, child) {
+        final _productScanned = ref.watch(productScannedProvider);
+        return Stack(
+          alignment: Alignment.topRight,
+          children: [
+            _getScanWidgetByPlatform(),
+            Column(
+              children: [
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Row(
+                          children: [
+                            IconButton(
+                              padding: const EdgeInsets.all(2),
+                              iconSize: 30,
+                              onPressed: () {
+                                setState(
+                                  () {
+                                    if (_scannerController.isOpenFlash) {
+                                      _isFlashOn = false;
+                                      _scannerController.closeFlash();
+                                    } else {
+                                      _isFlashOn = true;
+                                      _scannerController.openFlash();
+                                    }
+                                  },
+                                );
+                              },
+                              icon: Icon(
+                                _isFlashOn ? Icons.flash_on : Icons.flash_off,
+                                size: 30,
+                              ),
+                              color: Colors.white,
+                            ),
+                            IconButton(
+                              padding: const EdgeInsets.all(2),
+                              iconSize: 30,
+                              onPressed: () {
+                                // TODO When reset delete old scanned data
+                                _productScanned.reset();
+                                _scannerController.startCameraPreview();
+                              },
+                              icon: const Icon(Icons.refresh_rounded),
+                              color: Colors.red,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: Card(
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
+                          : Theme.of(context).cardColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                          10,
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          left: 4.0,
+                          right: 4.0,
+                          top: 2,
+                          bottom: 2,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              '${'poweredBy'.tr()}: ',
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 17,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 70,
+                              width: 150,
+                              child: Image.asset(
+                                'assets/Open_Food_Facts_logo.png',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 

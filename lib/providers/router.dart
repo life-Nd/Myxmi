@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/app.dart';
@@ -181,7 +184,9 @@ class RouterProvider extends RouterDelegate<List<RouteSettings>>
         break;
 
       case '/scan-product':
-        child = const ScanProductScreen();
+        child = !kIsWeb || kIsWeb && Platform.isAndroid || Platform.isIOS
+            ? const ScanProductScreen()
+            : const AddProductManuallyScreen();
         break;
       case '/add-product-manually':
         child = const AddProductManuallyScreen();

@@ -3,13 +3,14 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/screens/products/add/add_product_manually.dart';
+// import 'package:openfoodfacts/model/EcoscoreData.dart';
 import 'package:openfoodfacts/model/Nutriments.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
 
 class NutritionDetails extends StatefulWidget {
-  final String? code;
+  final String code;
 
-  const NutritionDetails({Key? key, this.code}) : super(key: key);
+  const NutritionDetails({Key? key, this.code = ''}) : super(key: key);
 
   @override
   State<NutritionDetails> createState() => _NutritionDetailsState();
@@ -19,7 +20,7 @@ class _NutritionDetailsState extends State<NutritionDetails> {
   Future<Product?>? getProduct;
   @override
   void initState() {
-    getProduct = _getProduct(widget.code!);
+    getProduct = _getProduct(widget.code);
     super.initState();
   }
 
@@ -54,14 +55,17 @@ class _NutritionDetailsState extends State<NutritionDetails> {
               debugPrint('🍅 Product: ${_product.toJson()}');
               final Nutriments _nutriments = _product.nutriments!;
               debugPrint('🧨 Nutriments: ${_nutriments.toJson()}}');
-              // debugPrint('🙂  Details: ${_product.}');
               final String _ingredientsText = _product.ingredientsText ?? '';
-              final String _imageUrl = _product.images![0].url!;
+              final String _imageUrl = _product.imageFrontUrl!;
               // TODO Show Environemental facts
+              // TODO if status return is null show right widget
+
               _productScannedProvider.code = widget.code;
               _productScannedProvider.productName = _product.productName;
               _productScannedProvider.photoUrl = _imageUrl;
               _productEntryProvider.type = _product.brands;
+              final String _nutriscore = _product.nutriscore ?? '';
+              debugPrint('🧽 _imageUrl: $_imageUrl');
               final CachedNetworkImage _image = CachedNetworkImage(
                 imageUrl: _imageUrl,
                 progressIndicatorBuilder: (context, url, downloadProgress) =>
@@ -78,6 +82,7 @@ class _NutritionDetailsState extends State<NutritionDetails> {
                           padding: const EdgeInsets.all(8.0),
                           child: Card(
                             child: ListTile(
+                              dense: false,
                               contentPadding: const EdgeInsets.all(1),
                               leading: _image,
                               title: Text(
@@ -86,6 +91,116 @@ class _NutritionDetailsState extends State<NutritionDetails> {
                               subtitle: Text(
                                 '${_product.countriesTags}',
                               ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                Card(
+                                  color: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      children: [
+                                        const Text(
+                                          'NUTRI-SCORE',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              _NutriscoreCard(
+                                                letter: 'A',
+                                                color: Colors.green,
+                                                nutriScore: _nutriscore,
+                                              ),
+                                              _NutriscoreCard(
+                                                letter: 'B',
+                                                color: Colors.lightGreen,
+                                                nutriScore: _nutriscore,
+                                              ),
+                                              _NutriscoreCard(
+                                                letter: 'C',
+                                                color: Colors.yellow,
+                                                nutriScore: _nutriscore,
+                                              ),
+                                              _NutriscoreCard(
+                                                letter: 'D',
+                                                color: Colors.orange,
+                                                nutriScore: _nutriscore,
+                                              ),
+                                              _NutriscoreCard(
+                                                letter: 'E',
+                                                color: Colors.deepOrange,
+                                                nutriScore: _nutriscore,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      children: [
+                                        const Text('NOVA'),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            children: [
+                                              _NutriscoreCard(
+                                                letter:
+                                                    '${_nutriments.novaGroup}',
+                                                color: Colors.red,
+                                                nutriScore:
+                                                    '${_nutriments.novaGroup}',
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                // Card(
+                                //   shape: RoundedRectangleBorder(
+                                //     borderRadius: BorderRadius.circular(10),
+                                //   ),
+                                //   margin: const EdgeInsets.all(4),
+                                //   child: Row(
+                                //     children: [
+                                //       if (_product.ecoscoreScore != null)
+                                //         const Icon(Icons.device_unknown_sharp)
+                                //       else
+                                //         const Icon(Icons.device_unknown_sharp),
+                                //       const Expanded(
+                                //         child: Text(
+                                //           'ECO SCORE',
+                                //         ),
+                                //       ),
+                                //     ],
+                                //   ),
+                                // ),
+                              ],
                             ),
                           ),
                         ),
@@ -320,14 +435,76 @@ class _NutritionDetailsState extends State<NutritionDetails> {
   }
 }
 
-final productScannedProvider = Provider<ProductScannedFromApiProvider>(
+class _NutriscoreCard extends StatelessWidget {
+  final String letter;
+  final Color color;
+  final String nutriScore;
+  const _NutriscoreCard({
+    Key? key,
+    required this.letter,
+    required this.color,
+    this.nutriScore = '',
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    debugPrint('nutriScore: $nutriScore');
+
+    final bool _selected = nutriScore.toUpperCase() == letter;
+
+    return Card(
+      elevation: _selected ? 20 : 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomLeft: letter == 'A' ? const Radius.circular(10) : Radius.zero,
+          topLeft: letter == 'A' ? const Radius.circular(10) : Radius.zero,
+          bottomRight: letter == 'E' ? const Radius.circular(10) : Radius.zero,
+          topRight: letter == 'E' ? const Radius.circular(10) : Radius.zero,
+        ),
+      ),
+      margin: _selected ? const EdgeInsets.all(4) : EdgeInsets.zero,
+      child: Container(
+        // margin: _selected ? const EdgeInsets.all(4) : EdgeInsets.zero,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+            bottomLeft: letter == 'A' ? const Radius.circular(10) : Radius.zero,
+            topLeft: letter == 'A' ? const Radius.circular(10) : Radius.zero,
+            bottomRight:
+                letter == 'E' ? const Radius.circular(10) : Radius.zero,
+            topRight: letter == 'E' ? const Radius.circular(10) : Radius.zero,
+          ),
+          color: nutriScore.isNotEmpty ? color : Colors.grey,
+        ),
+        padding: const EdgeInsets.all(10),
+        child: Text(
+          letter,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: _selected ? 44 : 20,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+final productScannedProvider =
+    ChangeNotifierProvider<ProductScannedFromApiProvider>(
   (ref) => ProductScannedFromApiProvider(),
 );
 
-class ProductScannedFromApiProvider {
-  String? code;
+class ProductScannedFromApiProvider extends ChangeNotifier {
+  String code = '';
   String? productName;
   String? photoUrl;
   bool enterProductDetails = false;
   bool dataFoundWithCode = false;
+  void reset() {
+    code = '';
+    productName = '';
+    photoUrl = '';
+    enterProductDetails = false;
+    dataFoundWithCode = false;
+    notifyListeners();
+  }
 }

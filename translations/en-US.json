@@ -321,5 +321,6 @@
    "organizePantry": "Organize your pantry",
    "organizePantryDetails": "Keep track of the quantities in stock and expiration dates of the products in your pantry.",
    "createGroceryList": "Create a grocery list",
-   "createGroceryListDetails": "With just one tap add the product to your grocery list and edit your list on the go."
+   "createGroceryListDetails": "With just one tap add the product to your grocery list and edit your list on the go.",
+   "poweredBy":"Powered By"
 }
