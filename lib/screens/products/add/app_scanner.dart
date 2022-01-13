@@ -9,7 +9,6 @@ import 'package:permission_handler/permission_handler.dart';
 
 // late String _label;
 late Function(String result) _resultCallback;
-bool _isFlashOn = false;
 
 class AppBarcodeScannerWidget extends StatefulWidget {
   AppBarcodeScannerWidget.defaultStyle({
@@ -92,6 +91,15 @@ class _BarcodePermissionWidgetState extends State<_BarcodePermissionWidget> {
                   ),
                 ),
         ),
+        Container(
+          margin: const EdgeInsets.only(top: 8),
+          height: 7,
+          width: 77,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Colors.black,
+          ),
+        ),
         if (_useCameraScan) ...[
           Consumer(
             builder: (_, ref, child) {
@@ -157,9 +165,6 @@ class _AppBarcodeScannerWidgetState extends State<_BarcodeScannerWidget> {
           Future.delayed(const Duration(seconds: 2), () {
             _scannerController.startCamera();
             _scannerController.startCameraPreview();
-            if (_scannerController.isOpenFlash) {
-              _isFlashOn = _scannerController.isOpenFlash;
-            }
           });
         } else {
           _scannerController.startCamera();
@@ -172,118 +177,127 @@ class _AppBarcodeScannerWidgetState extends State<_BarcodeScannerWidget> {
   @override
   void dispose() {
     super.dispose();
-
     _scannerController.stopCameraPreview();
     _scannerController.stopCamera();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer(
-      builder: (_, ref, child) {
-        final _productScanned = ref.watch(productScannedProvider);
-        return Stack(
-          alignment: Alignment.topRight,
+    return Stack(
+      alignment: Alignment.topRight,
+      children: [
+        _getScanWidgetByPlatform(),
+        Column(
           children: [
-            _getScanWidgetByPlatform(),
-            Column(
-              children: [
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: Row(
-                          children: [
-                            IconButton(
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Row(
+                      children: [
+                        Consumer(
+                          builder: (_, ref, child) {
+                            final _scannerFlash =
+                                ref.watch(scannerFlashProvider);
+                            return IconButton(
                               padding: const EdgeInsets.all(2),
                               iconSize: 30,
                               onPressed: () {
-                                setState(
-                                  () {
-                                    if (_scannerController.isOpenFlash) {
-                                      _isFlashOn = false;
-                                      _scannerController.closeFlash();
-                                    } else {
-                                      _isFlashOn = true;
-                                      _scannerController.openFlash();
-                                    }
-                                  },
-                                );
+                                if (_scannerFlash.isFlashOn) {
+                                  _scannerController.closeFlash();
+                                  _scannerFlash.toggleFlash(value: false);
+                                } else {
+                                  _scannerController.openFlash();
+                                  _scannerFlash.toggleFlash(value: true);
+                                }
                               },
                               icon: Icon(
-                                _isFlashOn ? Icons.flash_on : Icons.flash_off,
+                                _scannerFlash.isFlashOn
+                                    ? Icons.flash_on
+                                    : Icons.flash_off,
                                 size: 30,
                               ),
                               color: Colors.white,
-                            ),
-                            IconButton(
+                            );
+                          },
+                        ),
+                        Consumer(
+                          builder: (_, ref, child) {
+                            final _productScanner =
+                                ref.read(productScannerProvider);
+
+                            return IconButton(
                               padding: const EdgeInsets.all(2),
                               iconSize: 30,
                               onPressed: () {
-                                // TODO When reset delete old scanned data
-                                _productScanned.reset();
-                                _scannerController.startCameraPreview();
+                                _productScanner.reset();
+                                Future.delayed(
+                                    const Duration(milliseconds: 2000), () {
+                                  _scannerController.startCameraPreview();
+                                });
                               },
                               icon: const Icon(Icons.refresh_rounded),
                               color: Colors.red,
-                            ),
-                          ],
+                            );
+                          },
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: Card(
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white
-                          : Theme.of(context).cardColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                          10,
-                        ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: Card(
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Theme.of(context).cardColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        10,
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          left: 4.0,
-                          right: 4.0,
-                          top: 2,
-                          bottom: 2,
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              '${'poweredBy'.tr()}: ',
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 17,
-                              ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 4.0,
+                        right: 4.0,
+                        top: 2,
+                        bottom: 2,
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            '${'poweredBy'.tr()}: ',
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 17,
                             ),
-                            SizedBox(
-                              height: 70,
-                              width: 150,
-                              child: Image.asset(
-                                'assets/Open_Food_Facts_logo.png',
-                              ),
+                          ),
+                          SizedBox(
+                            height: 70,
+                            width: 150,
+                            child: Image.asset(
+                              'assets/Open_Food_Facts_logo.png',
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
-              ],
+              ),
             ),
           ],
-        );
-      },
+        ),
+      ],
     );
   }
 

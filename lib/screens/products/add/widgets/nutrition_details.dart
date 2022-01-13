@@ -2,27 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myxmi/screens/products/add/add_product_manually.dart';
-// import 'package:openfoodfacts/model/EcoscoreData.dart';
+import 'package:myxmi/utils/loading_column.dart';
+import 'package:myxmi/utils/no_data.dart';
 import 'package:openfoodfacts/model/Nutriments.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
 
-class NutritionDetails extends StatefulWidget {
-  final String code;
-
-  const NutritionDetails({Key? key, this.code = ''}) : super(key: key);
-
-  @override
-  State<NutritionDetails> createState() => _NutritionDetailsState();
-}
-
-class _NutritionDetailsState extends State<NutritionDetails> {
-  Future<Product?>? getProduct;
-  @override
-  void initState() {
-    getProduct = _getProduct(widget.code);
-    super.initState();
-  }
+class NutritionDetails extends StatelessWidget {
+  const NutritionDetails({Key? key}) : super(key: key);
 
   Future<Product?> _getProduct(String code) async {
     final ProductQueryConfiguration _configuration = ProductQueryConfiguration(
@@ -44,11 +30,19 @@ class _NutritionDetailsState extends State<NutritionDetails> {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (_, ref, watch) {
-        final _productScannedProvider = ref.watch(productScannedProvider);
-        final _productEntryProvider = ref.watch(productEntryProvider);
+        final _productScannedProvider = ref.watch(productScannerProvider);
+        debugPrint('_NutritionDetailsState initState');
         return FutureBuilder<Product?>(
-          future: getProduct,
+          future: _getProduct(_productScannedProvider.code),
           builder: (_, AsyncSnapshot<Product?> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const LoadingColumn();
+            }
+            if (!snapshot.hasData) {
+              return const NoData(
+                type: 'product',
+              );
+            }
             if (snapshot.hasData) {
               final _data = snapshot.data!;
               final Product _product = _data;
@@ -57,13 +51,11 @@ class _NutritionDetailsState extends State<NutritionDetails> {
               debugPrint('🧨 Nutriments: ${_nutriments.toJson()}}');
               final String _ingredientsText = _product.ingredientsText ?? '';
               final String _imageUrl = _product.imageFrontUrl!;
-              // TODO Show Environemental facts
-              // TODO if status return is null show right widget
 
-              _productScannedProvider.code = widget.code;
+              // TODO Show Environemental facts
               _productScannedProvider.productName = _product.productName;
               _productScannedProvider.photoUrl = _imageUrl;
-              _productEntryProvider.type = _product.brands;
+              // _productEntryProvider.type = _product.brands;
               final String _nutriscore = _product.nutriscore ?? '';
               debugPrint('🧽 _imageUrl: $_imageUrl');
               final CachedNetworkImage _image = CachedNetworkImage(
@@ -488,23 +480,47 @@ class _NutriscoreCard extends StatelessWidget {
   }
 }
 
-final productScannedProvider =
-    ChangeNotifierProvider<ProductScannedFromApiProvider>(
-  (ref) => ProductScannedFromApiProvider(),
+final productScannerProvider = ChangeNotifierProvider<ProductScannerProvider>(
+  (ref) => ProductScannerProvider(),
 );
 
-class ProductScannedFromApiProvider extends ChangeNotifier {
+class ProductScannerProvider extends ChangeNotifier {
   String code = '';
   String? productName;
   String? photoUrl;
+
   bool enterProductDetails = false;
   bool dataFoundWithCode = false;
+
+  void setCode(String _code) {
+    code = _code;
+    notifyListeners();
+  }
+
+  void changeEnterProductDetails() {
+    enterProductDetails = true;
+    notifyListeners();
+  }
+
   void reset() {
     code = '';
     productName = '';
     photoUrl = '';
     enterProductDetails = false;
     dataFoundWithCode = false;
+    notifyListeners();
+  }
+}
+
+final scannerFlashProvider = ChangeNotifierProvider<ScannerFlashProvider>(
+  (ref) => ScannerFlashProvider(),
+);
+
+class ScannerFlashProvider extends ChangeNotifier {
+  bool isFlashOn = false;
+
+  void toggleFlash({bool? value}) {
+    isFlashOn = value!;
     notifyListeners();
   }
 }

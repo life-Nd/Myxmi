@@ -59,9 +59,8 @@ class _AddProductState extends State<AddProductManuallyScreen> {
                             quantity: _quantityCtrl.text,
                             ingredientType: _product.type!,
                             barcode: '${DateTime.now().millisecondsSinceEpoch}',
-                            // TODO Add Unknown product image if image is null
                             photoUrl:
-                                'https://firebasestorage.googleapis.com/v0/b/myxmi-94982.appspot.com/o/apples.png?alt=media&token=abfd857e-9812-4083-ae1e-514c515ca774',
+                                'https://firebasestorage.googleapis.com/v0/b/myxmi-94982.appspot.com/o/file-unknown.png?alt=media&token=1ad45eb7-b8a2-4bab-aacb-eb77dfb88e34',
                           );
                           _nameCtrl.clear();
                           _quantityCtrl.clear();
