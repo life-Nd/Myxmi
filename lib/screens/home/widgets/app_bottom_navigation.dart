@@ -28,7 +28,7 @@ class AppBottomNavigation extends StatelessWidget {
               icon: const Icon(Icons.menu_book_outlined),
             ),
             BottomNavigationBarItem(
-              label: 'planner'.tr(),
+              label: 'calendar'.tr(),
               icon: const Icon(Icons.calendar_today_rounded),
             ),
             BottomNavigationBarItem(

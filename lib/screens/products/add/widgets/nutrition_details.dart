@@ -5,19 +5,29 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/utils/loading_column.dart';
 import 'package:myxmi/utils/no_data.dart';
 import 'package:openfoodfacts/model/Nutriments.dart';
+// import 'package:openfoodfacts/model/UserAgent.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
+// import 'package:package_info/package_info.dart';
 
 class NutritionDetails extends StatelessWidget {
   const NutritionDetails({Key? key}) : super(key: key);
 
   Future<Product?> _getProduct(String code) async {
+    // final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    // final UserAgent _userAgent = UserAgent(
+    //   name: 'Myxmi',
+    //   version: packageInfo.version,
+    //   system: '',
+    //   url: 'https://myxmi.app/',
+    // );
     final ProductQueryConfiguration _configuration = ProductQueryConfiguration(
       code,
       language: OpenFoodFactsLanguage.ENGLISH,
       fields: [ProductField.ALL],
     );
-    final ProductResult _result =
-        await OpenFoodAPIClient.getProduct(_configuration);
+    final ProductResult _result = await OpenFoodAPIClient.getProduct(
+      _configuration,
+    );
 
     if (_result.status == 1) {
       return _result.product;
@@ -40,7 +50,7 @@ class NutritionDetails extends StatelessWidget {
             }
             if (!snapshot.hasData) {
               return const NoData(
-                type: 'product',
+                type: 'Product',
               );
             }
             if (snapshot.hasData) {
@@ -49,7 +59,7 @@ class NutritionDetails extends StatelessWidget {
               debugPrint('🍅 Product: ${_product.toJson()}');
               final Nutriments _nutriments = _product.nutriments!;
               debugPrint('🧨 Nutriments: ${_nutriments.toJson()}}');
-              final String _ingredientsText = _product.ingredientsText ?? '';
+              final List _ingredients = _product.ingredients ?? [];
               final String _imageUrl = _product.imageFrontUrl!;
 
               // TODO Show Environemental facts
@@ -409,7 +419,28 @@ class NutritionDetails extends StatelessWidget {
                           child: Card(
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text(_ingredientsText),
+                              child: GridView.builder(
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  crossAxisSpacing: 1,
+                                  mainAxisSpacing: 2,
+                                ),
+                                itemCount: _ingredients.length,
+                                itemBuilder: (_, int index) {
+                                  return Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        '${_ingredients[index]}',
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         ),

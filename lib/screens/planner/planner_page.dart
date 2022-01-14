@@ -7,6 +7,15 @@ import 'package:myxmi/providers/router.dart';
 import 'package:myxmi/providers/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/* TODO Planner should be changed to Calendar
+ Calendar could be used to show
+ Plan Meals (MEAL PLANNER)
+ Track Meals (MEAL TRACKER)
+ Read the same DB but separate
+ the Plan Meals from the Track Meals
+ by reading just the Done meals ($date: true) 
+ in the Calendar Db 
+*/
 final _plannerEventProvider = ChangeNotifierProvider<PlannerEventProvider>(
   (ref) => PlannerEventProvider(),
 );

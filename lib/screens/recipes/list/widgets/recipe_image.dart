@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -65,18 +66,18 @@ class RecipeImage extends StatelessWidget {
 
   Widget _image(bool _fitWidth) {
     return _RecipeImageClip(
-      imageUrl: recipe.imageUrl,
+      imageUrl: recipe.imageUrl!,
       fitWidth: _fitWidth,
-      title: recipe.title,
+      title: recipe.title!,
       subCategory: 'dinner',
     );
   }
 }
 
 class _RecipeImageClip extends HookWidget {
-  final String? imageUrl;
+  final String imageUrl;
   final String subCategory;
-  final String? title;
+  final String title;
   final bool fitWidth;
   const _RecipeImageClip({
     required this.imageUrl,
@@ -89,20 +90,22 @@ class _RecipeImageClip extends HookWidget {
     final Size _size = MediaQuery.of(context).size;
 
     final double _height = _size.height;
+    final CachedNetworkImage _image = CachedNetworkImage(
+      imageUrl: imageUrl,
+      progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+        child: CircularProgressIndicator(
+          value: downloadProgress.progress,
+        ),
+      ),
+      height: _height,
+      width: double.infinity,
+      fit: fitWidth ? BoxFit.fitWidth : BoxFit.values[4],
+      errorWidget: (context, url, error) => const Icon(Icons.error),
+    );
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      child: imageUrl != null
-          ? Image.network(
-              imageUrl!,
-              fit: fitWidth ? BoxFit.fitWidth : BoxFit.values[4],
-              cacheWidth: 1000,
-              cacheHeight: 1000,
-              height: _height,
-              width: double.infinity,
-              errorBuilder: (context, child, error) {
-                return const Center(child: CircularProgressIndicator());
-              },
-            )
+      child: imageUrl.isNotEmpty
+          ? _image
           : Stack(
               alignment: Alignment.center,
               children: [

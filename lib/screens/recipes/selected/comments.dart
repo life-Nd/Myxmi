@@ -18,14 +18,13 @@ class CommentsList extends StatelessWidget {
     if (data != null) {
       final Map? _data = data as Map<String, dynamic>?;
       final List? _keys = _data?.keys.toList();
-      debugPrint('---Keys--$_keys');
       return ListView.builder(
         itemCount: _keys?.length,
         shrinkWrap: true,
         itemBuilder: (_, int index) {
-          debugPrint('data[_keys[index]] :${data![_keys![index]]}');
+          final String _key = _keys![index] as String;
           final CommentModel _comment = CommentModel.fromSnapshot(
-            snapshot: data![_keys[index]] as Map<String, dynamic>,
+            snapshot: data![_key] as Map<String, dynamic>,
           );
           _comment.messageId = _keys[index] as String;
           return Column(

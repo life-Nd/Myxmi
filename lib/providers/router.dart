@@ -1,6 +1,6 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -168,7 +168,7 @@ class RouterProvider extends RouterDelegate<List<RouteSettings>>
         break;
 
       case '/planner':
-        child = const PlannerScreenPage();
+        child = const CalendarScreenPage();
         break;
 
       case '/add-recipe-infos':
@@ -256,13 +256,13 @@ class RouterProvider extends RouterDelegate<List<RouteSettings>>
   }
 }
 
-class PlannerScreenPage extends StatelessWidget {
-  const PlannerScreenPage({Key? key}) : super(key: key);
+class CalendarScreenPage extends StatelessWidget {
+  const CalendarScreenPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Planner'),
+        title: Text('calendar'.tr()),
       ),
       body: const PlannerPage(),
     );

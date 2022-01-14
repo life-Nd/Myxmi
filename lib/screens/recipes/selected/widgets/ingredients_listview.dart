@@ -16,35 +16,40 @@ class IngredientsInRecipeListView extends StatelessWidget {
     return Consumer(
       builder: (_, ref, child) {
         final _ingredients = ref.watch(ingredientsProvider);
-        final _checkedIngredients = _ingredients.checkedIngredients;
+
+        final List<String> _checkedIngredients =
+            _ingredients.checkedIngredients;
+        _ingredients.allIngredients = ingredients!;
         return ListView.builder(
           shrinkWrap: true,
           controller: _ctrl,
           itemCount: _keys.length,
           itemBuilder: (_, int index) {
-            final _checked = _checkedIngredients.contains(_keys[index]);
+            final String _key = _keys[index].toString();
+            final _checked = _checkedIngredients.contains(_key);
             try {
               int.parse(
-                _keys[index].toString(),
+                _key,
               );
               _isText = false;
             } catch (error) {
               _isText = true;
-              final String _key = _keys[index].toString();
               _keyText =
                   '${_key[0].toUpperCase()}${_key.substring(1, _key.length)}';
             }
-            debugPrint('_keys[index] $_keys[index]');
             return ListTile(
               onTap: () {
-                _ingredients.toggle('${_keys[index]}');
+                _ingredients.toggle(_key);
               },
               leading: IconButton(
                 icon: _checked
-                    ? const Icon(Icons.check_circle_outline)
+                    ? const Icon(
+                        Icons.check_circle_outline,
+                        color: Colors.green,
+                      )
                     : const Icon(Icons.radio_button_unchecked),
                 onPressed: () {
-                  _ingredients.toggle('${_keys[index]}');
+                  _ingredients.toggle(_key);
                 },
               ),
               title: Row(

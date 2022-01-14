@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -19,6 +20,17 @@ class ProductDetails extends StatelessWidget {
         final _product = ref.watch(productScannerProvider);
         final String _name =
             '${product!.name![0].toUpperCase()}${product!.name?.substring(1, product!.name?.length)}';
+
+        // final String _photoUrl = _product.photoUrl!;
+        final CachedNetworkImage _image = CachedNetworkImage(
+          imageUrl: product!.imageUrl!,
+          progressIndicatorBuilder: (context, url, downloadProgress) =>
+              CircleAvatar(
+            child: CircularProgressIndicator(value: downloadProgress.progress),
+          ),
+          errorWidget: (context, url, error) =>
+              const CircleAvatar(child: Center(child: Icon(Icons.error))),
+        );
         return Padding(
           padding:
               const EdgeInsets.only(left: 4.0, right: 4.0, bottom: 4, top: 4),
@@ -30,6 +42,8 @@ class ProductDetails extends StatelessWidget {
                   _product.code = product!.productId!;
                   return AlertDialog(
                     title: Text(_name),
+                    insetPadding: const EdgeInsets.all(1),
+                    contentPadding: const EdgeInsets.all(1),
                     content: const NutritionDetails(),
                     actions: [
                       RawMaterialButton(
@@ -64,9 +78,7 @@ class ProductDetails extends StatelessWidget {
                         width: 77,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
-                          child: Image.network(
-                            '${product!.imageUrl}',
-                          ),
+                          child: _image,
                         ),
                       ),
                       const SizedBox(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class IngredientsProvider extends ChangeNotifier {
+  Map allIngredients = {};
   List<String> checkedIngredients = [];
 
   void toggle(String key) {

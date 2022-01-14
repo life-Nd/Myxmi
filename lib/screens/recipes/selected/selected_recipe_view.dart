@@ -28,6 +28,7 @@ class _SelectedRecipeState extends State<SelectedRecipe> {
       builder: (_, ref, __) {
         final _recipe = ref.watch(recipeDetailsProvider);
         final _recipeDetails = _recipe.details;
+
         final _router = ref.watch(routerProvider);
         return Scaffold(
           floatingActionButtonLocation:

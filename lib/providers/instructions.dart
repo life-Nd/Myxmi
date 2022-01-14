@@ -4,7 +4,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class InstructionsProvider extends ChangeNotifier {
   String view = 'List';
   List instructions = [];
+  int pageViewIndex = 0;
   List<String> checked = [];
+  PageController pageController = PageController();
 
   void toggleView() {
     view = view == 'List' ? 'Page' : 'List';
@@ -19,6 +21,17 @@ class InstructionsProvider extends ChangeNotifier {
     } else {
       checked.add(key);
     }
+    notifyListeners();
+  }
+
+  void setPageViewIndex(int index) {
+    pageViewIndex = index;
+    pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+
     notifyListeners();
   }
 }
