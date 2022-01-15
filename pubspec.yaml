@@ -43,6 +43,8 @@ dependencies:
     sdk: flutter
   flutter_hooks: ^0.18.1
   flutter_rating_bar: ^4.0.0
+  flutter_web_plugins:
+      sdk: flutter
   google_mobile_ads: ^1.0.1
   google_sign_in: ^5.2.1
   hooks_riverpod: ^1.0.2

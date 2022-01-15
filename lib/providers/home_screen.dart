@@ -10,26 +10,15 @@ final homeScreenProvider = ChangeNotifierProvider<HomeScreenProvider>(
 class HomeScreenProvider extends ChangeNotifier {
   bool showDownloadDialog = true;
   bool showCalendarBottom = false;
-  // int? view;
   TextEditingController searchCtrl = TextEditingController();
   bool? searchRecipesInDb = false;
   bool loading = false;
   int webIndex = -1;
-  int bottomNavIndex = 0;
-  // int? getView(BuildContext context) {
-  //   if (_view == null) {
-  //     debugPrint('view is null');
-  //     return _view = kIsWeb ? 9 : 0;
-  //   } else {
-  //     debugPrint('view is $_view');
-  //     return _view;
-  //   }
-  // }
+  int bottomIndex = 0;
 
-  // ignore: use_setters_to_change_properties
   void changeView({required int index}) {
-    webIndex = -index;
-    bottomNavIndex = index;
+    webIndex = index;
+    bottomIndex = index;
   }
 
   void changeBottom({bool? show}) {
@@ -49,7 +38,7 @@ class HomeScreenProvider extends ChangeNotifier {
     changeView(index: index);
     searchCtrl.clear();
     searchRecipesInDb = false;
-    if (webIndex == 2 || bottomNavIndex == 2) {
+    if (webIndex == 2 || bottomIndex == 2) {
       streamRecipesWith(key: 'uid', value: uid);
     }
     notifyListeners();
@@ -73,7 +62,7 @@ class HomeScreenProvider extends ChangeNotifier {
 
   void search(BuildContext context) {
     if (searchCtrl.text.isNotEmpty) {
-      if (webIndex == 1 || bottomNavIndex == 1) {
+      if (webIndex == 1 || bottomIndex == 1) {
         searchRecipesInDb = true;
       } else {
         searchWithCtrl(searchKey: 'title');

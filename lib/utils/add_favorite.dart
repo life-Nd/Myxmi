@@ -32,6 +32,7 @@ class _AddFavoriteButtonState extends State<AddFavoriteButton> {
           _recipe.isLiked =
               _recipe.likes!.containsKey(_uid) && _recipe.likes![_uid] == true;
         }
+        final bool _isLiked = _recipe.isLiked ?? false;
         return StatefulBuilder(
           builder: (context, StateSetter stateSetter) {
             if (_user.account?.uid == null) {
@@ -54,7 +55,7 @@ class _AddFavoriteButtonState extends State<AddFavoriteButton> {
                   _router.pushPage(name: '/home');
                 },
               );
-            } else if (!_recipe.isLiked!) {
+            } else if (!_isLiked) {
               return IconButton(
                 icon: Container(
                   decoration: BoxDecoration(

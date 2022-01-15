@@ -4,10 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/configure_nonweb.dart'
-    if (dart.library.html) 'package:myxmi/configure_nonweb.dart';
+    if (dart.library.html) 'package:myxmi/configure_web.dart';
 import 'package:myxmi/navigator/information_parser.dart';
 import 'package:myxmi/providers/prefs.dart';
 import 'package:myxmi/providers/router.dart';
@@ -21,12 +20,10 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await EasyLocalization.ensureInitialized();
-  // !kIsWeb ?? MobileAds.instance.initialize();
 
   if (kIsWeb) {
     FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
   }
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
 
   runApp(
     EasyLocalization(

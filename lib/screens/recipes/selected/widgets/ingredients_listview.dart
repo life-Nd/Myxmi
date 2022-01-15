@@ -16,7 +16,6 @@ class IngredientsInRecipeListView extends StatelessWidget {
     return Consumer(
       builder: (_, ref, child) {
         final _ingredients = ref.watch(ingredientsProvider);
-
         final List<String> _checkedIngredients =
             _ingredients.checkedIngredients;
         _ingredients.allIngredients = ingredients!;

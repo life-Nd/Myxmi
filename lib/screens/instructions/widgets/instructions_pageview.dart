@@ -20,7 +20,6 @@ class InstructionsPageView extends StatelessWidget {
           itemCount: _keys.length,
           controller: _instructionsPageView.pageController,
           onPageChanged: (int viewIndex) {
-            debugPrint('viewIndex: $viewIndex');
             _instructionsPageView.setPageViewIndex(viewIndex);
           },
           itemBuilder: (_, int index) {

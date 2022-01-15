@@ -66,7 +66,7 @@ class _BodyState extends State<Body> {
             final _view = ref.watch(homeScreenProvider);
             final _user = ref.watch(userProvider);
             return _build(
-              _isLandscape ? _view.webIndex : _view.bottomNavIndex,
+              _isLandscape ? _view.webIndex : _view.bottomIndex,
               _user.account?.uid,
             );
           },

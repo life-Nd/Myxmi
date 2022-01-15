@@ -39,7 +39,13 @@ class RecipeImage extends StatelessWidget {
                           recipe: recipe,
                           childRecipe: _image(true),
                         ),
+                        const SizedBox(
+                          width: 4,
+                        ),
                         AddFavoriteButton(recipe: recipe),
+                        const SizedBox(
+                          width: 4,
+                        ),
                         ShareButton(recipeId: recipe.recipeId),
                       ],
                     ),

@@ -11,7 +11,7 @@ class AppBottomNavigation extends StatelessWidget {
       builder: (_, ref, __) {
         final _home = ref.watch(homeScreenProvider);
         final _user = ref.watch(userProvider);
-        final int _viewIndex = _home.bottomNavIndex;
+        final int _viewIndex = _home.bottomIndex;
         return BottomNavigationBar(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           selectedItemColor:

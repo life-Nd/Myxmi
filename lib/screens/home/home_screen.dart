@@ -8,9 +8,6 @@ import 'package:myxmi/screens/home/widgets/app_bottom_navigation.dart';
 import 'package:myxmi/screens/home/widgets/body.dart';
 import 'package:myxmi/screens/home/widgets/web_appbar.dart';
 
-// "saveAllRecipes": "Save all your recipes in one place",
-//  "saveAllRecipesDetails": "Easily save recipes from any site or app to a digital recipe box, making it easy to create, organize, and share your cooking inspiration.",
-
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -21,12 +18,8 @@ class HomeScreen extends StatelessWidget {
         final _user = ref.watch(userProvider);
         final _router = ref.watch(routerProvider);
         final int _viewIndex =
-            kIsWeb && _size.width > 700 ? _home.webIndex : _home.bottomNavIndex;
-        // if (_home.view == null) {
-        //   _viewIndex = kIsWeb ? 0 : 1;
-        // } else {
-        //   _viewIndex = _home.view;
-        // }
+            kIsWeb && _size.width > 700 ? _home.webIndex : _home.bottomIndex;
+
         return Scaffold(
           extendBodyBehindAppBar: true,
           resizeToAvoidBottomInset: true,
@@ -43,9 +36,23 @@ class HomeScreen extends StatelessWidget {
                   ? FloatingActionButton(
                       backgroundColor: Colors.green.shade400,
                       onPressed: () {
+                        final TargetPlatform _platform =
+                            Theme.of(context).platform;
+                        bool _onPhone = true;
+                        try {
+                          _onPhone = TargetPlatform.iOS == _platform ||
+                              TargetPlatform.android == _platform;
+                        } catch (error) {
+                          _onPhone = MediaQuery.of(context).size.width <= 500;
+                        }
+
                         _viewIndex != 3
                             ? _router.pushPage(name: '/add-recipe-infos')
-                            : _router.pushPage(name: '/scan-product');
+                            : _onPhone
+                                ? _router.pushPage(name: '/scan-product')
+                                : _router.pushPage(
+                                    name: '/add-product-manually',
+                                  );
                       },
                       child: const Icon(
                         Icons.add,

@@ -314,7 +314,7 @@
    "beInspired": "Be inspired",
    "beInspiredDetails": "Try the creations of the community then see if you can add your touch.",
    "productScanner": "Product scanner",
-   "productScannerDetails": "Use your phone camera to check nutritional,environmental and so many more facts about the products you use.",
+   "productScannerDetails": "Use your phone camera to check nutritional facts about the products you use.",
    "mealPlannerDetails": "Save recipes to your meal planner to keep track of your diet.",
    "reviewRecipes": "Review recipes",
    "reviewRecipesDetails": "Review recipes and rate them to help others find the best recipes.",
@@ -328,5 +328,8 @@
    "instructionsDone": "Instructions done",
    "updatePantryStock": "Update pantry stock",
    "saveRecipeVersion": "Save recipe version",
-   "calendar":"Calendar"
+   "calendar":"Calendar",
+   "skipped":"Skipped",
+   "future":"Future"
+   
 }

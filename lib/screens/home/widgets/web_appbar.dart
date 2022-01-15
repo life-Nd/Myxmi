@@ -33,7 +33,7 @@ class WebAppBar extends StatelessWidget {
                     const SizedBox(width: 40),
                     _PageViewButton(uid: uid, index: 0, text: 'home'.tr()),
                     _PageViewButton(uid: uid, index: 1, text: 'recipes'.tr()),
-                    _PageViewButton(uid: uid, index: 2, text: 'planner'.tr()),
+                    _PageViewButton(uid: uid, index: 2, text: 'calendar'.tr()),
                     _PageViewButton(uid: uid, index: 3, text: 'products'.tr()),
                   ],
                 ),
@@ -44,8 +44,6 @@ class WebAppBar extends StatelessWidget {
                     _PageViewButton(uid: uid, index: 4, text: 'more'.tr())
                   else
                     _PageViewButton(uid: uid, index: 4, text: 'signIn'.tr()),
-                  // if (uid == null)
-                  //   _PageViewButton(uid: uid, index: 6, text: 'signUp'),
                   if (uid != null && _size.width > 750)
                     Card(
                       shape: const RoundedRectangleBorder(
@@ -109,8 +107,8 @@ class _PageViewButton extends StatelessWidget {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           onPressed: () {
+            _view.searchRecipesInDb = false;
             _view.changeViewIndex(index: index, uid: uid);
-            _view.doSearch(value: false);
           },
           child: _SelectableContainer(
             selected: _view.webIndex == index,

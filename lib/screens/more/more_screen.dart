@@ -15,12 +15,12 @@ class MoreScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final TargetPlatform _platform = Theme.of(context).platform;
-    bool _isPhone = true;
+    bool _onPhone = true;
     try {
-      _isPhone = TargetPlatform.iOS == _platform ||
+      _onPhone = TargetPlatform.iOS == _platform ||
           TargetPlatform.android == _platform;
     } catch (error) {
-      _isPhone = MediaQuery.of(context).size.width <= 500;
+      _onPhone = MediaQuery.of(context).size.width <= 500;
     }
 
     return Consumer(
@@ -31,7 +31,7 @@ class MoreScreen extends HookWidget {
         return SingleChildScrollView(
           child: Column(
             children: [
-              if (!kIsWeb || _isPhone)
+              if (!kIsWeb || _onPhone)
                 const ListTile(
                   title: Text(
                     'Myxmi',

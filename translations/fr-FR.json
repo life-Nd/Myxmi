@@ -288,7 +288,7 @@
    "planFor": "Plannifier pour",
    "load": "load",
    "comment": "comment",
-   "calendar":"Calendrier",
+   "calendar": "Calendrier",
    "chooseRecipeType": "Choisissez le type de recette",
    "getInstructions": "Accès aux instructions",
    "check": "Cocher",
@@ -334,6 +334,8 @@
    "ingredientsUsed": "Ingredients utilisés",
    "instructionsDone": "Instructions completées",
    "updatePantryStock": "Changer les quantités stock",
-   "saveRecipeVersion": "Sauvegarder votre version de la recette"
-
+   "saveRecipeVersion": "Sauvegarder votre version de la recette",
+   "skipped": "Skipped",
+   "future": "Future"
+   
 }

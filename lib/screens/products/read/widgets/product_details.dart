@@ -41,10 +41,13 @@ class ProductDetails extends StatelessWidget {
                 builder: (_) {
                   _product.code = product!.productId!;
                   return AlertDialog(
-                    title: Text(_name),
+                    title: Center(child: Text(_name)),
                     insetPadding: const EdgeInsets.all(1),
                     contentPadding: const EdgeInsets.all(1),
-                    content: const NutritionDetails(),
+                    content: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.5,
+                      child: const NutritionDetails(),
+                    ),
                     actions: [
                       RawMaterialButton(
                         onPressed: () {

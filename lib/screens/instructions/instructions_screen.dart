@@ -61,7 +61,6 @@ class InstructionsScreen extends StatelessWidget {
                 return const LoadingColumn();
               }
               final _data = snapshot.data!.data();
-              debugPrint('_doc: $_data');
               final List _instructions = _data!['steps'] as List;
 
               if (snapshot.hasData) {
@@ -107,8 +106,12 @@ class InstructionsScreen extends StatelessWidget {
                 ),
                 RawMaterialButton(
                   onPressed: () {
-                    final int _newIndex = _pageViewIndex + 1;
-                    _instructions.setPageViewIndex(_newIndex);
+                    if (_instructions.instructions.length >
+                        _pageViewIndex + 1) {
+                      final int _newIndex = _pageViewIndex + 1;
+
+                      _instructions.setPageViewIndex(_newIndex);
+                    }
                   },
                   child: Text(
                     'next'.tr(),

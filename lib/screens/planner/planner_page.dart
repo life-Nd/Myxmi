@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/providers/router.dart';
 import 'package:myxmi/providers/user.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 /* TODO Planner should be changed to Calendar
  Calendar could be used to show
@@ -16,8 +15,8 @@ import 'package:shared_preferences/shared_preferences.dart';
  by reading just the Done meals ($date: true) 
  in the Calendar Db 
 */
-final _plannerEventProvider = ChangeNotifierProvider<PlannerEventProvider>(
-  (ref) => PlannerEventProvider(),
+final _calendarEventProvider = ChangeNotifierProvider<CalendarEventProvider>(
+  (ref) => CalendarEventProvider(),
 );
 
 class PlannerPage extends StatefulWidget {
@@ -33,7 +32,6 @@ class _CalendarPageState extends State<PlannerPage> {
     return Scaffold(
       body: Consumer(
         builder: (_, ref, child) {
-          final _calendarProvider = ref.watch(_plannerEventProvider);
           final _user = ref.watch(userProvider);
           final _uid = _user.account!.uid;
           return StreamBuilder(
@@ -59,26 +57,38 @@ class _CalendarPageState extends State<PlannerPage> {
                       for (final String _day in _daysSelected.keys) {
                         final _allEvents = _event['days'] as Map;
                         final bool _done = _allEvents[_day] as bool;
+                        Color _eventTextColor;
+                        Color _eventBackgroundColor;
+                        final bool _isPassed = !DateTime.now()
+                            .compareTo(DateTime.parse(_day))
+                            .isNegative;
+
+                        if (_done) {
+                          _eventTextColor = Colors.white;
+                          _eventBackgroundColor = Colors.green;
+                        } else if (_isPassed) {
+                          _eventTextColor = Colors.white;
+                          _eventBackgroundColor = Colors.red;
+                        } else {
+                          _eventTextColor =
+                              Theme.of(context).textTheme.bodyText1!.color!;
+                          _eventBackgroundColor = Theme.of(context).cardColor;
+                        }
+                        final _calendarProvider =
+                            ref.read(_calendarEventProvider);
                         _calendarProvider.addEvent(
                           CalendarEvent(
                             eventName:
                                 '${_event['title'].toString().toUpperCase()},${_event['imageUrl']},$_done',
                             eventDate: DateTime.parse(_day),
                             eventID: _eventId,
-                            eventTextColor: _event['type'] == 'dinner'
-                                ? Colors.white
-                                : Colors.black,
-                            eventBackgroundColor: _done
-                                ? Colors.green
-                                : !DateTime.now()
-                                        .compareTo(DateTime.parse(_day))
-                                        .isNegative
-                                    ? Colors.red
-                                    : _event['type'] == 'breakfast'
-                                        ? const Color(0xff81d4fA)
-                                        : _event['type'] == 'supper'
-                                            ? const Color(0xffffff00)
-                                            : Colors.indigo.shade900,
+                            eventTextColor: _eventTextColor,
+                            eventBackgroundColor: _eventBackgroundColor,
+                            // : _event['type'] == 'breakfast'
+                            //     ? const Color(0xff81d4fA)
+                            //     : _event['type'] == 'supper'
+                            //         ? const Color(0xffffff00)
+                            //         : Colors.indigo.shade900,
                           ),
                         );
                       }
@@ -90,60 +100,140 @@ class _CalendarPageState extends State<PlannerPage> {
               return Column(
                 children: [
                   Expanded(
-                    child: CellCalendar(
-                      events: _calendarProvider.events,
-                      onCellTapped: (date) {
-                        final eventsOnTheDate =
-                            _calendarProvider.events.where((element) {
-                          return DateFormat('dd-MM,' 'yyyy')
-                                  .format(element.eventDate) ==
-                              DateFormat('dd-MM,' 'yyyy').format(date);
-                        }).toList();
-                        showDialog(
-                          context: context,
-                          builder: (_) {
-                            return AlertDialog(
-                              title: Center(
-                                child: Text(
-                                  '${DateFormat('EEEE d MMM , ' 'yyyy').format(date)} '
-                                      .toUpperCase(),
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              contentPadding: const EdgeInsets.all(1),
-                              insetPadding: const EdgeInsets.all(10),
-                              content: SizedBox(
-                                height: 400,
-                                width: 400,
-                                child: ListView.builder(
-                                  itemCount: eventsOnTheDate.length,
-                                  itemBuilder: (_, int index) {
-                                    return _SelectedRecipeCard(
-                                      eventId: eventsOnTheDate[index].eventID!,
-                                      date: eventsOnTheDate[index].eventDate,
-                                      title: eventsOnTheDate[index]
-                                          .eventName
-                                          .split(',')[0],
-                                      color: eventsOnTheDate[index]
-                                          .eventBackgroundColor,
-                                      imageUrl: eventsOnTheDate[index]
-                                          .eventName
-                                          .split(',')[1],
-                                      done: eventsOnTheDate[index]
-                                          .eventName
-                                          .split(',')[2],
+                    child: Consumer(
+                      builder: (_, ref, watch) {
+                        final _calendarProvider =
+                            ref.watch(_calendarEventProvider);
+
+                        return Stack(
+                          alignment: Alignment.topRight,
+                          children: [
+                            CellCalendar(
+                              events: _calendarProvider.allEvents,
+                              onCellTapped: (date) {
+                                final eventsOnTheDate = _calendarProvider
+                                    .allEvents
+                                    .where((element) {
+                                  return DateFormat('dd-MM,' 'yyyy')
+                                          .format(element.eventDate) ==
+                                      DateFormat('dd-MM,' 'yyyy').format(date);
+                                }).toList();
+                                showDialog(
+                                  context: context,
+                                  builder: (_) {
+                                    return AlertDialog(
+                                      title: Center(
+                                        child: Text(
+                                          '${DateFormat('EEEE d MMM , ' 'yyyy').format(date)} '
+                                              .toUpperCase(),
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      contentPadding: const EdgeInsets.all(1),
+                                      insetPadding: const EdgeInsets.all(10),
+                                      content: SizedBox(
+                                        height: 400,
+                                        width: 400,
+                                        child: ListView.builder(
+                                          itemCount: eventsOnTheDate.length,
+                                          itemBuilder: (_, int index) {
+                                            return _SelectedRecipeCard(
+                                              event: eventsOnTheDate[index],
+                                            );
+                                          },
+                                        ),
+                                      ),
                                     );
                                   },
-                                ),
-                              ),
-                            );
-                          },
+                                );
+                              },
+                            ),
+                            Consumer(
+                              builder: (_, ref, child) {
+                                final _calendar =
+                                    ref.read(_calendarEventProvider);
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    RawMaterialButton(
+                                      onPressed: () {
+                                        // _calendar.changeView(
+                                        //   viewType: 'Skipped',
+                                        // );
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            '${_calendar.eventsSkipped().length} ',
+                                            style: const TextStyle(
+                                              color: Colors.red,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(
+                                            'skipped'.tr(),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    RawMaterialButton(
+                                      onPressed: () {
+                                        // _calendar.changeView(
+                                        //   viewType: 'Done',
+                                        // );
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            '${_calendar.eventsDone().length} ',
+                                            style: const TextStyle(
+                                              color: Colors.green,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          // Icon(
+                                          //   _calendar.view == 'All' ||
+                                          //           _calendar.view == 'Done'
+                                          //       ? Icons.check_box
+                                          //       : Icons.check_box_outline_blank,
+                                          // ),
+                                          Text('done'.tr())
+                                        ],
+                                      ),
+                                    ),
+                                    RawMaterialButton(
+                                      onPressed: () {
+                                        // _calendar.changeView(
+                                        //   viewType: 'Future',
+                                        // );
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            '${_calendar.futureEvents().length} ',
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1!
+                                                  .color,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text('future'.tr())
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          ],
                         );
                       },
                     ),
@@ -159,20 +249,11 @@ class _CalendarPageState extends State<PlannerPage> {
 }
 
 class _SelectedRecipeCard extends StatefulWidget {
-  final String eventId;
-  final String title;
-  final String imageUrl;
-  final Color color;
-  final String done;
-  final DateTime date;
+  final CalendarEvent event;
+
   const _SelectedRecipeCard({
     Key? key,
-    required this.eventId,
-    required this.title,
-    required this.imageUrl,
-    required this.color,
-    required this.done,
-    required this.date,
+    required this.event,
   }) : super(key: key);
 
   @override
@@ -180,22 +261,29 @@ class _SelectedRecipeCard extends StatefulWidget {
 }
 
 class _SelectedRecipeCardState extends State<_SelectedRecipeCard> {
-  String type() {
-    String? _type = '';
-    if (widget.color == const Color(0xff263238)) {
-      _type = 'Dinner';
-    } else if (widget.color == const Color(0xffffff00)) {
-      _type = 'Supper';
-    } else {
-      _type = 'Breakfast';
-    }
-    return _type;
-  }
-
   bool _showOptions = false;
 
   @override
   Widget build(BuildContext context) {
+    final String _eventId = widget.event.eventID!;
+    final DateTime _date = widget.event.eventDate;
+    final String _title = widget.event.eventName.split(',')[0];
+    final Color _color = widget.event.eventBackgroundColor;
+    final String _imageUrl = widget.event.eventName.split(',')[1];
+    final String _done = widget.event.eventName.split(',')[2];
+    final bool _isToday = DateTime.now().compareTo(_date) == 0;
+    String type() {
+      String? _type = '';
+      if (_color == const Color(0xff263238)) {
+        _type = 'Dinner';
+      } else if (_color == const Color(0xffffff00)) {
+        _type = 'Supper';
+      } else {
+        _type = 'Breakfast';
+      }
+      return _type;
+    }
+
     return Container(
       margin: const EdgeInsets.all(4),
       decoration: BoxDecoration(
@@ -203,7 +291,7 @@ class _SelectedRecipeCardState extends State<_SelectedRecipeCard> {
         gradient: LinearGradient(
           colors: [
             Theme.of(context).cardColor,
-            widget.color,
+            _color,
           ],
         ),
       ),
@@ -217,57 +305,50 @@ class _SelectedRecipeCardState extends State<_SelectedRecipeCard> {
               return ListTile(
                 onTap: () => _router.pushPage(
                   name: '/recipe',
-                  arguments: {'id': widget.eventId},
+                  arguments: {'id': _eventId},
                 ),
-                title: Text(widget.title),
+                title: Text(_title),
                 contentPadding: const EdgeInsets.all(1),
                 minLeadingWidth: 50,
                 leading: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
-                  child: Image.network(widget.imageUrl),
+                  child: Image.network(_imageUrl),
                 ),
-                trailing: widget.done != 'true'
-                    ? IconButton(
-                        onPressed: () {
-                          setState(
-                            () {
-                              _showOptions = !_showOptions;
+                trailing: _done != 'true'
+                    ? _isToday
+                        ? IconButton(
+                            onPressed: () {
+                              setState(
+                                () {
+                                  _showOptions = !_showOptions;
+                                },
+                              );
                             },
-                          );
-                        },
-                        icon: Icon(
-                          Icons.edit,
-                          size: _showOptions ? 30 : 20,
+                            icon: Icon(
+                              Icons.edit,
+                              size: _showOptions ? 30 : 20,
+                            ),
+                          )
+                        : const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.edit_off,
+                              size: 25,
+                            ),
+                          )
+                    : Container(
+                        margin: const EdgeInsets.all(8),
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
                         ),
-                      )
-                    : FutureBuilder(
-                        future: SharedPreferences.getInstance().then(
-                          (value) => value.getStringList(
-                            'skippedRecipes',
+                        child: const Padding(
+                          padding: EdgeInsets.all(2.0),
+                          child: Icon(
+                            Icons.check,
+                            color: Colors.green,
                           ),
                         ),
-                        builder: (_, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            debugPrint('🔎 📱 loading skipped recipes');
-                          }
-                          if (snapshot.data != null) {
-                            final List<String> _skippedRecipes =
-                                snapshot.data! as List<String>;
-                            if (_skippedRecipes.contains(widget.eventId)) {
-                              return const Icon(
-                                Icons.no_meals_ouline,
-                                size: 24,
-                                color: Colors.orange,
-                              );
-                            }
-                          }
-                          return const Icon(
-                            Icons.check_circle_outline,
-                            size: 24,
-                            color: Colors.green,
-                          );
-                        },
                       ),
                 subtitle: Text(
                   type(),
@@ -275,19 +356,6 @@ class _SelectedRecipeCardState extends State<_SelectedRecipeCard> {
                     color: type() == 'Dinner' ? Colors.white : Colors.black,
                   ),
                 ),
-                // trailing: IconButton(
-                //   onPressed: () {
-                //     setState(
-                //       () {
-                //         _showOptions = !_showOptions;
-                //       },
-                //     );
-                //   },
-                //   icon: Icon(
-                //     Icons.edit,
-                //     size: _showOptions ? 30 : 20,
-                //   ),
-                // ),
               );
             },
           ),
@@ -295,36 +363,32 @@ class _SelectedRecipeCardState extends State<_SelectedRecipeCard> {
             Consumer(
               builder: (_, ref, child) {
                 final _user = ref.watch(userProvider);
-                final _router = ref.watch(routerProvider);
+                final _calendar = ref.watch(_calendarEventProvider);
                 final _uid = _user.account!.uid;
-                final _month = '${widget.date.month}';
-                final _year = '${widget.date.year}';
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       RawMaterialButton(
-                        fillColor: Theme.of(context).scaffoldBackgroundColor,
+                        fillColor: Theme.of(context).cardColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
                         onPressed: () {
-                          debugPrint(
-                            '${widget.eventId}.days.$_year-$_month.${widget.date}',
-                          );
                           final String _dateString =
-                              DateFormat('yyy-MM-dd hh:mm').format(widget.date);
+                              DateFormat('yyy-MM-dd HH:mm').format(_date);
                           FirebaseFirestore.instance
                               .collection('Planner')
                               .doc(_uid)
                               .update(
                             {
-                              '${widget.eventId}.days.$_dateString':
+                              '$_eventId.days.$_dateString':
                                   FieldValue.delete(),
                             },
                           );
-                          _router.pushPage(name: '/home');
+                          _calendar.removeEvent(widget.event);
+                          Navigator.of(context).pop();
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -348,71 +412,31 @@ class _SelectedRecipeCardState extends State<_SelectedRecipeCard> {
                           ),
                         ),
                       ),
-                      // RawMaterialButton(
-                      //   fillColor:
-                      //       Theme.of(context).scaffoldBackgroundColor,
-                      //   shape: RoundedRectangleBorder(
-                      //     borderRadius: BorderRadius.circular(20),
-                      //   ),
-                      //   onPressed: () {
-                      //     debugPrint(
-                      //       '${widget.eventId}.days.$_year-$_month.${widget.date}',
-                      //     );
-                      //     final String _dateString =
-                      //         DateFormat('yyy-MM-dd hh:mm')
-                      //             .format(widget.date);
-                      //     FirebaseFirestore.instance
-                      //         .collection('Planner')
-                      //         .doc(_uid)
-                      //         .update(
-                      //       {
-                      //         '${widget.eventId}.days.$_dateString':
-                      //             FieldValue.delete(),
-                      //       },
-                      //     );
-                      //     setState(() {});
-                      //     Navigator.of(context).pop();
-                      //   },
-                      //   child: Padding(
-                      //     padding: const EdgeInsets.all(8.0),
-                      //     child: Row(
-                      //       children: [
-                      //         const Icon(
-                      //           Icons.no_meals_ouline,
-                      //           color: Colors.orange,
-                      //         ),
-                      //         const SizedBox(
-                      //           width: 7,
-                      //         ),
-                      //         Text(
-                      //           'skip'.tr(),
-                      //           style: const TextStyle(
-                      //             color: Colors.orange,
-                      //             fontSize: 18,
-                      //           ),
-                      //         ),
-                      //       ],
-                      //     ),
-                      //   ),
-                      // ),
                       RawMaterialButton(
-                        fillColor: Theme.of(context).scaffoldBackgroundColor,
+                        fillColor: Theme.of(context).cardColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
                         onPressed: () {
                           final String _dateString =
-                              DateFormat('yyy-MM-dd hh:mm').format(widget.date);
+                              DateFormat('yyy-MM-dd HH:mm').format(_date);
                           FirebaseFirestore.instance
                               .collection('Planner')
                               .doc(_uid)
                               .update(
                             {
-                              '${widget.eventId}.days.$_dateString': true,
+                              '$_eventId.days.$_dateString': true,
                             },
                           );
-
-                          _router.pushPage(name: '/home');
+                          final CalendarEvent _newEvent = CalendarEvent(
+                            eventName: '$_title,$_imageUrl,true',
+                            eventDate: _date,
+                            eventID: _eventId,
+                            eventTextColor: _color,
+                            eventBackgroundColor: Colors.green,
+                          );
+                          _calendar.updateEvent(widget.event, _newEvent);
+                          Navigator.of(context).pop();
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -447,8 +471,8 @@ class _SelectedRecipeCardState extends State<_SelectedRecipeCard> {
   }
 }
 
-class PlannerEventProvider extends ChangeNotifier {
-  List<CalendarEvent> events = [];
+class CalendarEventProvider extends ChangeNotifier {
+  List<CalendarEvent> allEvents = [];
   List<String?> eventIds = [];
   Map<String, List> dailyEvents = {};
   DateTime? selectedDate;
@@ -458,8 +482,57 @@ class PlannerEventProvider extends ChangeNotifier {
   void addEvent(CalendarEvent event) {
     if (!eventIds.contains('${event.eventID}-${event.eventDate}')) {
       eventIds.add('${event.eventID}-${event.eventDate}');
-      events.add(event);
+      allEvents.add(event);
     }
+  }
+
+  List<CalendarEvent> eventsSkipped() {
+    return allEvents.where((event) {
+      final String _doneStr = event.eventName.split(',')[2];
+      final bool _done;
+      if (_doneStr == 'true') {
+        _done = true;
+      } else {
+        final bool _passed =
+            !DateTime.now().compareTo(event.eventDate).isNegative;
+        _done = !_passed && _doneStr == 'false';
+      }
+
+      return !_done;
+    }).toList();
+  }
+
+  List<CalendarEvent> eventsDone() {
+    return allEvents.where((event) {
+      final String _doneStr = event.eventName.split(',')[2];
+      final bool _done;
+      if (_doneStr == 'true') {
+        _done = true;
+      } else {
+        _done = false;
+      }
+      return _done;
+    }).toList();
+  }
+
+  List<CalendarEvent> futureEvents() {
+    return allEvents.where((event) {
+      return DateTime.now().compareTo(event.eventDate).isNegative;
+    }).toList();
+  }
+
+  void updateEvent(CalendarEvent oldEvent, CalendarEvent newEvent) {
+    eventIds.remove(oldEvent.eventID);
+    allEvents.remove(oldEvent);
+    eventIds.add(newEvent.eventID);
+    allEvents.add(newEvent);
+    notifyListeners();
+  }
+
+  void removeEvent(CalendarEvent event) {
+    eventIds.remove(event.eventID);
+    allEvents.remove(event);
+    notifyListeners();
   }
 
   void selectDay(CalendarEvent event, {DateTime? date}) {

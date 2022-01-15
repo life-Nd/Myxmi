@@ -47,7 +47,7 @@ class ProductsView extends StatelessWidget {
                       Center(
                         child: IconButton(
                           onPressed: () {
-                            _router.pushPage(name: '/add-product');
+                            _router.pushPage(name: '/add-product-manually');
                           },
                           tooltip: 'addProduct'.tr(),
                           icon: const Icon(
