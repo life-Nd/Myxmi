@@ -5,7 +5,11 @@ import 'package:myxmi/models/recipe.dart';
 
 class RecipeTileDetails extends HookWidget {
   final RecipeModel recipe;
-  const RecipeTileDetails({required this.recipe});
+  final double titleSize;
+  const RecipeTileDetails({
+    required this.recipe,
+    this.titleSize = 17,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +27,10 @@ class RecipeTileDetails extends HookWidget {
         children: [
           Text(
             _title,
+            style: TextStyle(
+              fontSize: titleSize,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           Divider(
             color: Theme.of(context).textTheme.bodyText1!.color,

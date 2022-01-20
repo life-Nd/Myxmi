@@ -107,7 +107,7 @@ class _CalendarButtonState extends State<CalendarButton> {
                                           ),
                                           onTap: () {
                                             _router.pushPage(
-                                              name: '/planner',
+                                              name: '/calendar',
                                             );
                                           },
                                         ),
@@ -267,7 +267,7 @@ class _CalendarButtonState extends State<CalendarButton> {
                                               ),
                                             ),
                                             const Spacer(),
-                                            SaveButton(
+                                            SaveEventToCalendarButton(
                                               color: _calendar.tileColor,
                                               selectedDates: calendarStateKey
                                                           .currentState !=

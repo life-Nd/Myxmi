@@ -50,8 +50,10 @@ class ProductField extends StatelessWidget {
                 width: 100,
                 child: TextField(
                   controller: textCtrl,
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    signed: true,
+                    decimal: true,
+                  ),
                   onSubmitted: (submitted) {
                     _recipe.setEstimatedWeight();
                     FocusScope.of(context).unfocus();

@@ -270,7 +270,7 @@ class AuthProvider extends ChangeNotifier {
     ).show(context);
 
     if (didRequestSignOut == true) {
-      await (_signOut(context: context) as Future<Type>);
+      await _signOut(context: context);
     }
   }
 

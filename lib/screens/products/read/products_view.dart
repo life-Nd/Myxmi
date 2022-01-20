@@ -9,7 +9,7 @@ import 'package:myxmi/screens/products/read/widgets/suggestions.dart';
 import 'package:myxmi/utils/cart_button.dart';
 
 class ProductsView extends StatelessWidget {
-  final DocumentSnapshot<Map<String, dynamic>>? snapshot;
+  final DocumentSnapshot<Map<String, dynamic>> snapshot;
   final String type;
   const ProductsView({
     Key? key,
@@ -25,9 +25,8 @@ class ProductsView extends StatelessWidget {
           builder: (_, ref, child) {
             final _productsSearch = ref.watch(productsSearchProvider);
             final _router = ref.watch(routerProvider);
-            final _data = snapshot!.data();
-
-            _productsSearch.allProducts(_data!);
+            final Map _data = snapshot.data()!;
+            _productsSearch.allProducts(_data);
             return Column(
               children: [
                 Row(

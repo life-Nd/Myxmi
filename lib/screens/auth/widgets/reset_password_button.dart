@@ -32,9 +32,9 @@ class ResetPasswordButton extends StatelessWidget {
                       const SizedBox(
                         height: 100,
                       ),
-                      const CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation(Colors.white),
-                        backgroundColor: Colors.green,
+                      CircularProgressIndicator(
+                        valueColor: const AlwaysStoppedAnimation(Colors.white),
+                        color: Colors.green.shade200,
                       ),
                     ],
                   ),

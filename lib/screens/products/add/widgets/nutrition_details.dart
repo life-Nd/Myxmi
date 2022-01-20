@@ -20,6 +20,8 @@ class NutritionDetails extends StatelessWidget {
     //   system: '',
     //   url: 'https://myxmi.app/',
     // );
+    debugPrint('running getProduct');
+    debugPrint('code: $code');
     final ProductQueryConfiguration _configuration = ProductQueryConfiguration(
       code,
       language: OpenFoodFactsLanguage.ENGLISH,
@@ -41,27 +43,28 @@ class NutritionDetails extends StatelessWidget {
     return Consumer(
       builder: (_, ref, watch) {
         final _productScannedProvider = ref.watch(productScannerProvider);
-        debugPrint('_NutritionDetailsState initState');
         return FutureBuilder<Product?>(
           future: _getProduct(_productScannedProvider.code),
           builder: (_, AsyncSnapshot<Product?> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const LoadingColumn();
-            }
-            if (!snapshot.hasData) {
-              return const NoData(
-                type: 'Product',
+              return const SizedBox(
+                height: 400,
+                width: 400,
+                child: LoadingColumn(),
               );
             }
+
             if (snapshot.hasData) {
               final _data = snapshot.data!;
               final Product _product = _data;
               debugPrint('🍅 Product: ${_product.toJson()}');
               final Nutriments _nutriments = _product.nutriments!;
+              final String _ingredientsText = _product.ingredientsText ?? '';
               debugPrint('🧨 Nutriments: ${_nutriments.toJson()}}');
-              final List _ingredients = _product.ingredients ?? [];
-              final String _imageUrl = _product.imageFrontUrl!;
-
+              debugPrint(
+                '🙂 _product.ingredientsText: ${_product.ingredientsText}',
+              );
+              final String _imageUrl = _product.imageFrontUrl ?? '';
               // TODO Show Environemental facts
               _productScannedProvider.productName = _product.productName;
               _productScannedProvider.photoUrl = _imageUrl;
@@ -71,7 +74,9 @@ class NutritionDetails extends StatelessWidget {
               final CachedNetworkImage _image = CachedNetworkImage(
                 imageUrl: _imageUrl,
                 progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    CircularProgressIndicator(value: downloadProgress.progress),
+                    CircularProgressIndicator(
+                  value: downloadProgress.progress,
+                ),
                 errorWidget: (context, url, error) => const Icon(Icons.error),
               );
               return Card(
@@ -419,27 +424,8 @@ class NutritionDetails extends StatelessWidget {
                           child: Card(
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: GridView.builder(
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
-                                  crossAxisSpacing: 1,
-                                  mainAxisSpacing: 2,
-                                ),
-                                itemCount: _ingredients.length,
-                                itemBuilder: (_, int index) {
-                                  return Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        '${_ingredients[index]}',
-                                      ),
-                                    ),
-                                  );
-                                },
+                              child: Text(
+                                _ingredientsText,
                               ),
                             ),
                           ),
@@ -449,8 +435,16 @@ class NutritionDetails extends StatelessWidget {
                   ],
                 ),
               );
+            } else {
+              return const SizedBox(
+                height: 400,
+                width: 400,
+                child: NoData(
+                  type: 'Product',
+                ),
+              );
             }
-            return Container();
+            // return Container();
           },
         );
       },
@@ -539,6 +533,10 @@ class ProductScannerProvider extends ChangeNotifier {
     photoUrl = '';
     enterProductDetails = false;
     dataFoundWithCode = false;
+  }
+
+  void resetAndNotify() {
+    reset();
     notifyListeners();
   }
 }

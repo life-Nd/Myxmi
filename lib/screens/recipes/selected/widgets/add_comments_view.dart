@@ -12,8 +12,7 @@ double _stars = 0;
 final TextEditingController _msgCtrl = TextEditingController();
 
 class AddComments extends StatelessWidget {
-  final int? commentsCount;
-  const AddComments({Key? key, required this.commentsCount}) : super(key: key);
+  const AddComments({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Consumer(
@@ -25,36 +24,6 @@ class AddComments extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              RichText(
-                text: TextSpan(
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  children: [
-                    TextSpan(
-                      text: 'comments'.tr().toUpperCase(),
-                      style: TextStyle(
-                        color: Theme.of(context).iconTheme.color,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    WidgetSpan(
-                      child: Transform.translate(
-                        offset: const Offset(0.0, -9.0),
-                        child: Text(
-                          '${commentsCount ?? '0'}',
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
               Center(
                 child: RatingBar.builder(
                   minRating: 1,

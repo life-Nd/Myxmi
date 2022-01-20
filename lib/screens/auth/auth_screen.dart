@@ -90,8 +90,10 @@ class _SignInState extends State<SignInScreen> {
                       builder: (context, ref, child) {
                         final _view = ref.watch(homeScreenProvider);
                         return _view.loading
-                            ? const Center(
-                                child: CircularProgressIndicator(),
+                            ? Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.green.shade200,
+                                ),
                               )
                             : RawMaterialButton(
                                 fillColor:
@@ -118,11 +120,10 @@ class _SignInState extends State<SignInScreen> {
                                       );
                                       switch (_auth.status) {
                                         case 'success':
-                                          _view.changeView(index: 1);
                                           _emailCtrl.clear();
                                           _passwordCtrl.clear();
-
                                           break;
+
                                         case 'user-not-found':
                                           dialogNoAccountFound(
                                             context: context,
@@ -131,6 +132,7 @@ class _SignInState extends State<SignInScreen> {
                                             error: _auth.error,
                                           );
                                           break;
+
                                         case 'wrong-password':
                                           dialogWrongPassword(
                                             context: context,

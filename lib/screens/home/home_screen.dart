@@ -56,7 +56,7 @@ class HomeScreen extends StatelessWidget {
                       },
                       child: const Icon(
                         Icons.add,
-                        color: Colors.black,
+                        color: Colors.white,
                       ),
                     )
                   : FloatingActionButton(

@@ -81,7 +81,10 @@ class _CartViewState extends State<CartView> {
                               '${_name[0].toUpperCase()}${_name.substring(1, _name.length)}',
                             ),
                           ),
-                          const Divider(indent: 80, color: Colors.grey)
+                          const Divider(
+                            indent: 80,
+                            color: Colors.grey,
+                          )
                         ],
                       );
                     },

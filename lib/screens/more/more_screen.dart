@@ -82,8 +82,8 @@ class MoreScreen extends HookWidget {
                       trailing: const Icon(Icons.arrow_forward_ios),
                       onTap: () async {
                         final _db = FirebaseFirestore.instance
-                            .collection('Sources')
-                            .doc('AppStores')
+                            .collection('App')
+                            .doc('Sources')
                             .snapshots();
                         _db.listen(
                           (event) {

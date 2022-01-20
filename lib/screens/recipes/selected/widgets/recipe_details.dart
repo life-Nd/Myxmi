@@ -77,37 +77,65 @@ class _RecipeDetailsState extends ConsumerState<RecipeDetails> {
           IngredientsInRecipeListView(
             ingredients: widget.ingredients,
           ),
-          AddComments(
-            commentsCount: widget.comments?.length,
-          ),
-          if (widget.comments != null) ...[
-            CommentsList(data: widget.comments),
-            Container(
-              width: double.infinity,
-              color: Theme.of(context).cardColor,
-              child: RawMaterialButton(
-                onPressed: () {},
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if (widget.comments!.isNotEmpty)
-                      Text(
-                        '${'load'.tr()} ${widget.comments!.length} ${'more'} ${'comment'.tr()}',
-                      ),
-                    if (widget.comments!.length > 1) const Text('s'),
-                  ],
-                ),
-              ),
-            ),
-          ] else
-            Center(
-              child: Text(
-                'noComments'.tr(),
-                style: const TextStyle(fontSize: 18),
-              ),
-            ),
         ] else
           const NoData(type: 'Ingredients'),
+        if (widget.comments != null) ...[
+          RichText(
+            text: TextSpan(
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+              children: [
+                TextSpan(
+                  text: 'comments'.tr().toUpperCase(),
+                  style: TextStyle(
+                    color: Theme.of(context).iconTheme.color,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                WidgetSpan(
+                  child: Transform.translate(
+                    offset: const Offset(0.0, -9.0),
+                    child: Text(
+                      '${widget.comments?.length ?? '0'}',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          CommentsList(data: widget.comments),
+          const AddComments(),
+          // Container(
+          //   width: double.infinity,
+          //   color: Theme.of(context).cardColor,
+          //   child: RawMaterialButton(
+          //     onPressed: () {},
+          //     child: Row(
+          //       mainAxisAlignment: MainAxisAlignment.center,
+          //       children: [
+          //         if (widget.comments!.isNotEmpty)
+          //           Text(
+          //             '${'load'.tr()} ${widget.comments!.length} ${'more'} ${'comment'.tr()}',
+          //           ),
+          //         if (widget.comments!.length > 1) const Text('s'),
+          //       ],
+          //     ),
+          //   ),
+          // ),
+        ] else
+          Center(
+            child: Text(
+              'noComments'.tr(),
+              style: const TextStyle(fontSize: 18),
+            ),
+          ),
       ],
     );
   }

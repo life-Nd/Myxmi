@@ -155,8 +155,7 @@ class RecipeEntriesProvider extends ChangeNotifier {
     return;
   }
 
-  Future saveDetailsToDb() async {
-    debugPrint('ingredients:--${ingredients.runtimeType}-- $ingredients');
+  Future updateProductsStock() async {
     final SharedPreferences _prefs = await SharedPreferences.getInstance();
     final String _now = '${DateTime.now().millisecondsSinceEpoch}';
     final List _keys = ingredients.keys.toList();
@@ -188,6 +187,11 @@ class RecipeEntriesProvider extends ChangeNotifier {
         ],
       );
     }
+  }
+
+  Future saveDetailsToDb() async {
+    debugPrint('ingredients:--${ingredients.runtimeType}-- $ingredients');
+    await updateProductsStock();
     final Map<String, dynamic> _ingredientsMapped =
         ingredients.map((key, value) {
       final Map _value = value as Map;

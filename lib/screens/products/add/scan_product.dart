@@ -56,7 +56,7 @@ class ScanProductScreen extends StatelessWidget {
             title: Text(
               'addProduct'.tr(),
             ),
-            expandedHeight: 700,
+            expandedHeight: 650,
             flexibleSpace: Consumer(
               builder: (_, ref, child) {
                 final _productScanner = ref.read(productScannerProvider);
@@ -72,7 +72,6 @@ class ScanProductScreen extends StatelessWidget {
             builder: (_, ref, child) {
               final _productScanner = ref.watch(productScannerProvider);
               final String _code = _productScanner.code;
-
               return SliverList(
                 delegate: SliverChildListDelegate.fixed(
                   [

@@ -16,7 +16,7 @@ class DownloadApp extends StatelessWidget {
 
   Stream<DocumentSnapshot<Map>> stream() {
     final _db = FirebaseFirestore.instance;
-    return _db.collection('Sources').doc('AppStores').snapshots();
+    return _db.collection('App').doc('Sources').snapshots();
   }
 
   @override

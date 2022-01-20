@@ -7,8 +7,8 @@ import 'package:myxmi/providers/calendar_entries.dart';
 import 'package:myxmi/providers/router.dart';
 import 'package:myxmi/providers/user.dart';
 
-class SaveButton extends StatelessWidget {
-  const SaveButton({
+class SaveEventToCalendarButton extends StatelessWidget {
+  const SaveEventToCalendarButton({
     Key? key,
     required this.selectedDates,
     required this.hour,
@@ -47,60 +47,9 @@ class SaveButton extends StatelessWidget {
           ),
           onPressed: type != null
               ? () {
-                  final String _now =
-                      '${DateTime.now().millisecondsSinceEpoch}';
-                  final Map _selectedDaysMapped = {};
-                  if (selectedDates!.isNotEmpty) {
-                    selectedDates!.sort();
-                    for (int i = 0; i <= selectedDates!.length - 1; i++) {
-                      final DateTime _date = selectedDates![i];
-                      final String _dateString = DateFormat(
-                        'yyy-MM-dd ${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}',
-                      ).format(_date);
-
-                      _selectedDaysMapped[_dateString] = false;
-                    }
-                    FirebaseFirestore.instance
-                        .collection('Planner')
-                        .doc(_uid)
-                        .snapshots()
-                        .listen(
-                      (event) {
-                        final Map _eventsData = event.data() ?? {};
-                        if (_eventsData['$recipeId'] != null) {
-                          final Map _recipe = _eventsData['$recipeId'] as Map;
-                          final Map _days = _recipe['days'] as Map;
-                          _selectedDaysMapped.addAll(_days);
-                          FirebaseFirestore.instance
-                              .collection('Planner')
-                              .doc(_uid)
-                              .update(
-                            {
-                              '$recipeId.days': _selectedDaysMapped,
-                            },
-                          );
-                        } else {
-                          FirebaseFirestore.instance
-                              .collection('Planner')
-                              .doc(_uid)
-                              .set(
-                            {
-                              '$recipeId': {
-                                'days': _selectedDaysMapped,
-                                'created': _now,
-                                'imageUrl': imageUrl,
-                                'title': title,
-                                'type': type,
-                              }
-                            },
-                            SetOptions(merge: true),
-                          );
-                        }
-                      },
-                    );
-                  }
+                  addEventInCalendar(uid: _uid);
                   _router.pushPage(
-                    name: '/planner',
+                    name: '/calendar',
                   );
                 }
               : () {
@@ -117,6 +66,53 @@ class SaveButton extends StatelessWidget {
         );
       },
     );
+  }
+
+  void addEventInCalendar({required String uid}) {
+    final String _now = '${DateTime.now().millisecondsSinceEpoch}';
+    final Map _selectedDaysMapped = {};
+    if (selectedDates!.isNotEmpty) {
+      selectedDates!.sort();
+      for (int i = 0; i <= selectedDates!.length - 1; i++) {
+        final DateTime _date = selectedDates![i];
+        final String _dateString = DateFormat(
+          'yyy-MM-dd ${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}',
+        ).format(_date);
+        _selectedDaysMapped[_dateString] = false;
+      }
+      FirebaseFirestore.instance
+          .collection('Calendar')
+          .doc(uid)
+          .snapshots()
+          .listen(
+        (event) {
+          final Map _eventsData = event.data() ?? {};
+          if (_eventsData['$recipeId'] != null) {
+            final Map _recipe = _eventsData['$recipeId'] as Map;
+            final Map _days = _recipe['days'] as Map;
+            _selectedDaysMapped.addAll(_days);
+            FirebaseFirestore.instance.collection('Calendar').doc(uid).update(
+              {
+                '$recipeId.days': _selectedDaysMapped,
+              },
+            );
+          } else {
+            FirebaseFirestore.instance.collection('Calendar').doc(uid).set(
+              {
+                '$recipeId': {
+                  'days': _selectedDaysMapped,
+                  'created': _now,
+                  'imageUrl': imageUrl,
+                  'title': title,
+                  'type': type,
+                }
+              },
+              SetOptions(merge: true),
+            );
+          }
+        },
+      );
+    }
   }
 }
 

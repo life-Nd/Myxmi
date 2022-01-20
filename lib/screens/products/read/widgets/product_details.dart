@@ -20,13 +20,14 @@ class ProductDetails extends StatelessWidget {
         final _product = ref.watch(productScannerProvider);
         final String _name =
             '${product!.name![0].toUpperCase()}${product!.name?.substring(1, product!.name?.length)}';
-
-        // final String _photoUrl = _product.photoUrl!;
         final CachedNetworkImage _image = CachedNetworkImage(
           imageUrl: product!.imageUrl!,
           progressIndicatorBuilder: (context, url, downloadProgress) =>
               CircleAvatar(
-            child: CircularProgressIndicator(value: downloadProgress.progress),
+            child: CircularProgressIndicator(
+              value: downloadProgress.progress,
+              color: Colors.green.shade200,
+            ),
           ),
           errorWidget: (context, url, error) =>
               const CircleAvatar(child: Center(child: Icon(Icons.error))),
@@ -41,6 +42,9 @@ class ProductDetails extends StatelessWidget {
                 builder: (_) {
                   _product.code = product!.productId!;
                   return AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     title: Center(child: Text(_name)),
                     insetPadding: const EdgeInsets.all(1),
                     contentPadding: const EdgeInsets.all(1),

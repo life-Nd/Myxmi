@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/providers/user.dart';
 import 'package:myxmi/screens/products/read/products_view.dart';
 import 'package:myxmi/utils/loading_column.dart';
+import 'package:myxmi/utils/no_data.dart';
 
 class ProductsStreamBuilder extends StatelessWidget {
   final String type;
@@ -34,19 +35,17 @@ class ProductsStreamBuilder extends StatelessWidget {
               );
               return const LoadingColumn();
             }
-            if (snapshot.data != null) {
+            if (snapshot.data != null && snapshot.data!.data() != null) {
+              // final DocumentSnapshot _doc = snapshot.data.data();
+              debugPrint('snapshot.data?.data(): ${snapshot.data?.data()}');
               final DocumentSnapshot<Map<String, dynamic>>? _data =
                   snapshot.data as DocumentSnapshot<Map<String, dynamic>>?;
               return ProductsView(
                 type: type,
-                snapshot: _data,
+                snapshot: _data!,
               );
             }
-            return Center(
-              child: Text(
-                'productsEmpty'.tr(),
-              ),
-            );
+            return const NoData(type: 'Product');
           },
         );
       },

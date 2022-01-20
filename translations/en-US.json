@@ -268,7 +268,7 @@
    "inviteFriendsTo": "Invite friends to",
    "noInternet": "No internet connection",
    "pleaseCheckYourInternet": "Please check your internet connection",
-   "mealPlanner": "Meal Planner",
+   "mealPlanner&Tracker": "Meal Planner & Tracker",
    "comingSoon": "Coming soon",
    "featureNotAvailable": "This feature is not available yet",
    "recipeShared": "Recipe Shared",
@@ -315,7 +315,7 @@
    "beInspiredDetails": "Try the creations of the community then see if you can add your touch.",
    "productScanner": "Product scanner",
    "productScannerDetails": "Use your phone camera to check nutritional facts about the products you use.",
-   "mealPlannerDetails": "Save recipes to your meal planner to keep track of your diet.",
+   "mealPlanner&TrackerDetails": "Save recipes to your meal planner and keep track of your diet.",
    "reviewRecipes": "Review recipes",
    "reviewRecipesDetails": "Review recipes and rate them to help others find the best recipes.",
    "organizePantry": "Organize your pantry",
@@ -330,6 +330,10 @@
    "saveRecipeVersion": "Save recipe version",
    "calendar":"Calendar",
    "skipped":"Skipped",
-   "future":"Future"
+   "future":"Future",
+   "saveToCalendar":"Save this recipe to your calendar",
+   "optionsToSave": "Options to save",
+   "cooked":"Cooked",
+   "consumed":"Consumed"
    
 }

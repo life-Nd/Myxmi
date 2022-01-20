@@ -183,121 +183,123 @@ class _AppBarcodeScannerWidgetState extends State<_BarcodeScannerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.topRight,
-      children: [
-        _getScanWidgetByPlatform(),
-        Column(
-          children: [
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: Row(
-                      children: [
-                        Consumer(
-                          builder: (_, ref, child) {
-                            final _scannerFlash =
-                                ref.watch(scannerFlashProvider);
-                            return IconButton(
-                              padding: const EdgeInsets.all(2),
-                              iconSize: 30,
-                              onPressed: () {
-                                if (_scannerFlash.isFlashOn) {
-                                  _scannerController.closeFlash();
-                                  _scannerFlash.toggleFlash(value: false);
-                                } else {
-                                  _scannerController.openFlash();
-                                  _scannerFlash.toggleFlash(value: true);
-                                }
-                              },
-                              icon: Icon(
-                                _scannerFlash.isFlashOn
-                                    ? Icons.flash_on
-                                    : Icons.flash_off,
-                                size: 30,
-                              ),
-                              color: Colors.white,
-                            );
-                          },
-                        ),
-                        Consumer(
-                          builder: (_, ref, child) {
-                            final _productScanner =
-                                ref.read(productScannerProvider);
-
-                            return IconButton(
-                              padding: const EdgeInsets.all(2),
-                              iconSize: 30,
-                              onPressed: () {
-                                _productScanner.reset();
-                                Future.delayed(
-                                    const Duration(milliseconds: 2000), () {
-                                  _scannerController.startCameraPreview();
-                                });
-                              },
-                              icon: const Icon(Icons.refresh_rounded),
-                              color: Colors.red,
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: Card(
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? Colors.white
-                        : Theme.of(context).cardColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        10,
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        left: 4.0,
-                        right: 4.0,
-                        top: 2,
-                        bottom: 2,
-                      ),
+    return SafeArea(
+      child: Stack(
+        alignment: Alignment.topRight,
+        children: [
+          _getScanWidgetByPlatform(),
+          Column(
+            children: [
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Align(
+                      alignment: Alignment.topRight,
                       child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Text(
-                            '${'poweredBy'.tr()}: ',
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 17,
-                            ),
+                          Consumer(
+                            builder: (_, ref, child) {
+                              final _scannerFlash =
+                                  ref.watch(scannerFlashProvider);
+                              return IconButton(
+                                padding: const EdgeInsets.all(2),
+                                iconSize: 30,
+                                onPressed: () {
+                                  if (_scannerFlash.isFlashOn) {
+                                    _scannerController.closeFlash();
+                                    _scannerFlash.toggleFlash(value: false);
+                                  } else {
+                                    _scannerController.openFlash();
+                                    _scannerFlash.toggleFlash(value: true);
+                                  }
+                                },
+                                icon: Icon(
+                                  _scannerFlash.isFlashOn
+                                      ? Icons.flash_on
+                                      : Icons.flash_off,
+                                  size: 30,
+                                ),
+                                color: Colors.white,
+                              );
+                            },
                           ),
-                          SizedBox(
-                            height: 70,
-                            width: 150,
-                            child: Image.asset(
-                              'assets/Open_Food_Facts_logo.png',
-                            ),
+                          Consumer(
+                            builder: (_, ref, child) {
+                              final _productScanner =
+                                  ref.read(productScannerProvider);
+
+                              return IconButton(
+                                padding: const EdgeInsets.all(2),
+                                iconSize: 30,
+                                onPressed: () {
+                                  _productScanner.resetAndNotify();
+                                  Future.delayed(
+                                      const Duration(milliseconds: 2000), () {
+                                    _scannerController.startCameraPreview();
+                                  });
+                                },
+                                icon: const Icon(Icons.refresh_rounded),
+                                color: Colors.red,
+                              );
+                            },
                           ),
                         ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: Card(
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
+                          : Theme.of(context).cardColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                          10,
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          left: 4.0,
+                          right: 4.0,
+                          top: 2,
+                          bottom: 2,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              '${'poweredBy'.tr()}: ',
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 17,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 70,
+                              width: 150,
+                              child: Image.asset(
+                                'assets/Open_Food_Facts_logo.png',
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+        ],
+      ),
     );
   }
 

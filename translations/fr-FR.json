@@ -276,7 +276,7 @@
    "inviteFriendsTo": "Inviter vos amis à",
    "noInternet": "Pas d'internet",
    "pleaseCheckYourInternet": "Verifiez votre connection internet",
-   "mealPlanner": "Plan de repas",
+   "mealPlanner&Tracker": "Plan de repas",
    "comingSoon": "Bientot disponible",
    "featureNotAvailable": "Cette fonctionnalité n'est pas encore disponible",
    "recipeShared": "Recette partagée",
@@ -325,6 +325,7 @@
    "reviewRecipesDetails": "Donnez votre avis sur les recettes en leur donnant un score pour aider les membres à trouver les meilleures recettes.",
    "productScanner": "Scannez des produits",
    "productScannerDetails": "Utilisez votre camera pour scanner les produits et voir les informations nutritionnelles, environnementales (et plus encore) de chaque produit.",
+   "mealPlanner&TrackerDetails": "Ajouter des recettes à votre agenda et garder un oeil sur votre diète.",
    "organizePantry": "Organisez votre garde-manger",
    "organizePantryDetails": "Gardez un oeil sur les quantités en stock et les dates d'expirations des produits dans votre garde-manger et les ajouter à votre panier.",
    "createGroceryList": "Créez une liste de courses",
@@ -336,6 +337,11 @@
    "updatePantryStock": "Changer les quantités stock",
    "saveRecipeVersion": "Sauvegarder votre version de la recette",
    "skipped": "Skipped",
-   "future": "Future"
+   "future": "Future",
+   "saveToCalendar": "Sauvegarder dans le calendrier",
+   "optionsToSave": "Options pour sauvegarder",
+   "cooked":"Cuisiné",
+   "consumed":"Consommé"
+
    
 }

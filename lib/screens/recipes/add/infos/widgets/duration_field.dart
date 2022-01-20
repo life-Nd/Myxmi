@@ -19,7 +19,10 @@ class DurationField extends StatelessWidget {
                 final _recipe = ref.watch(recipeEntriesProvider);
                 return TextField(
                   controller: _recipe.durationCtrl,
-                  keyboardType: TextInputType.number,
+                  keyboardType: const TextInputType.numberWithOptions(
+                    signed: true,
+                    decimal: true,
+                  ),
                   onChanged: (value) {
                     _recipe.setDuration();
                   },

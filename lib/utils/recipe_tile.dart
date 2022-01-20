@@ -52,33 +52,48 @@ class RecipeTile extends StatelessWidget {
                 ],
               ),
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Expanded(
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                    ),
-                    child: RecipeImage(
-                      recipe: _recipe,
-                      fitWidth: false,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: 7.0,
-                    right: 10.0,
-                  ),
-                  child: RecipeTileDetails(recipe: _recipe),
-                )
-              ],
-            ),
+            child: RecipePreview(recipe: _recipe),
           ),
         );
       },
+    );
+  }
+}
+
+class RecipePreview extends StatelessWidget {
+  const RecipePreview({
+    Key? key,
+    required RecipeModel recipe,
+  })  : _recipe = recipe,
+        super(key: key);
+
+  final RecipeModel _recipe;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Expanded(
+          child: ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+            child: RecipeImage(
+              recipe: _recipe,
+              fitWidth: false,
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(
+            left: 7.0,
+            right: 10.0,
+          ),
+          child: RecipeTileDetails(recipe: _recipe),
+        )
+      ],
     );
   }
 }

@@ -11,9 +11,11 @@ import 'package:myxmi/utils/share_button.dart';
 class RecipeImage extends StatelessWidget {
   final RecipeModel recipe;
   final bool fitWidth;
+  final bool hideButtons;
   const RecipeImage({
     required this.recipe,
     required this.fitWidth,
+    this.hideButtons = false,
   });
 
   @override
@@ -24,46 +26,47 @@ class RecipeImage extends StatelessWidget {
           alignment: Alignment.topRight,
           children: [
             _image(false),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.topRight,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        CalendarButton(
-                          recipe: recipe,
-                          childRecipe: _image(true),
-                        ),
-                        const SizedBox(
-                          width: 4,
-                        ),
-                        AddFavoriteButton(recipe: recipe),
-                        const SizedBox(
-                          width: 4,
-                        ),
-                        ShareButton(recipeId: recipe.recipeId),
-                      ],
+            if (!hideButtons)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CalendarButton(
+                            recipe: recipe,
+                            childRecipe: _image(true),
+                          ),
+                          const SizedBox(
+                            width: 4,
+                          ),
+                          AddFavoriteButton(recipe: recipe),
+                          const SizedBox(
+                            width: 4,
+                          ),
+                          ShareButton(recipeId: recipe.recipeId),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                const Spacer(),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: Card(
-                    color: Colors.grey.withOpacity(0.5),
-                    elevation: 20,
-                    child: RatingStars(
-                      stars: recipe.stars ?? '0.0',
+                  const Spacer(),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Card(
+                      color: Colors.grey.withOpacity(0.5),
+                      elevation: 20,
+                      child: RatingStars(
+                        stars: recipe.stars ?? '0.0',
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
           ],
         );
       },
@@ -100,6 +103,7 @@ class _RecipeImageClip extends HookWidget {
       imageUrl: imageUrl,
       progressIndicatorBuilder: (context, url, downloadProgress) => Center(
         child: CircularProgressIndicator(
+          color: Colors.green.shade200,
           value: downloadProgress.progress,
         ),
       ),

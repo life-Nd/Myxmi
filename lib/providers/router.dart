@@ -1,16 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myxmi/app.dart';
 import 'package:myxmi/models/recipe.dart';
 import 'package:myxmi/navigator/transition_delegate.dart';
+import 'package:myxmi/screens/calendar/calendar_screen.dart';
 import 'package:myxmi/screens/cart/cart_view.dart';
 import 'package:myxmi/screens/home/home_screen.dart';
 import 'package:myxmi/screens/instructions/instructions_screen.dart';
 import 'package:myxmi/screens/more/about/view.dart';
 import 'package:myxmi/screens/more/settings/view.dart';
-import 'package:myxmi/screens/planner/planner_page.dart';
 import 'package:myxmi/screens/products/add/add_product_manually.dart';
 import 'package:myxmi/screens/products/add/scan_product.dart';
 import 'package:myxmi/screens/profile/profile_screen.dart';
@@ -165,8 +164,10 @@ class RouterProvider extends RouterDelegate<List<RouteSettings>>
         );
         break;
 
-      case '/planner':
-        child = const CalendarScreenPage();
+      case '/calendar':
+        child = const CalendarScreen(
+          showAppBar: true,
+        );
         break;
 
       case '/add-recipe-infos':
@@ -184,18 +185,23 @@ class RouterProvider extends RouterDelegate<List<RouteSettings>>
       case '/scan-product':
         child = const ScanProductScreen();
         break;
+
       case '/add-product-manually':
         child = const AddProductManuallyScreen();
         break;
+
       case '/account':
         child = const ProfileScreen();
         break;
+
       case '/settings':
         child = const SettingsScreen();
         break;
+
       case '/instructions':
         child = const InstructionsScreen();
         break;
+
       case '/cart':
         child = const CartView();
         break;
@@ -249,18 +255,5 @@ class RouterProvider extends RouterDelegate<List<RouteSettings>>
     );
 
     return result ?? true;
-  }
-}
-
-class CalendarScreenPage extends StatelessWidget {
-  const CalendarScreenPage({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('calendar'.tr()),
-      ),
-      body: const PlannerPage(),
-    );
   }
 }

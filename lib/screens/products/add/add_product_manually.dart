@@ -218,7 +218,10 @@ class QuantityEntry extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 60, right: 60),
               child: TextField(
-                keyboardType: TextInputType.number,
+                keyboardType: const TextInputType.numberWithOptions(
+                  signed: true,
+                  decimal: true,
+                ),
                 controller: ctrl,
                 decoration: InputDecoration(
                   isDense: true,

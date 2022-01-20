@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
 import 'package:myxmi/utils/download_app.dart';
 
@@ -13,30 +14,37 @@ class LandingScreen extends StatelessWidget {
         children: <Widget>[
           const DemoContainer(
             title: 'createRecipes',
+            image: 'my_recipes',
             imageFirst: true,
           ),
           const DemoContainer(
             title: 'beInspired',
+            image: 'favorites',
             imageFirst: false,
           ),
           const DemoContainer(
             title: 'productScanner',
+            image: 'scanner',
             imageFirst: true,
           ),
           const DemoContainer(
             title: 'mealPlanner',
+            image: 'planner',
             imageFirst: false,
           ),
           const DemoContainer(
             title: 'organizePantry',
+            image: 'products',
             imageFirst: true,
           ),
           const DemoContainer(
             title: 'createGroceryList',
+            image: 'cart',
             imageFirst: false,
           ),
           const DemoContainer(
             title: 'reviewRecipes',
+            image: 'recipe',
             imageFirst: true,
           ),
           DownloadApp(),
@@ -49,21 +57,27 @@ class LandingScreen extends StatelessWidget {
 
 class DemoContainer extends StatelessWidget {
   final String title;
-  // final String message;
+  final String image;
   final bool imageFirst;
   const DemoContainer({
     required this.title,
-    // required this.message,
+    required this.image,
     required this.imageFirst,
   });
 
-  List<Widget> _children({required Size size}) {
+  List<Widget> _children({required Size size, required bool isDarkTheme}) {
+    final String _image = isDarkTheme
+        ? 'assets/images/${image}_dark.png'
+        : 'assets/images/$image.png';
     return [
       const SizedBox(width: 10),
       SizedBox(
         height: size.height * 0.9,
         width: size.width * 0.4,
-        child: Image.asset('assets/$title.png'),
+        child: Image(
+          image:
+              FirebaseImage('gs://myxmi-94982.appspot.com/images/$_image.png'),
+        ),
       ),
       const SizedBox(width: 10),
       Expanded(
@@ -93,10 +107,11 @@ class DemoContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
+    final _isDarkTheme = Theme.of(context).brightness == Brightness.dark;
     return Row(
       children: imageFirst == true
-          ? _children(size: _size)
-          : _children(size: _size).reversed.toList(),
+          ? _children(size: _size, isDarkTheme: _isDarkTheme)
+          : _children(size: _size, isDarkTheme: _isDarkTheme).reversed.toList(),
     );
   }
 }
